@@ -1,8 +1,9 @@
-import Taro, { Component, Config } from '@tarojs/taro'
-import { Provider } from '@tarojs/mobx'
+import Taro, {Component, Config} from '@tarojs/taro'
+import {Provider} from '@tarojs/mobx'
 import Index from './pages/index'
 import CounterStore from '@/store/counter'
 import './app.scss'
+import Remember from "@/pages/remember";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -16,13 +17,17 @@ const store = {
 
 class App extends Component {
 
-  componentDidMount () {}
+  componentDidMount() {
+  }
 
-  componentDidShow () {}
+  componentDidShow() {
+  }
 
-  componentDidHide () {}
+  componentDidHide() {
+  }
 
-  componentDidCatchError () {}
+  componentDidCatchError() {
+  }
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -33,6 +38,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/remember/index',
       'pages/index/index',
       'pages/test/index'
     ],
@@ -46,13 +52,13 @@ class App extends Component {
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render () {
+  render() {
     return (
       <Provider store={store}>
-        <Index />
+        <Remember/>
       </Provider>
     )
   }
 }
 
-Taro.render(<App />, document.getElementById('app'))
+Taro.render(<App/>, document.getElementById('app'))

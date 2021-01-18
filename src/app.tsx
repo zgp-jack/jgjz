@@ -33,8 +33,10 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/login/index',
       'pages/index/index',
-      'pages/test/index'
+      'pages/test/index',
+      'pages/account_book_list/index'
     ],
     window: {
       backgroundTextStyle: 'light',

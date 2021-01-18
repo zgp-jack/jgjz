@@ -1,5 +1,5 @@
 {
-  "miniprogramRoot": "./dist",
+  "miniprogramRoot": "dist/",
   "projectname": "mini_bookkeeping",
   "description": "this is yupao bookkeeping",
   "appid": "touristappid",
@@ -9,5 +9,26 @@
     "postcss": false,
     "minified": false
   },
-  "compileType": "miniprogram"
+  "compileType": "miniprogram",
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/AddressBook/index",
+          "pathName": "pages/AddressBook/index",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
 }

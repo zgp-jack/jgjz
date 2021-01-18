@@ -1,0 +1,44 @@
+.selectd {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  .selectd_left {
+    flex: 1;
+    overflow-x: auto;
+    display: flex;
+    align-items: center;
+    View {
+      width: 68rpx;
+      height: 68rpx;
+      background: #58C7FF;
+      border-radius: 16rpx;
+      position: relative;
+      margin-left: 30rpx;
+      text-align: center;
+      line-height: 68rpx;
+      flex: 0 0 68rpx;
+      Text{
+        font-size: 24rpx;
+        color: #fff;
+      }
+      Image {
+        width: 20rpx;
+        height: 20rpx;
+        position: absolute;
+        right: -10rpx;
+        top: -10rpx;
+      }
+    }
+  }
+  .selectd_right {
+    width: 162rpx;
+    height: 117rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    Text{
+      color: #000;
+      font-size: 26rpx;
+    }
+  }
+}

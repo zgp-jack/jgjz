@@ -1,0 +1,72 @@
+.list_content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 234rpx;
+  background: #F6F6F6;
+  overflow-y: auto;
+  .title {
+    font-size: 22rpx;
+    padding-left: 26rpx;
+  }
+  .item_person {
+    width: 100%;
+    height: 108rpx;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 93rpx 0 26rpx;
+    box-sizing: border-box;
+    &:last-child {
+      border-bottom: none;
+    }
+    .left {
+      display: flex;
+      align-items: center;
+      .item_checkbox {
+        width: 30rpx;
+        height: 30rpx;
+        background: #1492FF;
+        border-radius: 6rpx;
+      }
+      .avatar {
+        width: 68rpx;
+        height: 68rpx;
+        background: #58C7FF;
+        color: #fff;
+        text-align: center;
+        line-height: 68rpx;
+        border-radius: 16rpx;
+        margin-left: 20rpx;
+      }
+      .name_tle {
+        display: flex;
+        flex-direction: column;
+        margin-left: 23rpx;
+        .name {
+          font-size: 28rpx;
+          color: #000;
+        }
+        .tel{
+          font-size: 24rpx;
+          color: #8A8A8F;
+        }
+      }
+    }
+
+    
+
+
+
+
+    .setting {
+      Image {
+        width: 26rpx;
+        height: 26rpx;
+      }
+    }
+  }
+}

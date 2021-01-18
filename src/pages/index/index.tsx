@@ -12,6 +12,9 @@ export default function Index(){
       <Button onClick={ () => Taro.navigateTo({
         url: '/pages/test/index'
       })}> go to mobx page!</Button>
+      <Button onClick={ () => Taro.navigateTo({
+        url: '/pages/person_record/index'
+      })}>个人记工</Button>
     </View>
   )
 }

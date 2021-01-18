@@ -10,8 +10,8 @@ export default function Index(){
       <Text onClick={() => console.log('您好，程序员！')}>Hello world!</Text>
       <TestCommonComponent />
       <Button onClick={ () => Taro.navigateTo({
-        url: '/pages/test/index'
-      })}> go to mobx page!</Button>
+        url: '/pages/work_team/record_work/index'
+      })}> go to work_team!</Button>
     </View>
   )
 }

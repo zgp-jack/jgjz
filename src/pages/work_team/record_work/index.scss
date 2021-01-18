@@ -1,0 +1,169 @@
+
+page{
+  background-color: #f7f7f7;
+}
+.record-work-container{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  .record-work-head{
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    background-color: white;
+    .record-work-head-table{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100px;
+      box-shadow: 1px 4px 10px 0px rgba(110, 110, 111, 0.05);
+      font-size:30px;
+      .record-work-checked{
+        height: 100%;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #0099FF;
+        color: #0099FF
+      };
+      View:first-child{
+        margin-right: 20px;
+      }
+    }
+    .record-work-head-date{
+      height: 100px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      color: #333333;
+      font-weight: 500;
+      .record-work-head-choose-date{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+      }
+      Image{
+        width: 20px;
+      }
+    }
+  }
+  .record-work-check-person{
+    margin-top: 20px;
+    height: 50%;
+    background-color: white;
+    padding:0 20px;
+    .record-work-person-head{
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;;
+      .record-work-person-title{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 30px;
+        View:first-child{
+          font-weight: bold;
+          Text{
+            color:#5B80FB
+          }
+        }
+        View:last-child{
+          color:#5B80FB
+        }
+      }
+      .record-work-person-disc{
+        font-size: 26px;
+        color: #808080;
+      }
+    }
+    .record-work-person-content{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      .record-work-person-item{
+        width: 80px;
+        height: 120px;
+        position: relative;
+        font-size: 26px;
+        margin-top: 20px;
+        margin-right: 20px;
+        .record-work-person-box{
+          display: flex;
+          height: 80px;
+          width: 80px;
+          background-color: #5B80FB;
+          justify-content: center;
+          align-items: center;
+          color: #FFFFFF;
+        }
+        Text{
+          display: inline-block;
+          width: 100%;
+          position: absolute;
+          bottom: 0px;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .record-work-table-content{
+    background-color: white;
+    flex: 1;
+    margin-top: 20px;
+    .record-work-table-head{
+      height: 100px;
+      width: 100vw;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      .record-work-table-left{
+        position:relative;
+        height: 80px;
+        width: 50%;
+        overflow:hidden;
+        &::before{
+          content:'';
+          display:block;
+          position:absolute;
+          top:0;
+          bottom:0;
+          right:0;
+          width: 100%;
+          background-color:#E3F4FF;
+          transform-origin:0 100%;
+          transform:skewX(10deg);
+        }
+        Text{
+          position: absolute;
+        }
+      }
+      .record-work-table-right{
+        position:relative;
+        height: 80px;
+        width: 50%;
+        overflow:hidden;
+        &::before{
+          content:'';
+          display:block;
+          position:absolute;
+          top:0;
+          bottom:0;
+          right:0;
+          width: 100%;
+          transform-origin:100% 0;
+          transform:skewX(10deg);
+        }
+        Text{
+          position: absolute;
+        }
+      }
+    }
+  }
+
+}

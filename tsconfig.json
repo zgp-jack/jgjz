@@ -24,36 +24,16 @@
       "global.d.ts"
     ],
     "paths": {
-      "@/hooks/*": [
-        "src/hooks"
-      ],
-      "@/utils/*": [
-        "src/utils"
-      ],
-      "@/models/*": [
-        "src/models"
-      ],
-      "@/config/*": [
-        "src/config"
-      ],
-      "@/images/*": [
-        "src/images"
-      ],
-      "@/components/*": [
-        "src/components"
-      ],
-      "@/assets/*": [
-        "src/assets"
-      ],
-      "@/store/*": [
-        "src/store"
-      ],
-      "@/pages/*": [
-        "src/pages"
-      ],
-      "@/subpackage/*": [
-        "src/subpackage"
-      ],
+      "@/hooks/*": [ "./src/hooks/*" ],
+      "@/utils/*": [ "./src/utils/*" ],
+      "@/models/*": [ "./src/models/*" ],
+      "@/config/*": [ "./src/config/*" ],
+      "@/images/*": [ "./src/images/*" ],
+      "@/components/*": [ "./src/components/*" ],
+      "@/assets/*": [ "./src/assets/*" ],
+      "@/store/*": [ "./src/store/*" ],
+      "@/pages/*": [ "./src/pages/*" ],
+      "@/subpackage/*": [ "./src/subpackage/*" ],
     }
   },
   "exclude": [

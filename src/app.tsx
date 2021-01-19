@@ -37,7 +37,8 @@ class App extends Component {
       'pages/index/index',
       'pages/test/index',
       'pages/account_book_list/index',
-      'pages/identity_selection/index'
+      'pages/identity_selection/index',
+      'pages/feedback/index'
     ],
     window: {
       backgroundTextStyle: 'light',

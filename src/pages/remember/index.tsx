@@ -11,6 +11,10 @@ import arrowRight from '@/images/arrow-right.png'
 import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
+import PickerWorkTime from "@/components/picker/picker-work-time";
+import PickerOption from "@/components/picker/picker-option";
+import PickerOverTime from "@/components/picker/picker-over-time";
+import PickerUnit from "@/components/picker/picker-unit";
 
 Taro.setNavigationBarTitle({title: '个人记工账本'})
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
@@ -22,6 +26,10 @@ export default function Remember() {
   const [coworkers, setCoworkers] = useState(0)//筛选工友
 
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
+
+  const [showPopup, setShowPopup] = useState(false)//点击切换账本打开选择器弹窗（调试用）
+
+  const [activeRemark, setActiveRemark] = useState(false)//筛选选中有备注
 
   useEffect(() => {
     /*是否筛选了*/
@@ -50,7 +58,7 @@ export default function Remember() {
           <View className="header-tag"><View className="tag-text">个人记工</View></View>
           <View className="header-title overwords">个人默认消费记录清单记工账哈哈哈</View>
           <View className="header-line"/>
-          <View className="header-switch">切换记工本</View>
+          <View className="header-switch" onClick={() => setShowPopup(true)}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
@@ -177,6 +185,11 @@ export default function Remember() {
         </View>
       </View>
       {
+        showPopup &&
+        <PickerWorkTime show={showPopup} close={() => setShowPopup(false)} confirm={() => setShowPopup(false)}/>
+      }
+
+      {
         showFilter &&
         <View className="mask" onClick={() => setShowFilter(false)}/>
       }
@@ -249,7 +262,9 @@ export default function Remember() {
               <View className="filter-block-row filter-block-row-small">
                 <View className="filter-coworkers">
                   <View className="filter-block-row-title">有无备注</View>
-                  <View className="filter-type-item filter-type-item-remark">
+                  <View
+                    className={"filter-type-item filter-type-item-remark" + (activeRemark ? ' filter-type-item-active' : '')}
+                    onClick={() => setActiveRemark(!activeRemark)}>
                     有备注
                   </View>
                 </View>

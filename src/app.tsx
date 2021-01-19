@@ -38,6 +38,7 @@ class App extends Component {
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用
+      'pages/address_book/index', // 通讯录
     ],
     window: {
       backgroundTextStyle: 'light',

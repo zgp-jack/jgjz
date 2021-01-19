@@ -10,6 +10,7 @@
 
 import { useState, useEffect } from '@tarojs/taro'
 import { FetchResult, APIFunc } from './inter.d'
+// import { Result } from '@/utils/request/inter.d'
 
 
 export default function useInit<T, P>(api: APIFunc<T, P>, params: P ,data: T) {
@@ -39,10 +40,7 @@ export default function useInit<T, P>(api: APIFunc<T, P>, params: P ,data: T) {
   },[loading])
 
   return {
-    result,
-    errMsg: result.errMsg,
-    data: result.data,
-    loading: result.loading,
+    ...result,
     setLoading: (loading: boolean) => setResult({...result, loading})
   }
 }

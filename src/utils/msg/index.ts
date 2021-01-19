@@ -2,9 +2,9 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:51:47
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-18 16:19:09
+ * @LastEditTime: 2021-01-19 19:21:37
  * @Description: 公共提示信息
- ! 1.轻提示 msg  2.模态框提示 showActionModal 3.方法小驼峰 4.注释请参考以后方法
+ ! @rules 1.轻提示 msg  2.模态框提示 showActionModal 3.方法小驼峰 4.注释请参考以后方法
  */
 
 import Taro from '@tarojs/taro'

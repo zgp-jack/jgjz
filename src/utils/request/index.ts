@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-18 18:42:41
+ * @LastEditTime: 2021-01-19 11:47:48
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
@@ -11,7 +11,7 @@ import Taro from '@tarojs/taro'
 import { MINITOKEN, VERSION } from '@/config/index'
 import { UserInfo } from '@/config/store'
 import { User } from '@/store/user/inter.d'
-import { Request, RequestBase, RequestHeader } from './inter.d'
+import { Request, RequestBase, RequestHeader, Result } from './inter.d'
 
 
 /**
@@ -40,9 +40,8 @@ function getRequestHeaderInfo(): RequestHeader {
     'content-type': 'application/x-www-form-urlencoded',
     source: MINITOKEN,
     version: VERSION,
-    uid: 20009385,
-    token: 'f4feae7c04efff4d56200cb2f840bf55',
-    time: 0
+    uid: 20003124,
+    token: 'e8bb81b7982d16279593a9007508ffec',
   }
 
   // 获取用户信息
@@ -87,7 +86,7 @@ const getRequestHeaderInfoAction = (): RequestBase => {
  * @params Request 请看该接口详细声明注释
  * @description 发起请求方法
 */
-export default function doRequestAction<T>(reqData: Request): Promise<T> {
+export default function doRequestAction<T>(reqData: Request): Promise<Result<T>> {
   // 先将传入的参数与默认参数进行合并
   let req: RequestBase = { ...getRequestHeaderInfoAction(), ...reqData }
   // 判断该请求是否需要显示loading
@@ -128,23 +127,23 @@ export default function doRequestAction<T>(reqData: Request): Promise<T> {
 /**
  * @name: get for jsxin
  * @return Promise<T> 返回get请求的数据结果
- * @params url: string 接口请求地址 data: T 请求的参数
+ * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起get请求
 */
-export const get = <T, R>(url: string, data: T ): Promise<R> => {
+export const get = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
-    url,data,method: 'GET'
+    url, data, loading: !!loading, method: 'GET'
   })
 }
 
 /**
  * @name: post for jsxin
  * @return Promise<T> 返回get请求的数据结果
- * @params url: string 接口请求地址 data: T 请求的参数
+ * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起post请求
 */
-export const post = <T, R>(url: string, data: T): Promise<R> => {
+export const post = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
-    url, data, method: 'POST'
+    url, data, loading: !!loading , method: 'POST'
   })
 }

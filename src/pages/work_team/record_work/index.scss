@@ -41,7 +41,7 @@ page{
           transform: translateX(-50%);
         }
       };
-      View:first-child{
+      View{
         margin-right: 20px;
       }
     }
@@ -51,8 +51,10 @@ page{
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      color: #333333;
+      font-size: 30px;
+      font-family: Source Han Sans CN;
       font-weight: 500;
+      color: #333333;
       .record-work-head-choose-date{
         display: flex;
         flex-direction: row;
@@ -60,6 +62,7 @@ page{
         align-items: center;
         .record-work-date{
           text-align: end;
+          margin-right: 10px;
         }
       }
       Image{
@@ -84,7 +87,7 @@ page{
         font-size: 30px;
         padding-right: 24px;
         View:first-child{
-          font-weight: bold;
+          font-weight: 500;
           Text{
             color:#5B80FB
           }
@@ -120,15 +123,34 @@ page{
           align-items: center;
           color: #FFFFFF;
           border-radius: 5px;
-          Image{
+          .choose-image{
             width: 50%;
             height: 50%;
             position: absolute;
           }
+          .recorded-image{
+            width: 100%;
+            position: absolute;
+            bottom: -1px;
+            &::after{
+              content: "已记";
+              font-size: 19px;
+              font-family: Source Han Sans CN;
+              font-weight: 400;
+              color: #18A2FE;
+              position: absolute;
+              bottom: 0;
+              left: 50%;
+              transform: translateX(-50%);
+            }
+          }
         }
         .choose-box{
-          border: 2px solid #FF7777;
+          border: 4px solid #FF7777;
           opacity: .7;
+        }
+        .recorded-box{
+          background-color: #FFAB47;
         }
         Text{
           display: inline-block;
@@ -268,6 +290,9 @@ page{
           top: 50%;
         }
       }
+    }
+    .record-work-flow{
+      padding: 0 30px;
     }
   }
 

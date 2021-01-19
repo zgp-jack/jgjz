@@ -50,6 +50,22 @@
       justify-content: space-evenly;
       flex: 1;
       padding: 10px 30px 50px;
+      .input-container{
+        margin-top: 20px;
+        .input-title{
+          font-size: 34px;
+          font-family: Source Han Sans CN;
+          font-weight: 500;
+          color: #595959;
+        }
+        Input {
+          border: 2px solid #E5E5E5;
+          border-radius: 2px;
+          height: 85px;
+          padding-left: 20px;
+          margin-top: 20px;
+        }
+      }
     }
 
     .margin {

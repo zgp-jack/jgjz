@@ -52,8 +52,8 @@ export default function RecordWork() {
           {dataList.map((item,index) =>(
             <View className='record-work-person-item' key={index}>
               <View className={item.check ? (item.status ? 'record-work-person-box choose-box recorded-box' : 'record-work-person-box choose-box') : (item.status ?'record-work-person-box recorded-box':'record-work-person-box')}>{item.name}
-                {item.status && <Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/recorded.png' mode='widthFix' className="recorded-image"></Image>}
-                {item.check && <Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/choose-box.png' mode='widthFix' className="choose-image"></Image>}
+                {item.status && <Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/recorded.png' mode='widthFix' className='recorded-image'></Image>}
+                {item.check && <Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/choose-box.png' mode='widthFix' className='choose-image'></Image>}
               </View>
               <Text className='record-work-person-text'>{item.name}</Text>
             </View>)
@@ -81,8 +81,8 @@ export default function RecordWork() {
         </View>
       </View>
       <Popup>
-        <InputBox/>
-        <InputBox/>
+        <InputBox />
+        <InputBox />
       </Popup>
     </View>
   )

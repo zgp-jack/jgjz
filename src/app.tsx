@@ -35,7 +35,9 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/test/index',
-      'pages/person_record/index'
+      'pages/person_record/index',
+      'pages/person_tally/index',
+      'pages/person_detail/index'
     ],
     window: {
       backgroundTextStyle: 'light',

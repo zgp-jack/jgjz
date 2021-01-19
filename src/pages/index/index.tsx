@@ -15,6 +15,12 @@ export default function Index(){
       <Button onClick={ () => Taro.navigateTo({
         url: '/pages/person_record/index'
       })}>个人记工</Button>
+      <Button onClick={ () => Taro.navigateTo({
+        url: '/pages/person_tally/index'
+      })}>个人记帐</Button>
+      <Button onClick={ () => Taro.navigateTo({
+        url: '/pages/person_detail/index'
+      })}>个人修改</Button>
     </View>
   )
 }

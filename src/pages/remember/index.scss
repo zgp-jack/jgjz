@@ -76,7 +76,7 @@
 
         .feat {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: space-between;
           margin-bottom: 50px;
 
@@ -114,6 +114,59 @@
               margin-right: 7px;
               margin-top: -4px;
             }
+          }
+
+          .filter-btn-active {
+            color: $color;
+          }
+
+          .filter-start-end-date {
+            font-size: 30px;
+            color: #333333;
+
+            .filter-start-date {
+              margin-bottom: 20px;
+            }
+          }
+        }
+
+        .filter-info {
+          font-size: 26px;
+          color: #666666;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 40px;
+
+          .filter-info-box {
+            display: flex;
+            align-items: center;
+            width: 90%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+
+            Text {
+              white-space: nowrap;
+            }
+
+            .filter-info-blue {
+              color: $color;
+            }
+
+            .filter-info-line {
+              //width: 2px;
+              //height: 24px;
+              //background: #808080;
+              color: #808080;
+              margin: 0 15px;
+            }
+          }
+
+          .filter-info-arrow {
+            width: 14px;
+            height: 24px;
           }
         }
 
@@ -211,6 +264,10 @@
                   }
                 }
               }
+            }
+
+            .wage-meter {
+              background: #F2FAFF;
             }
           }
         }

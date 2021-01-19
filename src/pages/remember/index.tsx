@@ -1,5 +1,6 @@
-import Taro, {useState} from '@tarojs/taro'
+import Taro, {useState, useEffect} from '@tarojs/taro'
 import {View, Image, Text, Picker} from '@tarojs/components'
+import React from 'react'
 import './index.scss'
 import filter from '@/images/ic_sx.png'
 import remember from '@/images/ic_gt.png'
@@ -7,20 +8,40 @@ import debt from '@/images/ic_jz.png'
 import expenditure from '@/images/ic_zc.png'
 import feedback from '@/images/ic_yjfk.png'
 import arrowRight from '@/images/arrow-right.png'
+import filterActive from '@/images/ic_sx_blue.png'
+import wage from '@/images/ic_gq.png'
+import meter from '@/images/ic_gl.png'
 
 Taro.setNavigationBarTitle({title: '个人记工账本'})
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 export default function Remember() {
-  const [showFilter, setShowFilter] = useState(false)//筛选开关
+  const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
   const [startDate, setStartDate] = useState('2021-01-18')//筛选开始日期
   const [endDate, setEndDate] = useState('2021-01-17')//筛选结束日期
+  const [coworkers, setCoworkers] = useState(0)//筛选工友
 
+  const [isFilter, setIsFilter] = useState(false)//是否筛选了
+
+  useEffect(() => {
+    /*是否筛选了*/
+    setIsFilter(startDate !== '2021-01-18')
+  }, [startDate])
+  //开始时间筛选
   const onStartDate = e => {
     setStartDate(e.detail.value)
   }
+  //结束时间筛选
   const onEndDate = e => {
     setEndDate(e.detail.value)
+  }
+  //工友选择
+  const onSelectCoworkers = e => {
+    setCoworkers(e.detail.value)
+  }
+  //确认筛选
+  const onFilterConfirm = () => {
+    setShowFilter(false)
   }
   return (
     <View className="remember">
@@ -34,18 +55,36 @@ export default function Remember() {
         <View className="body">
           <View className="body-container">
             <View className="feat">
-              <View className="date">
-                <View className="icon-left date-icon"/>
-                <View className="date-value">2020年11月</View>
-                <View className="icon-right date-icon"/>
-              </View>
-              <View className="filter-btn" onClick={() => setShowFilter(true)}>
-                <Image src={filter} className="filter-icon"/>筛选
+              {!isFilter ? <View className="date">
+                  <View className="icon-left date-icon"/>
+                  <View className="date-value">2020年11月</View>
+                  <View className="icon-right date-icon"/>
+                </View>
+                :
+                <View className="filter-start-end-date">
+                  <View className="filter-start-date">开始时间：2020年11月01日</View>
+                  <View className="filter-end-date">截止时间：2020年12月21日</View>
+                </View>}
+              <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
+                    onClick={() => setShowFilter(true)}>
+                <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
               </View>
             </View>
-
+            {isFilter && <View className="filter-info">
+              <View className="filter-info-box overwords">
+                <Text>共<Text className="filter-info-blue">12</Text>人</Text>
+                <Text className="filter-info-line">|</Text>
+                <Text>记工量 借支 支出</Text>
+                <Text className="filter-info-line">|</Text>
+                <Text>有备注</Text>
+                <Text className="filter-info-line">|</Text>
+                <Text className="overwords">生活费哈哈哈哈</Text>
+              </View>
+              <Image src={arrowRight} className="filter-info-arrow"/>
+            </View>}
+            {/*记工统计*/}
             <View className="statistics">
-              <View className="statistics-title">11月记工统计</View>
+              {!isFilter && <View className="statistics-title">11月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -60,9 +99,37 @@ export default function Remember() {
                 </View>
               </View>
             </View>
+            {/*临时工资，平方米，筛选后才展示*/}
+            {isFilter && <View className="statistics">
+              <View className="statistics-bookkeeping">
+                <View className="bookkeeping-row wage-meter">
+                  <View className="bookkeeping-content">
+                    <Image src={wage} className="statistics-icon"/>
+                    <View className="bookkeeping-values">
+                      <View className="bookkeeping-label">
+                        临时工资
+                      </View>
+                      <View className="bookkeeping-value">￥500</View>
+                    </View>
+                  </View>
+                </View>
 
+                <View className="bookkeeping-row wage-meter">
+                  <View className="bookkeeping-content">
+                    <Image src={meter} className="statistics-icon"/>
+                    <View className="bookkeeping-values">
+                      <View className="bookkeeping-label">
+                        平方米
+                      </View>
+                      <View className="bookkeeping-value">￥500</View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>}
+            {/*记账统计*/}
             <View className="statistics">
-              <View className="statistics-title">11月记账统计</View>
+              {!isFilter && <View className="statistics-title">11月记账统计</View>}
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
@@ -163,9 +230,13 @@ export default function Remember() {
               <View className="filter-block-row filter-block-row-small">
                 <View className="filter-coworkers">
                   <View className="filter-block-row-title">选择工友</View>
-                  <View className="filter-picker-value">
-                    <View>全部工友</View>
-                    <Image src={arrowRight} className="filter-arrow"/>
+                  <View>
+                    <Picker mode='selector' onChange={onSelectCoworkers} value={coworkers} range={[1, 2, 3, 4]}>
+                      <View className="filter-picker-value">
+                        <View>全部工友</View>
+                        <Image src={arrowRight} className="filter-arrow"/>
+                      </View>
+                    </Picker>
                   </View>
                 </View>
               </View>
@@ -182,7 +253,7 @@ export default function Remember() {
           </View>
           <View className="filter-footer">
             <View className="filter-footer-reset">重置</View>
-            <View className="filter-footer-confirm">确定</View>
+            <View className="filter-footer-confirm" onClick={onFilterConfirm}>确定</View>
           </View>
         </View>
       </View>

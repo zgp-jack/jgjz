@@ -1,7 +1,5 @@
-let a = {
-  "code": 0,
-  "message": "ok",
-  "data": [{
+export default [
+  {
     "name_py": ":",
     "data": [{
       "id": 47270,
@@ -11,9 +9,11 @@ let a = {
       "name_color": "#A4BFFF",
       "is_deleted": 0,
       "is_self": 0,
-      "is_in_work_note": 0
+      "is_in_work_note": 0,
+      "is_check":true
     }]
-  }, {
+  },
+   {
     "name_py": "B",
     "data": [{
       "id": 35829,
@@ -25,7 +25,8 @@ let a = {
       "is_self": 0,
       "is_in_work_note": 1
     }]
-  }, {
+  },
+   {
     "name_py": "G",
     "data": [{
       "id": 35756,
@@ -281,4 +282,3 @@ let a = {
       "is_in_work_note": 0
     }]
   }]
-}

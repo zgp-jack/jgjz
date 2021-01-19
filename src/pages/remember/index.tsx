@@ -165,8 +165,13 @@ export default function Remember() {
               意见反馈
             </View>
             <View className="footer-buttons">
-              <View className="footer-button">记账</View>
-              <View className="footer-button">记工</View>
+              {!isFilter ? <View className="footer-button-box">
+                  <View className="footer-button footer-button-bookkeeping">记账</View>
+                  <View className="footer-button footer-button-remember">记工</View>
+                </View>
+                :
+                <View className="footer-button exit-filter">退出筛选</View>
+              }
             </View>
           </View>
         </View>

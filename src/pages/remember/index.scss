@@ -306,9 +306,12 @@
         }
 
         .footer-buttons {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
+
+          .footer-button-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
 
           .footer-button {
             width: 170px;
@@ -319,16 +322,24 @@
             font-weight: bold;
             text-align: center;
 
-            &:first-child {
-              border: 1px solid #3188FE;
-              color: #3188FE;
-              margin-right: 26px;
-            }
+          }
 
-            &:last-child {
-              background: #3188FE;
-              color: #fff;
-            }
+          .footer-button-bookkeeping {
+            border: 1px solid #3188FE;
+            color: #3188FE;
+            margin-right: 26px;
+          }
+
+          .footer-button-remember {
+            background: #3188FE;
+            color: #fff;
+          }
+
+          .exit-filter {
+            width: 200px;
+            height: 80px;
+            background: #FF5C64;
+            color: #fff;
           }
         }
       }

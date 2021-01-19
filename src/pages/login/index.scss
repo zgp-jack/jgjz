@@ -2,26 +2,14 @@
     padding:20rpx 60rpx;
     background-color: #FFF;
     .close-login-icon{
-        width:40rpx;
-        height:40rpx;
+        width:30rpx;
+        height:30rpx;
     }
     .logo-icon{
-        width:200rpx;
-        height:200rpx;
+        width:160rpx;
+        height:160rpx;
         display: block;
-        margin: 60rpx auto;
-    }
-    .login-passcode{
-        width:50rpx;
-        height:50rpx;
-    }
-    .login-passlock{
-        width:50rpx;
-        height:50rpx;
-    }
-    .login-eyes-open, .login-eyes-clone{
-        width:50rpx;
-        height:50rpx;
+        margin: 20rpx auto;
     }
     .login-type{
         display: flex;
@@ -36,8 +24,11 @@
             position: relative;
             display: inline-block;
         }
-        .login-type-title-left{
-            border-right: 1rpx solid #E5E5E5;
+        .login-type-title:first-child {
+            border-right: 1rpx solid #C7C6C6;
+        }
+        .login-active{
+            color: #333;
         }
         .login-active::after {
             position: absolute;
@@ -54,29 +45,68 @@
         
     }
     .login-form{
-        padding: 60rpx 40rpx 0;
+        padding: 80rpx 40rpx 0;
         .login-form-item{
             position: relative;
-            margin-bottom: 40rpx;
-            .login-phone-icon{
-                width:50rpx;
-                height:50rpx;
+            margin-bottom: 80rpx;
+            padding: 20rpx 0;
+            padding-left: 50rpx;
+            border-bottom: 1px solid #dcdcdc;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            .login-phone-icon, .login-passlock, .login-passcode{
+                width:40rpx;
+                height:40rpx;
                 position: absolute;
                 left: 0;
-                top: 10rpx;
+                top: 20rpx;
                 display: block;
+            } 
+            .get-code{
+                position: absolute;
+                right: 0;
+                // top: 20rpx;
+                color:#0099FF;
+                font-size: 30rpx;
             }
             .input-item-text{
                 position: relative;
-                color: #000;
+                color: #333;
                 border: 0;
-                border-bottom: 1px solid #BFBFBF;
-                padding-left: 0.5rem;
-                font-size: 0.28rem;
-                margin-top: 0rem;
+                font-size: 30rpx;
+                margin-top: 0;
                 border-radius: 0;
                 margin-bottom: 0;
             }
+            .login-eyes-clone{
+                width:40rpx;
+                height:40rpx;
+                position: absolute;
+                right: 0;
+                background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-clone.png") no-repeat;
+                background-size: 100% 100%;
+                filter: grayscale(100%);
+                z-index: 1;
+            }
+            .login-eyes-open{
+                width:40rpx;
+                height:40rpx;
+                position: absolute;
+                right: 0;
+                background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-open.png") no-repeat;
+                background-size: 100% 100%;
+                filter: grayscale(100%);
+                z-index: 1;
+            }
         }
+    }
+    .login-push-btn{
+        background-color: #0099FF;
+        color:#FFF;
+        margin: 120rpx 40rpx 0;
+        border-radius: 100rpx;
+        height: 100rpx;
+        line-height:100rpx;
     }
 }

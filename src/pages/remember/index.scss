@@ -76,7 +76,7 @@
 
         .feat {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: space-between;
           margin-bottom: 50px;
 
@@ -114,6 +114,59 @@
               margin-right: 7px;
               margin-top: -4px;
             }
+          }
+
+          .filter-btn-active {
+            color: $color;
+          }
+
+          .filter-start-end-date {
+            font-size: 30px;
+            color: #333333;
+
+            .filter-start-date {
+              margin-bottom: 20px;
+            }
+          }
+        }
+
+        .filter-info {
+          font-size: 26px;
+          color: #666666;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 40px;
+
+          .filter-info-box {
+            display: flex;
+            align-items: center;
+            width: 90%;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+
+            Text {
+              white-space: nowrap;
+            }
+
+            .filter-info-blue {
+              color: $color;
+            }
+
+            .filter-info-line {
+              //width: 2px;
+              //height: 24px;
+              //background: #808080;
+              color: #808080;
+              margin: 0 15px;
+            }
+          }
+
+          .filter-info-arrow {
+            width: 14px;
+            height: 24px;
           }
         }
 
@@ -212,6 +265,10 @@
                 }
               }
             }
+
+            .wage-meter {
+              background: #F2FAFF;
+            }
           }
 
           .bokkeeping-list{
@@ -309,9 +366,12 @@
         }
 
         .footer-buttons {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
+
+          .footer-button-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
 
           .footer-button {
             width: 170px;
@@ -322,16 +382,24 @@
             font-weight: bold;
             text-align: center;
 
-            &:first-child {
-              border: 1px solid #3188FE;
-              color: #3188FE;
-              margin-right: 26px;
-            }
+          }
 
-            &:last-child {
-              background: #3188FE;
-              color: #fff;
-            }
+          .footer-button-bookkeeping {
+            border: 1px solid #3188FE;
+            color: #3188FE;
+            margin-right: 26px;
+          }
+
+          .footer-button-remember {
+            background: #3188FE;
+            color: #fff;
+          }
+
+          .exit-filter {
+            width: 200px;
+            height: 80px;
+            background: #FF5C64;
+            color: #fff;
           }
         }
       }
@@ -347,178 +415,5 @@
     right: 0;
     background: #000;
     opacity: 0.7;
-  }
-
-  .filter {
-    position: absolute;
-    z-index: 3;
-    top: 0;
-    width: 660px;
-    height: 100vh;
-    background: #F6F6F6;
-    right: -660px;
-    transition: right ease-in-out .3s;
-
-    .filter-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-
-      .filter-header {
-        position: relative;
-        width: 100%;
-        height: 88px;
-        line-height: 88px;
-        text-align: center;
-        background-color: #fff;
-        margin-bottom: 18px;
-
-        .arrow {
-          position: absolute;
-          left: 24px;
-          width: 25px;
-          top: 40%;
-          height: 25px;
-          border: 5px solid #646464;
-          border-width: 5px 5px 0 0;
-          transform: rotate(-135deg);
-        }
-      }
-
-      .filter-body {
-        .filter-block {
-          background: #F6F6F6;
-
-          .filter-block-row {
-            background-color: #fff;
-            padding: 37px 26px 0 26px;
-            margin-bottom: 18px;
-
-            .filter-arrow {
-              width: 14px;
-              height: 24px;
-              margin-left: 28px;
-            }
-
-            .filter-block-row-title {
-              font-size: 30px;
-              color: #343434;
-              text-align: left;
-            }
-
-            .filter-picker-value {
-              font-size: 26px;
-              color: #0099FF;
-              display: flex;
-              align-items: center;
-            }
-
-            .filter-type-item {
-              width: 126px;
-              height: 52px;
-              line-height: 52px;
-              text-align: center;
-              background: #F5F6FA;
-              border-radius: 6px;
-              font-size: 26px;
-              color: #343434;
-              margin-bottom: 20px;
-              margin-right: 34px;
-
-              &:nth-child(4), :nth-child(8), :nth-child(12) {
-                margin-right: 0;
-              }
-            }
-
-            .filter-type-item-remark {
-              margin: 0;
-            }
-
-            .filter-line {
-              width: 100%;
-              height: 1px;
-              background: #EEEEEE;
-            }
-
-            .filter-date {
-              width: 100%;
-              height: 100px;
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-
-              .filter-date-label {
-                font-size: 26px;
-                color: #8B8B8B;
-              }
-            }
-
-            .filter-type {
-              width: 100%;
-              margin-top: 36px;
-              display: flex;
-              justify-content: left;
-              flex-wrap: wrap;
-              padding-bottom: 20px;
-
-              .filter-type-item-active {
-                background: #E4F4FF;
-                color: #0099FF;
-              }
-            }
-
-            .filter-coworkers {
-              height: 100px;
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            }
-          }
-
-          .filter-block-row-small {
-            padding-top: 0;
-          }
-        }
-      }
-
-      .filter-footer {
-        position: absolute;
-        z-index: 2;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 124px;
-        background: #FFFFFF;
-        box-shadow: 0px -12px 12px 0px rgba(175, 175, 175, 0.04);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 30px;
-
-        View {
-          height: 86px;
-          line-height: 86px;
-          border-radius: 6px;
-          font-size: 30px;
-          text-align: center;
-        }
-
-        .filter-footer-reset {
-          width: 246px;
-          background: #F5F5F5;
-          color: #0099FF;
-        }
-
-        .filter-footer-confirm {
-          width: 335px;
-          background: #0099FF;
-          color: #FFFFFF;
-        }
-      }
-    }
-  }
-
-  .show-filter {
-    right: 0;
   }
 }

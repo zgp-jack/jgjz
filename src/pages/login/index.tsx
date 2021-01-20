@@ -1,88 +1,88 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Text, Image, Button, Input } from '@tarojs/components'
-import './index.scss'
-import HeaderList from './config'
+import loginConfig, { codeWay, passWay } from './config'
+import { IMGCDNURL } from '@/config/index'
 import classnames from 'classnames'
+import useCode from '@/hooks/code'
+import './index.scss'
 
-interface Params {
-  reNewPwd: ParamsItem,
-}
-
-interface ParamsItem {
-  text: string,
-  hidden: boolean
-}
-export default function Index() {
-  // 当前高亮key
-  const [id, setId] = useState<string>(HeaderList[0].id)
-  // 用户切换二手状态
+export default function Login() {
+  /** 当前高亮key */
+  const [id, setId] = useState<string>(loginConfig[0].id)
+  /** 是否显示密码 */
+  const [showPass, setSHowPass] = useState<boolean>(false)
+  /** 用户切换登录方式 */
   const userChangePublishedItem = (key: string) => {
     setId(key)
   }
-  //提交的数据
-  const [paramsData, setParamsData] = useState<Params>({
-    reNewPwd: {
-      text: '',
-      hidden: true
-    },
+  /** 使用自定义验证码hooks */
+  const {  text, userGetCode } = useCode()
+
+  // 提交的数据
+  const [paramsData, setParamsData] = useState({
+    phone: '',
+    code: '',
+    pass: ''
   })
 
-  const changeInputType = (type: string) => {
-    paramsData[type].hidden = !paramsData[type].hidden
-    setParamsData({ ...paramsData })
+  /** 用户输入表单信息 */ 
+  const userEnterForm = (e: any, type: string) => {
+    let value: string = e.detail.value
+    let newData = { ...paramsData }
+    newData[type] = value
+    setParamsData(newData)
   }
-  const enterRePass = (type: string, value: string) => {
-    paramsData[type].text = value;
-    setParamsData({ ...paramsData })
+
+  /** 用户登录 */
+  const userLoginAction = () => {
+    console.log(paramsData)
   }
+  
   return (
     <View className='login-box'>
-      <Image className="close-login-icon" src="https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/close-login.png"></Image>
-      <Image className="logo-icon" src="https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/logo.png"></Image>
+      <Image className="close-login-icon" src={`${IMGCDNURL}gl/close-login.png`} ></Image>
+      <Image className="logo-icon" src={`${IMGCDNURL}gl/logo.png`} ></Image>
+
       <View className="login-type">
-        {HeaderList.map(item => (
-          <View
+        {loginConfig.map(item => (
+          <View 
+            key={item.id}
             onClick={() => userChangePublishedItem(item.id)}
             className={classnames({
               'login-type-title': true,
               'login-active': id === item.id
-            })}
-          >
+          })}>
             <Text className='published-item-title'>{item.title}</Text>
           </View>
         ))}
       </View>
-      {id == "paddcode" &&
-        <View className="login-form">
-          <View className="login-form-item">
-            <Image className="login-phone-icon" src="https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/phone.png"></Image>
-            <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} />
-          </View>
-          <View className="login-form-item">
-            <Image className="login-passcode" src="https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/pass-code.png"></Image>
-            <Input className="input-item-text" placeholder="请输入验证码" type="number" maxLength={6} />
-            <Text className="get-code">获取验证码</Text>
-          </View>
-        </View>}
 
-      {id == "paddwork" &&
         <View className="login-form">
           <View className="login-form-item">
-            <Image className="login-phone-icon" src="https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/phone.png"></Image>
-            <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} />
+            <Image className="login-phone-icon" src={`${IMGCDNURL}gl/phone.png`} ></Image>
+            <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} onInput={(e) => userEnterForm(e,'phone')} />
           </View>
+
+          {id === codeWay && 
           <View className="login-form-item">
-            <Image className="login-passlock" src="https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/pass-lock.png"></Image>
-            <Input className="input-item-text" placeholder="请输入密码" type="number" maxLength={6} password={paramsData.reNewPwd.hidden} onInput={(e: any) => enterRePass('reNewPwd', e.target.value)} />
+            <Image className="login-passcode" src={`${IMGCDNURL}gl/pass-code.png`} ></Image>
+            <Input className="input-item-text" placeholder="请输入验证码" type="number" maxLength={6} onInput={(e: any) => userEnterForm(e, 'code')} />
+            <Text className="get-code" onClick={() => userGetCode(paramsData.phone) }>{text}</Text>
+          </View>}
+
+          {id === passWay &&
+          <View className="login-form-item">
+            <Image className="login-passlock" src={`${IMGCDNURL}gl/pass-lock.png`} ></Image>
+          <Input className="input-item-text" placeholder="请输入密码"  maxLength={6} password={showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
             <Text className={classnames({
               'login-eyes-clone': true,
-              'login-eyes-open': !paramsData.reNewPwd.hidden
+              'login-eyes-open': !showPass
             })}
-              onClick={() => { changeInputType('reNewPwd') }}></Text>
-          </View>
-        </View>}
+              onClick={() => setSHowPass(!showPass) }></Text>
+          </View>}
+        </View>
 
-      <Button className="login-push-btn">登录</Button>
+      <Button className="login-push-btn" onClick={() => userLoginAction()}>登录</Button>
     </View>
   )
 }

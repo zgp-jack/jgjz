@@ -1,5 +1,5 @@
 import Taro, {useState, useEffect} from '@tarojs/taro'
-import {View, Image, Text} from '@tarojs/components'
+import {View, Image, Text, Picker} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
 import filter from '@/images/ic_sx.png'
@@ -11,34 +11,122 @@ import arrowRight from '@/images/arrow-right.png'
 import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
-import PickerWorkTime from "@/components/picker/picker-work-time";
-import PickerOption from "@/components/picker/picker-option";
-import PickerOverTime from "@/components/picker/picker-over-time";
 import PickerUnit from "@/components/picker/picker-unit";
 import Filter from "@/components/filter";
-import {initRemember} from "@/utils/api";
-import useInit from "@/hooks/init";
-import {getRememberById} from "@/pages/remember/api";
+import {get} from "@/utils/request";
+import {GetCountParams, GetCountResult} from "@/pages/remember/inter";
+import {getCountUrl} from "@/utils/api";
 
 Taro.setNavigationBarTitle({title: '个人记工账本'})
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 export default function Remember() {
+  /*统计数据*/
+  const [counts, setCounts] = useState({
+    work_time: "0",
+    work_time_hour: "",
+    overtime: "",
+    count_unit: [{unit: null, count: 0}],
+    work_money: "",
+    borrow_count: "0.00",
+    expend_count: "0.00"
+  })
+  /*获取年份*/
+  const year = new Date().getFullYear()
+  /*获取月份*/
+  const month = new Date().getMonth() + 1
 
-  const {data} = useInit(getRememberById, {work_note: 702}, [])
+  /*当前年份*/
+  const [currentYear, setCurrentYear] = useState(year)
+  /*当前月份*/
+  const [currentMonth, setCurrentMonth] = useState(month)
+  /*当前年份与月份*/
+  const [currentYearMonth, setCurrentYearMonth] = useState('')
 
+  /*筛选年份*/
+  const [filterYear, setFilterYear] = useState(year)
+  /*筛选月份*/
+  const [filterMonth, setFilterMonth] = useState(month)
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
 
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
 
   const [showPopup, setShowPopup] = useState(false)//点击切换账本打开选择器弹窗（调试用）
 
+  /*获取当前日期的下一个月份日期*/
+  const getNextYearMonth = (): string => {
+    let _nextYearMonth = ''
+    if (filterMonth == 12) {
+      _nextYearMonth = filterYear + 1 + '-' + 1
+    } else {
+      _nextYearMonth = filterYear + '-' + (filterMonth + 1)
+    }
+    return _nextYearMonth
+  }
+  /*当前选中日期的下一个日期，获取统计接口使用*/
+  const [nextYearMonth, setNextYearMonth] = useState(getNextYearMonth())
+
+  /*根据筛选日期改变初始化*/
+  useEffect(() => {
+    const start_business_time = filterYear + '-' + filterMonth
+    const end_business_time = getNextYearMonth()
+    setCurrentYearMonth(start_business_time)
+    setNextYearMonth(end_business_time)
+    const params: GetCountParams = {
+      start_business_time,
+      work_note: '718',
+      end_business_time
+    }
+    initData(params)
+  }, [filterMonth, filterYear])
+
+  /*获取统计数据*/
+  const initData = (params: GetCountParams) => {
+    get<GetCountParams, GetCountResult>(getCountUrl, params).then(res => {
+      setCounts(res.data.count)
+    })
+  }
+  /*上一个月份日期*/
+  const prevMonth = () => {
+    if (filterMonth == 1) {
+      setFilterYear(filterYear - 1)
+      setFilterMonth(12)
+    } else {
+      setFilterMonth(filterMonth - 1)
+    }
+  }
+  /*下一个月份日期*/
+  const nextMonth = () => {
+    if (filterMonth == 12) {
+      setFilterYear(filterYear + 1)
+      setFilterMonth(1)
+    } else {
+      setFilterMonth(filterMonth + 1)
+    }
+  }
+  /*日期选择器选择*/
+  const onFilterDateChange = (e) => {
+    const date = e.detail.value
+    setCurrentYearMonth(date)
+    const yearAndMonth = date.split('-')
+    setFilterYear(yearAndMonth[0])
+    yearAndMonth[1].charAt(yearAndMonth[1].length - 1)
+    let _month = Array.from(yearAndMonth[1])
+    if (_month.length > 1) {
+      let selectMonth
+      selectMonth = _month[0] == '0' ? _month[1] : _month.join('')
+      setFilterMonth(Number(selectMonth))
+    } else {
+      setFilterMonth(date[1])
+    }
+  }
+
   return (
     <View className="remember">
       <View className="container">
         <View className="header">
           <View className="header-tag"><View className="tag-text">个人记工</View></View>
-          <View className="header-title overwords">个人默认消费记录清单记工账哈哈哈</View>
+          <View className="header-title overwords">{}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch" onClick={() => setShowPopup(true)}>切换记工本</View>
         </View>
@@ -46,9 +134,12 @@ export default function Remember() {
           <View className="body-container">
             <View className="feat">
               {!isFilter ? <View className="date">
-                  <View className="icon-left date-icon"/>
-                  <View className="date-value">2020年11月</View>
-                  <View className="icon-right date-icon"/>
+                  <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon"/></View>
+                  <Picker fields="month" mode='date' onChange={onFilterDateChange} value={currentYearMonth}>
+                    <View className="date-value">{filterYear}年{filterMonth}月</View>
+                  </Picker>
+
+                  <View className="date-icon-bor" onClick={nextMonth}><View className="icon-right date-icon"/></View>
                 </View>
                 :
                 <View className="filter-start-end-date">
@@ -81,42 +172,51 @@ export default function Remember() {
                     <Image src={remember} className="statistics-icon"/>
                     <View className="remember-values">
                       <View className="remember-value">
-                        <Text>上班</Text><Text>7.5个工+0.5小时</Text>
+                        <Text>上班</Text>
+                        <Text>{counts.work_time}个工</Text>
+                        {counts.work_time_hour != '0' && <Text>+{counts.work_time_hour}小时</Text>}
                       </View>
-                      <View className="remember-value"><Text>加班</Text><Text>23.5小时</Text></View>
+                      {counts.overtime != '0' &&
+                      <View className="remember-value"><Text>加班</Text><Text>{counts.overtime}小时</Text></View>}
                     </View>
                   </View>
                 </View>
               </View>
             </View>
+
             {/*临时工资，平方米，筛选后才展示*/}
-            {isFilter && <View className="statistics">
-              <View className="statistics-bookkeeping">
-                <View className="bookkeeping-row wage-meter">
+            <View className="statistics">
+              <View className="statistics-bookkeeping statistics-bookkeeping-unit">
+                {counts.work_money && <View className="bookkeeping-row wage-meter">
                   <View className="bookkeeping-content">
                     <Image src={wage} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         临时工资
                       </View>
-                      <View className="bookkeeping-value">￥500</View>
+                      <View className="bookkeeping-value">￥{counts.work_money}</View>
                     </View>
                   </View>
-                </View>
-
-                <View className="bookkeeping-row wage-meter">
-                  <View className="bookkeeping-content">
-                    <Image src={meter} className="statistics-icon"/>
-                    <View className="bookkeeping-values">
-                      <View className="bookkeeping-label">
-                        平方米
+                </View>}
+                {
+                  (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0) &&
+                  counts.count_unit.map((item, i) => (
+                    <View className="bookkeeping-row wage-meter" key={i}>
+                      <View className="bookkeeping-content">
+                        <Image src={meter} className="statistics-icon"/>
+                        <View className="bookkeeping-values">
+                          <View className="bookkeeping-label">
+                            {item.unit}
+                          </View>
+                          <View className="bookkeeping-value">{item.count}</View>
+                        </View>
                       </View>
-                      <View className="bookkeeping-value">￥500</View>
                     </View>
-                  </View>
-                </View>
+                  ))
+                }
               </View>
-            </View>}
+            </View>
+
             {/*记账统计*/}
             <View className="statistics">
               {!isFilter && <View className="statistics-title">11月记账统计</View>}
@@ -128,7 +228,7 @@ export default function Remember() {
                       <View className="bookkeeping-label">
                         借支
                       </View>
-                      <View className="bookkeeping-value">￥500</View>
+                      <View className="bookkeeping-value">￥{parseFloat(counts.borrow_count).toFixed(2)}</View>
                     </View>
                   </View>
                 </View>
@@ -140,7 +240,7 @@ export default function Remember() {
                       <View className="bookkeeping-label">
                         支出
                       </View>
-                      <View className="bookkeeping-value">￥500</View>
+                      <View className="bookkeeping-value">￥{parseFloat(counts.expend_count).toFixed(2)}</View>
                     </View>
                   </View>
                 </View>
@@ -168,9 +268,8 @@ export default function Remember() {
       </View>
       {
         showPopup &&
-        <PickerWorkTime show={showPopup} close={() => setShowPopup(false)} confirm={() => setShowPopup(false)}/>
+        <PickerUnit show={showPopup} close={() => setShowPopup(false)} confirm={() => setShowPopup(false)}/>
       }
-
       {
         showFilter &&
         <View className="mask" onClick={() => setShowFilter(false)}/>

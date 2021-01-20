@@ -2,6 +2,8 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/mobx'
 import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
+import ClassifyType from '@/store/classify'
+import ClassifySubitem from '@/store/classify/subitem'
 import './app.scss'
 // import Remember from "@/pages/remember";
 import './styles/common.scss'
@@ -12,7 +14,9 @@ import './styles/common.scss'
 // }
 
 const store = {
-  CounterStore
+  CounterStore,
+  ClassifyType,
+  ClassifySubitem
 }
 
 class App extends Component {
@@ -35,13 +39,19 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+<<<<<<< HEAD
       'pages/work_team/record_work/index',
+=======
+      'pages/index/index', // 首页
+      'pages/person_record/index',
+      'pages/person_borrowing/index',
+      'pages/person_detail/index',
+>>>>>>> dev
       'pages/remember/index',
       'pages/feedback/index',
       'pages/login/index',
       'pages/account_book_list/index',
       'pages/identity_selection/index',
-      'pages/index/index', // 首页
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用

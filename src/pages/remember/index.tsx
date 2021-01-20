@@ -8,10 +8,8 @@ import debt from '@/images/ic_jz.png'
 import expenditure from '@/images/ic_zc.png'
 import feedback from '@/images/ic_yjfk.png'
 import arrowRight from '@/images/arrow-right.png'
-<<<<<<< HEAD
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-=======
 import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
@@ -23,7 +21,6 @@ import Filter from "@/components/filter";
 import {initRemember} from "@/utils/api";
 import useInit from "@/hooks/init";
 import {getRememberById} from "@/pages/remember/api";
->>>>>>> fed7bd6f9faa729eddd227f81c96d9cb302ca349
 
 Taro.setNavigationBarTitle({title: '个人记工账本'})
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})

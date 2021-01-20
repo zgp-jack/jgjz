@@ -5,45 +5,38 @@ import edit from '@/images/bianj.png'
 import remove from '@/images/shanc.png'
 import PickerBar from "@/components/picker/components/picker-bar";
 import PopupBottom from "@/components/picker/components/popupBottom";
-import {PickerData} from "@/components/picker/picker-work-time";
+import PickerOptionsProps from './inter.d'
+import LoadFooter from '@/components/load_footer'
 
-interface PickerOptionProps {
-  close: () => void
-  show: boolean
-  confirm: () => void
-}
-
-
-const PickerOption: React.FC<PickerOptionProps> = props => {
-  const [data, setData] = useState<PickerData[]>([])
-  useEffect(() => {
-    let _data: PickerData[] = []
-    for (let i = 1; i < 20; i++) {
-      _data.push({id: i, value: '选项' + i})
-    }
-    setData(_data)
-  }, [])
+export default function PickerOption({
+  data = [],
+  show,
+  close,
+  confirm,
+  add,
+  status = true
+}: PickerOptionsProps) {
+  
   return (
-    <PopupBottom show={props.show} closePopup={props.close}>
+    <PopupBottom show={show} closePopup={close}>
       <View className="picker-option">
-        <PickerBar centerText="选择分项" confirmClick={props.confirm}>
-          <View className="picker-bar-children">添加</View>
+        <PickerBar centerText="选择分项" confirmClick={close}>
+          <View className="picker-bar-children" onClick={() => add()}>添加</View>
         </PickerBar>
         <View className="picker-option-body">
           <ScrollView
             className='picker-body-scroll'
             scrollY
           >
-            {
-              data.length > 0 &&
-              data.map(item => (
-                <View className="picker-option-item" key={item.id}>
-                  <View className="option-item-name">{item.value}</View>
-                  <View className="option-item-icons">
-                    <Image className="option-item-icon" src={edit}/>
-                    <Image className="option-item-icon" src={remove}/>
-                  </View>
+            {!status && <LoadFooter text='数据加载中...' /> }
+            {data.map(item => (
+              <View className="picker-option-item" key={item.id} onClick={() => confirm(item)}>
+                <View className="option-item-name">{item.name}</View>
+                <View className="option-item-icons">
+                  <Image className="option-item-icon" src={edit}/>
+                  <Image className="option-item-icon" src={remove}/>
                 </View>
+              </View>
               ))
             }
           </ScrollView>
@@ -52,5 +45,3 @@ const PickerOption: React.FC<PickerOptionProps> = props => {
     </PopupBottom>
   )
 }
-
-export default PickerOption;

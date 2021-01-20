@@ -3,16 +3,17 @@ import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
 import { IMGCDNURL } from '@/config/index'
-import { ADDRESS_BOOK_LIST, PERSON_DATA } from './index.d'
+import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS } from './index.d'
 import InitProvider from '@/components/init_provider'
 import useInit from '@/hooks/init'
 import getWorkers from './api'
+import PromptBox from '@/components/popup/index'
 import './index.scss'
 
 
 export default function AddressBook() {
   /** 获取所有通讯录列表 */
-  const { loading, data, errMsg } = useInit(getWorkers, { work_note: '1' }, [])
+  const { loading, data, errMsg } = useInit(getWorkers, { work_note: '718' }, [])
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([]);
   /** 已选择的工友 */
@@ -38,7 +39,7 @@ export default function AddressBook() {
     let selectdArr: PERSON_DATA[] = []
     /** 找出已选中的工友 保存到selectd中 */
     newListData.map((pItem) => {
-      pItem.data.map((cItem) => {cItem.is_check ? selectdArr.push(cItem) : ''})
+      pItem.data.map((cItem) => { cItem.is_check ? selectdArr.push(cItem) : '' })
     })
     setSelectd(selectdArr)
   }
@@ -52,22 +53,56 @@ export default function AddressBook() {
     /** 从列表数据中 找到删除的这一条数据 改变is_check */
     newListData.map(pItem => {
       pItem.data.map(cItiem => {
-        if (cItiem.id == item.id){
+        if (cItiem.id == item.id) {
           cItiem.is_check = false
         }
       })
     })
     setList(newListData)
   }
+  /**随机选择一个颜色*/
+  const randomColor = (): string => {
+    let colors: string[] = ['#58C7FF', '#74E8D5', '#A4BFFF', '#79BAFF', '#4ECBF4']
+    return colors[Math.floor(Math.random() * 5)]
+  }
 
-
+  /** 添加工友弹窗确定 */
+  const addConfirm = (data: ADD_CONFIRM_DATA) => {
+    if (data.name) { 
+      setAddPopupShow(false)
+    }else {
+      Taro.showToast({
+        title: '请填写工人名称',
+        icon: 'none',
+        duration: 1000
+      })
+      return
+    }
+    
+    let params: ADD_PERSON_PARAMS = {
+      name: data.name,
+      tel: data.tel,
+      name_color: randomColor()
+    }
+    
+  }
+  /** 添加工友弹窗取消 */
+  const addCancel = () => {
+    setAddPopupShow(false)
+  }
+  /**是否显示添加工友弹窗*/
+  const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
+  /** 弹出添加工友弹窗*/
+  const showAddPopup = () => {
+    setAddPopupShow(true)
+  }
   return (
     <InitProvider loading={loading} errMsg={errMsg}>
       <View className="AddressBook">
         {/* 已选中工友 */}
         <Selectd selectd={selectd} deletePerson={deletePerson} />
         {/* 搜索组件 */}
-        <Search />
+        <Search addClick={showAddPopup} />
 
         {/* 通讯录列表 */}
         <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className="list_content">
@@ -116,6 +151,19 @@ export default function AddressBook() {
         </View>
         </View>
       </View>
+      {
+        addPopupShow && <PromptBox
+          titleText="添加工友"
+          showTitleButton={false}
+          confirmText="确定"
+          inputGroup={[
+            { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名' },
+            { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)' }
+          ]}
+          confirm={addConfirm}
+          cancel={addCancel}
+        ></PromptBox>
+      }
     </InitProvider>
   )
 }

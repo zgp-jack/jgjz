@@ -44,13 +44,33 @@ export interface GET_WORKERS_ALL_PARAMS {
 
 //获取所有工友的接口 后台返回值
 export interface GET_WORKERS_ALL_RESULT {
+  //状态码
   code:number,
+  //状态信息
   message:string,
+  //工友列表数据
   data: ADDRESS_BOOK_LIST[]
 }
 
 //已选中组件的参数
 export interface SELECTD_PROPS {
+  //已选中的工友数据
   selectd: PERSON_DATA[],
+  //删除事件
   deletePerson:Function
+}
+
+//搜索组件的参数
+export interface SEARCH_PROPS {
+  addClick:Function,
+}
+
+// 添加工友弹窗确定 的值
+export interface ADD_CONFIRM_DATA {
+  name:string,
+  tel:string
+}
+// 添加工友 给后台传的参数
+export interface ADD_PERSON_PARAMS extends ADD_CONFIRM_DATA {
+  name_color:string
 }

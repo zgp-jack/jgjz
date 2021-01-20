@@ -2,6 +2,8 @@ import Taro, {Component, Config} from '@tarojs/taro'
 import {Provider} from '@tarojs/mobx'
 import Index from './pages/index'
 import CounterStore from '@/store/counter'
+import ClassifyType from '@/store/classify'
+import ClassifySubitem from '@/store/classify/subitem'
 import './app.scss'
 import Remember from "@/pages/remember";
 import './styles/common.scss'
@@ -12,7 +14,9 @@ import './styles/common.scss'
 // }
 
 const store = {
-  CounterStore
+  CounterStore,
+  ClassifyType,
+  ClassifySubitem
 }
 
 class App extends Component {

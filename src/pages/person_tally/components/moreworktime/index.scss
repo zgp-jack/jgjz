@@ -1,0 +1,64 @@
+.moreworktime{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+.moreworktime-content{
+    width: 100%;
+    height: 650px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+.moreworktime-btn{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    background-color: #F8F4F4;
+    font-size: 27px;
+}
+.moreworktime-cancle{
+    color: #8E8E8E;
+    padding: 28px 30px;
+}
+.moreworktime-title{
+    color: #4E4D4D;
+}
+.moreworktime-confim{
+    color: #0099FF;
+    padding: 28px 30px;
+}
+.moreworktime-list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    height: 570px;
+    padding-bottom: 30px;
+    overflow-y: scroll;
+    font-size: 28px;
+    color: #808080;
+    background-color: #fff;
+}
+.moreworktime-item{
+    width: 150px;
+    height: 70px;
+    margin-top: 30px;
+    margin-left: 30px;
+    background-color: #EDEDED;
+    line-height: 70px;
+    text-align: center;
+    border-radius: 5px;
+}
+.moreworktime-item:nth-child(4n){
+    margin-right: 30px;
+}
+.worktime-active{
+    color: #fff;
+    background-color: #0099FF;
+}

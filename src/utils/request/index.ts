@@ -2,13 +2,13 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-19 11:47:48
+ * @LastEditTime: 2021-01-20 11:47:21
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
 
 import Taro from '@tarojs/taro'
-import { MINITOKEN, VERSION } from '@/config/index'
+import { MINITOKEN, VERSION, REQUESTURL } from '@/config/index'
 import { UserInfo } from '@/config/store'
 import { User } from '@/store/user/inter.d'
 import { Request, RequestBase, RequestHeader, Result } from './inter.d'
@@ -98,7 +98,7 @@ export default function doRequestAction<T>(reqData: Request): Promise<Result<T>>
   // 发起请求
   return new Promise((resolve, reject) => {
     Taro.request({
-      url: /^http(s?):\/\//.test(req.url) ? req.url : req.url,
+      url: /^http(s?):\/\//.test(req.url) ? req.url : REQUESTURL + req.url,
       method: req.method,
       header: req.header,
       data: { ...req.data },

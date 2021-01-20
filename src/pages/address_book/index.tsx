@@ -38,9 +38,7 @@ export default function AddressBook() {
     let selectdArr: PERSON_DATA[] = []
     /** 找出已选中的工友 保存到selectd中 */
     newListData.map((pItem) => {
-      pItem.data.map((cItem) => {
-        cItem.is_check ? selectdArr.push(cItem) : ''
-      })
+      pItem.data.map((cItem) => {cItem.is_check ? selectdArr.push(cItem) : ''})
     })
     setSelectd(selectdArr)
   }
@@ -50,7 +48,8 @@ export default function AddressBook() {
     let newSelectd: PERSON_DATA[] = [...selectd]
     /** 从已选中里 过滤掉 当前删除的这一条*/
     setSelectd(newSelectd.filter(SelectdItem => SelectdItem.id != item.id))
-    /** 从列表数据中 找到删除的这一条数据 并改变is_check */
+
+    /** 从列表数据中 找到删除的这一条数据 改变is_check */
     newListData.map(pItem => {
       pItem.data.map(cItiem => {
         if (cItiem.id == item.id){

@@ -7,7 +7,7 @@ import { GetWorkFlowParams, GetWorkFlowResult } from './index.d'
 import useList from '@/hooks/list'
 import { TypeAction } from './index.d'
 import getFlowlists from './api'
-// import Popup from '@/components/popup/index'
+import Popup from '@/components/popup/index'
 import './index.scss'
 
 
@@ -66,7 +66,13 @@ const [currentIndex, setCurrentIndex] = useState<number>(0)
     setCurrentIndex(index);
   }
 
+  const inputGroup = [
+    { title: '测试', name: 'test', placeholder: '请输入测试数据' }
+  ]
 
+  const userChangeData = (data) => {
+    console.log(data)
+  }
 
   return (
     <View className='record-work-container'>
@@ -136,12 +142,15 @@ const [currentIndex, setCurrentIndex] = useState<number>(0)
                     hasmore={hasmore}
                     length={list.length}
                   >
-                    {(currentIndex == 0 || currentIndex == 2) && list && Array.isArray(list) && list.length > 0 && <WorkCountDay list={list[0].list}></WorkCountDay>}
+                    {(currentIndex == 0 || currentIndex == 2) && <WorkCountDay list={ list.length ? list[0].list : []}></WorkCountDay>}
                     {currentIndex == 1 && <WorkMoneyBorrowing></WorkMoneyBorrowing>}
                   </ListProvider>
                 </View>
               </View>
-              {/* <Popup></Popup> */}
+              <Popup 
+                inputGroup={inputGroup}
+                confirm={(data) => userChangeData(data)}
+              />
             </ScrollView>
           </SwiperItem>
         ))}

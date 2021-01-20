@@ -153,7 +153,7 @@ export default function Remember() {
               <View className="statistics-title">11月全部流水</View>
               <View className="bokkeeping-list">
                 <View className="bokkeeping-list-head">2020年11月03日 周二</View>
-                <WorkCountDay/>
+                <WorkCountDay list={[]}/>
                 <View className="bokkeeping-list-head">2020年11月03日 周二</View>
                 <WorkMoneyBorrowing/>
                 <View className="bokkeeping-list-head">2020年11月03日 周二</View>

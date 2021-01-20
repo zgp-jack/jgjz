@@ -28,3 +28,9 @@ export const userGetCode: string = `${REQUESTURL}`
 // ! 意见反馈
 // 意见反馈-添加意见反馈
 export const addFeedback: string = `${REQUESTURL}feedback/add`
+
+// ! 通讯录
+// 获取全部工友
+export const addressBookAll: string = `${REQUESTURL}workers/get`
+//获取某个账本中的工友
+export const addressBookNote: string = `${REQUESTURL}workers/get-note-workers`

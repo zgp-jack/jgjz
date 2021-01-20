@@ -3,7 +3,7 @@ import { View, Text, Picker, Input, Image, ScrollView, Block, Swiper, SwiperItem
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import ListProvider from '@/components/list_provider'
-import { GetWorkFlowParams } from './index.d'
+import { GetWorkFlowParams, GetWorkFlowResult } from './index.d'
 import useList from '@/hooks/list'
 import { TypeAction } from './index.d'
 import getFlowlists from './api'
@@ -31,8 +31,9 @@ export default function RecordWork() {
     /**页码*/ 
     page: 1
   }
-  const { loading, setLoading, increasing, list, errMsg, setIncreasing, hasmore } = useList(getFlowlists, params)
-  console.log("list", list)
+  const { loading, setLoading, increasing, list=[], errMsg, setIncreasing, hasmore } = useList(getFlowlists, params)
+  console.log("list",list)
+
 
   //定义页面切换类型
   const types: TypeAction[] = [{ id: 'day', name: '记工天' }, { id: 'money', name: '记工钱' }, { id: 'count', name: '记工量' }];
@@ -135,7 +136,7 @@ const [currentIndex, setCurrentIndex] = useState<number>(0)
                     hasmore={hasmore}
                     length={list.length}
                   >
-                    {(currentIndex == 0 || currentIndex == 2) && <WorkCountDay></WorkCountDay>}
+                    {(currentIndex == 0 || currentIndex == 2) && list && Array.isArray(list) && list.length > 0 && <WorkCountDay list={list[0].list}></WorkCountDay>}
                     {currentIndex == 1 && <WorkMoneyBorrowing></WorkMoneyBorrowing>}
                   </ListProvider>
                 </View>

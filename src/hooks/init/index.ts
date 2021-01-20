@@ -8,19 +8,20 @@
  * @tips 使用该hooks 在其页面需要添加 InitProvider 容器 @/components/init_provider
  */
 
-import {useState, useEffect} from '@tarojs/taro'
-import {FetchResult, APIFunc} from './inter.d'
+import { useState, useEffect } from '@tarojs/taro'
+import { FetchResult, APIFunc } from './inter.d'
+import produce from 'immer'
 // import { Result } from '@/utils/request/inter.d'
 
 
-export default function useInit<T, P>(api: APIFunc<T, P>, params: P, data: T) {
+export default function useInit<T, P>(api: APIFunc<T, P>, params: P ,data: T) {
 
   // result 所有的状态保存
-  const [result, setResult] = useState<FetchResult<T>>({loading: true, errMsg: '', data});
-  const {loading} = result;
+  const [result, setResult] = useState<FetchResult<T>>({ loading: true, errMsg: '', data });
+  const { loading } = result;
 
-  useEffect(() => {
-    if (!loading) return
+  useEffect(()  => {
+    if(!loading) return
     api(params).then(res => {
       // 请求成功  并且接口返回成功
       setResult({
@@ -34,13 +35,16 @@ export default function useInit<T, P>(api: APIFunc<T, P>, params: P, data: T) {
         ...result,
         loading: false,
         errMsg: e.message,
-        data
+        data: data
       })
     })
-  }, [loading])
+  },[loading])
 
   return {
     ...result,
+    setData: (data: T) => setResult(produce(result, (proxy: typeof result) => {
+      proxy.data = data
+    })),
     setLoading: (loading: boolean) => setResult({...result, loading})
   }
 }

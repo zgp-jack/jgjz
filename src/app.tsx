@@ -17,33 +17,35 @@ const store = {
 
 class App extends Component {
 
-  componentDidMount() {
-  }
+  componentDidMount () {}
 
-  componentDidShow() {
-  }
+  componentDidShow () {}
 
-  componentDidHide() {
-  }
+  componentDidHide () {}
 
-  componentDidCatchError() {
-  }
+  componentDidCatchError () {}
 
-  /**
+  /*
    * 指定config的类型声明为: Taro.Config
    *
    * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
    * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
+   ! 页面的请使用_区分，不要用驼峰，页面后面请清楚的标注当时是哪个页面
    */
   config: Config = {
     pages: [
       'pages/remember/index',
+      'pages/feedback/index',
+      'pages/login/index',
+      'pages/account_book_list/index',
+      'pages/identity_selection/index',
       'pages/index/index', // 首页
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用
       'pages/address_book/index', // 通讯录
+
     ],
     window: {
       backgroundTextStyle: 'light',

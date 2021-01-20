@@ -1,9 +1,8 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, Text, Image, Textarea } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'
 
-function Content({src='', title, text, bool=0}){
+export default function Content({src='', title, text, bool=0}){
     /* bool(0)--默认(有叉) bool（1）--备注  bool(2)--分类（要箭头） bool(3)--报销（宽度）bool(4)--修改
     */
     return (
@@ -20,4 +19,3 @@ function Content({src='', title, text, bool=0}){
         </View>
     )
 }
-export default observer(Content)

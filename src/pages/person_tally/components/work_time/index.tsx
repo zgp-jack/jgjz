@@ -1,9 +1,8 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'
 
-function WorkTime(){
+export default function WorkTime(){
     return (
         <View className="person-record-worktime">
             <Text className="worktime-text">上班时长</Text>
@@ -16,4 +15,3 @@ function WorkTime(){
         </View>
     )
 }
-export default observer(WorkTime)

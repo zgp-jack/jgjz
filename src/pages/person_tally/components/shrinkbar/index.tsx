@@ -1,9 +1,8 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'
 
-function ShrinkBar({}){
+export default function ShrinkBar({}){
     return (
         <View>
             <View className="person-record-component">
@@ -14,4 +13,3 @@ function ShrinkBar({}){
         </View>
     )
 }
-export default observer(ShrinkBar)

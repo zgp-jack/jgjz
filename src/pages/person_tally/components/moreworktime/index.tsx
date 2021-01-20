@@ -1,6 +1,5 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'
 
 interface MoreWorkTimeType {
@@ -8,7 +7,7 @@ interface MoreWorkTimeType {
     id:string,
     selected:false
 }
-function MoreWorkTime({WorktimeCancle}){
+export default function MoreWorkTime({WorktimeCancle}){
     let moreworktimedata:MoreWorkTimeType[] = [];
     for(let i=0.5;i<=24;i+=0.5){
         moreworktimedata.push({num:i,id:'ids'+i,selected:false});
@@ -37,4 +36,3 @@ function MoreWorkTime({WorktimeCancle}){
         </View>
     )
 }
-export default observer(MoreWorkTime)

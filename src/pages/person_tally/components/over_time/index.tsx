@@ -1,9 +1,8 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'
 
-function OverTime({modify=false}){
+export default function OverTime({modify=false}){
     return (
         <View className="person-record-overtime person-record-worktime">
             <Text className="worktime-text">加班时长</Text>
@@ -15,4 +14,3 @@ function OverTime({modify=false}){
         </View>
     )
 }
-export default observer(OverTime)

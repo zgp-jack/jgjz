@@ -7,7 +7,7 @@ import ListData from './api/data'
 import { ADDRESS_BOOK_LIST } from './index.d'
 import InitProvider from '@/components/init_provider'
 import useInit from '@/hooks/init'
-import getWorkers from './api/api'
+import getWorkers from './api'
 import './index.scss'
 
 

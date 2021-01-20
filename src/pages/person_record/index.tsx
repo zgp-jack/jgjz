@@ -1,7 +1,7 @@
 import Taro, { Config, useState } from '@tarojs/taro'
 import { View, Text, Image, Textarea, Button, Input } from '@tarojs/components'
 import { observer, useLocalStore } from '@tarojs/mobx'
-import MoreWorkTime from '../person_tally/components/moreworktime/index'
+import MoreWorkTime from '../person_borrowing/components/moreworktime/index'
 import './index.scss'
 
 let type = [

@@ -1,0 +1,44 @@
+.selectd {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  .selectd_left {
+    flex: 1;
+    overflow-x: auto;
+    display: flex;
+    align-items: center;
+    .selected_left_box {
+      width: 68px;
+      height: 68px;
+      background: #58C7FF;
+      border-radius: 16px;
+      position: relative;
+      margin-left: 30px;
+      text-align: center;
+      line-height: 68px;
+      flex: 0 0 68px;
+      .selected_left_text{
+        font-size: 24px;
+        color: #fff;
+      }
+      .selected_left_img {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: -10px;
+        top: -10px;
+      }
+    }
+  }
+  .selectd_right {
+    width: 162px;
+    height: 117px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    Text{
+      color: #000;
+      font-size: 26px;
+    }
+  }
+}

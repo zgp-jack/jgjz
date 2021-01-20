@@ -3,12 +3,7 @@ import {View, Image} from '@tarojs/components'
 import './index.scss'
 import close from '@/images/x.png'
 import React from 'react'
-
-interface PickerBarProps {
-  centerText: string
-  confirmClick: () => void
-  confirmBtn?: boolean
-}
+import {PickerBarProps} from "@/components/picker/type";
 
 const PickerBar: React.FC<PickerBarProps> = ({centerText, confirmClick, children, confirmBtn = false}) => {
   return (

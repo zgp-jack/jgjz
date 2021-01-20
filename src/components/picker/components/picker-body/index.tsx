@@ -12,10 +12,7 @@ interface PickerBodyProps {
   over?: boolean
 }
 
-const PickerBody: React.FC<PickerBodyProps> = ({data, onSelect, activeData, over = false}) => {
-  if (!Array.isArray(data)) {
-    return null
-  }
+const PickerBody: React.FC<PickerBodyProps> = ({data = [], onSelect, activeData, over = false}) => {
   return (
     <View className="picker-body">
       <ScrollView

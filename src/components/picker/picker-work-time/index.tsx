@@ -1,23 +1,14 @@
 import Taro, {useEffect, useState} from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import './index.scss'
-
+import React from 'react'
 import PickerBar from "@/components/picker/components/picker-bar";
 import PopupBottom from "@/components/picker/components/popupBottom";
 import PickerBody from "@/components/picker/components/picker-body";
+import {PickerData, PickerProps} from "@/components/picker/type";
 
-interface PickerWorkTimeProps {
-  close: () => void
-  show: boolean
-  confirm: (activeTime: PickerData) => void
-}
 
-export interface PickerData {
-  id: number
-  value: string
-}
-
-const PickerWorkTime: React.FC<PickerWorkTimeProps> = props => {
+const PickerWorkTime: React.FC<PickerProps> = props => {
   const [times, setTimes] = useState<PickerData[]>([])
   const [activeTime, setActiveTime] = useState<PickerData>({id: 0, value: ''})
   useEffect(() => {

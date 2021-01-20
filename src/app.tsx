@@ -1,5 +1,5 @@
-import Taro, {Component, Config} from '@tarojs/taro'
-import {Provider} from '@tarojs/mobx'
+import Taro, { Component, Config } from '@tarojs/taro'
+import { Provider } from '@tarojs/mobx'
 import Index from './pages/index'
 import CounterStore from '@/store/counter'
 import './app.scss'
@@ -17,17 +17,13 @@ const store = {
 
 class App extends Component {
 
-  componentDidMount() {
-  }
+  componentDidMount () {}
 
-  componentDidShow() {
-  }
+  componentDidShow () {}
 
-  componentDidHide() {
-  }
+  componentDidHide () {}
 
-  componentDidCatchError() {
-  }
+  componentDidCatchError () {}
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -39,8 +35,12 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/remember/index',
-      'pages/index/index',
-      'pages/test/index'
+      'pages/test/index',
+      'pages/index/index', // 首页
+      'pages/example_mobx/index', // 示例 mobx 使用
+      'pages/example_useInit/index', // 示例 useInit 使用
+      'pages/example_useLists/index', // 示例 useLists 使用
+      'pages/address_book/index', // 通讯录
     ],
     window: {
       backgroundTextStyle: 'light',

@@ -4,7 +4,7 @@ import loginConfig, { codeWay, passWay } from './config'
 import { IMGCDNURL } from '@/config/index'
 import classnames from 'classnames'
 import useCode from '@/hooks/code'
-import msg,{showActionModal} from '@/utils/msg'
+import msg from '@/utils/msg'
 import userGetCodeLoginAction from './api'
 import { isPhone } from '@/utils/v'
 import './index.scss'
@@ -54,8 +54,12 @@ export default function Login() {
       }
     }
     userGetCodeLoginAction(paramsData).then(res =>{
+      msg(res.message)
       if(res.code == 0){
-        showActionModal({ msg:res.message,})
+        // 缓存本地
+
+        // 储存mobx
+
       }else{
         msg(res.message)
       }

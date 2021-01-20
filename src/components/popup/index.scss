@@ -19,6 +19,7 @@
     min-height: 408px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     .prompt-title {
       position: relative;

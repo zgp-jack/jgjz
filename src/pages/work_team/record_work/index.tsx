@@ -1,8 +1,7 @@
-import Taro, { Config, useState, useRef } from '@tarojs/taro'
+import Taro, { Config, useState } from '@tarojs/taro'
 import { View, Text, Picker, Input, Image } from '@tarojs/components'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import Popup from '@/components/popup/index'
-import InputBox from '@/components/input_box/index'
 import './index.scss'
 
 interface dataList {
@@ -21,7 +20,6 @@ export default function RecordWork() {
   for (let index = 0; index < emptyCount; index++) {
     emptyArray.push({name:''})
   }
-  let ref = useRef();
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
@@ -80,10 +78,7 @@ export default function RecordWork() {
           <WorkCountDay></WorkCountDay>
         </View>
       </View>
-      <Popup>
-        <InputBox />
-        <InputBox />
-      </Popup>
+      <Popup></Popup>
     </View>
   )
 }

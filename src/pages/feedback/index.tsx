@@ -4,8 +4,9 @@ import FeedbackData from './inter.d'
 import Star from  './components/star'
 import UploadImg from '@/components/upload_img'
 import starConfig from './components/star/config'
-import { showActionModal } from '@/utils/msg'
+import msg,{ showActionModal } from '@/utils/msg'
 import {isVaildVal} from '@/utils/v'
+import userGetFeedbackAction from './api'
 import './index.scss'
 
 export default function Feedback() {
@@ -43,14 +44,21 @@ export default function Feedback() {
   // 用户提交数据
   const userPostFeedback = () => {
     if (!isVaildVal(postData.note, 0)) {
-      showActionModal({ msg:'请填写反馈内容'})
+      msg('请填写反馈内容')
       return false
     }
     if(postData.type < 0){
-      showActionModal({ msg:'请选择评价等级'})
+      msg('请选择评价等级')
       return false
     }
     console.log(postData)
+    userGetFeedbackAction(postData).then(res =>{
+      if(res.code == 0){
+        showActionModal({ msg:res.message,})
+      }else{
+        msg(res.message)
+      }
+    })
   }
 
   return (

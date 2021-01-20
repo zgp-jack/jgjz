@@ -7,7 +7,7 @@
  ! @rules: 1. 导出的接口名 小驼峰  2.注释: 功能模块名 + 接口概述 3.功能模块相同的接口放在一起
  */
 
-import { REQUESTURL } from '@/config/index'
+import {REQUESTURL} from '@/config/index'
 
 // ! 记工本
 // 记工本-获取归档列表
@@ -28,3 +28,10 @@ export const userGetCode: string = `${REQUESTURL}`
 // ! 意见反馈
 // 意见反馈-添加意见反馈
 export const addFeedback: string = `${REQUESTURL}feedback/add`
+
+//初始化记工界面
+
+export const initRemember: string = REQUESTURL + 'business/get-one/'
+
+//获取记工本
+export const workNote: string = REQUESTURL + 'work-notes/get?id=1&co=23'

@@ -1,5 +1,5 @@
 import Taro, {useState, useEffect} from '@tarojs/taro'
-import {View, Image, Text, Picker} from '@tarojs/components'
+import {View, Image, Text} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
 import filter from '@/images/ic_sx.png'
@@ -16,17 +16,22 @@ import PickerOption from "@/components/picker/picker-option";
 import PickerOverTime from "@/components/picker/picker-over-time";
 import PickerUnit from "@/components/picker/picker-unit";
 import Filter from "@/components/filter";
+import {initRemember} from "@/utils/api";
+import useInit from "@/hooks/init";
+import {getRememberById} from "@/pages/remember/api";
 
 Taro.setNavigationBarTitle({title: '个人记工账本'})
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 export default function Remember() {
+
+  const {data} = useInit(getRememberById, {work_note: 702}, [])
+
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
 
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
 
   const [showPopup, setShowPopup] = useState(false)//点击切换账本打开选择器弹窗（调试用）
-
 
   return (
     <View className="remember">

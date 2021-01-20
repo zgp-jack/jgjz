@@ -2,19 +2,24 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:00:19
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-18 20:12:24
+ * @LastEditTime: 2021-01-20 13:54:24
  * @Description: 项目配置项文件、全局配置项
  ! @rules: 1.key 为全大写  2.注释在上方
  */
 
-// * 测试站
-export const DEVREQUESTURL: string = 'http://appjg.superinyang.com/api/'
-// * 预发布
-export const PREREQUESTURL: string = 'http://book.release.kkbbi.com/api/'
-// * 正式站
-export const PROREQUESTURL: string = 'https://app.cdmgkj.cn/api/'
+// * 请求地址
+const REQUESTURLS = {
+  // * 测试站
+  dev: 'http://appjg.superinyang.com/api/',
+  // * 预发布
+  pre: 'http://book.release.kkbbi.com/api/',
+  // * 正式站
+  pro: 'https://app.cdmgkj.cn/api/'
+}
+// * 当前小程序运行环境
+export const miniEnv: string = MINIENV || 'dev'
 // * 当前程序使用的请求地址
-export const REQUESTURL: string = DEVREQUESTURL
+export const REQUESTURL: string = REQUESTURLS[miniEnv]
 // * 默认上传图片
 export const UPLOADIMGURL: string = `https://newyupaomini.54xiaoshuo.com/index/upload/`
 // * 阿里云CDN域名

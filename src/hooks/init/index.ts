@@ -10,6 +10,7 @@
 
 import { useState, useEffect } from '@tarojs/taro'
 import { FetchResult, APIFunc } from './inter.d'
+import produce from 'immer'
 // import { Result } from '@/utils/request/inter.d'
 
 
@@ -41,6 +42,9 @@ export default function useInit<T, P>(api: APIFunc<T, P>, params: P ,data: T) {
 
   return {
     ...result,
+    setData: (data: T) => setResult(produce(result, (proxy: typeof result) => {
+      proxy.data = data
+    })),
     setLoading: (loading: boolean) => setResult({...result, loading})
   }
 }

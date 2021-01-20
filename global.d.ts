@@ -16,3 +16,6 @@ declare const process: {
     [key: string]: any;
   }
 }
+
+// 编译环境
+declare const MINIENV: string

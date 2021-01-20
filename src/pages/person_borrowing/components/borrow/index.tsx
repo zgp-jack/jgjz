@@ -1,8 +1,7 @@
 import { useState } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import Content from '../person_content/index'
 import ContentInput from '../person_input/index'
-import ShrinkBar from '../shrinkbar/index'
+import PickerType from '@/components/picker_type'
 import { IMGCDNURL } from '@/config/index'
 import BorrowPostData from './inter.d'
 
@@ -33,11 +32,8 @@ export default function Borrew() {
   return (
     <View>
       <ContentInput title='借支' value={postData.money} change={userUpdatePostData} type="money" />
-      <Content src={`${IMGCDNURL}gl/Bookkeeping-icon.png`} title={'分类'} text={'生活费'} bool={2} />
-      <Content src={`${IMGCDNURL}gl/Bookkeeping-icon.png`} title={'日期'} text={'4'} />
-      <Content src={`${IMGCDNURL}gl/Bookkeeping-icon.png`} title={'班组长'} text={'张合'} />
-      <Content src={`${IMGCDNURL}gl/Bookkeeping-icon.png`} title={'备注'} text={'盛大开放打快速反击看到副书记'} bool={1} />
-      <ShrinkBar />
+      
+      <PickerType title="分类" img={`${IMGCDNURL}gl/Bookkeeping-icon.png`} value="水电费"  />
 
       <View className="person-record-btn">
         <Button className="person-record-resave">保存并再记一笔</Button>

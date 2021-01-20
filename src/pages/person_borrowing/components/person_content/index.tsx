@@ -3,8 +3,7 @@ import { View, Text, Image, Textarea } from '@tarojs/components'
 import './index.scss'
 
 export default function Content({src='', title, text, bool=0}){
-    /* bool(0)--默认(有叉) bool（1）--备注  bool(2)--分类（要箭头） bool(3)--报销（宽度）bool(4)--修改
-    */
+    /* bool(0)--默认(有叉) bool（1）--备注  bool(2)--分类（要箭头） bool(3)--报销（宽度）bool(4)--修改*/
     return (
         <View>
             <View className={bool==1?"person-record-note person-record-overtime person-record-date":"person-record-overtime person-record-date"}>

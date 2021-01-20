@@ -4,7 +4,7 @@
  * @LastEditors: jsxin
  * @LastEditTime: 2021-01-18 17:45:01
  * @params api: 请求接口的方法  params: 请求接口的参数  data:请求接口的默认返回数据
- * @Description: 页面初始化接口 进入获取数据 如果 
+ * @Description: 页面初始化接口 进入获取数据 如果
  * @tips 使用该hooks 在其页面需要添加 InitProvider 容器 @/components/init_provider
  */
 
@@ -15,7 +15,7 @@ import produce from 'immer'
 
 
 export default function useInit<T, P>(api: APIFunc<T, P>, params: P ,data: T) {
-  
+
   // result 所有的状态保存
   const [result, setResult] = useState<FetchResult<T>>({ loading: true, errMsg: '', data });
   const { loading } = result;

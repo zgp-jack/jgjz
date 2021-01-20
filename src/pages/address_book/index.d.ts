@@ -1,3 +1,10 @@
+/*
+ * @Author: 老王
+ * @Date: 2021年01月20日10:26:35
+ * @LastEditors: 老王
+ * @LastEditTime: 2021年01月20日10:26:43
+ * @Description: 工友录文件夹下面的所有的接口存放文件
+ */
 // 通讯录数据列表
 export interface ADDRESS_BOOK_LIST {
   /** 名字首字母拼音 */ 
@@ -26,4 +33,18 @@ interface PERSON_DATA {
   is_in_work_note:number
   /** 是否选择当前用户 */
   is_check:boolean
+}
+
+
+//获取所有工友的接口 传给后台的参数
+export interface GET_WORKERS_ALL_PARAMS {
+  //记账本id
+  work_note:string
+}
+
+//获取所有工友的接口 后台返回值
+export interface GET_WORKERS_ALL_RESULT {
+  code:number,
+  message:string,
+  data: ADDRESS_BOOK_LIST[]
 }

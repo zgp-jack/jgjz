@@ -8,9 +8,9 @@
 
 import { get } from '@/utils/request'
 import { addressBookAll } from '@/utils/api'
-import { GET_WORKERS_ALL_PARAMS, GET_WORKERS_ALL_RESULT } from './index.d'
+import { GET_WORKERS_ALL_PARAMS, ADDRESS_BOOK_LIST } from './index.d'
 
 export default function getWorkers(params: GET_WORKERS_ALL_PARAMS) {
-  return get<GET_WORKERS_ALL_PARAMS, GET_WORKERS_ALL_RESULT[]>(addressBookAll, params)
+  return get<GET_WORKERS_ALL_PARAMS, ADDRESS_BOOK_LIST[]>(addressBookAll, params)
 }
 

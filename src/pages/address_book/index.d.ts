@@ -48,3 +48,9 @@ export interface GET_WORKERS_ALL_RESULT {
   message:string,
   data: ADDRESS_BOOK_LIST[]
 }
+
+//已选中组件的参数
+export interface SELECTD_PROPS {
+  selectd: PERSON_DATA[],
+  deletePerson:Function
+}

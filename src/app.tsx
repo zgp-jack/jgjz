@@ -1,6 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/mobx'
-import Index from './pages/index'
+import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import './app.scss'
 
@@ -34,11 +34,15 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+<<<<<<< HEAD
       'pages/index/index', // 首页
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用
       'pages/address_book/index', // 通讯录
+=======
+      'pages/work_team/record_work/index'
+>>>>>>> 6870b57e567ab4bb200e53ea3e2541499da6ce15
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -53,7 +57,7 @@ class App extends Component {
   render () {
     return (
       <Provider store={store}>
-        <Index />
+        <WorkTeam />
       </Provider>
     )
   }

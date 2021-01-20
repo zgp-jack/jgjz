@@ -1,0 +1,50 @@
+
+.feedback-box{
+  .feedback-wechat{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #E5F5FF;
+    padding:20px; 
+    .feedback-introduce{
+      color: #333;
+      font-size:30px;
+      width: 70%;
+    }
+    .click-copy{
+      color: #FFF;
+      font-size:30px;
+      background: #0099ff;
+      border-radius: 6px;
+      padding:10px 20px;
+    }
+  }
+  .feedback-item{
+    padding:30px 20px;
+    .feedback-item-title{
+      color: #333;
+      font-weight: bold;
+      font-size:30px;
+    }
+    .feedback-content-textarea{
+      width:100%;
+      font-size:28px;
+      margin: 20px 0 20px;
+    }
+  }
+  .feedback-upimages-box{
+    margin: 20px 0 80px;
+    .feedback-upimg{
+      width: 80px;
+      height: 80px;
+    }
+  }
+  .feedback-push-btn{
+    color: #FFF;
+    background: #0099FF;
+    border-radius: 10px;
+    font-size:30px;
+    height: 85px;
+    line-height:85px;
+  }
+}

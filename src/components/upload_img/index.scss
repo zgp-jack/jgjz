@@ -1,0 +1,34 @@
+@import '@/styles/common.scss';
+
+.upload-img-container{
+  position: relative;
+  .upload-img-item{
+    position: relative;
+    float: left;
+    width: 23.5%;
+    height: 150px;
+    margin-right: 2%;
+    margin-bottom: 15px;
+    &:nth-child(4n){
+      margin-right: 0;
+    }
+    .upload-img{
+      position: relative;
+      display: block;
+      height: 100%;
+      width: 100%;
+    }
+    .upload-img-remove{
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 30px;
+      height: 30px;
+      z-index: 3;
+      border-radius: 50%;
+      overflow: hidden;
+      background: url('http://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/common/remove-img.png') no-repeat;
+      background-size: cover;
+    }
+  }
+}

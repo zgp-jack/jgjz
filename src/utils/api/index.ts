@@ -36,7 +36,9 @@ export const userGetUnitWorkType: string = `UnitWorkType/get`
 
 // ! 登录注册
 // 登录-获取验证码
-export const userGetCode: string = ``
+export const userGetCode: string = `code/get`
+// 登录-验证码登录
+export const userGetMemberCodeLogin: string = `member/member-code-login`
 
 // ! 意见反馈
 // 意见反馈-添加意见反馈

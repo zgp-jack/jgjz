@@ -48,7 +48,10 @@ export type Request = Partial<RequestBase>
 
 // 常见的请求返回结果
 export interface Result<T> {
+  errmsg: string;
+  errcode: string;
   code: number,
   message: string,
+  refresh: number,
   data: T
 }

@@ -33,5 +33,5 @@ export const SERVERPHONE: string = '400-838-1888'
 // * 小程序当前版本号
 export const VERSION: string = '1.0.0'
 // * 小程序token标识
-export const MINITOKEN: string = 'ios'
+export const MINITOKEN: string = 'mini_app'
 

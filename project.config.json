@@ -54,8 +54,8 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/AddressBook/index",
-          "pathName": "pages/AddressBook/index",
+          "name": "通讯录",
+          "pathName": "pages/address_book/index",
           "query": "",
           "scene": null
         }

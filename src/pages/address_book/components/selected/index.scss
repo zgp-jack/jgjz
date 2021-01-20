@@ -6,39 +6,39 @@
     overflow-x: auto;
     display: flex;
     align-items: center;
-    View {
-      width: 68rpx;
-      height: 68rpx;
+    .selected_left_box {
+      width: 68px;
+      height: 68px;
       background: #58C7FF;
-      border-radius: 16rpx;
+      border-radius: 16px;
       position: relative;
-      margin-left: 30rpx;
+      margin-left: 30px;
       text-align: center;
-      line-height: 68rpx;
-      flex: 0 0 68rpx;
-      Text{
-        font-size: 24rpx;
+      line-height: 68px;
+      flex: 0 0 68px;
+      .selected_left_text{
+        font-size: 24px;
         color: #fff;
       }
-      Image {
-        width: 20rpx;
-        height: 20rpx;
+      .selected_left_img {
+        width: 20px;
+        height: 20px;
         position: absolute;
-        right: -10rpx;
-        top: -10rpx;
+        right: -10px;
+        top: -10px;
       }
     }
   }
   .selectd_right {
-    width: 162rpx;
-    height: 117rpx;
+    width: 162px;
+    height: 117px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     Text{
       color: #000;
-      font-size: 26rpx;
+      font-size: 26px;
     }
   }
 }

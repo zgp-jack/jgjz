@@ -4,6 +4,9 @@ import loginConfig, { codeWay, passWay } from './config'
 import { IMGCDNURL } from '@/config/index'
 import classnames from 'classnames'
 import useCode from '@/hooks/code'
+import msg,{showActionModal} from '@/utils/msg'
+import userGetCodeLoginAction from './api'
+import { isPhone } from '@/utils/v'
 import './index.scss'
 
 export default function Login() {
@@ -20,7 +23,7 @@ export default function Login() {
 
   // 提交的数据
   const [paramsData, setParamsData] = useState({
-    phone: '',
+    tel: '',
     code: '',
     pass: ''
   })
@@ -35,7 +38,28 @@ export default function Login() {
 
   /** 用户登录 */
   const userLoginAction = () => {
-    console.log(paramsData)
+    if (!isPhone(paramsData.tel)) {
+      msg('请输入正确的手机号码')
+      return
+    }
+    if (id == codeWay ) {
+      if (!paramsData.code) {
+        msg('请输入验证码')
+        return
+      }
+    }else{
+      if (!paramsData.code) {
+        msg('请输入密码')
+        return
+      }
+    }
+    userGetCodeLoginAction(paramsData).then(res =>{
+      if(res.code == 0){
+        showActionModal({ msg:res.message,})
+      }else{
+        msg(res.message)
+      }
+    })
   }
   
   return (
@@ -60,14 +84,14 @@ export default function Login() {
         <View className="login-form">
           <View className="login-form-item">
             <Image className="login-phone-icon" src={`${IMGCDNURL}gl/phone.png`} ></Image>
-            <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} onInput={(e) => userEnterForm(e,'phone')} />
+            <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} onInput={(e) => userEnterForm(e,'tel')} />
           </View>
 
           {id === codeWay && 
           <View className="login-form-item">
             <Image className="login-passcode" src={`${IMGCDNURL}gl/pass-code.png`} ></Image>
             <Input className="input-item-text" placeholder="请输入验证码" type="number" maxLength={6} onInput={(e: any) => userEnterForm(e, 'code')} />
-            <Text className="get-code" onClick={() => userGetCode(paramsData.phone) }>{text}</Text>
+            <Text className="get-code" onClick={() => userGetCode(paramsData.tel) }>{text}</Text>
           </View>}
 
           {id === passWay &&

@@ -1,9 +1,8 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
-import { View, Text, Textarea, Image, Button } from '@tarojs/components'
+import Taro, { useState } from '@tarojs/taro'
+import { View, Text, Textarea, Button } from '@tarojs/components'
 import FeedbackData from './inter.d'
 import Star from  './components/star'
 import UploadImg from '@/components/upload_img'
-import { IMGCDNURL } from '@/config/index'
 import starConfig from './components/star/config'
 import './index.scss'
 

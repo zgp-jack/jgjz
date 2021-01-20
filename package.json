@@ -25,8 +25,15 @@
     "dev:rn": "npm run build:rn -- --watch",
     "dev:qq": "npm run build:qq -- --watch",
     "dev:quickapp": "npm run build:quickapp -- --watch",
-    "dev": "npm run build:weapp -- --watch",
-    "build": "taro build --type weapp"
+
+    "dev": "npm run build:weapp dev -- --watch",
+    "pre": "npm run build:weapp pre -- --watch",
+    "pro": "npm run build:weapp pro -- --watch",
+
+    "build": "taro build pro --type weapp",
+    "build:dev": "taro build dev --type weapp",
+    "build:pre": "taro build pre --type weapp",
+    "build:pro": "taro build pro --type weapp"
   },
   "author": "",
   "license": "MIT",
@@ -46,9 +53,12 @@
     "@tarojs/taro-swan": "2.0.4",
     "@tarojs/taro-tt": "2.0.4",
     "@tarojs/taro-weapp": "2.0.4",
+    "classnames": "^2.2.6",
+    "immer": "^8.0.0",
     "mobx": "^4.8.0",
     "nerv-devtools": "^1.5.5",
-    "nervjs": "^1.5.5"
+    "nervjs": "^1.5.5",
+    "taro-ui": "^2.3.4"
   },
   "devDependencies": {
     "@types/react": "^16.4.6",

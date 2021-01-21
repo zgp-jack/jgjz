@@ -17,4 +17,6 @@ export default interface PickerTypeProps {
   title?: string,
   /** 内容 */
   value: string
+  /** 关闭组件 */
+  ColsePickerType: () => void
 }

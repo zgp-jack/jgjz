@@ -1,7 +1,7 @@
 import Taro, { useState } from '@tarojs/taro'
 import {View, Button} from '@tarojs/components'
 import { observer, useLocalStore } from '@tarojs/mobx'
-import ContentInput from '../person_borrowing/components/person_input/index'
+import ContentInput from '@/components/picker_input/index'
 import Content from '../person_borrowing/components/person_content/index'
 import WorkTime from '../person_borrowing/components/work_time/index'
 import OverTime from '../person_borrowing/components/over_time/index'

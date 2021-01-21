@@ -29,10 +29,8 @@ export default function PersonTally(){
           >{item.title}</View>
         )}
       </View>
-
       {id === borrow && <Borrow /> }
       {id === expenditure && <Expenditure /> }
-
     </View>
   )
 }

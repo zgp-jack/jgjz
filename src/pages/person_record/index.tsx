@@ -65,7 +65,7 @@ function PersonRecord(){
         overlist.forEach((item) => e.target.id == item.id ? item.selected = true:item.selected = false)
         setOverTime(overlist);
     }
-    const WorktimeCancle = (e) => {
+    const WorktimeCancle = () => {
         setIsMoreWorkTime(false);
     }
     return (

@@ -1,9 +1,12 @@
 import { useState } from '@tarojs/taro'
 import { View, Button } from  '@tarojs/components'
-import Content from '../person_content/index'
-import ContentInput from '../person_input/index'
-import ShrinkBar from '../shrinkbar/index'
+import ContentInput from '@/components/picker_input/index'
+import PickerType from '@/components/picker_type'
+import PickerDate from '@/components/picker_date'
+import PickerLeader from '@/components/picker_leader'
+import PickerMark from '@/components/picker_mark'
 import ExpenditurePostData from './inter.d'
+import './index.scss'
 
 export default function Expenditure(){
   // 支出提交数据
@@ -16,6 +19,13 @@ export default function Expenditure(){
     money: '0.00'
   })
 
+  // 是否显示分类组件
+  const [IsPickerType, setIsPickType] = useState<boolean>(true)
+  // 是否显示日期组件
+  const [IsPickerDate, setIsPickerDate] = useState<boolean>(true)
+  // 是否显示班组长 组件
+  const [IsPickerLeader, setIsPickerLeader] = useState<boolean>(true)
+
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: ExpenditurePostData = { ...postData }
@@ -23,25 +33,38 @@ export default function Expenditure(){
     setPostData(postdata)
   }
 
+  // 提交借支数据
+  const userPostAcion = () => {
+    console.log(postData)
+  }
+
+  // 用户关闭 分类组件
+  const ColsePickerType = () => {
+    setIsPickType(false)
+  }
+  // 用户关闭 日期组件
+  const DeletePickerDate = () => {
+    setIsPickerDate(false)
+  }
+  // 用户关闭班组 组件
+  const DeletePickerLeader = () => {
+    setIsPickerLeader(false)
+  }
   return (
     <View>
-      <ContentInput type="money" title="支出" change={userUpdatePostData} value={postData.money} />
-      <Content src={"https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/Bookkeeping-icon.png"} title={'分类'} text={'买材料'} bool={2} />
-      <Content src={"https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/Bookkeeping-icon.png"} title={'是否可报销'} text={'可报销'} bool={3} />
-      <Content src={"https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/Bookkeeping-icon.png"} title={'日期'} text={'4'} />
-      <Content src={"https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/Bookkeeping-icon.png"} title={'班组长'} text={'王一鸣组长'} />
-      <Content src={"https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/Bookkeeping-icon.png"} title={'备注'} text={'盛大开放打快速反击看到副书记'} bool={1} />
-      <ShrinkBar />
-
-      <View className="person-record-btn">
-        <Button className="person-record-resave">保存并再记一笔</Button>
-        <Button className="person-record-save">确认记工</Button>
+      <ContentInput type="money" title="金额" change={userUpdatePostData} value={postData.money} />
+      {IsPickerType && <PickerType value="水电费" ColsePickerType={ColsePickerType} />}
+      {IsPickerDate && <PickerDate date={'2021-01-20'} DeletePickerDate={DeletePickerDate} />}
+      {IsPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
+      <PickerMark text={'Hello world!'} />
+      <View className="person-record-component">
+          {!IsPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>2021-01-20</View>}
+          {!IsPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
+          {!IsPickerType && <View className="person-record-component-item" onClick={() => setIsPickType(true)}>分类</View>}
       </View>
-
+      <View className="person-record-btn">
+        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>
+      </View>
     </View>
   )
-}
-
-Expenditure.options = {
-  addGlobalClass: true
 }

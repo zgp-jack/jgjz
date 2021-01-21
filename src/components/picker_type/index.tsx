@@ -16,7 +16,7 @@ import msg, { showActionModal } from '@/utils/msg'
 let current = 0
 
 function PickerType({
-  img = `${IMGCDNURL}gl/Bookkeeping-icon.png`,
+  img = `${IMGCDNURL}zgp/classify_icon.png`,
   title = '分类',
   value =  '',
   hideImg = false,

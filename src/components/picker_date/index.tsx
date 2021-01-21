@@ -7,7 +7,7 @@ import './index.scss'
 
 export default function PickerDate({
     hideImg = true,
-    img = `${IMGCDNURL}gl/Bookkeeping-icon.png`,
+    img = `${IMGCDNURL}zgp/date_icon.png`,
     title = '日期',
     date = getTodayDate(),
     change,

@@ -184,6 +184,14 @@ const Remember = () => {
   const handleHideRightArrow = () => {
     return year == filterYear && month == filterMonth
   }
+
+  const goRecord = (e) => {
+    let type = e.currentTarget.dataset.type;
+    let url = `/pages/work_team/record_work/index?type=${type}`
+    Taro.navigateTo({
+      url: url
+    })
+  }
   return (
     <View className="remember">
       <View className="container">
@@ -357,8 +365,8 @@ const Remember = () => {
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
-                  <View className="footer-button footer-button-bookkeeping">记账</View>
-                  <View className="footer-button footer-button-remember">记工</View>
+                  <View className="footer-button footer-button-bookkeeping" data-type={1} onClick={(e) => goRecord(e)}>记账</View>
+                <View className="footer-button footer-button-remember" data-type={2} onClick={(e) => goRecord(e)}>记工</View>
                 </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>

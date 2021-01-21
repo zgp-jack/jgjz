@@ -2,23 +2,28 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:11:09
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 20:21:36
+ * @LastEditTime: 2021-01-21 17:25:22
  * @Description: 当前页面定义变量类型与接口请求相关参数返回结果定义
  */
 
 //  定义切换type
 export interface TypeAction {
-  /**切换type的id*/ 
+  /**切换type的id 1 记工天 2 记工量 3 记工钱*/ 
   id: string,
   /**切换type的文本名称*/ 
   name: string
 }
-
+// 定义接口参数
 export interface GetWorkFlowParams {
+  /**记工记账类型， 1 记工 2 记量 3 记工钱 4 借支 5 支出*/ 
   business_type: string,
+  /**开始时间*/ 
   start_business_time: string,
+  /**账本id*/ 
   work_note: string,
+  /**结束时间*/
   end_business_time: string,
+  /**页数*/ 
   page: number
 }
 
@@ -64,4 +69,15 @@ export interface FlowLists {
 export interface GetWorkFlowResult {
   date: string,
   list: FlowLists[]
+}
+
+export interface loadData{
+  loading?: boolean
+  setLoading?: (loading: boolean) => void
+  increasing?: boolean
+  list?: GetWorkFlowResult[]
+  errMsg?: string
+  setIncreasing?: (increasing: boolean) => void
+  hasmore?: boolean
+
 }

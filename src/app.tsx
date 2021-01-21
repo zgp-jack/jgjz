@@ -48,7 +48,6 @@ class App extends Component {
       'pages/person_record/index',
       'pages/person_borrowing/index',
       'pages/person_detail/index',
-      'pages/remember/index',
       'pages/feedback/index',
       'pages/account_book_list/index',
       'pages/identity_selection/index',

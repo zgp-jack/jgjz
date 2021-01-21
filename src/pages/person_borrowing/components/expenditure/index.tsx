@@ -7,13 +7,14 @@ import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import ExpenditurePostData from './inter.d'
 import './index.scss'
+import { getTodayDate } from '@/utils/index'
 
 export default function Expenditure(){
   // 支出提交数据
   const [postData, setPostData] = useState<ExpenditurePostData>({
     expend_type: 4,
     business_type: '',
-    date: '',
+    date: getTodayDate(),
     group_id: '',
     note: '',
     money: '0.00'
@@ -50,16 +51,24 @@ export default function Expenditure(){
   const DeletePickerLeader = () => {
     setIsPickerLeader(false)
   }
+
+  // 用户修改日期
+  const userChangeDate = (val: string) => {
+    let data = {...postData}
+    data.date = val
+    setPostData({...data})
+  }
+
   return (
     <View>
       <ContentInput type="money" title="金额" change={userUpdatePostData} value={postData.money} />
-      {isPickerType && <PickerType value="水电费" close={() => setIsPickType(false)} />}
-      {isPickerDate && <PickerDate date={'2021-01-20'} DeletePickerDate={DeletePickerDate} />}
+      {isPickerType && <PickerType value="无分类" close={() => setIsPickType(false)} />}
+      {isPickerDate && <PickerDate date={postData.date} DeletePickerDate={DeletePickerDate} change={(val) => userChangeDate(val)} />}
       {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
-      <PickerMark text={'Hello world!'} />
+      <PickerMark text={postData.note} />
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => setIsPickType(true)}>分类</View>}
-        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>2021-01-20</View>}
+        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.date}</View>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
       </View>
       <View className="person-record-btn">

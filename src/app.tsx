@@ -39,7 +39,6 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/work_team/record_work/index',
       'pages/index/index', // 首页
       'pages/person_record/index',
       'pages/person_borrowing/index',
@@ -53,6 +52,7 @@ class App extends Component {
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用
       'pages/address_book/index', // 通讯录
+      'pages/work_team/record_work/index'
     ],
     window: {
       backgroundTextStyle: 'light',

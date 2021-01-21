@@ -61,6 +61,8 @@ export const addFeedback: string = `feedback/add`
 export const addressBookAll: string = `workers/get`
 //获取某个账本中的工友
 export const addressBookNote: string = `workers/get-note-workers`
+// 添加工人
+export const workersAdd: string = `workers/add`
 //初始化记工界面
 export const initRemember: string = REQUESTURL + 'business/get-one/'
 

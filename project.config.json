@@ -58,6 +58,12 @@
           "pathName": "pages/address_book/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "登录",
+          "pathName": "pages/login/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

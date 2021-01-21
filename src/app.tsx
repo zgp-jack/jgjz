@@ -4,6 +4,7 @@ import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import ClassifyType from '@/store/classify'
 import ClassifySubitem from '@/store/classify/subitem'
+import User from '@/store/user'
 import './app.scss'
 // import Remember from "@/pages/remember";
 import './styles/common.scss'
@@ -16,7 +17,8 @@ import './styles/common.scss'
 const store = {
   CounterStore,
   ClassifyType,
-  ClassifySubitem
+  ClassifySubitem,
+  User
 }
 
 class App extends Component {

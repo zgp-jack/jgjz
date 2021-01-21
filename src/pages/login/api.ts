@@ -7,9 +7,9 @@
  */
 
 import { post } from '@/utils/request'
-import { UserGetCodeLoginParams } from './inter.d'
+import { UserGetCodeLoginParams,UserResult } from './inter.d'
 import { userGetMemberCodeLogin } from '@/utils/api'
 
 export default function userGetCodeLoginAction(params: UserGetCodeLoginParams) {
-  return post<UserGetCodeLoginParams, number>(userGetMemberCodeLogin, params)
+  return post<UserGetCodeLoginParams, UserResult>(userGetMemberCodeLogin, params)
 }

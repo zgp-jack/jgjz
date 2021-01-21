@@ -7,9 +7,17 @@ import useCode from '@/hooks/code'
 import msg from '@/utils/msg'
 import userGetCodeLoginAction from './api'
 import { isPhone } from '@/utils/v'
+import { UserInfo } from '@/config/store'
+import { observer, useLocalStore } from '@tarojs/mobx'
+import User from '@/store/user';
+import { UserGetCodeLoginParams } from './inter.d'
 import './index.scss'
 
-export default function Login() {
+function Login() {
+
+  const localStore = useLocalStore(() => User);
+  const { setUserInfo } = localStore
+
   /** 当前高亮key */
   const [id, setId] = useState<string>(loginConfig[0].id)
   /** 是否显示密码 */
@@ -17,18 +25,12 @@ export default function Login() {
   /** 用户切换登录方式 */
   const userChangePublishedItem = (key: string) => {
     setId(key)
+    setParamsData({ ...paramsData, type: key })
   }
   /** 使用自定义验证码hooks */
-  const {  text, userGetCode } = useCode()
+  const { text, userGetCode } = useCode()
 
-  // 提交的数据
-  const [paramsData, setParamsData] = useState({
-    tel: '',
-    code: '',
-    pass: ''
-  })
-
-  /** 用户输入表单信息 */ 
+  /** 用户输入表单信息 */
   const userEnterForm = (e: any, type: string) => {
     let value: string = e.detail.value
     let newData = { ...paramsData }
@@ -36,36 +38,57 @@ export default function Login() {
     setParamsData(newData)
   }
 
+  // 提交的数据
+  const [paramsData, setParamsData] = useState({
+    tel: '',
+    code: '',
+    pass: '',
+    type: ''
+  })
+
   /** 用户登录 */
   const userLoginAction = () => {
     if (!isPhone(paramsData.tel)) {
       msg('请输入正确的手机号码')
       return
     }
-    if (id == codeWay ) {
+    let params: UserGetCodeLoginParams = {
+      tel: paramsData.tel,
+      type: paramsData.type
+    }
+    if (id == codeWay) {
       if (!paramsData.code) {
         msg('请输入验证码')
         return
       }
-    }else{
-      if (!paramsData.code) {
+      params.code = paramsData.code
+    } else {
+      if (!paramsData.pass) {
         msg('请输入密码')
         return
       }
+      params.pass = paramsData.pass
     }
-    userGetCodeLoginAction(paramsData).then(res =>{
+    userGetCodeLoginAction(params).then(res => {
       msg(res.message)
-      if(res.code == 0){
+      if (res.code == 0) {
+        // 设置用户信息
+        let userInfo = {
+          token: res.data.token,
+          userId: res.data.yupao_id,
+          login: true,
+        }
         // 缓存本地
-
+        Taro.setStorageSync(UserInfo, userInfo)
         // 储存mobx
+        setUserInfo(userInfo)
 
-      }else{
+      } else {
         msg(res.message)
       }
     })
   }
-  
+
   return (
     <View className='login-box'>
       <Image className="close-login-icon" src={`${IMGCDNURL}gl/close-login.png`} ></Image>
@@ -73,44 +96,46 @@ export default function Login() {
 
       <View className="login-type">
         {loginConfig.map(item => (
-          <View 
+          <View
             key={item.id}
             onClick={() => userChangePublishedItem(item.id)}
             className={classnames({
               'login-type-title': true,
               'login-active': id === item.id
-          })}>
+            })}>
             <Text className='published-item-title'>{item.title}</Text>
           </View>
         ))}
       </View>
 
-        <View className="login-form">
-          <View className="login-form-item">
-            <Image className="login-phone-icon" src={`${IMGCDNURL}gl/phone.png`} ></Image>
-            <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} onInput={(e) => userEnterForm(e,'tel')} />
-          </View>
+      <View className="login-form">
+        <View className="login-form-item">
+          <Image className="login-phone-icon" src={`${IMGCDNURL}gl/phone.png`} ></Image>
+          <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} onInput={(e) => userEnterForm(e, 'tel')} />
+        </View>
 
-          {id === codeWay && 
+        {id === codeWay &&
           <View className="login-form-item">
             <Image className="login-passcode" src={`${IMGCDNURL}gl/pass-code.png`} ></Image>
             <Input className="input-item-text" placeholder="请输入验证码" type="number" maxLength={6} onInput={(e: any) => userEnterForm(e, 'code')} />
-            <Text className="get-code" onClick={() => userGetCode(paramsData.tel) }>{text}</Text>
+            <Text className="get-code" onClick={() => userGetCode(paramsData.tel)}>{text}</Text>
           </View>}
 
-          {id === passWay &&
+        {id === passWay &&
           <View className="login-form-item">
             <Image className="login-passlock" src={`${IMGCDNURL}gl/pass-lock.png`} ></Image>
-          <Input className="input-item-text" placeholder="请输入密码"  maxLength={6} password={showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
+            <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
             <Text className={classnames({
               'login-eyes-clone': true,
               'login-eyes-open': !showPass
             })}
-              onClick={() => setSHowPass(!showPass) }></Text>
+              onClick={() => setSHowPass(!showPass)}></Text>
           </View>}
-        </View>
+      </View>
 
       <Button className="login-push-btn" onClick={() => userLoginAction()}>登录</Button>
     </View>
   )
 }
+
+export default observer(Login)

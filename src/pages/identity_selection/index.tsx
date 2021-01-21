@@ -3,7 +3,7 @@ import { View, Image } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
 import './index.scss'
 
-export default function Index() {
+export default function IdentitySelection() {
   return (
     <View className='identity-selection-box'>
       <Image className="identity-back-icon" src={`${IMGCDNURL}common/left-arrow.png`}></Image>

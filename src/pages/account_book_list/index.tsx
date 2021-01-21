@@ -3,12 +3,15 @@ import { View, Text, Image, Button } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
 import './index.scss'
 
-export default function Index() {
+export default function AccountBook() {
   return (
     <View className='account-book-box'>
       <View className="account-book-top">
         <Text className="account-book-project">当前共1个项目</Text>
-        <Text className="account-book-add">新建+</Text>
+        <View className="account-book-top-btn">
+          <Text className="account-book-add">新建+</Text>
+          <Text className="account-book-add">已归档</Text>
+        </View>
       </View>
       <View className="account-book-personal account-book-item">
         <Text className="account-book-type-personal">个人记工</Text>

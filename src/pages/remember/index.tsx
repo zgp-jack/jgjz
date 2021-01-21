@@ -53,18 +53,8 @@ export default function Remember() {
 
   const [showPopup, setShowPopup] = useState(false)//点击切换账本打开选择器弹窗（调试用）
 
-  /*获取当前日期的下一个月份日期*/
-  const getNextYearMonth = (): string => {
-    let _nextYearMonth = ''
-    if (filterMonth == 12) {
-      _nextYearMonth = filterYear + 1 + '-' + 1
-    } else {
-      _nextYearMonth = filterYear + '-' + (filterMonth + 1)
-    }
-    return _nextYearMonth
-  }
   /*当前选中日期的下一个日期，获取统计接口使用*/
-  const [nextYearMonth, setNextYearMonth] = useState(getNextYearMonth())
+  const [nextYearMonth, setNextYearMonth] = useState('')
 
   /*根据筛选日期改变初始化*/
   useEffect(() => {
@@ -83,8 +73,20 @@ export default function Remember() {
   /*获取统计数据*/
   const initData = (params: GetCountParams) => {
     get<GetCountParams, GetCountResult>(getCountUrl, params).then(res => {
-      setCounts(res.data.count)
+      if (res.code === 0) {
+        setCounts(res.data.count)
+      }
     })
+  }
+  /*获取当前日期的下一个月份日期*/
+  const getNextYearMonth = (): string => {
+    let _nextYearMonth = ''
+    if (filterMonth == 12) {
+      _nextYearMonth = filterYear + 1 + '-' + 1
+    } else {
+      _nextYearMonth = filterYear + '-' + (filterMonth + 1)
+    }
+    return _nextYearMonth
   }
   /*上一个月份日期*/
   const prevMonth = () => {

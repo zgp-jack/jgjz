@@ -26,13 +26,13 @@ export default function RecordWork() {
   // 获取stroe数据
   const localStore = useLocalStore(() => RememberTypeItem);
   // 获取remebertype数据
-  const {rememberType} = localStore;
+  const {businessType} = localStore;
   // 获取当前路由
   const router: Taro.RouterInfo = useRouter()
   // 获取路由参数type 1 记账 2 记工
   let {type} = router.params;
   //定义页面切换类型
-  const types: TypeAction[] = type == '1' ? rememberType.slice(3) : rememberType.slice(0, 3);
+  const types: TypeAction[] = type == '1' ? businessType.slice(3) : businessType.slice(0, 3);
   //定义当前选择的type项
   const [currentIndex, setCurrentIndex] = useState<number>(0)
 

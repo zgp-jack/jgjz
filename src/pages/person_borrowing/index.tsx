@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { connectSocket, useState } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import Borrow from './components/borrow'
 import Expenditure from './components/expenditure'

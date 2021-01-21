@@ -14,13 +14,13 @@ import userAddBorrowAction from '@/pages/person_borrowing/api'
 export default function Borrow() {
 
   // 是否显示分类组件
-  const [isPickerType, setIsPickType] = useState<boolean>(true)
+  const [isPickerType, setIsPickType] = useState<boolean>(false)
   // 是否显示选择分类
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 是否显示日期组件
-  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(false)
   // 是否显示班组长 组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(true)
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 分类数据
   const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: '' })
   // 借支提交数据
@@ -47,6 +47,7 @@ export default function Borrow() {
     // postDataMock.identity ='1';
     // postDataMock.worker_id = '1'
     userAddBorrowAction(postDataMock).then((res) => {
+      debugger
     }) 
   }
 

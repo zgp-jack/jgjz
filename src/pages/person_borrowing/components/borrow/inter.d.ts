@@ -13,7 +13,7 @@ export default interface BorrowPostData {
   /** 分类 */
   business_type: string,
   /** 日期 */
-  date: string,
+  business_time: string,
   /** 班组长id */
   group_id: string,
   /** 备注 */

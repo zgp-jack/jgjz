@@ -4,7 +4,7 @@ import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import ClassifyType from '@/store/classify'
 import ClassifySubitem from '@/store/classify/subitem'
-import RememberStore from '@/store/remember/index'
+import RememberStore from '@/store/business/index'
 import './app.scss'
 import Remember from "@/pages/remember";
 import './styles/common.scss'

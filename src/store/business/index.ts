@@ -1,19 +1,19 @@
-import {action, observable} from 'mobx'
-import {RememberTypeItem} from "@/store/remember/inter";
+import {observable} from 'mobx'
+import {BusinessTypeItem} from "@/store/business/inter";
 
 export class RememberStore {
-  @observable rememberType: RememberTypeItem[] = [
+  @observable businessType: BusinessTypeItem[] = [
     {
       id: '1',
       name: '记工天'
     },
     {
       id: '2',
-      name: '记工钱'
+      name: '记工量'
     },
     {
       id: '3',
-      name: '记工量'
+      name: '记工钱'
     },
     {
       id: '4',

@@ -20,11 +20,11 @@ export default function Expenditure(){
   })
 
   // 是否显示分类组件
-  const [IsPickerType, setIsPickType] = useState<boolean>(true)
+  const [isPickerType, setIsPickType] = useState<boolean>(false)
   // 是否显示日期组件
-  const [IsPickerDate, setIsPickerDate] = useState<boolean>(true)
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(false)
   // 是否显示班组长 组件
-  const [IsPickerLeader, setIsPickerLeader] = useState<boolean>(true)
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
 
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
@@ -53,14 +53,14 @@ export default function Expenditure(){
   return (
     <View>
       <ContentInput type="money" title="金额" change={userUpdatePostData} value={postData.money} />
-      {IsPickerType && <PickerType value="水电费" ColsePickerType={ColsePickerType} />}
-      {IsPickerDate && <PickerDate date={'2021-01-20'} DeletePickerDate={DeletePickerDate} />}
-      {IsPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
+      {isPickerType && <PickerType value="水电费" close={() => setIsPickType(false)} />}
+      {isPickerDate && <PickerDate date={'2021-01-20'} DeletePickerDate={DeletePickerDate} />}
+      {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={'Hello world!'} />
       <View className="person-record-component">
-          {!IsPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>2021-01-20</View>}
-          {!IsPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
-          {!IsPickerType && <View className="person-record-component-item" onClick={() => setIsPickType(true)}>分类</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => setIsPickType(true)}>分类</View>}
+        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>2021-01-20</View>}
+        {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
       </View>
       <View className="person-record-btn">
         <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

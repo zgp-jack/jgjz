@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 08:59:21
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 10:31:31
+ * @LastEditTime: 2021-01-20 21:03:41
  * @Description: 添加、修改、删除分类分项，添加、修改、删除工友
  */
 
@@ -45,7 +45,7 @@ export interface PromptBoxProps {
   /**弹窗左下角按钮事件*/
   cancel?: () => void
   /**弹窗右下角按钮事件*/
-  confirm?: (data: any) => void
+  confirm?: (data: InputValue) => void
   /**弹窗右上角按钮事件*/
   delet?: () => void
 }

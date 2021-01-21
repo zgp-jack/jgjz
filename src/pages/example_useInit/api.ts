@@ -6,9 +6,9 @@
  * @Description: 数据请求文件
  */
 
-import { get } from '@/utils/request'
-import { userGetAllWorkNotes } from '@/utils/api'
-import { UserGetBusinessListsParams, UserGetBusinessListsResult } from './inter.d'
+import {get} from '@/utils/request'
+import {userGetAllWorkNotes} from '@/utils/api'
+import {UserGetBusinessListsParams, UserGetBusinessListsResult} from './inter.d'
 
 export default function getWorkNotesLists(params: UserGetBusinessListsParams) {
   return get<UserGetBusinessListsParams, UserGetBusinessListsResult[]>(userGetAllWorkNotes, params)

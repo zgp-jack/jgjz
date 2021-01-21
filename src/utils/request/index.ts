@@ -30,7 +30,7 @@ function requestShowToast(show: boolean): void {
 
 /**
  * @name: getRequestHeaderInfo for jsxin
- * @return RequestHeader 
+ * @return RequestHeader
  * @description 使用函数获取请求时的头部信息
  * @tips 只有在用户信息存在的情况下我们才会传入用户信息
 */

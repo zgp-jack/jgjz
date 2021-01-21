@@ -43,7 +43,7 @@ const PromptBox = ({
    * @return void
    * @description 输入框输入数据设置到当前data中
   */
-  const enterInput = (e)=>{
+  const enterInput = (e: any)=>{
     //获取输入数据，并根据输入框name分别保存
     data[e.target.dataset.name] = e.detail.value
     // 保存到data中

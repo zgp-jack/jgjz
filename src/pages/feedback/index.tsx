@@ -4,6 +4,9 @@ import FeedbackData from './inter.d'
 import Star from  './components/star'
 import UploadImg from '@/components/upload_img'
 import starConfig from './components/star/config'
+import msg, { showBackModal } from '@/utils/msg'
+import {isVaildVal} from '@/utils/v'
+import userGetFeedbackAction from './api'
 import './index.scss'
 
 export default function Feedback() {
@@ -13,7 +16,7 @@ export default function Feedback() {
   const [postData, setPostData] = useState<FeedbackData>({
     note: '',
     img: '',
-    type: starConfig.length - 1
+    type: -1,
   })
 
   // 输入意见反馈内容
@@ -27,7 +30,7 @@ export default function Feedback() {
   // 用户点击✨
   const useTapStar = (i: number) => {
     let newPostData: FeedbackData = { ...postData }
-    newPostData.type = i
+    newPostData.type = i + 1
     setPostData(newPostData);
   }
 
@@ -40,7 +43,17 @@ export default function Feedback() {
 
   // 用户提交数据
   const userPostFeedback = () => {
-    console.log(postData)
+    if (!postData.note) {
+      msg('请填写反馈内容')
+      return false
+    }
+    userGetFeedbackAction(postData).then(res =>{
+      if(res.code == 0){
+        showBackModal(res.message)
+      }else{
+        msg(res.message)
+      }
+    })
   }
 
   return (

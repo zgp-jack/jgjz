@@ -36,7 +36,7 @@ export default function useCode() {
     userGetCodeAction(tel).then(res => {
       if (res.code === 0) {
         msg(res.message, 2500)
-        let t: number = res.data || 60
+        let t: number = res.data.refresh || 60
         setText(t + 's后重新获取')
         let timer = setInterval(() => {
           t--

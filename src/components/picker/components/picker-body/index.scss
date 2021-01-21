@@ -1,0 +1,16 @@
+.picker-body {
+  padding: 15px 15px 0 15px;
+  background-color: #fff;
+  width: 100%;
+
+  .picker-body-scroll {
+    height: 538px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+  }
+
+  .picker-body-scroll-over {
+    height: 443px;
+  }
+}

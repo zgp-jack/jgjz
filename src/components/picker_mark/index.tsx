@@ -6,7 +6,7 @@ import './index.scss'
 
 export default function PickerMark({
     hideImg = true,
-    img = `${IMGCDNURL}gl/Bookkeeping-icon.png`,
+    img = `${IMGCDNURL}zgp/mark_icon.png`,
     title = '备注',
     text = '',
     set

@@ -6,7 +6,7 @@ import './index.scss'
 
 export default function PickerLeader({
     hideImg = true,
-    img = `${IMGCDNURL}gl/Bookkeeping-icon.png`,
+    img = `${IMGCDNURL}zgp/leader_icon.png`,
     title = '班组长',
     leader = '',
     DeletePickerLeader

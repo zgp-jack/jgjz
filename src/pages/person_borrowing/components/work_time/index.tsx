@@ -16,7 +16,7 @@ export default function WorkTime({
   return (
     <View className={classnames({
       "person-record-worktime person-record-overtime": true,
-      "overtime-text": isClose === false
+      "overtime-text": !isClose
     })}>
       <Text className="worktime-text">{isClose?'上班时长':'加班时长'}</Text>
       {worktime.map((item) => (

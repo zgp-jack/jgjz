@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 16:26:46
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 14:42:48
+ * @LastEditTime: 2021-01-21 17:42:02
  * @Description: interface for picker
  */
 import ClassifyItem from '@/store/classify/inter.d'
@@ -21,6 +21,10 @@ export default interface PickerTypeProps {
   close?: () => void,
   /** 获取值 */
   set?: (data: ClassifyItem) => void,
+  /** 是否显示option-picker */
+  show: boolean
+  /** 控制option-picker显示 */
+  setShow: (bool: boolean) => void
 }
 
 // popup弹窗数据格式
@@ -33,4 +37,6 @@ export interface PopupInputGroup {
   placeholder: string
   /** input value */
   value: string
+  /** 关闭组件 */
+  ColsePickerType: () => void
 }

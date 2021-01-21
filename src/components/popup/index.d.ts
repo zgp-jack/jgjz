@@ -9,13 +9,13 @@
 //弹窗，输入框内容
 interface InputItem {
   /**输入框标题 */
-  title?: string
+  title: string
   /**输入框提示placeholder*/
-  placeholder?: string
+  placeholder: string
   /**输入框名称，方便通过name取对应输入框值*/ 
-  name?: string
+  name: string
   /**输入框默认value值*/
-  value?: string
+  value: string
 }
 
 //定义弹窗传递的props

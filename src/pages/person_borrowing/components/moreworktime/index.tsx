@@ -1,23 +1,21 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
+import classnames from 'classnames'
+import MoreWorkTimeProps from './inter.d'
 import './index.scss'
 
-interface MoreWorkTimeType {
-    num:number,
-    id:string,
-    selected:false
-}
-export default function MoreWorkTime({WorktimeCancle}){
-    let moreworktimedata:MoreWorkTimeType[] = [];
+
+export default function MoreWorkTime({WorktimeCancle}:MoreWorkTimeProps){
+    // 更多加班数据
+    let moreworktimedata:number[] = [];
     for(let i=0.5;i<=24;i+=0.5){
-        moreworktimedata.push({num:i,id:'ids'+i,selected:false});
+        moreworktimedata.push(i);
     }
-    const [worktime, setWorkTime] = useState<MoreWorkTimeType[]>(moreworktimedata)
-    const SelectWorkTime = (e) => {
-        if(!e.target.id) return false;
-        let worktimelist = JSON.parse(JSON.stringify(moreworktimedata));
-        worktimelist.forEach((item) => e.target.id == item.id ? item.selected = true:item.selected = false)
-        setWorkTime(worktimelist)
+    // 选择的加班时间
+    const [selectedTime, setselectedTime] = useState<number>(0)
+    // 用户选择加班时间
+    const userSelectTime = (item) => {
+        setselectedTime(item);
     }
     return (
         <View className="moreworktime">
@@ -27,9 +25,12 @@ export default function MoreWorkTime({WorktimeCancle}){
                     <Text className="moreworktime-title">选择上班时长</Text>
                     <Text className="moreworktime-confim">确定</Text>
                 </View>
-                <View className="moreworktime-list" onClick={SelectWorkTime}>
-                    {worktime.map((item) => 
-                        <View className={item.selected?"worktime-active moreworktime-item":"moreworktime-item"} id={item.id}>{item.num}小时</View>
+                <View className="moreworktime-list">
+                    {moreworktimedata.map((item) => 
+                        <View className = {classnames({
+                            "moreworktime-item": true,
+                            "worktime-active": selectedTime === item
+                        })} key={`ids${item}`} onClick={() => userSelectTime(item)}>{item}小时</View>
                     )}
                 </View>
             </View>

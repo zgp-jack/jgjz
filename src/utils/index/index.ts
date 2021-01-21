@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 20:19:43
+ * @LastEditTime: 2021-01-21 20:29:09
  * @Description: 常用助手函数
  */
 
@@ -47,4 +47,23 @@ export function callPhone(phone: string): void {
   Taro.makePhoneCall({
     phoneNumber: phone
   })
+}
+
+/**
+ * @name: objDeepCopy for jsxin
+ * @params type: y = 年 m = 年-月 d = 年-月-日
+ * @default type = d
+ * @return string for date
+ * @description 获取今天日期
+*/
+export function getTodayDate(type: string = 'd'): string{
+  let date  = new Date()
+  let y: number = date.getFullYear()
+  let m: number = date.getMonth() + 1
+  let d: number = date.getDate()
+  let _m: string = m < 10 ? `0${m}` : `${m}`
+  let _d: string = d < 10 ? `0${d}` : `${d}`
+  if (type === 'y') return `${y}`
+  if(type === 'm') return `${y}-${_m}`
+  return `${y}-${_m}-${_d}`
 }

@@ -24,7 +24,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   /*本地筛选数据*/
   const [filterData, setFilterData] = useState<GetCountParams>(props.data)
   useEffect(() => {
-    setFilterData(JSON.parse(JSON.stringify(props.data)))
+    props.data && setFilterData(JSON.parse(JSON.stringify(props.data)))
   }, [props.data])
   /*开始时间筛选*/
   const onStartDate = e => {

@@ -4,8 +4,10 @@ import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import ClassifyType from '@/store/classify'
 import ClassifySubitem from '@/store/classify/subitem'
+import RememberStore from '@/store/business/index'
+import User from '@/store/user'
 import './app.scss'
-// import Remember from "@/pages/remember";
+import Remember from "@/pages/remember";
 import './styles/common.scss'
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -16,7 +18,9 @@ import './styles/common.scss'
 const store = {
   CounterStore,
   ClassifyType,
-  ClassifySubitem
+  ClassifySubitem,
+  RememberStore,
+  User
 }
 
 class App extends Component {
@@ -39,20 +43,21 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/remember/index',
+      'pages/login/index',
       'pages/work_team/record_work/index',
       'pages/index/index', // 首页
       'pages/person_record/index',
       'pages/person_borrowing/index',
       'pages/person_detail/index',
-      'pages/remember/index',
       'pages/feedback/index',
-      'pages/login/index',
       'pages/account_book_list/index',
       'pages/identity_selection/index',
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用
       'pages/address_book/index', // 通讯录
+      'pages/work_team/record_work/index'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -67,7 +72,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <WorkTeam />
+        <Remember/>
       </Provider>
     )
   }

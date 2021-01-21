@@ -1,6 +1,11 @@
 import {get} from "@/utils/request";
-import {initRemember, useGetIndexBusiness, workNote} from "@/utils/api";
+import {getCountUrl, useGetIndexBusiness} from "@/utils/api";
+import {GetCountParams, GetCountResult, getRememberParams, getRememberResult} from "@/pages/remember/inter";
 
-export function getRememberById(params) {
-  return get<any, any[]>(useGetIndexBusiness, params)
+export function getBusiness(params) {
+  return get<getRememberParams, getRememberResult>(useGetIndexBusiness, params)
+}
+
+export function getCount(params: GetCountParams) {
+  return get<GetCountParams, GetCountResult>(getCountUrl, params)
 }

@@ -2,10 +2,17 @@
  * @Author: jsxin
  * @Date: 2021-01-19 21:08:06
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-19 21:19:46
+ * @LastEditTime: 2021-01-21 19:49:33
  * @Description: interface for login/*
  */
 
+// 登录组件参数
+export interface LoginProps {
+  /** 是否显示登陆组件 */
+  show: boolean,
+  /** 登录 */
+  setShow?: (bool: boolean) => void
+}
 
 // 登录方式配置
 export interface LoginConfig {

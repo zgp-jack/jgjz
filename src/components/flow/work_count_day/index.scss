@@ -1,7 +1,12 @@
-.bokkeeping-list-item{
+.bokkeeping-list-container{
+  width: 100vw;
+  min-height: 150px;
+  border-bottom:1px solid rgba(229, 229, 229, .9);
+  padding: 0 30px;
+  .bokkeeping-list-item{
   display: flex;
   flex-direction: row;
-  min-height: 120px;
+  min-height: 150px;
   justify-content: space-between;
   align-items: center;
   .bokkeeping-list-left{
@@ -33,6 +38,7 @@
     align-items: center;
     .bokkeeping-list-count{
       margin-right: 15px;
+      text-align: end;
       View{
         font-size: 28px;
         font-weight: 400;
@@ -44,5 +50,6 @@
       height: 25px;
     }
     
+  }
   }
 }

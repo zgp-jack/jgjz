@@ -5,7 +5,6 @@ import Star from  './components/star'
 import UploadImg from '@/components/upload_img'
 import starConfig from './components/star/config'
 import msg, { showBackModal } from '@/utils/msg'
-import {isVaildVal} from '@/utils/v'
 import userGetFeedbackAction from './api'
 import './index.scss'
 
@@ -45,6 +44,10 @@ export default function Feedback() {
   const userPostFeedback = () => {
     if (!postData.note) {
       msg('请填写反馈内容')
+      return false
+    }
+    if(postData.type < 0){
+      msg('请选择评价等级')
       return false
     }
     userGetFeedbackAction(postData).then(res =>{

@@ -1,8 +1,10 @@
 import { View, Text, Image, Input } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
+import { SEARCH_PROPS } from '../../index.d'
 import './index.scss'
 
-export default function TestComponent() {
+export default function TestComponent(props: SEARCH_PROPS) {
+  const { addClick } = props
   return (
     <View className="search">
       {/* <View className="search_type1">
@@ -19,7 +21,7 @@ export default function TestComponent() {
           <Input className="input_box_input" type="text" placeholder="请输入名字或者手机号码查询"></Input>
         </View>
         <View className="add">
-          <View className="add_botton">
+          <View className="add_botton" onClick={()=>addClick()}>
             <Text>添加工友</Text>
           </View>
         </View>

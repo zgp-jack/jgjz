@@ -13,9 +13,9 @@ export default function PickerDate({
     change,
     DeletePickerDate
 }:PickerDateProps){
-  
+
   // 用户重置picker
-  const userChangePicker = (e) => {
+  const userChangePicker = (e: any) => {
     let value = e.detail.value
     change && change(value)
   }

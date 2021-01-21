@@ -270,6 +270,66 @@
               background: #F2FAFF;
             }
           }
+
+          .bokkeeping-list{
+            .bokkeeping-list-head{
+              height: 70px;
+              width: 100%;
+              background: #F2FAFF;
+              font-size: 28px;
+              font-weight: 400;
+              color: #22A9FC;
+              line-height: 70px;
+            }
+            .bokkeeping-list-item{
+              display: flex;
+              flex-direction: row;
+              min-height: 120px;
+              justify-content: space-between;
+              align-items: center;
+              .bokkeeping-list-left{
+                display: flex;
+                flex-direction: column;
+                margin-right: auto;
+                .bokkeeping-list-title{
+                  font-size: 30px;
+                  font-family: Source Han Sans CN;
+                  font-weight: 400;
+                  color: #333333;
+                }
+                .bokkeeping-list-des{
+                  font-size: 28px;
+                  font-family: Source Han Sans CN;
+                  font-weight: 400;
+                  color: #979797;
+                }
+                .bokkeeping-list-remarks{
+                  font-size: 28px;
+                  font-family: Source Han Sans CN;
+                  font-weight: 400;
+                  color: #979797;
+                }
+              }
+              .bokkeeping-list-right{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                .bokkeeping-list-count{
+                  margin-right: 15px;
+                  View{
+                    font-size: 28px;
+                    font-weight: 400;
+                    color: #5C5C5C;
+                  }
+                }
+                Image{
+                  width: 25px;
+                  height: 25px;
+                }
+                
+              }
+            }
+          }
         }
       }
     }

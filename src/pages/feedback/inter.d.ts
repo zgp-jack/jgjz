@@ -15,3 +15,12 @@ export default interface FeedbackData {
   /** 反馈星级  */
   type: number
 }
+// 意见反馈提交内容
+export interface FeedbackParams {
+  /** 反馈内容  */ 
+  note: string
+  /** 反馈图片  */
+  img: string
+  /** 反馈星级  */
+  type: number
+}

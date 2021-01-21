@@ -14,3 +14,12 @@ export interface LoginConfig {
   /** 登录 */
   title: string
 }
+
+
+// 登录-验证码  接口返回的数据类型
+export interface UserGetCodeLoginParams {
+  /** 验证码的手机号 */
+  tel: string,
+  code: string,
+  pass: string
+}

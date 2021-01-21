@@ -8,6 +8,8 @@ import debt from '@/images/ic_jz.png'
 import expenditure from '@/images/ic_zc.png'
 import feedback from '@/images/ic_yjfk.png'
 import arrowRight from '@/images/arrow-right.png'
+import WorkCountDay from '@/components/flow/work_count_day/index'
+import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
@@ -144,6 +146,18 @@ export default function Remember() {
                     </View>
                   </View>
                 </View>
+              </View>
+            </View>
+
+            <View className="statistics">
+              <View className="statistics-title">11月全部流水</View>
+              <View className="bokkeeping-list">
+                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
+                <WorkCountDay list={[]}/>
+                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
+                <WorkMoneyBorrowing/>
+                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
+                <WorkMoneyBorrowing/>
               </View>
             </View>
           </View>

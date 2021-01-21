@@ -6,11 +6,11 @@
  * @Description: 通过接口发送验证码 
  */
 
-import { post } from '@/utils/request'
-import { UserGetCodeParams } from './inter.d'
+import { get } from '@/utils/request'
+import { UserGetCodeParams, UserGetCodeResult } from './inter.d'
 import { userGetCode } from '@/utils/api'
 
 export default function userGetCodeAction(tel: string) {
   const data: UserGetCodeParams = { tel: tel }
-  return post<UserGetCodeParams, number>(userGetCode, data)
+  return get<UserGetCodeParams, UserGetCodeResult>(userGetCode, data)
 }

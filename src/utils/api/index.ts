@@ -2,7 +2,11 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:15:01
  * @LastEditors: jsxin
+<<<<<<< HEAD
+ * @LastEditTime: 2021-01-20 18:58:48
+=======
  * @LastEditTime: 2021-01-20 19:32:42
+>>>>>>> dev
  * @Description: 存放所有的API请求接口
  ! @rules: 1. 导出的接口名 小驼峰  2.注释: 功能模块名 + 接口概述 3.功能模块相同的接口放在一起
  */
@@ -32,7 +36,9 @@ export const userGetUnitWorkType: string = `UnitWorkType/get`
 
 // ! 登录注册
 // 登录-获取验证码
-export const userGetCode: string = ``
+export const userGetCode: string = `code/get`
+// 登录-验证码登录
+export const userGetMemberCodeLogin: string = `member/member-code-login`
 
 // ! 意见反馈
 // 意见反馈-添加意见反馈
@@ -48,3 +54,8 @@ export const initRemember: string = REQUESTURL + 'business/get-one/'
 
 //获取记工本
 export const workNote: string = REQUESTURL + 'work-notes/get?id=1&co=23'
+
+
+// !流水列表
+// 获取流水
+export const flowList: string = 'business/get-business/'

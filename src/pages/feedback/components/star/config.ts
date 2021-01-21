@@ -10,23 +10,23 @@ import { StarConfig } from './inter.d'
 
 const starConfig: StarConfig[] = [
   {
-    id: 0,
+    id: 1,
     text: '差评'
   },
   {
-    id: 1,
+    id: 2,
     text: '一般'
   }, 
   {
-    id: 2,
+    id: 3,
     text: '不太好'
   },
   {
-    id: 3,
+    id: 4,
     text: '挺好的'
   },
   {
-    id: 4,
+    id: 5,
     text: '好评'
   }]
 

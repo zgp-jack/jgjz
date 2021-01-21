@@ -1,11 +1,11 @@
-import Taro, {Component, Config} from '@tarojs/taro'
-import {Provider} from '@tarojs/mobx'
-import Index from './pages/index'
+import Taro, { Component, Config } from '@tarojs/taro'
+import { Provider } from '@tarojs/mobx'
+import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import ClassifyType from '@/store/classify'
 import ClassifySubitem from '@/store/classify/subitem'
 import './app.scss'
-import Remember from "@/pages/remember";
+// import Remember from "@/pages/remember";
 import './styles/common.scss'
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -39,10 +39,14 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+<<<<<<< HEAD
+      'pages/work_team/record_work/index',
+=======
       'pages/index/index', // 首页
       'pages/person_record/index',
       'pages/person_borrowing/index',
       'pages/person_detail/index',
+>>>>>>> dev
       'pages/remember/index',
       'pages/feedback/index',
       'pages/login/index',
@@ -52,7 +56,6 @@ class App extends Component {
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用
       'pages/address_book/index', // 通讯录
-
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -67,7 +70,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Remember/>
+        <WorkTeam />
       </Provider>
     )
   }

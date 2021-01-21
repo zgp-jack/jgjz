@@ -1,0 +1,52 @@
+
+.picker-option {
+
+  .picker-bar-children {
+    font-size: 30px;
+    font-weight: bold;
+    color: #0099FF;
+  }
+
+  .picker-option-body {
+    width: 100%;
+    background-color: #fff;
+
+    .picker-body-scroll {
+      height: 568px;
+      overflow: hidden;
+
+      .picker-option-item {
+        height: 100px;
+        padding-left: 30px;
+        padding-right: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #E5E5E5;
+
+
+        .option-item-name {
+          font-size: 30px;
+          color: #333333;
+        }
+
+        .option-item-icons {
+          display: flex;
+
+          .option-item-icon {
+            width: 32px;
+            height: 32px;
+
+            &:first-child {
+              margin-right: 46px;
+            }
+          }
+
+        }
+      }
+
+
+    }
+
+  }
+}

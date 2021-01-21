@@ -1,0 +1,92 @@
+.person-record-overtime{
+    position: relative;
+    margin-top: 25px;
+    margin-right: 40px;
+    .overtime-icon{
+        transform: scale(1.5);
+        width: 22px;
+        height: 22px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -11px;
+    }
+    .overtime-icon::before,
+    .overtime-icon::after{
+        content: "";
+        position: absolute;  /*方便进行定位*/
+        height: 22px;
+        width: 1.5px;
+        top: 2px;
+        right: 12px;
+        background: #808080;
+    }
+    .overtime-icon::before{
+      transform: rotate(45deg);
+    }
+    .overtime-icon::after{
+      transform: rotate(-45deg);
+    }
+}
+.person-record-date-img{
+    width: 26px;
+    height: 30px;
+    margin-right: 19px;
+}
+.person-record-date{
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 80px;
+    margin-left: 40px;
+    .person-record-date-title{
+        width: 110px;
+        font-size: 30px;
+        color: #999999;
+    }
+    .person-record-date-text{
+        font-size: 30px;
+        color: #333333;
+    }
+    .person-record-modify{
+        font-size: 30px;
+        color: #999999;
+    }
+    .person-record-modify-title{
+        width: 155px;
+    }
+    .person-record-date-day{
+        color: #6B9D00;
+    }
+}
+.person-record-note{
+    align-items: initial;
+    .person-record-date-textarea{
+        width: 540px;
+        max-height: 150px;
+    }
+}
+.person-record-date .record-reimbursable{
+    width: 160px;
+}
+.unit-icon{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    right: 0;
+    top: 50%;
+    margin-top: -20px;
+    transform: scale(1.5);
+}
+.unit-icon:after{
+    content: '';
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    border-left: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+    -webkit-transform: translate(0,-50%) rotate(-135deg);
+    transform: translate(0,-50%) rotate(-135deg);
+}

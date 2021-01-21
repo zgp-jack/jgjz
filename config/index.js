@@ -1,13 +1,14 @@
 const path = require('path')
 // * 监测当前编译环境
 const miniEnvironment = JSON.stringify(process.argv[2])
+const reminiflag = miniEnvironment.replace(/\"/g, "")
 const miniEnv = {
   dev: '开发',
   pre: '预发布',
   pro: '线上',
 }
 
-console.log(`\x1B[31m当前运行：\x1B[0m \x1B[32m${miniEnv[miniEnvironment]}环境\x1B[0m\n`)
+console.log(`\x1B[31m当前运行：\x1B[0m \x1B[32m${miniEnv[reminiflag]}环境\x1B[0m\n`)
 
 const config = {
   projectName: 'mini_bookkeeping',

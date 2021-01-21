@@ -1,0 +1,16 @@
+.picker-block {
+  width: 150px;
+  height: 70px;
+  line-height: 70px;
+  background: #EDEDED;
+  border-radius: 6px;
+  font-size: 28px;
+  color: #808080;
+  margin: 15px;
+  text-align: center;
+}
+
+.picker-block-active {
+  background-color: #0099FF;
+  color: #fff;
+}

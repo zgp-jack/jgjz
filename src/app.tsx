@@ -1,9 +1,12 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { Provider } from '@tarojs/mobx'
-import Index from './pages/index'
+import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
+import ClassifyType from '@/store/classify'
+import ClassifySubitem from '@/store/classify/subitem'
 import './app.scss'
-
+// import Remember from "@/pages/remember";
+import './styles/common.scss'
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
 // if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
@@ -11,7 +14,9 @@ import './app.scss'
 // }
 
 const store = {
-  CounterStore
+  CounterStore,
+  ClassifyType,
+  ClassifySubitem
 }
 
 class App extends Component {
@@ -34,16 +39,23 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+<<<<<<< HEAD
+      'pages/work_team/record_work/index',
+=======
+      'pages/index/index', // 首页
+      'pages/person_record/index',
+      'pages/person_borrowing/index',
+      'pages/person_detail/index',
+>>>>>>> dev
+      'pages/remember/index',
       'pages/feedback/index',
       'pages/login/index',
       'pages/account_book_list/index',
       'pages/identity_selection/index',
-      'pages/index/index', // 首页
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用
       'pages/address_book/index', // 通讯录
-      
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -55,13 +67,13 @@ class App extends Component {
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render () {
+  render() {
     return (
       <Provider store={store}>
-        <Index />
+        <WorkTeam />
       </Provider>
     )
   }
 }
 
-Taro.render(<App />, document.getElementById('app'))
+Taro.render(<App/>, document.getElementById('app'))

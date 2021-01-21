@@ -3,7 +3,7 @@ import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
 import { IMGCDNURL } from '@/config/index'
-import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS, ADD_PERSON_RESULT } from './index.d'
+import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA } from './index.d'
 import InitProvider from '@/components/init_provider'
 import useInit from '@/hooks/init'
 import getWorkers from './api'
@@ -88,19 +88,33 @@ export default function AddressBook() {
       })
       return
     }
-
+    /**给后台的参数*/ 
     let params: ADD_PERSON_PARAMS = {
       name: data.name,
-      tel: data.tel,
+      tel: data.tel || '',
       name_color: randomColor()
     }
-    post<ADD_PERSON_PARAMS,ADD_PERSON_RESULT>(workersAdd, params, true).then((r)=>{
+    /** 发送添加工友数据给后台 */ 
+    post<ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA>(workersAdd, params, true).then((r)=>{
       if(r.code == 0){
         Taro.showToast({
           title: '添加成功',
           icon: 'success',
           duration: 1000
         })
+        // 添加成功后的人员信息
+        let newPersonData: PERSON_DATA = {
+          id: r.data.worker_id,
+          is_deleted:0,
+          is_in_work_note:0,
+          is_self:0,
+          name: params.name,
+          name_color:params.name_color,
+          name_py:"B",
+          tel:params.tel,
+          is_check:true
+        }
+        pushNewPerson(newPersonData)
       }else{
         Taro.showToast({
           title: r.message,
@@ -109,6 +123,47 @@ export default function AddressBook() {
         })
       }
     })
+  }
+  /** 添加成功后 把数据添加到本地 */
+  const pushNewPerson = (newPerson:PERSON_DATA)=>{
+    let newList: ADDRESS_BOOK_LIST[] = [...list]
+    /** 字母表 */
+    let letter:string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',]
+    /** 现有的字母表 */
+    let modernLetter: string[] = []
+    newList.map((item)=>{
+      modernLetter.push(item.name_py)
+    })
+    /** 如果首字母已存在 */
+    if (modernLetter.indexOf(newPerson.name_py) !== -1){
+      newList[modernLetter.indexOf(newPerson.name_py)].data.push(newPerson)
+      setList(newList)
+    }else {
+      /** 如果首字母不存在 */ 
+      let letterIndex: number = letter.indexOf(newPerson.name_py)
+      /** 从已存在的字母表中找到当前字母的上一个字母 */
+      let lastLetter:string = ''
+      for (let i = 0; i < letter.length;i++){
+        letterIndex--
+        if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
+          lastLetter = letter[letterIndex]
+          break;
+        }
+      }
+      /** 需要添加的数据 */
+      let newLetterData: ADDRESS_BOOK_LIST = {
+        name_py: newPerson.name_py,
+        data:[newPerson]
+      }
+      //在list中插入新的数据
+      newList.map((item,index)=>{
+        if (item.name_py == lastLetter){
+          newList.splice(index+1, 0, newLetterData)
+        }
+      })
+      console.log(newList)
+      setList(newList)
+    }
   }
   /** 添加工友弹窗取消 */
   const addCancel = () => {
@@ -159,7 +214,7 @@ export default function AddressBook() {
                     <View className="avatar" style={{ background: cItem.name_color }}>{cItem.name.substring(0, 2)}</View>
                     <View className="name_tle">
                       <Text className="name">{cItem.name}</Text>
-                      {cItem.tel && cItem.tel != undefined && <Text className="tel">{cItem.tel}</Text>}
+                      {cItem.tel && <Text className="tel">{cItem.tel}</Text>}
                     </View>
                   </View>
                   <View className="setting">

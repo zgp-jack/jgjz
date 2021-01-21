@@ -75,10 +75,6 @@ export interface ADD_PERSON_PARAMS extends ADD_CONFIRM_DATA {
   name_color:string
 }
 //添加工友的返回值
-export interface ADD_PERSON_RESULT {
-  code:number,
-  data:{
-    worker_id:number
-  },
-  message:string
+export interface ADD_PERSON_RESULT_DATA {
+  worker_id:number
 }

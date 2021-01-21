@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 17:15:51
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 17:40:24
+ * @LastEditTime: 2021-01-21 10:36:36
  * @Description: 记工 - 分类 数据
  */
 
@@ -25,7 +25,7 @@ export class ClassifySubitem {
   */
   @action
   addClassifySubitem = (item: ClassifyItem) => {
-    this.types = [...this.types, item]
+    this.types = [item, ...this.types]
   }
 
   /**

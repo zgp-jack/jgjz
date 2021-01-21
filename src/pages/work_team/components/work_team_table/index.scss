@@ -1,0 +1,32 @@
+.record-work-head-table{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100px;
+  box-shadow: 1px 4px 10px 0px rgba(110, 110, 111, 0.05);
+  font-size:30px;
+  .record-work-checked{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 5px solid #0099FF;
+    color: #0099FF;
+    position: relative;
+    &::after{
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 10px solid #0099FF;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  };
+  .record-table-item {
+    margin-right: 20px;
+  }
+}

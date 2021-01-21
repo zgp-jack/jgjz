@@ -129,7 +129,7 @@ function PickerType({
         {!hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
         <Input className="person-record-date-text" value={value} placeholder='请添加您的分类' disabled></Input>
-        <Text className="overtime-icon" onClick={() => { close && close()}}></Text>
+        <Text className="overtime-icon" onClick={(e) => { e.stopPropagation();close && close()}}></Text>
       </View>
 
       {/* picker弹窗 */}

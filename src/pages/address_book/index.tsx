@@ -27,7 +27,10 @@ export default function AddressBook() {
   /** 是否一全选 全选勾勾控制*/
   const [isAllSelect, setIsAllSelect] = useState<boolean>(false)
   /** 保存一份获取到的数据 */
-  setList(data)
+  useEffect(() => {
+    if (loading) return
+    setList(data)
+  }, [data])
   /** 点击字母跳转相应位置 */
   const toView = (viewId: string) => {
     setViewTo(viewId == "view#" ? 'view_' : viewId)
@@ -110,7 +113,7 @@ export default function AddressBook() {
           is_self:0,
           name: params.name,
           name_color:params.name_color,
-          name_py:"B",
+          name_py:"C",
           tel:params.tel,
           is_check:true
         }
@@ -153,16 +156,16 @@ export default function AddressBook() {
       /** 需要添加的数据 */
       let newLetterData: ADDRESS_BOOK_LIST = {
         name_py: newPerson.name_py,
-        data:[newPerson]
+        data: [newPerson]
       }
       //在list中插入新的数据
       newList.map((item,index)=>{
-        if (item.name_py == lastLetter){
-          newList.splice(index+1, 0, newLetterData)
+        if (item.name_py == lastLetter) {
+          newList.splice(index + 1, 0, newLetterData)
         }
       })
       console.log(newList)
-      setList(newList)
+      setList([...newList])
     }
   }
   /** 添加工友弹窗取消 */

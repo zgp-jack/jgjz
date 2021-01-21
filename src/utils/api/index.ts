@@ -3,7 +3,7 @@
  * @Date: 2021-01-18 14:15:01
  * @LastEditors: jsxin
 <<<<<<< HEAD
- * @LastEditTime: 2021-01-20 18:58:48
+ * @LastEditTime: 2021-01-21 14:30:39
 =======
  * @LastEditTime: 2021-01-20 19:32:42
 >>>>>>> dev
@@ -29,10 +29,22 @@ export const userGetBusinessLists: string = `business/get-business`
 // ! 记账类别
 // 记账类别-获取已有类别
 export const userGetExpendType: string = `expend-type/get`
+// 记账类别-新增
+export const userAddExpendType: string = `expend-type/add`
+// 记账类别-修改
+export const userEditExpendType: string = `expend-type/update`
+// 记账类别-删除
+export const userDelExpendType: string = `expend-type/delete`
 
 // ! 计量类别
 // 记账类别-获取已有类别
 export const userGetUnitWorkType: string = `UnitWorkType/get`
+// 记账类别-新增
+export const userAddUnitWorkType: string = `UnitWorkType/add`
+// 记账类别-修改
+export const userEditUnitWorkType: string = `UnitWorkType/update`
+// 记账类别-删除
+export const userDelUnitWorkType: string = `UnitWorkType/delete`
 
 // ! 登录注册
 // 登录-获取验证码

@@ -20,9 +20,20 @@ export const useGetIndexBusiness: string = `business/get-index-business`
 // 记工-获取流水列表
 export const userGetBusinessLists: string = `business/get-business`
 
+
+// ! 记账类别
+// 记账类别-获取已有类别
+export const userGetExpendType: string = `expend-type/get`
+
+// ! 计量类别
+// 记账类别-获取已有类别
+export const userGetUnitWorkType: string = `UnitWorkType/get`
+
 // ! 登录注册
 // 登录-获取验证码
-export const userGetCode: string = ``
+export const userGetCode: string = `code/get`
+// 登录-验证码登录
+export const userGetMemberCodeLogin: string = `member/member-code-login`
 
 // ! 意见反馈
 // 意见反馈-添加意见反馈
@@ -41,3 +52,8 @@ export const workNote: string = 'work-notes/get?id=1&co=23'
 
 //获取账本流水统计
 export const getCountUrl: string = 'business/get-count'
+
+
+// !流水列表
+// 获取流水
+export const flowList: string = 'business/get-business/'

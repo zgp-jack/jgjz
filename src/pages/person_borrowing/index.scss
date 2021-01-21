@@ -1,0 +1,68 @@
+.person-record-top{
+    display: flex;
+    padding-left: 40px;
+    border-bottom: 1px solid #E5E5E5;
+    .person-record-top-item{
+        position: relative;
+        width: 90px;
+        margin-right: 53px;
+        padding-bottom: 6px;
+        text-align: center;
+        font-size: 30px;
+        color: #666666;
+        line-height: 72px;
+    }
+    .record-active{
+        color: #0099FF;
+    }
+    .record-active::before{
+        content: '';
+        width: 0;
+        height: 0;
+        border: 8px solid transparent;
+        border-bottom: 8px solid #0099FF;
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .record-active::after{
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 6px;
+        background-color: #0099FF;
+    }
+}
+.person-record-btn{
+    position: fixed;
+    left: 0;
+    bottom: 74px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 26px;
+    padding-right: 26px;
+    font-size: 30px;
+    line-height: 43px;
+    text-align: center;
+    button:after{
+        border: none;
+    }
+    .person-record-resave{
+        margin: 0;
+        padding: 0 31px;
+        background-color: #F0F0F0;
+        color: #666666;
+    }
+    .person-record-save{
+        margin: 0;
+        padding: 0 70px;
+        background-color: #0099FF;
+        color: #fff;
+        border: none;
+    }
+}

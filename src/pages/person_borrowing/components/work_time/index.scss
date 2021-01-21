@@ -1,0 +1,56 @@
+.person-record-worktime{
+    display: flex;
+    align-items: center;
+    .worktime-text{
+        font-weight: 600;
+        font-size: 30px;
+        color: #666666;
+        margin-right: 26px;
+    }
+    .worktime{
+        width: 120px;
+        margin-right: 18px;
+        color: #808080;
+        font-size: 26px;
+        line-height: 60px;
+        text-align: center;
+        background-color: #EDEDED;
+        border-radius: 6px;
+    }
+    .worktime-active{
+        color: #FFFFFF;
+        background-color: #0099FF;
+    }
+    .worktime-select{
+        padding-right: 22px;
+    }
+    .worktime-select-time{
+        position: relative;
+    }
+    .worktime-select-time::before{
+        content: '';
+        width: 0;
+        height: 0;
+        border: 8px solid transparent;
+        border-bottom: 8px solid #666666;
+        position: absolute;
+        bottom: 47%;
+        right: -20px;
+    }
+    .worktime-select-time::after{
+        content: '';
+        width: 0;
+        height: 0;
+        border: 8px solid transparent;
+        border-top: 8px solid #666666;
+        position: absolute;
+        bottom: -17%;
+        right: -20px;
+    }
+    .worktime-active .worktime-select-time::before{
+        border-bottom-color: #fff;
+    }
+    .worktime-active .worktime-select-time::after{
+        border-top-color: #fff;
+    }
+}

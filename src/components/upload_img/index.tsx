@@ -27,7 +27,7 @@ export default function UploadImg({
         let _imgs: ImgsState[] = [...imgs, imgData]
         setImgs(_imgs)
         // 更新调用者数据
-        let imgStr: string = _imgs.map(item => item.url).join('')
+        let imgStr: string = _imgs.map(item => item.url).join(',')
         onUpload(imgStr)
       }else{
         msg(res.errmsg)

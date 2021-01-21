@@ -1,43 +1,60 @@
 import Taro, {useState, useEffect} from '@tarojs/taro'
-import {View, Image, Text, Picker} from '@tarojs/components'
+import {View, Image, Picker} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
 import arrowRight from "@/images/arrow-right.png";
+import {observer, useLocalStore} from '@tarojs/mobx'
+import RememberStore from "@/store/remember";
+import {GetCountParams} from "@/pages/remember/inter";
 
-interface FilterProps {
+interface FilterProps<T> {
+  data: T
+  setData: (data: T) => void
   show: boolean
   close: () => void
 }
 
-const Filter: React.FC<FilterProps> = (props) => {
-
-  const [startDate, setStartDate] = useState('2021-01-18')//筛选开始日期
-  const [endDate, setEndDate] = useState('2021-01-17')//筛选结束日期
-  const [coworkers, setCoworkers] = useState(0)//筛选工友
-
-  const [activeRemark, setActiveRemark] = useState(false)//筛选选中有备注
-
-
-  // useEffect(() => {
-  //   /*是否筛选了*/
-  //   setIsFilter(startDate !== '2021-01-18')
-  // }, [startDate])
+const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
+  const localStore = useLocalStore(() => RememberStore)
+  const {rememberType} = localStore
+  const [filterData, setFilterData] = useState<GetCountParams>(props.data)
+  useEffect(() => {
+    setFilterData(JSON.parse(JSON.stringify(props.data)))
+  }, [props.data])
   //开始时间筛选
   const onStartDate = e => {
-    setStartDate(e.detail.value)
+    setFilterData({...filterData, start_business_time: e.detail.value})
   }
   //结束时间筛选
   const onEndDate = e => {
-    setEndDate(e.detail.value)
+    setFilterData({...filterData, end_business_time: e.detail.value})
   }
   //工友选择
   const onSelectCoworkers = e => {
-    setCoworkers(e.detail.value)
+    // setCoworkers(e.detail.value)
   }
   //确认筛选
   const onFilterConfirm = () => {
+    props.setData(filterData)
     props.close()
   }
+  const handleClickBusinessType = (id: string) => {
+    if (initActiveBusinessType(id)) {
+      let _business_type = JSON.parse(JSON.stringify(filterData.business_type))
+      let _index = _business_type.findIndex(item => item == id)
+      _business_type.splice(_index, 1)
+      setFilterData({...filterData, business_type: _business_type})
+    } else {
+      console.log([...filterData.business_type, id])
+      setFilterData({...filterData, business_type: [...filterData.business_type, id]})
+    }
+  }
+  //记工类型 查询传入的类型id是否已经被选中了
+  const initActiveBusinessType = (id: string) => {
+    const index = (filterData.business_type as string[]).findIndex(item => item == id)
+    return index !== -1
+  }
+  if (!filterData) return null
   return (
     <View className={"filter " + (props.show ? "show-filter" : '')}>
       <View className="filter-container">
@@ -54,9 +71,9 @@ const Filter: React.FC<FilterProps> = (props) => {
               <View className="filter-date">
                 <View className="filter-date-label">开始时间</View>
                 <View>
-                  <Picker mode='date' onChange={onStartDate} value={startDate}>
+                  <Picker mode='date' fields="month" onChange={onStartDate} value={filterData.start_business_time}>
                     <View className='filter-picker-value'>
-                      <View>{startDate}</View>
+                      <View>{filterData.start_business_time}</View>
                       <Image src={arrowRight} className="filter-arrow"/>
                     </View>
                   </Picker>
@@ -66,9 +83,9 @@ const Filter: React.FC<FilterProps> = (props) => {
               <View className="filter-date">
                 <View className="filter-date-label">结束时间</View>
                 <View>
-                  <Picker mode='date' onChange={onEndDate} value={endDate}>
+                  <Picker mode='date' fields="month" onChange={onEndDate} value={filterData.end_business_time}>
                     <View className='filter-picker-value'>
-                      <View>{endDate}</View>
+                      <View>{filterData.end_business_time}</View>
                       <Image src={arrowRight} className="filter-arrow"/>
                     </View>
                   </Picker>
@@ -81,13 +98,14 @@ const Filter: React.FC<FilterProps> = (props) => {
                 记工类型
               </View>
               <View className="filter-type">
-                <View className="filter-type-item">记工天</View>
-                <View className="filter-type-item">记工天</View>
-                <View className="filter-type-item">记工天</View>
-                <View className="filter-type-item filter-type-item-active">记工天</View>
-                <View className="filter-type-item">记工天</View>
-                <View className="filter-type-item">记工天</View>
-                <View className="filter-type-item">记工天</View>
+                {
+                  rememberType.map(item => (
+                    <View
+                      className={"filter-type-item" + (initActiveBusinessType(item.id) ? ' filter-type-item-active' : '')}
+                      key={item.id}
+                      onClick={() => handleClickBusinessType(item.id)}>{item.name}</View>
+                  ))
+                }
               </View>
             </View>
 
@@ -105,8 +123,8 @@ const Filter: React.FC<FilterProps> = (props) => {
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">有无备注</View>
                 <View
-                  className={"filter-type-item filter-type-item-remark" + (activeRemark ? ' filter-type-item-active' : '')}
-                  onClick={() => setActiveRemark(!activeRemark)}>
+                  className={"filter-type-item filter-type-item-remark" + (filterData.is_note == '1' ? ' filter-type-item-active' : '')}
+                  onClick={() => setFilterData({...filterData, is_note: filterData.is_note == '1' ? '0' : '1'})}>
                   有备注
                 </View>
               </View>
@@ -122,4 +140,4 @@ const Filter: React.FC<FilterProps> = (props) => {
   )
 }
 
-export default Filter;
+export default observer(Filter);

@@ -1,11 +1,13 @@
-import Taro, { Config, useEffect, useState } from '@tarojs/taro'
+import Taro, { Config, useEffect, useState, useRouter } from '@tarojs/taro'
 import { View, Text, Picker, Input, Image, ScrollView, Block, Swiper, SwiperItem } from '@tarojs/components'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
 import ListProvider from '@/components/list_provider'
 import { IMGCDNURL } from '@/config/index'
+import { observer, useLocalStore } from '@tarojs/mobx'
 import { GetWorkFlowParams, GetWorkFlowResult, loadData } from './index.d'
+import RememberTypeItem from '@/store/remember';
 import useList from '@/hooks/list'
 import { TypeAction } from './index.d'
 import getFlowlists from './api'
@@ -20,56 +22,89 @@ interface dataList {
 }
 
 
-export default function RecordWork() {
+export default function RecordWork () {
+  // 获取stroe数据
+  const localStore = useLocalStore(() => RememberTypeItem);
+  // 获取remebertype数据
+  const { rememberType } = localStore;
+  // 获取当前路由
+  const router: Taro.RouterInfo = useRouter()
+  // 获取路由参数type 1 记账 2 记工
+  let { type } = router.params;
   //定义页面切换类型
-  const types: TypeAction[] = [{ id: 1, name: '记工天' }, { id: 3, name: '记工钱' }, { id: 2, name: '记工量' }];
+  const types: TypeAction[] = type == '1' ? rememberType.slice(3) : rememberType.slice(0,3);
   //定义当前选择的type项
   const [currentIndex, setCurrentIndex] = useState<number>(0)
+
+  /**
+* @name: initTime
+* @params time:string
+* @return string
+* @description 滑动滑块的时候切换当前的index
+*/
+  var initTime = (time: string): string[] => {
+    /**检查字符串格式是哪种  / 或者 | */
+    let result = time.search("/")
+    /**字符串转换成成数组*/
+    let timeArray = result !== -1 ? time.split("/") : time.split("-");
+    /**处理日期的月和日为小于10，只有一位补充为两位*/
+    timeArray[1] = timeArray[1].length < 2 && Number(timeArray[1]) < 10 ? `0${timeArray[1]}` : timeArray[1];
+    timeArray[2] = timeArray[2].length < 2 && Number(timeArray[2]) < 10 ? `0${timeArray[2]}` : timeArray[2];
+    /**返回处理日期字符串*/
+    return [`${timeArray[0]}年${timeArray[1]}月${timeArray[2]}日`, `${timeArray[0]}-${timeArray[1]}-${timeArray[2]}`, `${timeArray[0]}/${timeArray[1]}/${timeArray[2]}`]
+  }
+  //定义当前时间
+  const nowTime = initTime(new Date().toLocaleDateString())[1]
   // 初始化请求参数
   let defaultParams: GetWorkFlowParams = {
     /**记工类型 1记工天，2记工量，3记工钱，4借支, 5支出*/
     business_type: types[currentIndex].id,
     /**开始时间*/
-    start_business_time: '2021-01-21',
+    start_business_time: nowTime,
     /**当前账本，个人账本或者班组账本id*/
     work_note: '873',
     /**结束时间*/
-    end_business_time: '2021-01-21',
+    end_business_time: nowTime,
     /**页码*/
     page: 1
   }
-  // const [params, setNewParams] = useState<GetWorkFlowParams>(defaultParams)
-  // 定义流水数据
-  // const [loadData, setLoadData] = useState<loadData>({
-  //   loading: true,
-  //   errMsg: '',
-  //   increasing: false,
-  //   list: [],
-  //   hasmore: true
-  // })
-  
-  // const { loading, increasing, list, errMsg, hasmore } = loadData;
-  const { loading, increasing, list, errMsg, hasmore, setLoading, setParams } = useList(getFlowlists, defaultParams)
-  console.log("list", list)
-  console.log("currentIndex", currentIndex)
+  // 时间选择文本显示
+  const [timeText, setTimeText] = useState<string>('');
+  const [startDate, setStartDate] = useState<string>(nowTime)//筛选开始日期
+ 
+  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getFlowlists, defaultParams)
 
 
-  const [startDate, setStartDate] = useState('2021-01-18')//筛选开始日期
-  const onStartDate = e => {
-    setStartDate(e.detail.value)
-  }
   let dataList = [{ name: "王五", check: true }, { name: "王五" }, { name: "王五" }, { name: "王五" }, { name: "王五", status: true, check: true }, { name: "王五" }, { name: "王五" }, { name: "王五", status: true}]
   let emptyCount = 6 - (dataList.length + 2)%6;
   let emptyArray:dataList[] = []
   for (let index = 0; index < emptyCount; index++) {
     emptyArray.push({name:''})
   }
-  
-  // useEffect(()=>{
-  //   // 获取流水数据列表
-    
-  //   setLoadData({ loading, increasing, list, errMsg, hasmore})
-  // },[currentIndex])
+
+  useEffect(() => {
+    /**获取本地格式化日期 eg:2021/01/21*/
+    let nowTime = new Date().toLocaleDateString()
+    /**按照格式初始化时间*/
+    let timeStr = initTime(nowTime)[0];
+    setTimeText(timeStr)
+  },[])
+
+/**
+ * @name: changeTime
+ * @params null
+ * @return null
+ * @description 日期picker选择器，选择日期
+ */
+  const changeTime = (e:any) => {
+    let timeStr = initTime(e.detail.value)[0]
+    setTimeText(timeStr)
+    setStartDate(e.detail.value)
+    /**传递新的参数，刷新页面*/
+    setParams({ start_business_time: e.detail.value, end_business_time: e.detail.value}, true)
+  }
+
+
 /**
  * @name: switchTab
  * @params e: 事件对象 current为当前滑块idnex
@@ -83,7 +118,10 @@ export default function RecordWork() {
     setCurrentIndex(index);
     /**传递新的参数，刷新页面*/
     setParams({ business_type: types[index].id}, true)
+    setTimeText(initTime(nowTime)[0])
+    setStartDate(nowTime)
   }
+
 
   /**
   * @name: changeTable
@@ -96,6 +134,8 @@ export default function RecordWork() {
     setCurrentIndex(index)
     /**传递新的参数，刷新页面*/
     setParams({ business_type: types[index].id }, true)
+    setTimeText(initTime(nowTime)[0])
+    setStartDate(nowTime)
   }
 
   return (
@@ -109,8 +149,8 @@ export default function RecordWork() {
             <View className='record-work-head-date'>
               <View className='record-work-head-title'>选择日期：</View>
               <View className='record-work-head-choose-date'>
-                <Picker mode='date' onChange={onStartDate} value={startDate}>
-                  <Input className='record-work-date' type='text' disabled value='2121年08月21日' />
+                <Picker mode='date' onChange={changeTime} value={startDate}>
+                  <Input className='record-work-date' type='text' disabled value={timeText} />
                 </Picker>
                 <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix' />
               </View>
@@ -160,8 +200,8 @@ export default function RecordWork() {
                     hasmore={hasmore}
                     length={list.length}
                   >
-                    {(currentIndex == 0 || currentIndex == 2) && <WorkCountDay list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkCountDay>}
-                    {currentIndex == 1 && <WorkMoneyBorrowing list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkMoneyBorrowing>}
+                    {(types[currentIndex].id == "1" || types[currentIndex].id == "2") && <WorkCountDay list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkCountDay>}
+                    {(types[currentIndex].id == "3" || types[currentIndex].id == "4" ||  types[currentIndex].id == "5") && <WorkMoneyBorrowing list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkMoneyBorrowing>}
                   </ListProvider>
                 </View>
               </View>
@@ -173,7 +213,6 @@ export default function RecordWork() {
     </View>
   )
 }
-
 RecordWork.config = {
   navigationBarTitleText: '班组记工',
   navigationBarBackgroundColor: '#0099ff',

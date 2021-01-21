@@ -2,16 +2,11 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:15:01
  * @LastEditors: jsxin
-<<<<<<< HEAD
- * @LastEditTime: 2021-01-20 18:58:48
-=======
- * @LastEditTime: 2021-01-20 19:32:42
->>>>>>> dev
+ * @LastEditTime: 2021-01-19 14:25:16
  * @Description: 存放所有的API请求接口
  ! @rules: 1. 导出的接口名 小驼峰  2.注释: 功能模块名 + 接口概述 3.功能模块相同的接口放在一起
  */
 
-import { REQUESTURL } from '@/config/index'
 
 // ! 记工本
 // 记工本-获取归档列表
@@ -50,12 +45,18 @@ export const addressBookAll: string = `workers/get`
 //获取某个账本中的工友
 export const addressBookNote: string = `workers/get-note-workers`
 //初始化记工界面
-export const initRemember: string = REQUESTURL + 'business/get-one/'
+export const initRemember: string = 'business/get-one/'
 
 //获取记工本
-export const workNote: string = REQUESTURL + 'work-notes/get?id=1&co=23'
+export const workNote: string = 'work-notes/get?id=1&co=23'
+
+//获取账本流水统计
+export const getCountUrl: string = 'business/get-count'
 
 
 // !流水列表
 // 获取流水
 export const flowList: string = 'business/get-business/'
+
+//获取记账类别
+export const rememberType: string = 'UnitWorkType/get'

@@ -7,7 +7,7 @@
   position: relative;
 
   .container {
-    padding: 22px 26px;
+    padding: 22px 26px 156px 26px;
 
     .header {
       width: 100%;
@@ -83,6 +83,14 @@
           .date {
             display: flex;
             align-items: center;
+
+            .date-icon-bor {
+              width: 30px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
 
             .date-value {
               font-size: 32px;
@@ -207,21 +215,21 @@
                 flex-direction: column;
 
                 .remember-value {
+
                   &:first-child {
                     margin-bottom: 10px;
+                  }
+
+                  Text {
+                    font-size: 30px;
+                    font-weight: 500;
+                    color: #333333;
                   }
 
                   Text:first-child {
                     font-size: 26px;
                     color: #808080;
                     margin-right: 22px;
-                  }
-
-                  Text:last-child {
-                    font-size: 30px;
-                    font-weight: 500;
-                    color: #333333;
-
                   }
                 }
               }
@@ -268,6 +276,20 @@
 
             .wage-meter {
               background: #F2FAFF;
+            }
+          }
+
+          .statistics-bookkeeping-unit {
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            .bookkeeping-row {
+              margin-top: 30px;
+
+              &:nth-child(1), &:nth-child(2) {
+                margin-top: 0;
+              }
             }
           }
 
@@ -326,7 +348,7 @@
                   width: 25px;
                   height: 25px;
                 }
-                
+
               }
             }
           }
@@ -405,7 +427,6 @@
       }
     }
   }
-
   .mask {
     position: absolute;
     z-index: 2;

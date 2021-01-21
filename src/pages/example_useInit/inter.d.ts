@@ -8,7 +8,7 @@
 
 // 获取记工 流水的接口参数
 export interface UserGetBusinessListsParams {
-  /** 记工类型 */ 
+  /** 记工类型 */
   work_note: string,
   /** 当前页数 */
   business_time: string

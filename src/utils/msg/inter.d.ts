@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:57:05
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-18 16:03:04
+ * @LastEditTime: 2021-01-21 11:12:54
  * @Description: msg提示信息的接口类声明
  */
 
@@ -17,7 +17,7 @@ export interface ShowActionModel {
   /** 确定文本的颜色 */
   confirmColor?: string,
   /** 模态框成功回调 */
-  success?: () => void,
+  success?: (res: Taro.showModal.SuccessCallbackResult) => void,
   /** 是否展示取消按钮 */
   showCancel?: boolean
 }

@@ -1,5 +1,5 @@
-import Taro, {Component, Config} from '@tarojs/taro'
-import {Provider} from '@tarojs/mobx'
+import Taro, { Component, Config } from '@tarojs/taro'
+import { Provider } from '@tarojs/mobx'
 import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import ClassifyType from '@/store/classify'
@@ -23,17 +23,13 @@ const store = {
 
 class App extends Component {
 
-  componentDidMount() {
-  }
+  componentDidMount () {}
 
-  componentDidShow() {
-  }
+  componentDidShow () {}
 
-  componentDidHide() {
-  }
+  componentDidHide () {}
 
-  componentDidCatchError() {
-  }
+  componentDidCatchError () {}
 
   /*
    * 指定config的类型声明为: Taro.Config
@@ -52,6 +48,7 @@ class App extends Component {
       'pages/person_record/index',
       'pages/person_borrowing/index',
       'pages/person_detail/index',
+      'pages/remember/index',
       'pages/feedback/index',
       'pages/account_book_list/index',
       'pages/identity_selection/index',

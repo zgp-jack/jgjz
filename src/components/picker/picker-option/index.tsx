@@ -1,7 +1,7 @@
 import Taro, {useEffect, useState} from '@tarojs/taro'
 import {View, ScrollView, Image} from '@tarojs/components'
 import './index.scss'
-import edit from '@/images/bianj.png'
+import editpng from '@/images/bianj.png'
 import remove from '@/images/shanc.png'
 import PickerBar from "@/components/picker/components/picker-bar";
 import PopupBottom from "@/components/picker/components/popupBottom";
@@ -14,6 +14,8 @@ export default function PickerOption({
   close,
   confirm,
   add,
+  edit,
+  del,
   status = true
 }: PickerOptionsProps) {
   
@@ -29,12 +31,12 @@ export default function PickerOption({
             scrollY
           >
             {!status && <LoadFooter text='数据加载中...' /> }
-            {data.map(item => (
+            {data.map((item, index) => (
               <View className="picker-option-item" key={item.id} onClick={() => confirm(item)}>
                 <View className="option-item-name">{item.name}</View>
                 <View className="option-item-icons">
-                  <Image className="option-item-icon" src={edit}/>
-                  <Image className="option-item-icon" src={remove}/>
+                  <Image className="option-item-icon" src={editpng} onClick={(e) => { e.stopPropagation();edit(item, index)}}/>
+                  <Image className="option-item-icon" src={remove} onClick={(e) => { e.stopPropagation();del(item.id, index)}}/>
                 </View>
               </View>
               ))

@@ -147,3 +147,29 @@ export const post = <T, R>(url: string, data: T, loading?: boolean): Promise<Res
     url, data, loading: !!loading , method: 'POST'
   })
 }
+
+
+/**
+ * @name: post for jsxin
+ * @return Promise<T> 返回get请求的数据结果
+ * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
+ * @description 发起delete请求
+*/
+export const del = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
+  return doRequestAction<R>({
+    url, data, loading: !!loading, method: 'DELETE'
+  })
+}
+
+
+/**
+ * @name: post for jsxin
+ * @return Promise<T> 返回get请求的数据结果
+ * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
+ * @description 发起put请求
+*/
+export const put = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
+  return doRequestAction<R>({
+    url, data, loading: !!loading, method: 'PUT'
+  })
+}

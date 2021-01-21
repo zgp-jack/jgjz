@@ -69,14 +69,16 @@ export default function useList<P extends PageParams,R>(
   }
 
   /** 设置请求参数 */
-  const setParams = (options: P, refreshing?: boolean) => {
+  const setParams = (options: Partial<P>, refreshing?: boolean) => {
     const _params: P = refreshing ? { ...params, ...options, ...defaultParams } : { ...params, ...options };
     if (refreshing) {
       setResult(produce(result, (proxy: typeof result) => {
         proxy.loading = true
+        proxy.params = _params
       }))
+    }else{
+      setResult({ ...result, params: _params })
     }
-    setResult({ ...result, params: _params })
     return _params;
   }
 

@@ -40,13 +40,8 @@ function getRequestHeaderInfo(): RequestHeader {
     'content-type': 'application/x-www-form-urlencoded',
     source: MINITOKEN,
     version: VERSION,
-<<<<<<< HEAD
     uid: 20021907,
     token: '0e976cb74e736736f39254ea7ee1def0787054ddaf8ab4ddaedc850daefe16d1',
-=======
-    uid: 20004425,
-    token: '035df17868e3ee6a4f160c4c27076b9c787054ddaf8ab4ddaedc850daefe16d1',
->>>>>>> abc6a508e6759cc4ad1a8b7b4b31ee08e7ec1f82
   }
 
   // 获取用户信息

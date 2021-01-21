@@ -1,12 +1,15 @@
-import Taro, { Config, useState } from '@tarojs/taro'
+import Taro, { Config, useEffect, useState } from '@tarojs/taro'
 import { View, Text, Picker, Input, Image, ScrollView, Block, Swiper, SwiperItem } from '@tarojs/components'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
+import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
 import ListProvider from '@/components/list_provider'
-import { GetWorkFlowParams, GetWorkFlowResult } from './index.d'
+import { IMGCDNURL } from '@/config/index'
+import { GetWorkFlowParams, GetWorkFlowResult, loadData } from './index.d'
 import useList from '@/hooks/list'
 import { TypeAction } from './index.d'
 import getFlowlists from './api'
+import { get } from '@/utils/request'
 import Popup from '@/components/popup/index'
 import './index.scss'
 
@@ -18,28 +21,37 @@ interface dataList {
 
 
 export default function RecordWork() {
+  //定义页面切换类型
+  const types: TypeAction[] = [{ id: 1, name: '记工天' }, { id: 3, name: '记工钱' }, { id: 2, name: '记工量' }];
+  //定义当前选择的type项
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 初始化请求参数
-  let params: GetWorkFlowParams = {
+  let defaultParams: GetWorkFlowParams = {
     /**记工类型 1记工天，2记工量，3记工钱，4借支, 5支出*/
-    business_type: '1',
-    /**开始时间*/ 
-    start_business_time: '2021-01-20',
-    /**当前账本，个人账本或者班组账本id*/ 
-    work_note: '702',
-    /**结束时间*/ 
-    end_business_time: '2021-01-20',
-    /**页码*/ 
+    business_type: types[currentIndex].id,
+    /**开始时间*/
+    start_business_time: '2021-01-21',
+    /**当前账本，个人账本或者班组账本id*/
+    work_note: '873',
+    /**结束时间*/
+    end_business_time: '2021-01-21',
+    /**页码*/
     page: 1
   }
-  const { loading, setLoading, increasing, list=[], errMsg, setIncreasing, hasmore } = useList(getFlowlists, params)
-  console.log("list",list)
-
-
-  //定义页面切换类型
-  const types: TypeAction[] = [{ id: 'day', name: '记工天' }, { id: 'money', name: '记工钱' }, { id: 'count', name: '记工量' }];
-
-//定义当前选择的type项
-const [currentIndex, setCurrentIndex] = useState<number>(0)
+  // const [params, setNewParams] = useState<GetWorkFlowParams>(defaultParams)
+  // 定义流水数据
+  // const [loadData, setLoadData] = useState<loadData>({
+  //   loading: true,
+  //   errMsg: '',
+  //   increasing: false,
+  //   list: [],
+  //   hasmore: true
+  // })
+  
+  // const { loading, increasing, list, errMsg, hasmore } = loadData;
+  const { loading, increasing, list, errMsg, hasmore, setLoading, setParams } = useList(getFlowlists, defaultParams)
+  console.log("list", list)
+  console.log("currentIndex", currentIndex)
 
 
   const [startDate, setStartDate] = useState('2021-01-18')//筛选开始日期
@@ -52,7 +64,12 @@ const [currentIndex, setCurrentIndex] = useState<number>(0)
   for (let index = 0; index < emptyCount; index++) {
     emptyArray.push({name:''})
   }
-
+  
+  // useEffect(()=>{
+  //   // 获取流水数据列表
+    
+  //   setLoadData({ loading, increasing, list, errMsg, hasmore})
+  // },[currentIndex])
 /**
  * @name: switchTab
  * @params e: 事件对象 current为当前滑块idnex
@@ -64,40 +81,41 @@ const [currentIndex, setCurrentIndex] = useState<number>(0)
     let index = e.detail.current;
     /**保存当前滑块index*/ 
     setCurrentIndex(index);
+    /**传递新的参数，刷新页面*/
+    setParams({ business_type: types[index].id}, true)
   }
 
-  const inputGroup = [
-    { title: '测试', name: 'test', placeholder: '请输入测试数据' }
-  ]
-
-  const userChangeData = (data) => {
-    console.log(data)
+  /**
+  * @name: changeTable
+  * @params index 当前点击的table的index
+  * @return void
+  * @description 点击table切换页面并更新数据
+  */
+  const changeTable = (index:number) => {
+    /**设置当前选中最新index*/ 
+    setCurrentIndex(index)
+    /**传递新的参数，刷新页面*/
+    setParams({ business_type: types[index].id }, true)
   }
 
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
-        <View className='record-work-head-table'>
-          {types.map((item,index) => (
-            <Block key={item.id}>
-              <View className={currentIndex == index ? 'record-work-checked': ''} data-id={item.id}>{item.name}</View>
-            </Block>
-          ))}
-        </View>
+        <WorkTeamTable types={types} index={currentIndex} onChange={changeTable}/>
       </View>
       <Swiper className="record-work-swiper" current={currentIndex} duration={300} onChange={(e) => switchTab(e)}>
-        {types.map(_ => (
-          <SwiperItem>
-            <ScrollView className="record-work-scroll" scrollY enableFlex>
-              <View className='record-work-head-date'>
-                <View className='record-work-head-title'>选择日期：</View>
-                <View className='record-work-head-choose-date'>
-                  <Picker mode='date' onChange={onStartDate} value={startDate}>
-                    <Input className='record-work-date' type='text' disabled value='2121年08月21日' />
-                  </Picker>
-                  <Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/common/arrow-right.png' mode='widthFix' />
-                </View>
+        {types.map(item => (
+          <SwiperItem key={item.id}>
+            <View className='record-work-head-date'>
+              <View className='record-work-head-title'>选择日期：</View>
+              <View className='record-work-head-choose-date'>
+                <Picker mode='date' onChange={onStartDate} value={startDate}>
+                  <Input className='record-work-date' type='text' disabled value='2121年08月21日' />
+                </Picker>
+                <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix' />
               </View>
+            </View>
+            <ScrollView className="record-work-scroll" scrollY enableFlex>
               <View className='record-work-check-person'>
                 <View className='record-work-person-head'>
                   <View className='record-work-person-title'>
@@ -107,21 +125,21 @@ const [currentIndex, setCurrentIndex] = useState<number>(0)
                   <View className='record-work-person-disc'>黄色块代表此工友当日已有记工</View>
                 </View>
                 <View className='record-work-person-content'>
-                  {dataList.map((item, index) => (
+                  {dataList.map((obj, index) => (
                     <View className='record-work-person-item' key={index}>
-                      <View className={item.check ? (item.status ? 'record-work-person-box choose-box recorded-box' : 'record-work-person-box choose-box') : (item.status ? 'record-work-person-box recorded-box' : 'record-work-person-box')}>{item.name}
-                        {item.status && <Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/recorded.png' mode='widthFix' className='recorded-image'></Image>}
-                        {item.check && <Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/choose-box.png' mode='widthFix' className='choose-image'></Image>}
+                      <View className={obj.check ? (obj.status ? 'record-work-person-box choose-box recorded-box' : 'record-work-person-box choose-box') : (obj.status ? 'record-work-person-box recorded-box' : 'record-work-person-box')}>{obj.name}
+                        {obj.status && <Image src={`${IMGCDNURL}yc/recorded.png`} mode='widthFix' className='recorded-image'></Image>}
+                        {obj.check && <Image src={`${IMGCDNURL}yc/choose-box.png`} mode='widthFix' className='choose-image'></Image>}
                       </View>
-                      <Text className='record-work-person-text'>{item.name}</Text>
+                      <Text className='record-work-person-text'>{obj.name}</Text>
                     </View>)
                   )}
                   <View className='record-work-person-add'>
-                    <View className='record-work-person-box'><Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/add.png' mode='widthFix' /></View>
+                    <View className='record-work-person-box'><Image src={`${IMGCDNURL}yc/add.png`} mode='widthFix' /></View>
                     <Text className='record-work-person-text'>添加</Text>
                   </View>
                   <View className='record-work-person-del'>
-                    <View className='record-work-person-box'><Image src='https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/yc/del.png' mode='widthFix' /></View>
+                    <View className='record-work-person-box'><Image src={`${IMGCDNURL}yc/del.png`} mode='widthFix' /></View>
                     <Text className='record-work-person-text'>删除</Text>
                   </View>
                   {emptyArray.map((_, index) => (
@@ -142,15 +160,12 @@ const [currentIndex, setCurrentIndex] = useState<number>(0)
                     hasmore={hasmore}
                     length={list.length}
                   >
-                    {(currentIndex == 0 || currentIndex == 2) && <WorkCountDay list={ list.length ? list[0].list : []}></WorkCountDay>}
-                    {currentIndex == 1 && <WorkMoneyBorrowing></WorkMoneyBorrowing>}
+                    {(currentIndex == 0 || currentIndex == 2) && <WorkCountDay list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkCountDay>}
+                    {currentIndex == 1 && <WorkMoneyBorrowing list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkMoneyBorrowing>}
                   </ListProvider>
                 </View>
               </View>
-              <Popup 
-                inputGroup={inputGroup}
-                confirm={(data) => userChangeData(data)}
-              />
+              {/* <Popup /> */}
             </ScrollView>
           </SwiperItem>
         ))}

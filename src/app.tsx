@@ -39,17 +39,14 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-<<<<<<< HEAD
       'pages/work_team/record_work/index',
-=======
+      'pages/login/index',
       'pages/index/index', // 首页
       'pages/person_record/index',
       'pages/person_borrowing/index',
       'pages/person_detail/index',
->>>>>>> dev
       'pages/remember/index',
       'pages/feedback/index',
-      'pages/login/index',
       'pages/account_book_list/index',
       'pages/identity_selection/index',
       'pages/example_mobx/index', // 示例 mobx 使用

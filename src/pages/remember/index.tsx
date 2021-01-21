@@ -14,20 +14,22 @@ import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
 import PickerUnit from "@/components/picker/picker-unit";
-import Filter from "@/components/filter";
+import Filter from "./filter/index";
 import {get} from "@/utils/request";
 import {GetCountParams, GetCountResult} from "@/pages/remember/inter";
 import {getCountUrl} from "@/utils/api";
-
-Taro.setNavigationBarTitle({title: '个人记工账本'})
+/*账本类型 1：个人账本 2：班组账本*/
+Taro.setStorageSync('ledgerType', '1')
+const ledgerType = Taro.getStorageSync('ledgerType')
+Taro.setNavigationBarTitle({title: (ledgerType == '1' ? '个人' : '班组') + '记工账本'})
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 export default function Remember() {
   /*统计数据*/
   const [counts, setCounts] = useState({
     work_time: "0",
-    work_time_hour: "",
-    overtime: "",
+    work_time_hour: "0",
+    overtime: "0",
     count_unit: [{unit: null, count: 0}],
     work_money: "",
     borrow_count: "0.00",
@@ -37,6 +39,19 @@ export default function Remember() {
   const year = new Date().getFullYear()
   /*获取月份*/
   const month = new Date().getMonth() + 1
+  /*获取统计数据，请求参数*/
+  const [filterData, setFilterData] = useState<GetCountParams>({
+    start_business_time: '',
+    end_business_time: '',
+    work_note: '874',
+    worker_id: '',
+    business_type: [],
+    expend_type: '',
+    expense_account: '',
+    group_leader: '',
+    is_note: '',
+    unit_work_type: ''
+  })
 
   /*当前年份*/
   const [currentYear, setCurrentYear] = useState(year)
@@ -44,7 +59,6 @@ export default function Remember() {
   const [currentMonth, setCurrentMonth] = useState(month)
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
-
   /*筛选年份*/
   const [filterYear, setFilterYear] = useState(year)
   /*筛选月份*/
@@ -57,19 +71,23 @@ export default function Remember() {
 
   /*当前选中日期的下一个日期，获取统计接口使用*/
   const [nextYearMonth, setNextYearMonth] = useState('')
+  /*获取统计数据*/
+  useEffect(() => {
+    if (!filterData.start_business_time || !filterData.end_business_time) return
+    let params = {
+      ...filterData,
+      business_type: (filterData.business_type as string[]).join(',')
+    }
+    initData(params)
+  }, [filterData])
 
-  /*根据筛选日期改变初始化*/
+  /*根据筛选日期初始化请求参数*/
   useEffect(() => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
-    const params: GetCountParams = {
-      start_business_time,
-      work_note: '718',
-      end_business_time
-    }
-    initData(params)
+    setFilterData({...filterData, start_business_time, end_business_time})
   }, [filterMonth, filterYear])
 
   /*获取统计数据*/
@@ -124,7 +142,15 @@ export default function Remember() {
       setFilterMonth(date[1])
     }
   }
+  const handleFilter = (data: GetCountParams) => {
+    setFilterData(data)
+    setIsFilter(true)
+  }
 
+  const handleSplitDate = (date: string) => {
+    const _date = date.split('-')
+    return _date[0] + '年' + _date[1] + '月'
+  }
   return (
     <View className="remember">
       <View className="container">
@@ -147,8 +173,9 @@ export default function Remember() {
                 </View>
                 :
                 <View className="filter-start-end-date">
-                  <View className="filter-start-date">开始时间：2020年11月01日</View>
-                  <View className="filter-end-date">截止时间：2020年12月21日</View>
+                  <View
+                    className="filter-start-date">开始时间：{handleSplitDate(filterData.start_business_time)}</View>
+                  <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
                     onClick={() => setShowFilter(true)}>
@@ -169,7 +196,7 @@ export default function Remember() {
             </View>}
             {/*记工统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">11月记工统计</View>}
+              {!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -189,6 +216,8 @@ export default function Remember() {
             </View>
 
             {/*临时工资，平方米，筛选后才展示*/}
+
+            {(counts.work_money || (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0)) &&
             <View className="statistics">
               <View className="statistics-bookkeeping statistics-bookkeeping-unit">
                 {counts.work_money && <View className="bookkeeping-row wage-meter">
@@ -219,11 +248,11 @@ export default function Remember() {
                   ))
                 }
               </View>
-            </View>
+            </View>}
 
             {/*记账统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">11月记账统计</View>}
+              {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
@@ -266,7 +295,7 @@ export default function Remember() {
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="feedback">
+            <View className="feedback" onClick={() => Taro.navigateTo({url: '/pages/feedback/index'})}>
               <Image src={feedback} className="feedback-icon"/>
               意见反馈
             </View>
@@ -290,7 +319,8 @@ export default function Remember() {
         showFilter &&
         <View className="mask" onClick={() => setShowFilter(false)}/>
       }
-      <Filter show={showFilter} close={() => setShowFilter(false)}/>
+      <Filter data={filterData} setData={data => handleFilter(data)} show={showFilter}
+              close={() => setShowFilter(false)}/>
     </View>
   )
 }

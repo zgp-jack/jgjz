@@ -9,10 +9,16 @@ export interface getRememberParams {
 }
 
 export interface GetCountParams {
-  business_type?: string
+  business_type: string[] | string
   start_business_time: string
   work_note: string
   end_business_time: string
+  is_note?: string
+  expend_type?: string
+  unit_work_type?: string
+  expense_account?: string
+  group_leader?: string
+  worker_id?: string
 }
 
 export interface GetCountResult {

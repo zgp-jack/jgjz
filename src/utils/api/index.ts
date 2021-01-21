@@ -57,3 +57,6 @@ export const getCountUrl: string = 'business/get-count'
 // !流水列表
 // 获取流水
 export const flowList: string = 'business/get-business/'
+
+//获取记账类别
+export const rememberType: string = 'UnitWorkType/get'

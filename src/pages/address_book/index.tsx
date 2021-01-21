@@ -3,44 +3,55 @@ import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
 import { IMGCDNURL } from '@/config/index'
-import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS } from './index.d'
+import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS, ADD_PERSON_RESULT } from './index.d'
 import InitProvider from '@/components/init_provider'
 import useInit from '@/hooks/init'
 import getWorkers from './api'
+import { workersAdd } from '@/utils/api'
 import PromptBox from '@/components/popup/index'
+import { post } from '@/utils/request/index'
 import './index.scss'
 
 
 export default function AddressBook() {
   /** 获取所有通讯录列表 */
-  const { loading, data, errMsg } = useInit(getWorkers, { work_note: '718' }, [])
+  const { loading, data, errMsg } = useInit(getWorkers, { work_note: '859' }, [])
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([]);
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
-  /** 保存一份获取到的数据 */
-  setList(data)
+  /**是否显示添加工友弹窗*/
+  const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
   /** 字母定位ID */
   const [viewTo, setViewTo] = useState<string>("")
-
+  /** 是否一全选 全选勾勾控制*/
+  const [isAllSelect, setIsAllSelect] = useState<boolean>(false)
+  /** 保存一份获取到的数据 */
+  setList(data)
   /** 点击字母跳转相应位置 */
   const toView = (viewId: string) => {
     setViewTo(viewId == "view#" ? 'view_' : viewId)
   }
-
   /** 选中或者取消选中 */
   const selectItem = (pIndex: number, cIndex: number) => {
     let newListData: ADDRESS_BOOK_LIST[] = [...list]
-    //添加is_check 表示是否选中
+    /** 添加is_check 表示是否选中 */
     newListData[pIndex].data[cIndex].is_check = !newListData[pIndex].data[cIndex].is_check
     setList(newListData)
-
     /** 已选中的工友数据 */
     let selectdArr: PERSON_DATA[] = []
     /** 找出已选中的工友 保存到selectd中 */
+    /** 不在账本中的工友数量 */
+    let onWorkLen: number = 0
     newListData.map((pItem) => {
-      pItem.data.map((cItem) => { cItem.is_check ? selectdArr.push(cItem) : '' })
+      pItem.data.map((cItem) => {
+        cItem.is_check ? selectdArr.push(cItem) : ''
+        /** 找出不在账本中的工友数量 */
+        cItem.is_in_work_note == 0 ? onWorkLen++ : ''
+      })
     })
+    /** 当前选中的数量 是否==不在账本中的工友数量 相等说明全选 */
+    selectdArr.length == onWorkLen ? setIsAllSelect(true) : setIsAllSelect(false)
     setSelectd(selectdArr)
   }
   /** 删除已选中的工友 */
@@ -49,7 +60,6 @@ export default function AddressBook() {
     let newSelectd: PERSON_DATA[] = [...selectd]
     /** 从已选中里 过滤掉 当前删除的这一条*/
     setSelectd(newSelectd.filter(SelectdItem => SelectdItem.id != item.id))
-
     /** 从列表数据中 找到删除的这一条数据 改变is_check */
     newListData.map(pItem => {
       pItem.data.map(cItiem => {
@@ -59,18 +69,18 @@ export default function AddressBook() {
       })
     })
     setList(newListData)
+    setIsAllSelect(false)
   }
   /**随机选择一个颜色*/
   const randomColor = (): string => {
     let colors: string[] = ['#58C7FF', '#74E8D5', '#A4BFFF', '#79BAFF', '#4ECBF4']
     return colors[Math.floor(Math.random() * 5)]
   }
-
   /** 添加工友弹窗确定 */
   const addConfirm = (data: ADD_CONFIRM_DATA) => {
-    if (data.name) { 
+    if (data.name) {
       setAddPopupShow(false)
-    }else {
+    } else {
       Taro.showToast({
         title: '请填写工人名称',
         icon: 'none',
@@ -78,23 +88,53 @@ export default function AddressBook() {
       })
       return
     }
-    
+
     let params: ADD_PERSON_PARAMS = {
       name: data.name,
       tel: data.tel,
       name_color: randomColor()
     }
-    
+    post<ADD_PERSON_PARAMS,ADD_PERSON_RESULT>(workersAdd, params, true).then((r)=>{
+      if(r.code == 0){
+        Taro.showToast({
+          title: '添加成功',
+          icon: 'success',
+          duration: 1000
+        })
+      }else{
+        Taro.showToast({
+          title: r.message,
+          icon: 'none',
+          duration: 1000
+        })
+      }
+    })
   }
   /** 添加工友弹窗取消 */
   const addCancel = () => {
     setAddPopupShow(false)
   }
-  /**是否显示添加工友弹窗*/
-  const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
   /** 弹出添加工友弹窗*/
   const showAddPopup = () => {
     setAddPopupShow(true)
+  }
+  /** 全选 */
+  const allSelect = () => {
+    let newListData: ADDRESS_BOOK_LIST[] = [...list]
+    let newIsAllSelect: boolean = isAllSelect
+    newIsAllSelect = !newIsAllSelect//全选取反
+    let newSelectd: PERSON_DATA[] = []
+    /** 把工友列表里的 所有工友添加上 is_ckeck=true */
+    newListData.map(pItem => {
+      pItem.data.map(cItiem => {
+        cItiem.is_in_work_note != 1 ? cItiem.is_check = isAllSelect ? false : true : ''
+        cItiem.is_in_work_note != 1 ? newSelectd.push(cItiem) : ''
+      })
+    })
+    setList(newListData)
+    setIsAllSelect(newIsAllSelect)
+    //判断是全选还是取消全选
+    newIsAllSelect ? setSelectd(newSelectd) : setSelectd([])
   }
   return (
     <InitProvider loading={loading} errMsg={errMsg}>
@@ -103,25 +143,23 @@ export default function AddressBook() {
         <Selectd selectd={selectd} deletePerson={deletePerson} />
         {/* 搜索组件 */}
         <Search addClick={showAddPopup} />
-
         {/* 通讯录列表 */}
         <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className="list_content">
           {list.map((pItem, pIndex) => (
             <View className="item" key={pItem.name_py} id={pItem.name_py == "#" ? 'view_' : 'view' + pItem.name_py}>
               <Text className="title">{pItem.name_py}</Text>
-
               {pItem.data.map((cItem, cIndex) => (
                 <View className="item_person" key={cItem.id}>
-                  <View className="left" onClick={() => selectItem(pIndex, cIndex)}>
-
-                    {cItem.is_check && <Image className="item_checkbox" src={`${IMGCDNURL}ws/ckeckd.png`} />}
-                    {!cItem.is_check && <Image className="item_checkbox" src={`${IMGCDNURL}ws/check.png`} />}
-                    {/* {默认选中还没写} */}
-
+                  <View className="left" onClick={() => !cItem.is_in_work_note ? selectItem(pIndex, cIndex) : ''}>
+                    {
+                      // 判断是否已经在账本中 默认选中 再判断是否已经选中
+                      cItem.is_in_work_note ? <Image className="item_checkbox" src={`${IMGCDNURL}ws/on_check.png`} /> : cItem.is_check ? <Image className="item_checkbox" src={`${IMGCDNURL}ws/ckeckd.png`} /> :
+                        <Image className="item_checkbox" src={`${IMGCDNURL}ws/check.png`} />
+                    }
                     <View className="avatar" style={{ background: cItem.name_color }}>{cItem.name.substring(0, 2)}</View>
                     <View className="name_tle">
                       <Text className="name">{cItem.name}</Text>
-                      {cItem.tel && <Text className="tel">{cItem.tel}</Text>}
+                      {cItem.tel && cItem.tel != undefined && <Text className="tel">{cItem.tel}</Text>}
                     </View>
                   </View>
                   <View className="setting">
@@ -134,24 +172,27 @@ export default function AddressBook() {
           )
           )}
         </ScrollView>
+        {/* 右侧字母表 */}
         <View className="right_nav">
           {list.map((item) => (
             <Text className='right-nav-text' onClick={() => toView('view' + item.name_py)}>{item.name_py}</Text>
           ))}
         </View>
-
         {/* 底部组件 */}
         <View className="bottom_all">
-          <View className="bottom_all_box">
-            <Image className="bottom_all_img" src={`${IMGCDNURL}ws/check.png`} ></Image>
+          <View className="bottom_all_box" onClick={() => allSelect()}>
+            {
+              isAllSelect ? <Image className="bottom_all_img" src={`${IMGCDNURL}ws/ckeckd.png`} ></Image> : <Image className="bottom_all_img" src={`${IMGCDNURL}ws/check.png`} ></Image>
+            }
             <Text className="bottom_all_text" >全选</Text>
           </View>
           <View className="button">
-            确定（3人）
+            确定（{selectd.length}人）
         </View>
         </View>
       </View>
       {
+        // 添加工友组件
         addPopupShow && <PromptBox
           titleText="添加工友"
           showTitleButton={false}

@@ -39,7 +39,6 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/work_team/record_work/index',
       'pages/index/index', // 首页
       'pages/person_record/index',
       'pages/person_borrowing/index',

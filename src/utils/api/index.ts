@@ -49,10 +49,8 @@ export const addFeedback: string = `feedback/add`
 export const addressBookAll: string = `workers/get`
 //获取某个账本中的工友
 export const addressBookNote: string = `workers/get-note-workers`
-<<<<<<< HEAD
 // 添加工人
 export const workersAdd: string = `workers/add`
-=======
 //初始化记工界面
 export const initRemember: string = REQUESTURL + 'business/get-one/'
 
@@ -63,4 +61,3 @@ export const workNote: string = REQUESTURL + 'work-notes/get?id=1&co=23'
 // !流水列表
 // 获取流水
 export const flowList: string = 'business/get-business/'
->>>>>>> a9ffb93bd7fb1c7b26860a4c2c8f04b82da4114d

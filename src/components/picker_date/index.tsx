@@ -27,7 +27,7 @@ export default function PickerDate({
           {hideImg && <Image className="person-record-date-img" src={img} />}
           <View className="person-record-modify-title person-record-date-title">{title}</View>
           <Text className="person-record-date-text">{date}</Text>
-          <Text className="overtime-icon" onClick={DeletePickerDate}></Text>
+            <Text className="overtime-icon" onClick={(e) => { e.stopPropagation(); DeletePickerDate}}></Text>
         </View>
       </View>
       </Picker>)

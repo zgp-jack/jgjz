@@ -6,6 +6,7 @@ import PickerDate from '@/components/picker_date'
 import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import ExpenditurePostData from './inter.d'
+import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
 import { getTodayDate } from '@/utils/index'
 
@@ -19,14 +20,16 @@ export default function Expenditure(){
     note: '',
     money: '0.00'
   })
-
+  // 分类数据
+  const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
   // 是否显示分类组件
   const [isPickerType, setIsPickType] = useState<boolean>(false)
   // 是否显示日期组件
   const [isPickerDate, setIsPickerDate] = useState<boolean>(false)
   // 是否显示班组长 组件
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
-
+  // 是否显示选择分类
+  const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: ExpenditurePostData = { ...postData }
@@ -39,10 +42,6 @@ export default function Expenditure(){
     console.log(postData)
   }
 
-  // 用户关闭 分类组件
-  const ColsePickerType = () => {
-    setIsPickType(false)
-  }
   // 用户关闭 日期组件
   const DeletePickerDate = () => {
     setIsPickerDate(false)
@@ -52,22 +51,23 @@ export default function Expenditure(){
     setIsPickerLeader(false)
   }
 
-  // 用户修改日期
-  const userChangeDate = (val: string) => {
-    let data = {...postData}
-    data.date = val
-    setPostData({...data})
-  }
-
   return (
     <View>
       <ContentInput type="money" title="金额" change={userUpdatePostData} value={postData.money} />
-      {isPickerType && <PickerType value="无分类" close={() => setIsPickType(false)} />}
-      {isPickerDate && <PickerDate date={postData.date} DeletePickerDate={DeletePickerDate} change={(val) => userChangeDate(val)} />}
+      {isPickerType && 
+        <PickerType 
+          value={typeData.name} 
+          close={() => setIsPickType(false)} 
+          set={(data) => setTypeData(data)} 
+          show={showTypePicker} 
+          setShow={(bool: boolean) => setShowTypePicker(bool) }
+        />
+      }
+      {isPickerDate && <PickerDate date={postData.date} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'date')} />}
       {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
-      <PickerMark text={postData.note} />
+      <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
-        {!isPickerType && <View className="person-record-component-item" onClick={() => setIsPickType(true)}>分类</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true);setShowTypePicker(true)}}>分类</View>}
         {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.date}</View>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
       </View>

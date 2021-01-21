@@ -6,6 +6,7 @@ import useInit from '@/hooks/init'
 import userGetExpendType, { userAddExpendType, userDelExpendType, userEditExpendType} from './api'
 import PickerTypeProps, { PopupInputGroup } from './inter.d'
 import Popup from '@/components/popup'
+import { InputItem } from '@/components/popup/index.d'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import ClassifyType from '@/store/classify';
 import ClassifyItem from '@/store/classify/inter.d'
@@ -18,20 +19,20 @@ let current = 0
 function PickerType({
   img = `${IMGCDNURL}gl/Bookkeeping-icon.png`,
   title = '分类',
-  value =  '',
+  value =  '无分类',
   hideImg = false,
   close,
-  set
+  set,
+  show,
+  setShow,
 }: PickerTypeProps) {
 
   // input-name
   const inputName: string = 'name'
-  // 是否显示picker
-  const [show, setShow] = useState<boolean>(false)
   // 是否显示添加 修改弹窗
   const [showPopup, setShowPopup] = useState<boolean>(false)
   // 添加 修改弹窗 input 内容
-  const [popupData, setPopupData] = useState<PopupInputGroup[]>([{ title: '分类名称:', name: inputName, placeholder: '请输入分类名称', value: '' }])
+  const [popupData, setPopupData] = useState<InputItem[]>([{ title: '分类名称:', name: inputName, placeholder: '请输入分类名称', value: '' }])
   // 修改弹窗的id
   const [id, setId] = useState<string>('')
   // 用户确认选择picker
@@ -39,6 +40,7 @@ function PickerType({
     setShow(true)
     console.log(data)
     set && set(data)
+    setShow(false)
   }
 
   // 获取stroe里面的数据
@@ -91,8 +93,7 @@ function PickerType({
 
   // 用户添加弹窗或者修改弹窗 1 添加 2 修改
   const userEditItemType = (item?: ClassifyItem) => {
-    console.log(current)
-    let obj: PopupInputGroup = { ...popupData[0] }
+    let obj: InputItem = { ...popupData[0] }
     if (item) {
       obj.value = item.name
       setId(item.id)

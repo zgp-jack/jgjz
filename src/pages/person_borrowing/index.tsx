@@ -7,6 +7,7 @@ import classnames from 'classnames'
 import './index.scss'
 
 export default function PersonTally(){
+  
   // 当前选中的tab
   const [id, setId] = useState<string>(tallyConfig[0].id)
   // 用户改变tab

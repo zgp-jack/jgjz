@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 11:47:21
+ * @LastEditTime: 2021-01-21 11:07:11
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
@@ -40,8 +40,13 @@ function getRequestHeaderInfo(): RequestHeader {
     'content-type': 'application/x-www-form-urlencoded',
     source: MINITOKEN,
     version: VERSION,
+<<<<<<< HEAD
     uid: 20021907,
     token: '0e976cb74e736736f39254ea7ee1def0787054ddaf8ab4ddaedc850daefe16d1',
+=======
+    uid: 20004425,
+    token: '035df17868e3ee6a4f160c4c27076b9c787054ddaf8ab4ddaedc850daefe16d1',
+>>>>>>> abc6a508e6759cc4ad1a8b7b4b31ee08e7ec1f82
   }
 
   // 获取用户信息
@@ -145,5 +150,31 @@ export const get = <T, R>(url: string, data: T, loading?: boolean): Promise<Resu
 export const post = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
     url, data, loading: !!loading , method: 'POST'
+  })
+}
+
+
+/**
+ * @name: post for jsxin
+ * @return Promise<T> 返回get请求的数据结果
+ * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
+ * @description 发起delete请求
+*/
+export const del = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
+  return doRequestAction<R>({
+    url, data, loading: !!loading, method: 'DELETE'
+  })
+}
+
+
+/**
+ * @name: post for jsxin
+ * @return Promise<T> 返回get请求的数据结果
+ * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
+ * @description 发起put请求
+*/
+export const put = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
+  return doRequestAction<R>({
+    url, data, loading: !!loading, method: 'PUT'
   })
 }

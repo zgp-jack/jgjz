@@ -6,8 +6,7 @@
  * @Description: interface for overtime
  */
 
- // 更多加班时间 选择组件
- export default interface MoreWorkTimeProps {
-    /** 取消组件 */
-    WorktimeCancle: () => void
+ // 加班时间组件
+ export default interface OverTimeProps {
+    /** */
  }

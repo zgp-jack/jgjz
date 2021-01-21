@@ -39,14 +39,11 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-<<<<<<< HEAD
       'pages/work_team/record_work/index',
-=======
       'pages/index/index', // 首页
       'pages/person_record/index',
       'pages/person_borrowing/index',
       'pages/person_detail/index',
->>>>>>> dev
       'pages/remember/index',
       'pages/feedback/index',
       'pages/login/index',

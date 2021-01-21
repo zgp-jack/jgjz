@@ -38,8 +38,8 @@ export function showActionModal(data: ShowActionModel): void {
     showCancel,
     confirmText,
     confirmColor,
-    success: () => {
-      success && success()
+    success: (res) => {
+      success && success(res)
     }
   })
 }

@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:41
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-18 17:30:27
+ * @LastEditTime: 2021-01-21 11:06:21
  * @Description: 请求方法的接口类文件
  */
 
@@ -27,7 +27,7 @@ interface RequestBase {
   /** 请求的接口地址 */ 
   url: string,
   /** 请求方法 */
-  method: 'GET' | 'POST',
+  method: 'GET' | 'POST' | 'DELETE' | 'PUT',
   /** 请求头信息 */
   header: RequestHeader,
   /** 提交的数据 */

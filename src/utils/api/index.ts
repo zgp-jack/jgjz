@@ -1,8 +1,8 @@
 /*
  * @Author: jsxin
  * @Date: 2021-01-18 14:15:01
- * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 19:32:42
+ * @LastEditors: jsxin 
+ * @LastEditTime: 2021-01-21 14:30:39 
  * @Description: 存放所有的API请求接口
  ! @rules: 1. 导出的接口名 小驼峰  2.注释: 功能模块名 + 接口概述 3.功能模块相同的接口放在一起
  */
@@ -25,10 +25,22 @@ export const userGetBusinessLists: string = `business/get-business`
 // ! 记账类别
 // 记账类别-获取已有类别
 export const userGetExpendType: string = `expend-type/get`
+// 记账类别-新增
+export const userAddExpendType: string = `expend-type/add`
+// 记账类别-修改
+export const userEditExpendType: string = `expend-type/update`
+// 记账类别-删除
+export const userDelExpendType: string = `expend-type/delete`
 
 // ! 计量类别
 // 记账类别-获取已有类别
 export const userGetUnitWorkType: string = `UnitWorkType/get`
+// 记账类别-新增
+export const userAddUnitWorkType: string = `UnitWorkType/add`
+// 记账类别-修改
+export const userEditUnitWorkType: string = `UnitWorkType/update`
+// 记账类别-删除
+export const userDelUnitWorkType: string = `UnitWorkType/delete`
 
 // ! 登录注册
 // 登录-获取验证码

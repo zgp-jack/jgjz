@@ -55,7 +55,7 @@ const Remember = () => {
     start_business_time: '',
     end_business_time: '',
     work_note: '874',
-    worker_id: '',
+    worker_id: [],
     business_type: [],
     expend_type: '',
     expense_account: '',
@@ -66,12 +66,17 @@ const Remember = () => {
   })
   /*获取统计数据，请求参数*/
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
+  /*数组转字符串*/
+  const handleArrayToString = (data?: string[] | string) => {
+    return (data as string[]).join(',')
+  }
   // 参数处理
   const actionParams = () => {
     return {
       ...filterData,
-      business_type: (filterData.business_type as string[]).join(','),
-      group_leader: (filterData.group_leader as string[]).join(',')
+      business_type: handleArrayToString(filterData.business_type),
+      group_leader: handleArrayToString(filterData.group_leader),
+      worker_id: handleArrayToString(filterData.worker_id)
     }
   }
   const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
@@ -86,9 +91,8 @@ const Remember = () => {
 
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
 
-  const [showPopup, setShowPopup] = useState(false)//点击切换账本打开选择器弹窗（调试用）
 
-  /*当前选中日期的下一个日期，获取统计接口使用*/
+  /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
   useEffect(() => {
@@ -117,6 +121,8 @@ const Remember = () => {
       if (res.code === 0) {
         setCounts(res.data.count)
       }
+    }).catch(e => {
+
     })
   }
   /*获取当前日期的下一个月份日期*/
@@ -194,6 +200,7 @@ const Remember = () => {
     setFilterData(defaultFilterData)
     setShowFilter(false)
   }
+  /*是否是当前年月,是的话不显示右边箭头*/
   const handleHideRightArrow = () => {
     return year == filterYear && month == filterMonth
   }
@@ -205,8 +212,14 @@ const Remember = () => {
       url: url
     })
   }
+  /*1转为01*/
   const handleMonthShow = (month = filterMonth) => {
     return Number(month) < 10 ? `0${month}` : month
+  }
+  /*是否显示筛选了哪些内容*/
+  const handleShowFilterResult = () => {
+    let {is_note, business_type, group_leader, worker_id} = filterData
+    return (is_note == '1' || business_type.length || (group_leader as string[]).length || (worker_id as string[]).length)
   }
   return (
     <View className={"remember" + (showFilter ? ' stop-move' : '')}>
@@ -241,7 +254,8 @@ const Remember = () => {
                 <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
               </View>
             </View>
-            {isFilter && <View className="filter-info" onClick={() => setShowFilter(true)}>
+            {(isFilter && handleShowFilterResult()) &&
+            <View className="filter-info" onClick={() => setShowFilter(true)}>
               <View className="filter-info-box overwords">
                 {
                   (filterData.group_leader as string[]).length > 1 &&

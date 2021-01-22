@@ -18,7 +18,7 @@ export interface GetCountParams {
   unit_work_type?: string
   expense_account?: string
   group_leader?: string | string[]
-  worker_id?: string
+  worker_id?: string[] | string
   page: number
 }
 

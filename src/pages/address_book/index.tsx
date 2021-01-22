@@ -12,6 +12,7 @@ import msg from '@/utils/msg'
 import getWorkers, { postAdd_Person, deletedPerson, editWordkerInfo } from './api'
 import PromptBox from '@/components/popup/index'
 import './index.scss'
+import { objDeepCopy } from '@/utils/index'
 
 
 export default function AddressBook({ 
@@ -39,9 +40,13 @@ export default function AddressBook({
   /**是否显示添加工友弹窗*/
   const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
   /**是否显示编辑工友弹窗*/
-  const [editPopupShow, setEditPopupShow] = useState<boolean>(false);
+  const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
+  /** 筛选工友数据 列表 */
+  const [filterList, setFilterList] = useState<PERSON_DATA[]>([]);
+  // 输入框的值
+  const [value, setValue] = useState<string>('')
   /** 编辑工友默认数据 */
-  const [workerInfo, setWorkerInfo] = useState<PERSON_DATA>({
+  const [editItemData, setEditItemData] = useState<PERSON_DATA>({
     id: 0,
     name: "",
     tel: "",
@@ -222,17 +227,17 @@ export default function AddressBook({
   }
   /** 修改工友  */
   const bossEditWorkerinfo = (i: number, data: PERSON_DATA) => {
-    setWorkerInfo(data)
-    setEditPopupShow(true)
+    setEditItemData(data)
+    setIsShowEdit(true)
   }
   /** 修改工友-接口请求 */ 
   const editWorkerConfirm = (data: InputValue) => {
-    editWordkerInfo(workerInfo.id, { name: data.name, tel: data.tel || ''} ).then(res => {
+    editWordkerInfo(editItemData.id, { name: data.name, tel: data.tel || ''} ).then(res => {
       msg(res.message)
       if(res.code != 0){
         return
       }
-      setEditPopupShow(false)
+      setIsShowEdit(false)
       /** 所有工友数据 */ 
       let newList: ADDRESS_BOOK_LIST[] = [...list]
       /** 现有的字母表 */
@@ -241,12 +246,12 @@ export default function AddressBook({
         modernLetter.push(item.name_py)
       })
       /** 修改后的数据 */
-      let newWorkerInfo: PERSON_DATA = JSON.parse(JSON.stringify(workerInfo)) 
+      let newWorkerInfo: PERSON_DATA = JSON.parse(JSON.stringify(editItemData)) 
       newWorkerInfo.name = data.name
       newWorkerInfo.tel = data.tel
       newWorkerInfo.name_py = res.data.name_py
       /** 如果name_py没有改变 */
-      if (res.data.name_py == workerInfo.name_py){
+      if (res.data.name_py == editItemData.name_py){
         newList.map((Pitem, Pindex) => {
           Pitem.data.map((Citem, Cindex) => {
             if (Citem.id == newWorkerInfo.id) {
@@ -320,14 +325,14 @@ export default function AddressBook({
   /** 删除事件 */
   const deletPerson =()=> {
     let workId = {
-      id: workerInfo.id
+      id: editItemData.id
     }
     deletedPerson(workId).then((res)=>{
       msg(res.message)
       if (res.code == 0) {
         /** 在本地list删除当前数据 */ 
         let newList: ADDRESS_BOOK_LIST[] = [...list]
-        let editId: number = workerInfo.id
+        let editId: number = editItemData.id
         newList.map((Pitem,Pindex)=>{
           Pitem.data.map((Citem,Cindex)=>{
             if (Citem.id == editId){
@@ -344,6 +349,60 @@ export default function AddressBook({
       }
     })
   }
+  /** 显示修弹窗 */
+  const editwork = (editData: PERSON_DATA) => {
+    setEditItemData(editData)
+    setIsShowEdit(true)
+  }
+  // 用户搜索操作
+  const userSearchAction = (val: string) => {
+    setValue(val)
+    let lists: ADDRESS_BOOK_LIST[] = objDeepCopy(list)
+    let _lists: PERSON_DATA[] = []
+    lists.forEach(item => {
+      let items: PERSON_DATA[] = item.data
+      for(let i = 0 ;i < items.length ; i++){
+        let data: PERSON_DATA = items[i]
+        if(data.name.indexOf(val) !== -1){
+          _lists = [..._lists, data]
+        }
+      }
+    })
+    setFilterList(_lists)
+  }
+  // 搜索后的数据 选择
+  const filterSelect = (index:number,id:number) => {
+    let newSelectd =  [...selectd]
+    let newList = [...list]
+    let newFilterList = [...filterList]
+    /** 搜索列表选中或取消 */
+    newFilterList[index].is_check = !newFilterList[index].is_check
+    setFilterList(newFilterList)
+    /** 添加 */ 
+    if (newFilterList[index].is_check){
+      newSelectd.push(newFilterList[index])
+    }else{
+      /** 删除 */ 
+      newSelectd.map((selectdItem, selectdIndex) => {
+        if (selectdItem.id == id) {
+          newSelectd.splice(selectdIndex, 1)
+        }
+      })
+    }
+    setFilterList(newFilterList)
+    setSelectd(newSelectd)
+    //  选中或者取消 所有列表中的数据
+    newList.map((listItem,listIndex)=>{
+      listItem.data.map((dataItem,dataIndex)=>{
+        if(dataItem.id == id){
+          newList[listIndex].data[dataIndex].is_check = !newList[listIndex].data[dataIndex].is_check
+        }
+      })
+    })
+    setList(newList)
+  }
+
+
   return (
     <InitProvider loading={loading} errMsg={errMsg}>
       <View className="AddressBook">
@@ -351,7 +410,7 @@ export default function AddressBook({
         {type !== aloneType && <Selectd selectd={selectd} deletePerson={deletePerson} />}
         
         {/* 搜索组件 */}
-        <Search addClick={showAddPopup} />
+        <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} />
         {/* 通讯录列表 */}
         <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
           "list_content": true,
@@ -383,6 +442,36 @@ export default function AddressBook({
           )
           )}
         </ScrollView>
+
+        {/* 筛选列表 */}
+        {value &&
+        <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
+          "list_content": true,
+          "list_content-alone": type === aloneType,
+          "list_content_filter": true,
+        })} >
+          {filterList.map((item, pIndex) => (
+            <View className="item_person" key={item.id}>
+              <View className="left" onClick={() => filterSelect(pIndex,item.id)}>
+
+                {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
+                {type !== aloneType && <Image className='item_checkbox' src={item.is_in_work_note ? `${disableCheckImg}` : item.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
+
+                <View className="avatar" style={{ background: item.name_color }}>{item.name.substring(0, 2)}</View>
+                <View className="name_tle">
+                  <Text className="name">{item.name}</Text>
+                  {item.tel && <Text className="tel">{item.tel}</Text>}
+                </View>
+              </View>
+              <View className="setting">
+                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); }} ></Image>
+              </View>
+            </View>
+          ))
+          }
+        </ScrollView>}
+
+
         {/* 右侧字母表 */}
         <View className="right_nav">
           {list.map((item) => (
@@ -416,15 +505,15 @@ export default function AddressBook({
       ></PromptBox>}
 
       {/* // 修改工友组件 */}
-      {editPopupShow && <PromptBox
+      {isShowEdit && <PromptBox
         titleText="修改工友"
         confirmText="确定"
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: workerInfo.name },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: workerInfo.tel }
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel }
         ]}
         confirm={(data) => editWorkerConfirm(data)}
-        cancel={() => setEditPopupShow(false)}
+        cancel={() => setIsShowEdit(false)}
         delet={() => deletPerson()}
       ></PromptBox>}
 

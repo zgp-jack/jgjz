@@ -2,7 +2,7 @@
  * @Author: 老王
  * @Date: 2021年01月20日10:26:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-22 15:16:33
+ * @LastEditTime: 2021-01-22 17:36:31
  * @Description: 工友录文件夹下面的所有的接口存放文件
  */
 
@@ -79,7 +79,12 @@ export interface SELECTD_PROPS {
 
 //搜索组件的参数
 export interface SEARCH_PROPS {
-  addClick:Function,
+  /** 添加工友 */
+  addClick:() => void,
+  /** 用户搜索行为 */ 
+  onSearch?: (val: string) => void,
+  /** 用户搜索行为 */
+  value?: string,
 }
 
 // 添加工友弹窗确定 的值

@@ -9,7 +9,7 @@
 // 借支配置项
 export default interface TallyConfig {
   /** id */ 
-  id: string,
+  id: number,
   /** 标题 */
   title: string
 }

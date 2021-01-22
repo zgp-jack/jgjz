@@ -16,7 +16,7 @@ export default interface PickerTypeProps {
   /** 标题 */
   title?: string,
   /** 内容 */
-  value: string,
+  value?: string,
   /** 关闭事件 */
   close?: () => void,
   /** 获取值 */

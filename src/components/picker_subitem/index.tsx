@@ -16,8 +16,8 @@ import './index.scss'
 let current = 0
 
 function PickerType({
-  img = `${IMGCDNURL}gl/Bookkeeping-icon.png`,
-  title = '分类',
+  img = `${IMGCDNURL}zgp/subitem_icon.png`,
+  title = '分项',
   value = '',
   hideImg = false,
   set,
@@ -129,7 +129,7 @@ function PickerType({
       <View className="person-record-overtime person-record-date" onClick={() => setShow(true)}>
         {!hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
-        <Input className="person-record-date-text">{value}</Input>
+        <Input className="person-record-date-text" value={value} placeholder='请添加您的分类' disabled></Input>
         <Text className="overtime-icon" onClick={() => { close && close() }}></Text>
       </View>
 
@@ -138,7 +138,7 @@ function PickerType({
           close={() => setShow(false)}
           show={show}
           confirm={(data) => userSurePicker(data)}
-          add={() => { }}
+          add={() => userEditItemType() }
           data={data}
           status={status && !loading}
           edit={(data, i) => { current = i; userEditItemType(data); }}

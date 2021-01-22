@@ -2,16 +2,15 @@ import Taro, { connectSocket, useState } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import Borrow from './components/borrow'
 import Expenditure from './components/expenditure'
-import tallyConfig, { borrow, expenditure } from './config'
+import tallyConfig from './config'
 import classnames from 'classnames'
 import './index.scss'
 
 export default function PersonTally(){
-  
   // 当前选中的tab
-  const [id, setId] = useState<string>(tallyConfig[0].id)
+  const [id, setId] = useState<number>(tallyConfig[0].id)
   // 用户改变tab
-  const userChangeTab = (id: string, title: string) => {
+  const userChangeTab = (id: number, title: string) => {
     setId(id)
     Taro.setNavigationBarTitle({ title: `个人记${title}`}) 
   }
@@ -30,8 +29,8 @@ export default function PersonTally(){
           >{item.title}</View>
         )}
       </View>
-      {id === borrow && <Borrow /> }
-      {id === expenditure && <Expenditure /> }
+      {id === 4 && <Borrow /> }
+      {id === 5 && <Expenditure /> }
     </View>
   )
 }

@@ -6,7 +6,7 @@ import './index.scss'
 
 export default function PickerUnit({
     hideImg = true,
-    img = `${IMGCDNURL}gl/Bookkeeping-icon.png`,
+    img = `${IMGCDNURL}zgp/unit_icon.png`,
     title = '单位',
     value = '平方米'
 }:PickerUnitProps){

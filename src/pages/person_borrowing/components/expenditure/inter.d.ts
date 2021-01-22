@@ -26,4 +26,6 @@ export default interface ExpenditurePostData {
   work_note?: string
   /** 工人ID */
   worker_id?: string
+  /** 上传图片 */
+  img_url?: string
 }

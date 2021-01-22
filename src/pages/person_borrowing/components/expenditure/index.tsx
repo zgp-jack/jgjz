@@ -29,7 +29,7 @@ export default function Expenditure(){
   // 是否显示分类组件
   const [isPickerType, setIsPickType] = useState<boolean>(false)
   // 是否显示日期组件
-  const [isPickerDate, setIsPickerDate] = useState<boolean>(false)
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 是否显示选择分类

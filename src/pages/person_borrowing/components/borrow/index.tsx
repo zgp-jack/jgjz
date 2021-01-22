@@ -18,7 +18,7 @@ export default function Borrow() {
   // 是否显示选择分类
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 是否显示日期组件
-  const [isPickerDate, setIsPickerDate] = useState<boolean>(false)
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 分类数据
@@ -33,8 +33,7 @@ export default function Borrow() {
     money: '0.00',
     identity: 2,
     work_note: '890',
-    worker_id: '1693',
-    img_url:''
+    worker_id: '1693'
   })
 
   // 用户更新数据

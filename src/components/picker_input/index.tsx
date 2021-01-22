@@ -17,7 +17,7 @@ export default function ContentInput({ title, change, value, type }: PersonInput
         <Text className="work-amount-text">{title}</Text>
           <Input 
             type="number" value={value} 
-            placeholder={`请输入${title}`} 
+            placeholder={`0.00`} 
             className="work-amount-input" 
             onInput={(e: any) => change(e.detail.value, type)}
             onFocus={() => setFocus(true)}

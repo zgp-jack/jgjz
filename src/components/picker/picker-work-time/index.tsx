@@ -7,7 +7,6 @@ import PopupBottom from "@/components/picker/components/popupBottom";
 import PickerBody from "@/components/picker/components/picker-body";
 import {PickerData, PickerProps} from "@/components/picker/type";
 
-
 const PickerWorkTime: React.FC<PickerProps> = props => {
   const [times, setTimes] = useState<PickerData[]>([])
   const [activeTime, setActiveTime] = useState<PickerData>({id: 0, value: ''})

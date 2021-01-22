@@ -1,8 +1,8 @@
 /*
  * @Author: 老王
  * @Date: 2021年01月20日10:26:35
- * @LastEditors: 老王
- * @LastEditTime: 2021年01月20日10:26:43
+ * @LastEditors: jsxin
+ * @LastEditTime: 2021-01-22 11:09:54
  * @Description: 工友录文件夹下面的所有的接口存放文件
  */
 // 通讯录数据列表
@@ -67,9 +67,25 @@ export interface SEARCH_PROPS {
 
 // 添加工友弹窗确定 的值
 export interface ADD_CONFIRM_DATA {
+  /** worker姓名 */ 
   name:string,
+  /** worker电话 */
   tel:string
 }
+
+// 修改工友弹窗确定 的值
+export interface EDIT_CONFIRM_DATA extends ADD_CONFIRM_DATA {
+  /** 当前修改的用户id */ 
+  id: number
+}
+
+
+// 修改工友 接口返回值
+export interface EDIT_WORKER_RESULT {
+  /** 当前修改的用户id */
+  name_py: string
+}
+
 // 添加工友 给后台传的参数
 export interface ADD_PERSON_PARAMS extends ADD_CONFIRM_DATA {
   name_color:string

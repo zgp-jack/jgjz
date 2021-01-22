@@ -1,13 +1,12 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
 import RecordDay from './record_day/index'
 import RecordAmoumt from './record_amount/index'
 import RecordMoney from './record_money/index'
 import recordConfig from './config'
 import classnames from 'classnames'
 import './index.scss'
-function PersonRecord(){
+export default function PersonRecord(){
     // 切换记工type值
     const [recordnum, setRecordnum] = useState<number>(0);
     // 切换Tap
@@ -32,7 +31,7 @@ function PersonRecord(){
         </View>
     )
 }
-export default observer(PersonRecord)
+
 PersonRecord.config = {
     navigationBarTitleText: '个人记工天',
 }

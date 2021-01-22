@@ -3,10 +3,10 @@ import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
 import { IMGCDNURL } from '@/config/index'
-import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA } from './index.d'
+import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA, EDIT_CONFIRM_DATA } from './index.d'
 import InitProvider from '@/components/init_provider'
 import useInit from '@/hooks/init'
-import getWorkers from './api'
+import getWorkers, { editWordkerInfo } from './api'
 import { workersAdd } from '@/utils/api'
 import PromptBox from '@/components/popup/index'
 import { post } from '@/utils/request/index'
@@ -22,6 +22,14 @@ export default function AddressBook() {
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   /**是否显示添加工友弹窗*/
   const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
+  /**是否显示编辑工友弹窗*/
+  const [editPopupShow, setEditPopupShow] = useState<boolean>(false);
+  /** 编辑工友默认数据 */
+  const [workerInfo, setWorkerInfo] = useState<EDIT_CONFIRM_DATA>({
+    id: 0,
+    name: '',
+    tel: ''
+  })
   /** 字母定位ID */
   const [viewTo, setViewTo] = useState<string>("")
   /** 是否一全选 全选勾勾控制*/
@@ -194,6 +202,25 @@ export default function AddressBook() {
     //判断是全选还是取消全选
     newIsAllSelect ? setSelectd(newSelectd) : setSelectd([])
   }
+
+  /** 修改工友  */
+  const bossEditWorkerinfo = (i: number, data: PERSON_DATA) => {
+    console.log(i, data)
+    setWorkerInfo({
+      id: data.id,
+      name: data.name,
+      tel: data.tel
+    })
+    setEditPopupShow(true)
+  }
+
+  /** 修改工友-接口请求 */ 
+  const editWorkerConfirm = (data: ADD_CONFIRM_DATA) => {
+    editWordkerInfo(workerInfo.id,data).then(res => {
+      console.log(res)
+    })
+  }
+
   return (
     <InitProvider loading={loading} errMsg={errMsg}>
       <View className="AddressBook">
@@ -221,7 +248,7 @@ export default function AddressBook() {
                     </View>
                   </View>
                   <View className="setting">
-                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} ></Image>
+                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={() => bossEditWorkerinfo(cIndex,cItem) } ></Image>
                   </View>
                 </View>
               ))
@@ -233,7 +260,7 @@ export default function AddressBook() {
         {/* 右侧字母表 */}
         <View className="right_nav">
           {list.map((item) => (
-            <Text className='right-nav-text' onClick={() => toView('view' + item.name_py)}>{item.name_py}</Text>
+            <Text className='right-nav-text' key={item.name_py} onClick={() => toView('view' + item.name_py)}>{item.name_py}</Text>
           ))}
         </View>
         {/* 底部组件 */}
@@ -249,20 +276,34 @@ export default function AddressBook() {
         </View>
         </View>
       </View>
-      {
-        // 添加工友组件
-        addPopupShow && <PromptBox
-          titleText="添加工友"
-          showTitleButton={false}
-          confirmText="确定"
-          inputGroup={[
-            { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名' },
-            { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)' }
-          ]}
-          confirm={addConfirm}
-          cancel={addCancel}
-        ></PromptBox>
-      }
+
+      {/* // 添加工友组件 */}
+      {addPopupShow && <PromptBox
+        titleText="添加工友"
+        showTitleButton={false}
+        confirmText="确定"
+        inputGroup={[
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: '' },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: '' }
+        ]}
+        confirm={addConfirm()}
+        cancel={addCancel}
+      ></PromptBox>}
+
+      {/* // 修改工友组件 */}
+      {editPopupShow && <PromptBox
+        titleText="修改工友"
+        showTitleButton={false}
+        confirmText="确定"
+        inputGroup={[
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: workerInfo.name },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: workerInfo.tel }
+        ]}
+        confirm={(data) => editWorkerConfirm(data)}
+        cancel={() => setEditPopupShow(false)}
+      ></PromptBox>}
+
+
     </InitProvider>
   )
 }

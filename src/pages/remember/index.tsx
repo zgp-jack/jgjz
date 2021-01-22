@@ -21,6 +21,7 @@ import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import useList from '@/hooks/list'
+import PickerWorkTime from "@/components/picker/picker-work-time";
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -29,6 +30,7 @@ Taro.setNavigationBarTitle({title: (ledgerType == '1' ? '个人' : '班组') + '
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 const Remember = () => {
+  const [showPicker, setShowPicker] = useState(false)
   const {params} = useRouter()
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
@@ -227,7 +229,7 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords">{params.accountName}记工账本</View>
+          <View className="header-title overwords" onClick={() => setShowPicker(true)}>{params.accountName}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
                 onClick={() => Taro.navigateTo({url: '/pages/account_book_list/index'})}>切换记工本</View>
@@ -425,6 +427,7 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
+      <PickerWorkTime show={showPicker} confirm={() => console.log(123)} close={() => setShowPicker(false)}/>
     </View>
   )
 }

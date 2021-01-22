@@ -31,7 +31,7 @@ export interface ADD_RECORD_WORK {
   /** 记工名称 */
   name:string,
   /** 记工 */
-  c:string
+  action:string
 }
 
 // 提交修改记工 的值

@@ -6,7 +6,7 @@
  * @Description: interface for record_amount
  */
 
-// 记工量组件
+// 记工量接口
 export default interface RecordAmountPostData {
   /** 记工类型 */
   business_type: 1 | 2 | 3,

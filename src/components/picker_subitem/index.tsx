@@ -39,6 +39,7 @@ function PickerType({
     setShow(true)
     console.log(data)
     set && set(data)
+    setShow(false)
   }
 
   // 获取stroe里面的数据

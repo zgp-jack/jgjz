@@ -22,6 +22,8 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import useList from '@/hooks/list'
 import PickerWorkTime from "@/components/picker/picker-work-time";
+import PickerUnit from "@/components/picker/picker-unit";
+import PickerOverTime from "@/components/picker/picker-over-time";
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -30,6 +32,7 @@ Taro.setNavigationBarTitle({title: (ledgerType == '1' ? '个人' : '班组') + '
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 const Remember = () => {
+  /*打开picker弹窗（调试使用）*/
   const [showPicker, setShowPicker] = useState(false)
   const {params} = useRouter()
   /*记工类型数据*/
@@ -427,7 +430,7 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
-      <PickerWorkTime show={showPicker} confirm={() => console.log(123)} close={() => setShowPicker(false)}/>
+      {/*<PickerUnit show={showPicker} confirm={() => console.log(123)} close={() => setShowPicker(false)}/>*/}
     </View>
   )
 }

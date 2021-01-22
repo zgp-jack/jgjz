@@ -26,7 +26,7 @@ export default function RecordWork() {
   // 获取stroe数据
   const localStore = useLocalStore(() => RememberTypeItem);
   // 获取remebertype数据
-  const {businessType} = localStore;
+  const { businessType } = localStore;
   // 获取当前路由
   const router: Taro.RouterInfo = useRouter()
   // 获取路由参数type 1 记账 2 记工

@@ -13,7 +13,6 @@ import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
-import PickerUnit from "@/components/picker/picker-unit";
 import Filter from "./filter/index";
 import {get} from "@/utils/request";
 import { getBusiness } from './api'
@@ -50,12 +49,12 @@ const Remember = () => {
   const year = new Date().getFullYear()
   /*获取月份*/
   const month = new Date().getMonth() + 1
-  /**获取日*/ 
+  /**获取日*/
   const day = new Date().getDate();
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '873',
+    work_note: '874',
     worker_id: '',
     business_type: [],
     expend_type: '',
@@ -176,9 +175,12 @@ const Remember = () => {
   const handleSplitDate = (date: string | undefined) => {
     if (!date) return ''
     const _date = date.split('-')
-    console.log(typeof _date[1])
     let _month = _date[1].length == 1 ? ('0' + _date[1]) : _date[1]
-    return _date[0] + '年' + _month + '月'
+    let dateStr = _date[0] + '年' + _month + '月'
+    if (_date.length == 3) {
+      dateStr += _date[2] + '日'
+    }
+    return dateStr
   }
 
   /*显示筛选后选中了的记工类型*/
@@ -236,7 +238,7 @@ const Remember = () => {
                 <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
               </View>
             </View>
-            {isFilter && <View className="filter-info">
+            {isFilter && <View className="filter-info" onClick={() => setShowFilter(true)}>
               <View className="filter-info-box overwords">
                 {
                   (filterData.group_leader as string[]).length > 1 &&
@@ -391,10 +393,6 @@ const Remember = () => {
           </View>
         </View>
       </View>
-      {
-        showPopup &&
-        <PickerUnit show={showPopup} close={() => setShowPopup(false)} confirm={() => setShowPopup(false)}/>
-      }
       {
         showFilter &&
         <View className="mask" onClick={() => setShowFilter(false)}/>

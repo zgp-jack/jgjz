@@ -6,6 +6,7 @@ import arrowRight from "@/images/arrow-right.png";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import {GetCountParams} from "@/pages/remember/inter";
+import {getTodayDate} from "@/utils/index";
 
 interface FilterProps<T> {
   data: T
@@ -23,8 +24,17 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   const {businessType} = localStore
   /*本地筛选数据*/
   const [filterData, setFilterData] = useState<GetCountParams>(props.data)
+  console.log(getTodayDate())
+
   useEffect(() => {
-    props.data && setFilterData(JSON.parse(JSON.stringify(props.data)))
+    if (props.data) {
+      let _data: GetCountParams = {
+        ...props.data,
+        start_business_time: props.data.start_business_time + '-01',
+        end_business_time: props.data.end_business_time + '-' + new Date().getDay()
+      }
+      setFilterData(JSON.parse(JSON.stringify(_data)))
+    }
   }, [props.data])
   /*开始时间筛选*/
   const onStartDate = e => {

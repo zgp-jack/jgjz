@@ -28,17 +28,18 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
 
   useEffect(() => {
     if (props.data) {
+      let start_business_time = props.data.start_business_time
+      let end_business_time = props.data.end_business_time
       let _data: GetCountParams = {
         ...props.data,
-        start_business_time: props.data.start_business_time + '-01',
-        end_business_time: props.data.end_business_time + '-' + new Date().getDay()
+        start_business_time: start_business_time.split('-').length == 3 ? start_business_time : start_business_time + '-01',
+        end_business_time: end_business_time.split('-').length == 3 ? end_business_time : getTodayDate()
       }
       setFilterData(JSON.parse(JSON.stringify(_data)))
     }
   }, [props.data])
   /*开始时间筛选*/
   const onStartDate = e => {
-    console.log(e.detail.value)
     setFilterData({...filterData, start_business_time: e.detail.value})
   }
   /*结束时间筛选*/
@@ -90,7 +91,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
               <View className="filter-date">
                 <View className="filter-date-label">开始时间</View>
                 <View>
-                  <Picker mode='date' fields="month" onChange={onStartDate} value={filterData.start_business_time}>
+                  <Picker mode='date' onChange={onStartDate} value={filterData.start_business_time}>
                     <View className='filter-picker-value'>
                       <View>{props.handleSplitDate(filterData.start_business_time)}</View>
                       <Image src={arrowRight} className="filter-arrow"/>
@@ -102,7 +103,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
               <View className="filter-date">
                 <View className="filter-date-label">结束时间</View>
                 <View>
-                  <Picker mode='date' fields="month" onChange={onEndDate} value={filterData.end_business_time}>
+                  <Picker mode='date' onChange={onEndDate} value={filterData.end_business_time}>
                     <View className='filter-picker-value'>
                       <View>{props.handleSplitDate(filterData.end_business_time)}</View>
                       <Image src={arrowRight} className="filter-arrow"/>

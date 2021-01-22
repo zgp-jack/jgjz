@@ -152,6 +152,7 @@
           align-items: center;
           justify-content: space-between;
           margin-bottom: 40px;
+          padding: 0 30px;
 
           .filter-info-box {
             display: flex;
@@ -196,6 +197,12 @@
           width: 100%;
           margin-bottom: 40px;
           padding: 0 30px;
+
+          .statistics-title {
+            font-size: 30px;
+            color: #333333;
+            margin-bottom: 30px;
+          }
 
           .statistics-icon {
             width: 52px;
@@ -302,18 +309,20 @@
             }
           }
 
-          
+
         }
 
-        .statistics-flow{
+        .statistics-flow {
           width: 100%;
           margin-bottom: 40px;
+
           .statistics-title {
             font-size: 30px;
             color: #333333;
             margin-bottom: 30px;
             padding: 0 30px;
           }
+
           .bokkeeping-list {
             .bokkeeping-list-head {
               height: 70px;
@@ -325,10 +334,11 @@
               line-height: 70px;
               padding: 0 30px;
             }
-            .bokkeeping-list-content{
+
+            .bokkeeping-list-content {
               padding: 0 30px;
             }
-            
+
           }
         }
       }

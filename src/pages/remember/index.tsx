@@ -15,9 +15,9 @@ import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
 import Filter from "./filter/index";
 import {get} from "@/utils/request";
-import { getBusiness } from './api'
+import {getBusiness} from './api'
 import {GetCountParams, GetCountResult} from "@/pages/remember/inter";
-import { getCountUrl } from "@/utils/api";
+import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import useList from '@/hooks/list'
@@ -74,7 +74,7 @@ const Remember = () => {
       group_leader: (filterData.group_leader as string[]).join(',')
     }
   }
-  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
+  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
   console.log("list", list)
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
@@ -95,7 +95,7 @@ const Remember = () => {
     if (!filterData.start_business_time || !filterData.end_business_time) return
     const params = actionParams()
     initData(params)
-    setParams({ ...params },true)
+    setParams({...params}, true)
   }, [filterData])
 
   /*根据筛选日期初始化请求参数*/
@@ -205,6 +205,9 @@ const Remember = () => {
       url: url
     })
   }
+  const handleMonthShow = (month = filterMonth) => {
+    return Number(month) < 10 ? `0${month}` : month
+  }
   return (
     <View className="remember">
       <View className="container">
@@ -249,7 +252,7 @@ const Remember = () => {
                 }
 
                 {
-                  (filterData.business_type as string[]).length > 1 && <Text>
+                  (filterData.business_type as string[]).length > 0 && <Text>
                     {
                       (filterData.business_type as string[]).map((item, i) => (
                         <Text key={item}
@@ -259,7 +262,7 @@ const Remember = () => {
                   </Text>
                 }
                 {
-                  ((filterData.business_type as string[]).length > 1 && filterData.is_note == '1') &&
+                  ((filterData.business_type as string[]).length > 0 && filterData.is_note == '1') &&
                   <Text className="filter-info-line">|</Text>
                 }
                 {
@@ -273,7 +276,7 @@ const Remember = () => {
             </View>}
             {/*记工统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
+              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -329,7 +332,7 @@ const Remember = () => {
 
             {/*记账统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
+              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记账统计</View>}
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
@@ -358,15 +361,18 @@ const Remember = () => {
             </View>
 
             <View className="statistics-flow">
-              <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
+              <View
+                className="statistics-title">{handleMonthShow()}月全部流水</View>
               <View className="bokkeeping-list">
                 {list.map(item => (
                   <Block>
                     <View className="bokkeeping-list-head">{item.date}</View>
                     <View className="bokkeeping-list-content">
                       {item.list.map(p => (
-                        (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay list={[p]} type={p.business_type} /> :
-                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />)
+                        (p.business_type == 1 || p.business_type == 2) ?
+                          <WorkCountDay list={[p]} type={p.business_type}/> :
+                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>)
                       ))}
                     </View>
                   </Block>
@@ -383,8 +389,10 @@ const Remember = () => {
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
-                  <View className="footer-button footer-button-bookkeeping" data-type={1} onClick={(e) => goRecord(e)}>记账</View>
-                <View className="footer-button footer-button-remember" data-type={2} onClick={(e) => goRecord(e)}>记工</View>
+                  <View className="footer-button footer-button-bookkeeping" data-type={1}
+                        onClick={(e) => goRecord(e)}>记账</View>
+                  <View className="footer-button footer-button-remember" data-type={2}
+                        onClick={(e) => goRecord(e)}>记工</View>
                 </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>

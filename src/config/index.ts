@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:00:19
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 13:54:24
+ * @LastEditTime: 2021-01-22 19:22:13
  * @Description: 项目配置项文件、全局配置项
  ! @rules: 1.key 为全大写  2.注释在上方
  */
@@ -34,4 +34,6 @@ export const SERVERPHONE: string = '400-838-1888'
 export const VERSION: string = '1.0.0'
 // * 小程序token标识
 export const MINITOKEN: string = 'mini_app'
+// * 小程序通讯录确定事件名
+
 

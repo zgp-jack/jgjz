@@ -209,7 +209,7 @@ const Remember = () => {
     return Number(month) < 10 ? `0${month}` : month
   }
   return (
-    <View className="remember">
+    <View className={"remember" + (showFilter ? ' stop-move' : '')}>
       <View className="container">
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View

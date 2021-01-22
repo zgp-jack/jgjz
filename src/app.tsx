@@ -44,6 +44,7 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/remember/index',
+
       'pages/login/index',
       'pages/work_team/record_work/index',
       'pages/index/index', // 首页

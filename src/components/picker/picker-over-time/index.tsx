@@ -24,7 +24,7 @@ const PickerOverTime: React.FC<PickerProps> = props => {
   return (
     <PopupBottom show={props.show} closePopup={props.close}>
       <View className="picker-over-time">
-        <PickerBar centerText="加班时长" confirmClick={props.confirm}>
+        <PickerBar centerText="加班时长" confirmClick={() => props.confirm}>
           <View className="picker-bar-children">上班:<Text>1</Text>个工</View>
         </PickerBar>
         <PickerBody data={times} onSelect={time => setActiveTime(time)} activeData={activeTime} over/>

@@ -5,19 +5,10 @@ import './index.scss'
 import PickerBar from "@/components/picker/components/picker-bar";
 import PopupBottom from "@/components/picker/components/popupBottom";
 import PickerBody from "@/components/picker/components/picker-body";
+import {PickerData, PickerProps} from "@/components/picker/type";
 
-interface PickerWorkTimeProps {
-  close: () => void
-  show: boolean
-  confirm: (activeTime: PickerData) => void
-}
 
-export interface PickerData {
-  id: number
-  value: string
-}
-
-const PickerUnit: React.FC<PickerWorkTimeProps> = props => {
+const PickerUnit: React.FC<PickerProps> = props => {
   const [data, setData] = useState<PickerData[]>([])
   const [activeData, setActiveData] = useState<PickerData>({id: 0, value: ''})
   useEffect(() => {

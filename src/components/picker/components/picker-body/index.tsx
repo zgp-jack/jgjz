@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 import {View, ScrollView} from '@tarojs/components'
 import './index.scss'
 import PickerBlock from "@/components/picker/components/picker-block";
-import {PickerData} from "@/components/picker/picker-work-time";
+import {PickerData} from "@/components/picker/type";
 import React from 'react'
 
 interface PickerBodyProps {

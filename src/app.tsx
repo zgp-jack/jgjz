@@ -50,16 +50,15 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/remember/index',
-
-      'pages/login/index',
+      'pages/login/index', //登录
       'pages/work_team/record_work/index',
       'pages/index/index', // 首页
       'pages/person_record/index', //个人记工
       'pages/person_borrowing/index', // 个人借支/支出
       'pages/person_detail/index', // 个人记工-借支 详情页/修改页
-      'pages/feedback/index',
-      'pages/account_book_list/index',
-      'pages/identity_selection/index',
+      'pages/feedback/index',   //意见反馈
+      'pages/account_book_list/index',  //记工账本列表
+      'pages/identity_selection/index', //身份选择
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用
       'pages/example_useLists/index', // 示例 useLists 使用

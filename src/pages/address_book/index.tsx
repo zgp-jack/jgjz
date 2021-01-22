@@ -26,29 +26,21 @@ export default function AddressBook() {
   /**是否显示编辑工友弹窗*/
   const [editPopupShow, setEditPopupShow] = useState<boolean>(false);
   /** 编辑工友默认数据 */
-  const [workerInfo, setWorkerInfo] = useState<EDIT_CONFIRM_DATA>({
+  const [workerInfo, setWorkerInfo] = useState<PERSON_DATA>({
     id: 0,
-    name: '',
-    tel: ''
+    name: "",
+    tel: "",
+    name_py: "",
+    name_color: "",
+    is_deleted: 0,
+    is_self: 0,
+    is_in_work_note: 0,
+    is_check: false
   })
   /** 字母定位ID */
   const [viewTo, setViewTo] = useState<string>("")
   /** 是否一全选 全选勾勾控制*/
   const [isAllSelect, setIsAllSelect] = useState<boolean>(false)
-  /** 是否显示编辑弹窗 */
-  const [isShowEdit, setIsShowEdit] = useState<boolean>(false)
-  /** 当前编辑的那个工友数据 */ 
-  const [editItemData, setEditItemData] = useState<PERSON_DATA>({
-    id:0,
-    name:"",
-    tel:"",
-    name_py:"",
-    name_color:"",
-    is_deleted:0,
-    is_self:0,
-    is_in_work_note:0,
-    is_check:false
-  })
   /** 保存一份获取到的数据 */
   useEffect(() => {
     if (loading) return
@@ -107,11 +99,7 @@ export default function AddressBook() {
     if (data.name) {
       setAddPopupShow(false)
     } else {
-      Taro.showToast({
-        title: '请填写工人名称',
-        icon: 'none',
-        duration: 1000
-      })
+      msg("请填写工人名称")
       return
     }
     /**给后台的参数*/ 
@@ -122,12 +110,8 @@ export default function AddressBook() {
     }
     //发送数据给后台
     postAdd_Person(params).then((r)=>{
+      msg(r.message)
       if (r.code == 0) {
-        Taro.showToast({
-          title: '添加成功',
-          icon: 'success',
-          duration: 1000
-        })
         // 添加成功后的人员信息
         let newPersonData: PERSON_DATA = {
           id: r.data.worker_id,
@@ -141,12 +125,6 @@ export default function AddressBook() {
           is_check: true
         }
         pushNewPerson(newPersonData)
-      } else {
-        Taro.showToast({
-          title: r.message,
-          icon: 'none',
-          duration: 1000
-        })
       }
     })
   }
@@ -154,7 +132,7 @@ export default function AddressBook() {
   const pushNewPerson = (newPerson:PERSON_DATA)=>{
     let newList: ADDRESS_BOOK_LIST[] = [...list]
     /** 字母表 */
-    let letter:string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',]
+    let letter:string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','#']
     /** 现有的字母表 */
     let modernLetter: string[] = []
     newList.map((item)=>{
@@ -219,36 +197,113 @@ export default function AddressBook() {
 
   /** 修改工友  */
   const bossEditWorkerinfo = (i: number, data: PERSON_DATA) => {
-    console.log(i, data)
-    setWorkerInfo({
-      id: data.id,
-      name: data.name,
-      tel: data.tel
-    })
+    setWorkerInfo(data)
     setEditPopupShow(true)
   }
 
   /** 修改工友-接口请求 */ 
   const editWorkerConfirm = (data: InputValue) => {
-    editWordkerInfo(workerInfo.id, { name: data.name, tel: data.tel} ).then(res => {
+    editWordkerInfo(workerInfo.id, { name: data.name, tel: data.tel || ''} ).then(res => {
       msg(res.message)
-      //console.log(res)
+      if(res.code != 0){
+        return
+      }
+      /** 所有工友数据 */ 
+      let newList: ADDRESS_BOOK_LIST[] = [...list]
+      /** 现有的字母表 */
+      let modernLetter: string[] = []
+      newList.map((item) => {
+        modernLetter.push(item.name_py)
+      })
+      /** 修改后的数据 */
+      let newWorkerInfo: PERSON_DATA = JSON.parse(JSON.stringify(workerInfo)) 
+      newWorkerInfo.name = data.name
+      newWorkerInfo.tel = data.tel
+      newWorkerInfo.name_py = res.data.name_py
+      /** 如果name_py没有改变 */
+      if (res.data.name_py == workerInfo.name_py){
+        newList.map((Pitem, Pindex) => {
+          Pitem.data.map((Citem, Cindex) => {
+            if (Citem.id == newWorkerInfo.id) {
+              newList[Pindex].data[Cindex] = newWorkerInfo
+            }
+          })
+        })
+        setList(newList)
+        /** 如果修改的name_py 已存在 */ 
+      } else if (modernLetter.indexOf(res.data.name_py) !== -1){
+        /** 删除修改之前的那一条数据 */ 
+        newList.map((Pitem, Pindex) => {
+          Pitem.data.map((Citem, Cindex) => {
+            if (Citem.id == newWorkerInfo.id) {
+              newList[Pindex].data.splice(Cindex, 1)
+              if (newList[Pindex].data.length < 1){
+                newList.splice(Pindex,1)
+              }
+            }
+          })
+        })
+        newList[modernLetter.indexOf(res.data.name_py)].data.push(newWorkerInfo)
+        
+        setList(newList)
+      }else {
+        /** 现有字母标中不存在当前字母 */
+        /** 所有字母表 */
+        let letter: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z','#']
+        /** 当前字母在所有字母表中的位置 */ 
+        let letterIndex: number = letter.indexOf(res.data.name_py)
+        /** 从已存在的字母表中找到当前字母的上一个字母 */
+        let lastLetter: string = ''
+        for (let i = 0; i < letter.length; i++) {
+          letterIndex--
+          if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
+            lastLetter = letter[letterIndex]
+            break;
+          }
+        }
+        /** 需要添加的数据 */
+        let newLetterData: ADDRESS_BOOK_LIST = {
+          name_py: res.data.name_py,
+          data: [newWorkerInfo]
+        }
+        /** 删除修改之前的那一条数据 */
+        newList.map((Pitem, Pindex) => {
+          Pitem.data.map((Citem, Cindex) => {
+            if (Citem.id == newWorkerInfo.id) {
+              newList[Pindex].data.splice(Cindex, 1)
+            }
+          })
+        })
+        //在newList中插入新的数据
+        newList.map((item, index) => {
+          if (item.name_py == lastLetter) {
+            newList.splice(index + 1, 0, newLetterData)
+          }
+        })
+        setList([...newList])
+      }
+      /** 修改已选中的数据 */
+      let newSelectd = [...selectd]
+      newSelectd.map((selectItem,selectIndex)=>{
+        if (selectItem.id == newWorkerInfo.id){
+          newSelectd[selectIndex] = newWorkerInfo
+        }
+      })
+      setSelectd(newSelectd)
     })
   }
 
   /** 删除事件 */
   const deletPerson =()=> {
     let workId = {
-      id: editItemData.id
+      id: workerInfo.id
     }
-    debugger
     deletedPerson(workId).then((res)=>{
       msg(res.message)
-      setIsShowEdit(false)
       if (res.code == 0) {
         /** 在本地list删除当前数据 */ 
         let newList: ADDRESS_BOOK_LIST[] = [...list]
-        let editId:number = editItemData.id
+        let editId: number = workerInfo.id
         newList.map((Pitem,Pindex)=>{
           Pitem.data.map((Citem,Cindex)=>{
             if (Citem.id == editId){
@@ -264,11 +319,6 @@ export default function AddressBook() {
         setSelectd(newSelectd)
       }
     })
-  }
-  /** 显示修弹窗 */
-  const editwork = (editData: PERSON_DATA)=> {
-    setEditItemData(editData)
-    setIsShowEdit(true)
   }
   return (
     <InitProvider loading={loading} errMsg={errMsg}>

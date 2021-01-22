@@ -77,13 +77,14 @@
       border-radius: 10px;
 
       .body-container {
-        padding: 40px 30px 30px;
+        padding: 40px 0px 30px;
 
         .feat {
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
           margin-bottom: 50px;
+          padding: 0 30px;
 
           .date {
             display: flex;
@@ -151,6 +152,7 @@
           align-items: center;
           justify-content: space-between;
           margin-bottom: 40px;
+          padding: 0 30px;
 
           .filter-info-box {
             display: flex;
@@ -194,6 +196,7 @@
         .statistics {
           width: 100%;
           margin-bottom: 40px;
+          padding: 0 30px;
 
           .statistics-title {
             font-size: 30px;
@@ -306,6 +309,20 @@
             }
           }
 
+
+        }
+
+        .statistics-flow {
+          width: 100%;
+          margin-bottom: 40px;
+
+          .statistics-title {
+            font-size: 30px;
+            color: #333333;
+            margin-bottom: 30px;
+            padding: 0 30px;
+          }
+
           .bokkeeping-list {
             .bokkeeping-list-head {
               height: 70px;
@@ -315,64 +332,13 @@
               font-weight: 400;
               color: #22A9FC;
               line-height: 70px;
+              padding: 0 30px;
             }
 
-            .bokkeeping-list-item {
-              display: flex;
-              flex-direction: row;
-              min-height: 120px;
-              justify-content: space-between;
-              align-items: center;
-
-              .bokkeeping-list-left {
-                display: flex;
-                flex-direction: column;
-                margin-right: auto;
-
-                .bokkeeping-list-title {
-                  font-size: 30px;
-                  font-family: Source Han Sans CN;
-                  font-weight: 400;
-                  color: #333333;
-                }
-
-                .bokkeeping-list-des {
-                  font-size: 28px;
-                  font-family: Source Han Sans CN;
-                  font-weight: 400;
-                  color: #979797;
-                }
-
-                .bokkeeping-list-remarks {
-                  font-size: 28px;
-                  font-family: Source Han Sans CN;
-                  font-weight: 400;
-                  color: #979797;
-                }
-              }
-
-              .bokkeeping-list-right {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-
-                .bokkeeping-list-count {
-                  margin-right: 15px;
-
-                  View {
-                    font-size: 28px;
-                    font-weight: 400;
-                    color: #5C5C5C;
-                  }
-                }
-
-                Image {
-                  width: 25px;
-                  height: 25px;
-                }
-
-              }
+            .bokkeeping-list-content {
+              padding: 0 30px;
             }
+
           }
         }
       }
@@ -460,4 +426,9 @@
     background: #000;
     opacity: 0.7;
   }
+}
+
+.stop-move {
+  height: 100vh;
+  overflow: hidden;
 }

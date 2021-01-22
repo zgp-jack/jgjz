@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 20:29:21
+ * @LastEditTime: 2021-01-22 20:49:23
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
@@ -10,7 +10,7 @@
 import Taro from '@tarojs/taro'
 import { MINITOKEN, VERSION, REQUESTURL } from '@/config/index'
 import { UserInfo } from '@/config/store'
-import { User } from '@/store/user/inter.d'
+import User from '@/store/user/inter.d'
 import { Request, RequestBase, RequestHeader, Result } from './inter.d'
 
 
@@ -50,7 +50,6 @@ function getRequestHeaderInfo(): RequestHeader {
     'content-type': 'application/x-www-form-urlencoded',
     uid: userInfo.userId,
     token: userInfo.token,
-    time: userInfo.tokenTime,
     source: MINITOKEN,
     version: VERSION
   } : {
@@ -155,7 +154,7 @@ export const post = <T, R>(url: string, data: T, loading?: boolean): Promise<Res
  * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起delete请求
 */
-export const del = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
+export const del = <T, R>(url: string, data?: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
     url, data, loading: !!loading, method: 'DELETE'
   })

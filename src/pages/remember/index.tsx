@@ -1,5 +1,5 @@
 import Taro, {useEffect, useState, useRouter} from '@tarojs/taro'
-import {Image, Picker, Text, View} from '@tarojs/components'
+import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
 import filter from '@/images/ic_sx.png'
@@ -13,13 +13,18 @@ import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
-import PickerUnit from "@/components/picker/picker-unit";
 import Filter from "./filter/index";
 import {get} from "@/utils/request";
+import {getBusiness} from './api'
 import {GetCountParams, GetCountResult} from "@/pages/remember/inter";
 import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
+import useList from '@/hooks/list'
+import PickerWorkTime from "@/components/picker/picker-work-time";
+import PickerUnit from "@/components/picker/picker-unit";
+import PickerOverTime from "@/components/picker/picker-over-time";
+import ListProvider from '@/components/list_provider'
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -28,6 +33,8 @@ Taro.setNavigationBarTitle({title: (ledgerType == '1' ? '个人' : '班组') + '
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 const Remember = () => {
+  /*打开picker弹窗（调试使用）*/
+  const [showPicker, setShowPicker] = useState(false)
   const {params} = useRouter()
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
@@ -48,21 +55,37 @@ const Remember = () => {
   const year = new Date().getFullYear()
   /*获取月份*/
   const month = new Date().getMonth() + 1
+  /**获取日*/
+  const day = new Date().getDate();
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '874',
+    work_note: '873',
     worker_id: '',
     business_type: [],
     expend_type: '',
     expense_account: '',
     group_leader: [],
     is_note: '',
-    unit_work_type: ''
+    unit_work_type: '',
+    page: 1
   })
   /*获取统计数据，请求参数*/
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
-
+  /*数组转字符串*/
+  const handleArrayToString = (data?: string[] | string) => {
+    return (data as string[]).join(',')
+  }
+  // 参数处理
+  const actionParams = () => {
+    return {
+      ...filterData,
+      business_type: handleArrayToString(filterData.business_type),
+      group_leader: handleArrayToString(filterData.group_leader),
+      worker_id: handleArrayToString(filterData.worker_id)
+    }
+  }
+  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -73,19 +96,15 @@ const Remember = () => {
 
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
 
-  const [showPopup, setShowPopup] = useState(false)//点击切换账本打开选择器弹窗（调试用）
 
-  /*当前选中日期的下一个日期，获取统计接口使用*/
+  /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
   useEffect(() => {
     if (!filterData.start_business_time || !filterData.end_business_time) return
-    let params: GetCountParams = {
-      ...filterData,
-      business_type: (filterData.business_type as string[]).join(','),
-      group_leader: (filterData.group_leader as string[]).join(',')
-    }
+    const params = actionParams()
     initData(params)
+    setParams({...params}, true)
   }, [filterData])
 
   /*根据筛选日期初始化请求参数*/
@@ -107,6 +126,8 @@ const Remember = () => {
       if (res.code === 0) {
         setCounts(res.data.count)
       }
+    }).catch(e => {
+
     })
   }
   /*获取当前日期的下一个月份日期*/
@@ -165,9 +186,12 @@ const Remember = () => {
   const handleSplitDate = (date: string | undefined) => {
     if (!date) return ''
     const _date = date.split('-')
-    console.log(typeof _date[1])
     let _month = _date[1].length == 1 ? ('0' + _date[1]) : _date[1]
-    return _date[0] + '年' + _month + '月'
+    let dateStr = _date[0] + '年' + _month + '月'
+    if (_date.length == 3) {
+      dateStr += _date[2] + '日'
+    }
+    return dateStr
   }
 
   /*显示筛选后选中了的记工类型*/
@@ -181,24 +205,34 @@ const Remember = () => {
     setFilterData(defaultFilterData)
     setShowFilter(false)
   }
+  /*是否是当前年月,是的话不显示右边箭头*/
   const handleHideRightArrow = () => {
     return year == filterYear && month == filterMonth
   }
 
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
-    let url = `/pages/work_team/record_work/index?type=${type}`
+    let url = `/pages/work_team/record_work/index?type=${type}`;
     Taro.navigateTo({
       url: url
     })
   }
+  /*1转为01*/
+  const handleMonthShow = (month = filterMonth) => {
+    return Number(month) < 10 ? `0${month}` : month
+  }
+  /*是否显示筛选了哪些内容*/
+  const handleShowFilterResult = () => {
+    let {is_note, business_type, group_leader, worker_id} = filterData
+    return (is_note == '1' || business_type.length || (group_leader as string[]).length || (worker_id as string[]).length)
+  }
   return (
-    <View className="remember">
+    <View className={"remember" + (showFilter ? ' stop-move' : '')}>
       <View className="container">
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords">{params.accountName}记工账本</View>
+          <View className="header-title overwords" onClick={() => setShowPicker(true)}>{params.accountName}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
                 onClick={() => Taro.navigateTo({url: '/pages/account_book_list/index'})}>切换记工本</View>
@@ -225,7 +259,8 @@ const Remember = () => {
                 <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
               </View>
             </View>
-            {isFilter && <View className="filter-info">
+            {(isFilter && handleShowFilterResult()) &&
+            <View className="filter-info" onClick={() => setShowFilter(true)}>
               <View className="filter-info-box overwords">
                 {
                   (filterData.group_leader as string[]).length > 1 &&
@@ -236,7 +271,7 @@ const Remember = () => {
                 }
 
                 {
-                  (filterData.business_type as string[]).length > 1 && <Text>
+                  (filterData.business_type as string[]).length > 0 && <Text>
                     {
                       (filterData.business_type as string[]).map((item, i) => (
                         <Text key={item}
@@ -246,7 +281,7 @@ const Remember = () => {
                   </Text>
                 }
                 {
-                  ((filterData.business_type as string[]).length > 1 && filterData.is_note == '1') &&
+                  ((filterData.business_type as string[]).length > 0 && filterData.is_note == '1') &&
                   <Text className="filter-info-line">|</Text>
                 }
                 {
@@ -260,7 +295,7 @@ const Remember = () => {
             </View>}
             {/*记工统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
+              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -316,7 +351,7 @@ const Remember = () => {
 
             {/*记账统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
+              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记账统计</View>}
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
@@ -343,17 +378,47 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-
-            <View className="statistics">
-              <View className="statistics-title">11月全部流水</View>
+            
+            <View className="statistics-flow">
+              <View
+                className="statistics-title">{handleMonthShow()}月全部流水</View>
               <View className="bokkeeping-list">
-                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
-                <WorkCountDay list={[]}/>
-                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
-                <WorkMoneyBorrowing/>
-                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
-                <WorkMoneyBorrowing/>
+                {list.map(item => (
+                  <Block>
+                    <View className="bokkeeping-list-head">{item.date}</View>
+                    <View className="bokkeeping-list-content">
+                      {item.list.map(p => (
+                        (p.business_type == 1 || p.business_type == 2) ?
+                          <WorkCountDay list={[p]} type={p.business_type}/> :
+                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>)
+                      ))}
+                    </View>
+                  </Block>
+                ))}
               </View>
+              <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
+              <ListProvider
+                increasing={increasing}
+                loading={loading}
+                errMsg={errMsg}
+                hasmore={hasmore}
+                length={list.length}
+              >
+                <View className="bokkeeping-list">
+                  {list.map(item => (
+                    <Block key={item.date}>
+                      <View className="bokkeeping-list-head">{item.date}</View>
+                      <View className="bokkeeping-list-content">
+                        {item.list.map(p => (
+                          (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay key={p.id} list={[p]} type={p.business_type} /> :
+                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type} />)
+                        ))}
+                      </View>
+                    </Block>
+                  ))}
+                </View>
+              </ListProvider>
             </View>
           </View>
         </View>
@@ -365,8 +430,10 @@ const Remember = () => {
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
-                  <View className="footer-button footer-button-bookkeeping" data-type={1} onClick={(e) => goRecord(e)}>记账</View>
-                <View className="footer-button footer-button-remember" data-type={2} onClick={(e) => goRecord(e)}>记工</View>
+                  <View className="footer-button footer-button-bookkeeping" data-type={1}
+                        onClick={(e) => goRecord(e)}>记账</View>
+                  <View className="footer-button footer-button-remember" data-type={2}
+                        onClick={(e) => goRecord(e)}>记工</View>
                 </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>
@@ -375,10 +442,6 @@ const Remember = () => {
           </View>
         </View>
       </View>
-      {
-        showPopup &&
-        <PickerUnit show={showPopup} close={() => setShowPopup(false)} confirm={() => setShowPopup(false)}/>
-      }
       {
         showFilter &&
         <View className="mask" onClick={() => setShowFilter(false)}/>
@@ -389,6 +452,7 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
+      <PickerOverTime show={showPicker} confirm={() => console.log(123)} close={() => setShowPicker(false)}/>
     </View>
   )
 }

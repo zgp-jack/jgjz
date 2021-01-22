@@ -1,8 +1,8 @@
 /*
  * @Author: lcmxkg
  * @Date: 2021年01月22日10:26:35
- * @LastEditors: lcmxkg
- * @LastEditTime: 2021年01月22日10:26:43
+ * @LastEditors: jsxin
+ * @LastEditTime: 2021-01-22 21:19:33
  * @Description: 记工-账本列表
  */
 // 数据列表
@@ -26,18 +26,19 @@ interface RECORD_WORK_DATA {
   /**  是否归档状态 */
   status:number,
 }
-// 修改记工弹窗确定 的值
-export interface ADD_RECORD_WORK {
-  /** 记工名称 */
-  name:string,
-  /** 记工 */
-  action:string
-}
 
 // 提交修改记工 的值
 export interface ADD_RECORD_WORK_PARAMS {
   /** 记工名称 */
   name:string
   /** 记工 */
-  action:string
+  action?:string
+}
+
+// 修改记工本信息
+export interface Edit_AddressBook_Info {
+  /** 记工本id */ 
+  id: number, 
+  /** 记工本新名称 */
+  name: string
 }

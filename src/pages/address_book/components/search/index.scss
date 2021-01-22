@@ -1,4 +1,5 @@
 .search {
+  background-color: #fff;
   .search_type1 {
     width: 100%;
     display: flex;
@@ -22,7 +23,11 @@
       position: relative;
       box-sizing: border-box;
       padding-left: 62px;
+      transition: all 0.2s;
       flex: 1;
+      .input_box_active{
+        width: 100%;
+      }
 
       .input_box_img {
         width: 30px;
@@ -37,6 +42,14 @@
         font-size: 24px;
         height: 100%;
         margin-left: 20px;
+        padding-right: 100px;
+      }
+      .input_box_clear{
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        right: 20px;
+        top: 19px;
       }
     }
   }

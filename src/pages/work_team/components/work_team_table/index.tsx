@@ -1,5 +1,5 @@
 
-import { View, Image, Block } from '@tarojs/components'
+import { View, Block } from '@tarojs/components'
 import { PropsData } from './index.d'
 import './index.scss'
 

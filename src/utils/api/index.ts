@@ -74,3 +74,14 @@ export const flowList: string = 'business/get-business/'
 
 //获取记账类别
 export const rememberType: string = 'UnitWorkType/get'
+
+//获取记工本
+export const getWorkNotes: string = 'work-notes/get'
+
+//新建记工本
+export const addWorkNotes: string = 'work-notes/add'
+
+//修改记工本
+export const editWorkNotes: string = 'work-notes/edit-work-note'
+
+

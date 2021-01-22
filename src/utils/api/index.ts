@@ -19,7 +19,8 @@ export const userGetAllWorkNotes: string = `work-notes/get`
 export const useGetIndexBusiness: string = `business/get-index-business`
 // 记工-获取流水列表
 export const userGetBusinessLists: string = `business/get-business`
-
+// 记工-记工接口
+export const userAddBorrow: string = `business/add`
 
 // ! 记账类别
 // 记账类别-获取已有类别

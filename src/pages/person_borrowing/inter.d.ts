@@ -9,7 +9,21 @@
 // 借支配置项
 export default interface TallyConfig {
   /** id */ 
-  id: string,
+  id: number,
   /** 标题 */
   title: string
+}
+export interface BorrowPostData {
+  /** 借支类型 */
+  expend_type: 4 | 5,
+  /** 分类 */
+  business_type: string,
+  /** 日期 */
+  date: string,
+  /** 班组长id */
+  group_id: string,
+  /** 备注 */
+  note: string,
+  /** 借支金额 */
+  money: string
 }

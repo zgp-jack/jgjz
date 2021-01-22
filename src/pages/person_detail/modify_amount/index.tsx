@@ -6,7 +6,7 @@ import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerDetail from '@/components/picker_detail'
 import PickerType from '@/components/picker_type'
-import PickerUnit from '@/components/picker_unit'
+import PickerUnitWara from '@/components/picker_unit'
 import './index.scss'
 
 
@@ -52,7 +52,7 @@ export default function ModifyAmoumt() {
   }
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
-    <PickerUnit value="平方米" />
+    <PickerUnitWara value="平方米" />
     <PickerType value="水电费" ColsePickerType={ColsePickerType} />
     <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />
     <PickerMark text={'Hello world!'} />

@@ -8,18 +8,13 @@
 
 import TallyConfig from './inter.d'
 
-// 借支
-export const borrow: string = 'borrow'
-// 支出
-export const expenditure: string = 'expenditure'
-
 // tab配置项
 const tallyConfig: TallyConfig[] = [
   {
-    id: borrow,
+    id: 4,
     title: '借支'
   }, {
-    id: expenditure,
+    id: 5,
     title: '支出'
   }
 ]

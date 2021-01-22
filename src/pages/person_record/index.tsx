@@ -8,7 +8,7 @@ import classnames from 'classnames'
 import './index.scss'
 export default function PersonRecord(){
     // 切换记工type值
-    const [recordnum, setRecordnum] = useState<number>(0);
+    const [recordnum, setRecordnum] = useState<number>(1);
     // 切换Tap
     const Changetype = (id,title) => {
       setRecordnum(id)
@@ -25,13 +25,12 @@ export default function PersonRecord(){
                 </View>
               )}
             </View>
-            {recordnum == 0 && <RecordDay /> } 
-            {recordnum == 1 && <RecordAmoumt />}
-            {recordnum == 2 && <RecordMoney />}
+            {recordnum == 1 && <RecordDay /> } 
+            {recordnum == 2 && <RecordAmoumt />}
+            {recordnum == 3 && <RecordMoney />}
         </View>
     )
 }
-
 PersonRecord.config = {
     navigationBarTitleText: '个人记工天',
 }

@@ -54,9 +54,9 @@ class App extends Component {
       'pages/login/index',
       'pages/work_team/record_work/index',
       'pages/index/index', // 首页
-      'pages/person_record/index',
-      'pages/person_borrowing/index',
-      'pages/person_detail/index',
+      'pages/person_record/index', //个人记工
+      'pages/person_borrowing/index', // 个人借支/支出
+      'pages/person_detail/index', // 个人记工-借支 详情页/修改页
       'pages/feedback/index',
       'pages/account_book_list/index',
       'pages/identity_selection/index',

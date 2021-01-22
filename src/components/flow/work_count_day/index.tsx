@@ -5,7 +5,6 @@ import { PropsData } from './idnex.d'
 import './index.scss'
 
 export default function WorkCountDay({ list, type }) {
-  console.log("propslist", list)
   return (
       list.map(item=>(
         <Block key={item.id}>

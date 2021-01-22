@@ -2,9 +2,26 @@
  * @Author: 老王
  * @Date: 2021年01月20日10:26:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-22 11:16:24
+ * @LastEditTime: 2021-01-22 17:36:31
  * @Description: 工友录文件夹下面的所有的接口存放文件
  */
+
+// 组件参数
+export default interface AddressBookProps {
+  /** 通讯录类型  alone:个人 leave:离场 group: 班组多选  @default alone */ 
+  type?: 'alone' | 'leave' | 'group',
+  /** 确认事件 */ 
+  confim?: (data: AddressBookConfimType[]) => void
+}
+
+// 组件确定返回值
+export interface AddressBookConfimType {
+  /** 工友id */ 
+  id: number,
+  /** 工友名字 */
+  name: string,
+}
+
 // 通讯录数据列表
 export interface ADDRESS_BOOK_LIST {
   /** 名字首字母拼音 */ 
@@ -62,7 +79,12 @@ export interface SELECTD_PROPS {
 
 //搜索组件的参数
 export interface SEARCH_PROPS {
-  addClick:Function,
+  /** 添加工友 */
+  addClick:() => void,
+  /** 用户搜索行为 */ 
+  onSearch?: (val: string) => void,
+  /** 用户搜索行为 */
+  value?: string,
 }
 
 // 添加工友弹窗确定 的值

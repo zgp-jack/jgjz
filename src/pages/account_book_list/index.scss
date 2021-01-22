@@ -82,6 +82,14 @@ page {
       .account-book-title {
         display: flex;
         justify-content: space-between;
+        .account-book-name{
+          width: 80%;
+          overflow:hidden;
+          text-overflow:ellipsis; 
+          display: block;
+          white-space: nowrap;
+          word-break: break-all; 
+        }
         .account-book-edit {
           color: #a7a7a7;
           font-size: 28px;

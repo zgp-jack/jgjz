@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 16:49:45
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 17:49:38
+ * @LastEditTime: 2021-01-21 21:00:42
  * @Description: 数据请求文件
  */
 import { get } from '@/utils/request'

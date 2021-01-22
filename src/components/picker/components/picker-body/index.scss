@@ -4,7 +4,7 @@
   width: 100%;
 
   .picker-body-scroll {
-    height: 538px;
+    max-height: 538px;
     display: flex;
     flex-wrap: wrap;
     overflow: hidden;

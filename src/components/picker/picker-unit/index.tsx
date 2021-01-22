@@ -5,31 +5,21 @@ import './index.scss'
 import PickerBar from "@/components/picker/components/picker-bar";
 import PopupBottom from "@/components/picker/components/popupBottom";
 import PickerBody from "@/components/picker/components/picker-body";
+import {PickerData, PickerProps} from "@/components/picker/type";
 
-interface PickerWorkTimeProps {
-  close: () => void
-  show: boolean
-  confirm: (activeTime: PickerData) => void
-}
-
-export interface PickerData {
-  id: number
-  value: string
-}
-
-const PickerUnit: React.FC<PickerWorkTimeProps> = props => {
+const PickerUnit: React.FC<PickerProps> = props => {
   const [data, setData] = useState<PickerData[]>([])
   const [activeData, setActiveData] = useState<PickerData>({id: 0, value: ''})
   useEffect(() => {
     let _data: PickerData[] = []
-    for (let i = 1; i < 20; i++) {
+    for (let i = 1; i < 10; i++) {
       _data.push({id: i, value: '平方米' + i})
     }
     setData(_data)
   }, [])
   return (
     <PopupBottom show={props.show} closePopup={props.close}>
-      <View className="picker-work-time">
+      <View className="picker-unit">
         <PickerBar centerText="选择单位" confirmClick={() => props.confirm(activeData)}>
         </PickerBar>
         <PickerBody data={data} onSelect={time => setActiveData(time)} activeData={activeData}/>

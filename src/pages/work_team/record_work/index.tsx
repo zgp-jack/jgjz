@@ -3,16 +3,15 @@ import {View, Text, Picker, Input, Image, ScrollView, Block, Swiper, SwiperItem}
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
+import WorkerList from '@/pages/work_team/components/worker_list/index'
 import ListProvider from '@/components/list_provider'
 import {IMGCDNURL} from '@/config/index'
-import {observer, useLocalStore} from '@tarojs/mobx'
-import {GetWorkFlowParams, GetWorkFlowResult, loadData} from './index.d'
+import { useLocalStore } from '@tarojs/mobx'
+import {GetWorkFlowParams} from './index.d'
 import RememberTypeItem from '@/store/business';
 import useList from '@/hooks/list'
 import {TypeAction} from './index.d'
 import getFlowlists from './api'
-import {get} from '@/utils/request'
-import Popup from '@/components/popup/index'
 import './index.scss'
 
 
@@ -26,7 +25,7 @@ export default function RecordWork() {
   // 获取stroe数据
   const localStore = useLocalStore(() => RememberTypeItem);
   // 获取remebertype数据
-  const { businessType } = localStore;
+  const {businessType} = localStore;
   // 获取当前路由
   const router: Taro.RouterInfo = useRouter()
   // 获取路由参数type 1 记账 2 记工
@@ -160,41 +159,8 @@ export default function RecordWork() {
               </View>
             </View>
             <ScrollView className="record-work-scroll" scrollY enableFlex>
-              <View className='record-work-check-person'>
-                <View className='record-work-person-head'>
-                  <View className='record-work-person-title'>
-                    <View>选择工友（已选<Text>3</Text>人）</View>
-                    <View>全选未记</View>
-                  </View>
-                  <View className='record-work-person-disc'>黄色块代表此工友当日已有记工</View>
-                </View>
-                <View className='record-work-person-content'>
-                  {dataList.map((obj, index) => (
-                    <View className='record-work-person-item' key={index}>
-                      <View
-                        className={obj.check ? (obj.status ? 'record-work-person-box choose-box recorded-box' : 'record-work-person-box choose-box') : (obj.status ? 'record-work-person-box recorded-box' : 'record-work-person-box')}>{obj.name}
-                        {obj.status &&
-                        <Image src={`${IMGCDNURL}yc/recorded.png`} mode='widthFix' className='recorded-image'></Image>}
-                        {obj.check &&
-                        <Image src={`${IMGCDNURL}yc/choose-box.png`} mode='widthFix' className='choose-image'></Image>}
-                      </View>
-                      <Text className='record-work-person-text'>{obj.name}</Text>
-                    </View>)
-                  )}
-                  <View className='record-work-person-add'>
-                    <View className='record-work-person-box'><Image src={`${IMGCDNURL}yc/add.png`}
-                                                                    mode='widthFix'/></View>
-                    <Text className='record-work-person-text'>添加</Text>
-                  </View>
-                  <View className='record-work-person-del'>
-                    <View className='record-work-person-box'><Image src={`${IMGCDNURL}yc/del.png`}
-                                                                    mode='widthFix'/></View>
-                    <Text className='record-work-person-text'>删除</Text>
-                  </View>
-                  {emptyArray.map((_, index) => (
-                    <View className='record-work-person-item' key={index}></View>
-                  ))}
-                </View>
+              <View className="record-worker-list">
+                <WorkerList></WorkerList>
               </View>
               <View className='record-work-table-content'>
                 <View className='record-work-table-head'>

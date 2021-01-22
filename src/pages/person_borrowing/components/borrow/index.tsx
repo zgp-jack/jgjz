@@ -25,12 +25,16 @@ export default function Borrow() {
   const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: '' })
   // 借支提交数据
   const [postData, setPostData] = useState<BorrowPostData>({
-    expend_type: 4,
-    business_type: '',
+    business_type: 4,
+    expend_type: '',
     business_time: getTodayDate(),
-    group_id: '',
+    group_leader: '',
     note:  '',
-    money: '0.00'
+    money: '0.00',
+    identity: 2,
+    work_note: '890',
+    worker_id: '1693',
+    img_url:''
   })
 
   // 用户更新数据
@@ -42,11 +46,10 @@ export default function Borrow() {
 
   // 提交借支数据
   const userPostAcion = () => {
-    let postDataMock = JSON.parse(JSON.stringify(postData));
-    // postDataMock.work_note = '1';
-    // postDataMock.identity ='1';
-    // postDataMock.worker_id = '1'
-    userAddBorrowAction(postDataMock).then((res) => {
+    if(parseInt(postData.money)<=0){
+      
+    }
+    userAddBorrowAction(postData).then((res) => {
       debugger
     }) 
   }
@@ -59,12 +62,6 @@ export default function Borrow() {
   const DeletePickerLeader = () => {
     setIsPickerLeader(false)
   }
-  // 用户修改日期
-  const userChangeDate = (val: string) => {
-    let data = { ...postData }
-    data.business_time = val
-    setPostData({ ...data })
-  }
   return (
     <View>
       <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
@@ -72,18 +69,18 @@ export default function Borrow() {
         <PickerType
           value={typeData.name}
           close={() => setIsPickType(false)}
-          set={(data) => { setTypeData(data); userUpdatePostData(data.name,'business_type')}}
+          set={(data) => { setTypeData(data); userUpdatePostData(data.name,'expend_type')}}
           show={showTypePicker}
           setShow={(bool: boolean) => setShowTypePicker(bool)}
         />
       }
-      {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userChangeDate(val)} />}
+      {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'business_time')} />}
       {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
-      <PickerMark text={'Hello world!'} set={(data) => userUpdatePostData(data,'note')} />
+      <PickerMark text={postData.note} set={(data) => userUpdatePostData(data,'note')} />
       <View className="person-record-component">
-          {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>2021-01-20</View>}
-          {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
-          {!isPickerType && <View className="person-record-component-item" onClick={() => setIsPickType(true)}>分类</View>}
+        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
+        {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{postData.expend_type ? postData.expend_type : '分类'}</View>}
       </View>
       <View className="person-record-btn">
         <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

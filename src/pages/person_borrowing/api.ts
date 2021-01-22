@@ -8,7 +8,7 @@
 
 import { userAddBorrow } from '@/utils/api'
 import { post } from '@/utils/request/index'
-import { BorrowPostData } from './inter.d'
+import BorrowPostData from './components/borrow/inter.d'
 
 export default function userAddBorrowAction(params: BorrowPostData) {
   return post<BorrowPostData, number>(userAddBorrow, params)

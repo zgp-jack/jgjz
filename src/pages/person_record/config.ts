@@ -10,14 +10,14 @@ import ConfigRecord from './inter.d'
 const recordConfig: ConfigRecord[] = [
   { 
     name: '记工天', 
-    id: 0 
-  },
-  { 
-    name: '记工量', 
-    id: 1 
+    id: 1
   },
   { 
     name: '记工钱', 
+    id: 3 
+  },
+  { 
+    name: '记工量', 
     id: 2 
   }
 ]

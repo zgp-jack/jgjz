@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, Config } from '@tarojs/taro'
+import Taro, { useState, useEffect, Config, useRouter } from '@tarojs/taro'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
@@ -15,7 +15,7 @@ import './index.scss'
 
 
 export default function AddressBook({ 
-  type = 'alone',
+  type = 'group',
   confim
 }: AddressBookProps) {
   /** 组件 单选 类型 */ 
@@ -25,9 +25,9 @@ export default function AddressBook({
   /** 组件 离场 类型 */
   const leaveType: string = 'leave'
   /** 未选择check图片 */
-  const normalCheckImg: string = `${IMGCDNURL}ws/ckeckd.png`
+  const normalCheckImg: string = `${IMGCDNURL}ws/check.png`
   /** 不可选择check图片 */ 
-  const disableCheckImg: string = `${IMGCDNURL}ws/ckeckd.png`
+  const disableCheckImg: string = `${IMGCDNURL}ws/on_check.png`
   /** 已选择check图片 */
   const onCheckdImg: string = `${IMGCDNURL}ws/ckeckd.png`
   /** 获取所有通讯录列表 */
@@ -70,7 +70,6 @@ export default function AddressBook({
     // 判断是单选 则拿到当前数据然后退出
     if(type === aloneType){
       let data: PERSON_DATA = list[pIndex].data[cIndex]
-      console.log(data)
       return
     }
     // 如果是 多选或者 离场 的情况 那么久选择或者取消
@@ -190,6 +189,10 @@ export default function AddressBook({
       })
       setList([...newList])
     }
+    /** 修改已选中的数据 */
+    let newSelectd = [...selectd]
+    newSelectd.push(newPerson)
+    setSelectd(newSelectd)
   }
   /** 添加工友弹窗取消 */
   const addCancel = () => {
@@ -217,13 +220,11 @@ export default function AddressBook({
     //判断是全选还是取消全选
     newIsAllSelect ? setSelectd(newSelectd) : setSelectd([])
   }
-
   /** 修改工友  */
   const bossEditWorkerinfo = (i: number, data: PERSON_DATA) => {
     setWorkerInfo(data)
     setEditPopupShow(true)
   }
-
   /** 修改工友-接口请求 */ 
   const editWorkerConfirm = (data: InputValue) => {
     editWordkerInfo(workerInfo.id, { name: data.name, tel: data.tel || ''} ).then(res => {
@@ -231,6 +232,7 @@ export default function AddressBook({
       if(res.code != 0){
         return
       }
+      setEditPopupShow(false)
       /** 所有工友数据 */ 
       let newList: ADDRESS_BOOK_LIST[] = [...list]
       /** 现有的字母表 */
@@ -315,7 +317,6 @@ export default function AddressBook({
       setSelectd(newSelectd)
     })
   }
-
   /** 删除事件 */
   const deletPerson =()=> {
     let workId = {

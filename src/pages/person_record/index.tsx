@@ -31,7 +31,6 @@ export default function PersonRecord(){
         </View>
     )
 }
-export default PersonRecord
 PersonRecord.config = {
     navigationBarTitleText: '个人记工天',
 }

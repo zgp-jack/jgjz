@@ -6,7 +6,7 @@ import RecordMoney from './record_money/index'
 import recordConfig from './config'
 import classnames from 'classnames'
 import './index.scss'
-function PersonRecord(){
+export default function PersonRecord(){
     // 切换记工type值
     const [recordnum, setRecordnum] = useState<number>(1);
     // 切换Tap

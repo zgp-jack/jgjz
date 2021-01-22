@@ -122,22 +122,22 @@ function PickerType({
     })
   }
 
-  return ( 
+  return (
     <View>
       {/* 分类item */}
       <View className="person-record-overtime person-record-date" onClick={() =>  setShow(true)}>
         {!hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
         <Input className="person-record-date-text" value={value} placeholder='请添加您的分类' disabled></Input>
-        <Text className="overtime-icon" onClick={() => { close && close()}}></Text>
+        <Text className="overtime-icon" onClick={(e) => { e.stopPropagation();close && close()}}></Text>
       </View>
 
       {/* picker弹窗 */}
-      {show && 
-        <PickerOption 
-          close={() => setShow(false)} 
-          show={show} 
-          confirm={(data) => userSurePicker(data)} 
+      {show &&
+        <PickerOption
+          close={() => setShow(false)}
+          show={show}
+          confirm={(data) => userSurePicker(data)}
           add={() => userEditItemType()}
           data={types}
           status={status && !loading}
@@ -146,7 +146,7 @@ function PickerType({
         />}
 
       {/* 新增弹窗 */}
-      {showPopup &&<Popup 
+      {showPopup &&<Popup
         titleText={id ? '修改分类' : '添加分类'}
         showTitleButton={false}
         inputGroup={popupData}

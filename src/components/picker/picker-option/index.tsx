@@ -35,8 +35,8 @@ export default function PickerOption({
               <View className="picker-option-item" key={item.id} onClick={() => confirm(item)}>
                 <View className="option-item-name">{item.name}</View>
                 <View className="option-item-icons">
-                  <Image className="option-item-icon" src={editpng} onClick={() => edit(item, index)}/>
-                  <Image className="option-item-icon" src={remove} onClick={() => del(item.id, index)}/>
+                  <Image className="option-item-icon" src={editpng} onClick={(e) => { e.stopPropagation();edit(item, index)}}/>
+                  <Image className="option-item-icon" src={remove} onClick={(e) => { e.stopPropagation();del(item.id, index)}}/>
                 </View>
               </View>
               ))

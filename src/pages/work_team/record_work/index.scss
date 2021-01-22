@@ -15,43 +15,8 @@ page{
     flex-direction: column;
     padding: 0 30px;
     background-color: white;
-    .record-work-head-table{
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100px;
-      box-shadow: 1px 4px 10px 0px rgba(110, 110, 111, 0.05);
-      font-size:30px;
-      .record-work-checked{
-        height: 100%;
-        display: flex;
-        align-items: center;
-        border-bottom: 5px solid #0099FF;
-        color: #0099FF;
-        position: relative;
-        &::after{
-          content: '';
-          width: 0;
-          height: 0;
-          border-left: 15px solid transparent;
-          border-right: 15px solid transparent;
-          border-bottom: 10px solid #0099FF;
-          position: absolute;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-      };
-      View {
-        margin-right: 20px;
-      }
-    }
   }
   .record-work-swiper{
-    height: calc(100vh - 100px);
-  }
-  .record-work-scroll{
     height: calc(100vh - 100px);
     .record-work-head-date{
       height: 100px;
@@ -77,11 +42,16 @@ page{
         width: 20px;
       }
     }
+  }
+  .record-work-scroll{
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
     .record-work-check-person{
       margin-top: 20px;
       height: 45%;
       background-color: white;
-      padding: 0px 6rpx 0px 30rpx;
+      padding: 0px 6rpx 50px 30rpx;
       .record-work-person-head{
         height: 120px;
         display: flex;
@@ -296,11 +266,7 @@ page{
           }
         }
       }
-      .record-work-flow{
-        padding: 0 30px;
-      }
+     
     }
   }
-  
-
 }

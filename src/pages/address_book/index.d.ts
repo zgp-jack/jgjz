@@ -2,7 +2,7 @@
  * @Author: 老王
  * @Date: 2021年01月20日10:26:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-22 11:09:54
+ * @LastEditTime: 2021-01-22 11:16:24
  * @Description: 工友录文件夹下面的所有的接口存放文件
  */
 // 通讯录数据列表
@@ -88,9 +88,18 @@ export interface EDIT_WORKER_RESULT {
 
 // 添加工友 给后台传的参数
 export interface ADD_PERSON_PARAMS extends ADD_CONFIRM_DATA {
+  //头像颜色
   name_color:string
 }
 //添加工友的返回值
 export interface ADD_PERSON_RESULT_DATA {
-  worker_id:number
+  //工友id
+  worker_id:number,
+  name_py:string
+}
+
+// 删除工友接口提交参数
+interface DeletedParams {
+  /** 工友id */ 
+  id: number
 }

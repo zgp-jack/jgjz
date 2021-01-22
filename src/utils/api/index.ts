@@ -65,9 +65,10 @@ export const addressBookNote: string = `workers/get-note-workers`
 export const workersAdd: string = `workers/add`
 //初始化记工界面
 export const initRemember: string = REQUESTURL + 'business/get-one/'
-
 //获取记工本
 export const workNote: string = REQUESTURL + 'work-notes/get?id=1&co=23'
+//删除工人
+export const deleteWorker: string = REQUESTURL + 'workers/delete/'
 
 
 // !流水列表

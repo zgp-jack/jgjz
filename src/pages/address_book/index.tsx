@@ -3,13 +3,12 @@ import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
 import { IMGCDNURL } from '@/config/index'
-import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA } from './index.d'
+import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS } from './index.d'
 import InitProvider from '@/components/init_provider'
 import useInit from '@/hooks/init'
-import getWorkers from './api'
-import { workersAdd } from '@/utils/api'
+import getWorkers, { postAdd_Person, deletedPerson } from './api'
 import PromptBox from '@/components/popup/index'
-import { post } from '@/utils/request/index'
+
 import './index.scss'
 
 
@@ -17,17 +16,34 @@ export default function AddressBook() {
   /** 获取所有通讯录列表 */
   const { loading, data, errMsg } = useInit(getWorkers, { work_note: '859' }, [])
   /** 通信录列表数据 */
-  const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([]);
+  const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   /**是否显示添加工友弹窗*/
-  const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
+  const [addPopupShow, setAddPopupShow] = useState<boolean>(false)
   /** 字母定位ID */
   const [viewTo, setViewTo] = useState<string>("")
   /** 是否一全选 全选勾勾控制*/
   const [isAllSelect, setIsAllSelect] = useState<boolean>(false)
+  /** 是否显示编辑弹窗 */
+  const [isShowEdit, setIsShowEdit] = useState<boolean>(false)
+  /** 当前编辑的那个工友数据 */ 
+  const [editItemData, setEditItemData] = useState<PERSON_DATA>({
+    id:0,
+    name:"",
+    tel:"",
+    name_py:"",
+    name_color:"",
+    is_deleted:0,
+    is_self:0,
+    is_in_work_note:0,
+    is_check:false
+  })
   /** 保存一份获取到的数据 */
-  setList(data)
+  useEffect(() => {
+    if (loading) return
+    setList(data)
+  }, [data])
   /** 点击字母跳转相应位置 */
   const toView = (viewId: string) => {
     setViewTo(viewId == "view#" ? 'view_' : viewId)
@@ -94,9 +110,9 @@ export default function AddressBook() {
       tel: data.tel || '',
       name_color: randomColor()
     }
-    /** 发送添加工友数据给后台 */ 
-    post<ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA>(workersAdd, params, true).then((r)=>{
-      if(r.code == 0){
+    //发送数据给后台
+    postAdd_Person(params).then((r)=>{
+      if (r.code == 0) {
         Taro.showToast({
           title: '添加成功',
           icon: 'success',
@@ -105,17 +121,17 @@ export default function AddressBook() {
         // 添加成功后的人员信息
         let newPersonData: PERSON_DATA = {
           id: r.data.worker_id,
-          is_deleted:0,
-          is_in_work_note:0,
-          is_self:0,
+          is_deleted: 0,
+          is_in_work_note: 0,
+          is_self: 0,
           name: params.name,
-          name_color:params.name_color,
-          name_py:"C",
-          tel:params.tel,
-          is_check:true
+          name_color: params.name_color,
+          name_py: r.data.name_py,
+          tel: params.tel,
+          is_check: true
         }
         pushNewPerson(newPersonData)
-      }else{
+      } else {
         Taro.showToast({
           title: r.message,
           icon: 'none',
@@ -161,10 +177,7 @@ export default function AddressBook() {
           newList.splice(index+1, 0, newLetterData)
         }
       })
-      
-      debugger
-      console.log(newList)
-      setList(newList)
+      setList([...newList])
     }
   }
   /** 添加工友弹窗取消 */
@@ -193,6 +206,52 @@ export default function AddressBook() {
     //判断是全选还是取消全选
     newIsAllSelect ? setSelectd(newSelectd) : setSelectd([])
   }
+  /** 修改弹窗确定 */
+  const editConfirm = () => {
+
+  }
+  /** 修改弹窗取消 */
+  const editCancel = () => {
+
+  }
+  /** 删除事件 */
+  const deletPerson =()=> {
+    let workId = {
+      id: editItemData.id
+    }
+    deletedPerson(workId).then((res)=>{
+      if (res.code == 0) {
+        Taro.showToast({
+          title: '删除成功',
+          icon: 'success',
+          duration: 1000
+        })
+        setIsShowEdit(false)
+
+        /** 在本地删除当前数据 */ 
+        let newList: ADDRESS_BOOK_LIST[] = [...list]
+        let editId:number = editItemData.id
+        newList.map((Pitem,Pindex)=>{
+          Pitem.data.map((Citem,Cindex)=>{
+            if (Citem.id == editId){
+              newList[Pindex].data.splice(Cindex, 1)
+            }
+          })
+        })
+      }else{
+        Taro.showToast({
+          title: res.message,
+          duration: 1000
+        })
+        setIsShowEdit(false)
+      }
+    })
+  }
+  /** 显示修弹窗 */
+  const editwork = (editData: PERSON_DATA)=> {
+    setEditItemData(editData)
+    setIsShowEdit(true)
+  }
   return (
     <InitProvider loading={loading} errMsg={errMsg}>
       <View className="AddressBook">
@@ -220,7 +279,7 @@ export default function AddressBook() {
                     </View>
                   </View>
                   <View className="setting">
-                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} ></Image>
+                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={() => editwork(cItem)}></Image>
                   </View>
                 </View>
               ))
@@ -260,6 +319,20 @@ export default function AddressBook() {
           ]}
           confirm={addConfirm}
           cancel={addCancel}
+        ></PromptBox>
+      }
+      {
+        // 修改删除工友组件
+        isShowEdit && <PromptBox
+          titleText="修改工友"
+          confirmText="确定"
+          inputGroup={[
+            { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名' },
+            { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)' }
+          ]}
+          confirm={editConfirm}
+          cancel={editCancel}
+          delet={deletPerson}
         ></PromptBox>
       }
     </InitProvider>

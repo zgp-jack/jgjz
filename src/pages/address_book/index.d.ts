@@ -72,9 +72,12 @@ export interface ADD_CONFIRM_DATA {
 }
 // 添加工友 给后台传的参数
 export interface ADD_PERSON_PARAMS extends ADD_CONFIRM_DATA {
+  //头像颜色
   name_color:string
 }
 //添加工友的返回值
 export interface ADD_PERSON_RESULT_DATA {
-  worker_id:number
+  //工友id
+  worker_id:number,
+  name_py:string
 }

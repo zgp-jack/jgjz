@@ -155,7 +155,7 @@ export const post = <T, R>(url: string, data: T, loading?: boolean): Promise<Res
  * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起delete请求
 */
-export const del = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
+export const del = <T, R>(url: string, data?: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
     url, data, loading: !!loading, method: 'DELETE'
   })

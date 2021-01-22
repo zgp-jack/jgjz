@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:15:01
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 20:24:50
+ * @LastEditTime: 2021-01-22 11:14:51
  * @Description: 存放所有的API请求接口
  ! @rules: 1. 导出的接口名 小驼峰  2.注释: 功能模块名 + 接口概述 3.功能模块相同的接口放在一起
  */
@@ -60,12 +60,17 @@ export const addressBookNote: string = `workers/get-note-workers`
 export const workersAdd: string = `workers/add`
 //初始化记工界面
 export const initRemember: string = 'business/get-one/'
+// 修改工人
+export const updateWordkerInfo: string = `workers/update/`
 
 //获取记工本
 export const workNote: string = 'work-notes/get?id=1&co=23'
 
 //获取账本流水统计
 export const getCountUrl: string = 'business/get-count'
+
+//删除工人
+export const deleteWorker: string = 'workers/delete/'
 
 
 // !流水列表

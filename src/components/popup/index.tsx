@@ -1,5 +1,5 @@
 import { View, Input } from '@tarojs/components'
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useEffect, useState } from '@tarojs/taro'
 import {PromptBoxProps, InputValue} from './index.d'
 import './index.scss'
 
@@ -26,7 +26,7 @@ const PromptBox = ({
   /**默认右下角按钮颜色*/ 
   confirmColor = '#0099FF',
   /**默认弹窗中输入框内容*/ 
-  inputGroup = [{name:'input',title:'标题1',placeholder:'请输入你的标题'}],
+  inputGroup = [{name:'input',title:'标题1',placeholder:'请输入你的标题', value: ''}],
   /**左下角按钮事件*/ 
   cancel,
   /**右上角按钮事件*/
@@ -34,8 +34,15 @@ const PromptBox = ({
   /**右下角按钮事件*/
   confirm,
 }: PromptBoxProps) => {
+
+  // 初始化组件数据默认返回值
+  let normal_data: InputValue = {}
+  inputGroup.forEach((d) => {
+    normal_data[d.name] = d.value
+  })
+
   //输入框输入的数据
-  const [data, setData] = useState<InputValue>({})
+  const [data, setData] = useState<InputValue>(normal_data)
 
   /**
    * @name: enterInput

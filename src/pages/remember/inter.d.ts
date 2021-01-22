@@ -19,6 +19,7 @@ export interface GetCountParams {
   expense_account?: string
   group_leader?: string | string[]
   worker_id?: string
+  page: number
 }
 
 export interface GetCountResult {

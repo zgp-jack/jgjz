@@ -1,0 +1,157 @@
+    .record-work-check-person{
+      .record-work-person-head{
+        height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;;
+        .record-work-person-title{
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          font-size: 30px;
+          padding-right: 24px;
+          View:first-child{
+            font-weight: bold;
+            Text{
+              color:#5B80FB
+            }
+          }
+          View:last-child{
+            color:#5B80FB
+          }
+        }
+        .record-work-person-disc{
+          font-size: 26px;
+          color: #808080;
+        }
+      }
+      .record-work-person-content{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .record-work-person-item{
+          width: 80px;
+          height: 120px;
+          position: relative;
+          font-size: 26px;
+          margin-top: 20px;
+          margin-right: 24px;
+          .record-work-person-box{
+            position: relative;
+            display: flex;
+            height: 80px;
+            width: 80px;
+            background-color: #5B80FB;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF;
+            border-radius: 5px;
+            .recorded-image{
+              position: absolute;
+              width: 100%;
+              bottom: 0;
+              &::after{
+                content:"已记";
+                position: absolute;
+                bottom: 5px;
+                color: #18A2FE;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 19px;
+              }
+            }
+            .choose-image{
+              width: 50%;
+              height: 50%;
+              position: absolute;
+            }
+          }
+          .choose-box{
+            border: 2px solid #FF7777;
+            opacity: .7;
+          }
+          .recorded-box{
+            background: #FFAB47;
+          }
+          Text{
+            display: inline-block;
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+        }
+        .record-work-person-add{
+          width: 80px;
+          height: 120px;
+          position: relative;
+          font-size: 26px;
+          margin-top: 20px;
+          margin-right: 24px;
+          .record-work-person-box{
+            position: relative;
+            display: flex;
+            height: 80px;
+            width: 80px;
+            background: #E6E6E6;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF;
+            border-radius: 5px;
+            Image{
+              width: 50%;
+              height: 50%;
+              position: absolute;
+            }
+          }
+          Text{
+            display: inline-block;
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+        }
+        .record-work-person-del{
+          width: 80px;
+          height: 120px;
+          position: relative;
+          font-size: 26px;
+          margin-top: 20px;
+          margin-right: 24px;
+          .record-work-person-box{
+            position: relative;
+            display: flex;
+            height: 80px;
+            width: 80px;
+            background: #E6E6E6;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF;
+            border-radius: 5px;
+            Image{
+              width: 50%;
+              height: 50%;
+              position: absolute;
+            }
+          }
+          Text{
+            display: inline-block;
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+        }
+      }
+    }

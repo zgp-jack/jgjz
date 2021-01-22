@@ -1,5 +1,5 @@
 import Taro, {useEffect, useState, useRouter} from '@tarojs/taro'
-import {Image, Picker, Text, View} from '@tarojs/components'
+import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
 import filter from '@/images/ic_sx.png'
@@ -16,10 +16,12 @@ import meter from '@/images/ic_gl.png'
 import PickerUnit from "@/components/picker/picker-unit";
 import Filter from "./filter/index";
 import {get} from "@/utils/request";
+import { getBusiness } from './api'
 import {GetCountParams, GetCountResult} from "@/pages/remember/inter";
-import {getCountUrl} from "@/utils/api";
+import { getCountUrl } from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
+import useList from '@/hooks/list'
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -48,21 +50,33 @@ const Remember = () => {
   const year = new Date().getFullYear()
   /*获取月份*/
   const month = new Date().getMonth() + 1
+  /**获取日*/ 
+  const day = new Date().getDate();
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '874',
+    work_note: '873',
     worker_id: '',
     business_type: [],
     expend_type: '',
     expense_account: '',
     group_leader: [],
     is_note: '',
-    unit_work_type: ''
+    unit_work_type: '',
+    page: 1
   })
   /*获取统计数据，请求参数*/
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
-
+  // 参数处理
+  const actionParams = () => {
+    return {
+      ...filterData,
+      business_type: (filterData.business_type as string[]).join(','),
+      group_leader: (filterData.group_leader as string[]).join(',')
+    }
+  }
+  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
+  console.log("list", list)
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -80,12 +94,9 @@ const Remember = () => {
   /*获取统计数据*/
   useEffect(() => {
     if (!filterData.start_business_time || !filterData.end_business_time) return
-    let params: GetCountParams = {
-      ...filterData,
-      business_type: (filterData.business_type as string[]).join(','),
-      group_leader: (filterData.group_leader as string[]).join(',')
-    }
+    const params = actionParams()
     initData(params)
+    setParams({ ...params },true)
   }, [filterData])
 
   /*根据筛选日期初始化请求参数*/
@@ -187,7 +198,7 @@ const Remember = () => {
 
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
-    let url = `/pages/work_team/record_work/index?type=${type}`
+    let url = `/pages/work_team/record_work/index?type=${type}`;
     Taro.navigateTo({
       url: url
     })
@@ -344,15 +355,20 @@ const Remember = () => {
               </View>
             </View>
 
-            <View className="statistics">
-              <View className="statistics-title">11月全部流水</View>
+            <View className="statistics-flow">
+              <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
               <View className="bokkeeping-list">
-                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
-                <WorkCountDay list={[]}/>
-                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
-                <WorkMoneyBorrowing/>
-                <View className="bokkeeping-list-head">2020年11月03日 周二</View>
-                <WorkMoneyBorrowing/>
+                {list.map(item => (
+                  <Block>
+                    <View className="bokkeeping-list-head">{item.date}</View>
+                    <View className="bokkeeping-list-content">
+                      {item.list.map(p => (
+                        (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay list={[p]} type={p.business_type} /> :
+                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />)
+                      ))}
+                    </View>
+                  </Block>
+                ))}
               </View>
             </View>
           </View>

@@ -1,6 +1,5 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
 import RecordDay from './record_day/index'
 import RecordAmoumt from './record_amount/index'
 import RecordMoney from './record_money/index'
@@ -32,7 +31,7 @@ function PersonRecord(){
         </View>
     )
 }
-export default observer(PersonRecord)
+export default PersonRecord
 PersonRecord.config = {
     navigationBarTitleText: '个人记工天',
 }

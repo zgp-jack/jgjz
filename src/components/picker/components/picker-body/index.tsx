@@ -10,9 +10,11 @@ interface PickerBodyProps {
   onSelect: (data: PickerData) => void
   activeData: PickerData
   over?: boolean
+  isTime?: boolean
 }
 
-const PickerBody: React.FC<PickerBodyProps> = ({data = [], onSelect, activeData, over = false}) => {
+const PickerBody: React.FC<PickerBodyProps> = ({data = [], onSelect, activeData, over = false, isTime}) => {
+  console.log('123123123', data)
   return (
     <View className="picker-body">
       <ScrollView
@@ -23,8 +25,8 @@ const PickerBody: React.FC<PickerBodyProps> = ({data = [], onSelect, activeData,
       >
         {
           data.map(item => (
-            <PickerBlock key={item.id} text={item.value} click={() => onSelect(item)}
-                         active={activeData.id === item.id}/>
+            <PickerBlock isTime={isTime} key={item.id} text={item.value} click={() => onSelect(item)}
+                         active={activeData.id == item.id}/>
           ))
         }
       </ScrollView>

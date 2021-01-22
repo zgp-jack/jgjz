@@ -1,10 +1,11 @@
-import Taro, { Component, Config } from '@tarojs/taro'
-import { Provider } from '@tarojs/mobx'
+import Taro, {Component, Config} from '@tarojs/taro'
+import {Provider} from '@tarojs/mobx'
 import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import ClassifyType from '@/store/classify'
 import ClassifySubitem from '@/store/classify/subitem'
 import RememberStore from '@/store/business/index'
+import PickerStore from '@/store/picker/index'
 import User from '@/store/user'
 import './app.scss'
 import Remember from "@/pages/remember";
@@ -20,18 +21,23 @@ const store = {
   ClassifyType,
   ClassifySubitem,
   RememberStore,
-  User
+  User,
+  PickerStore
 }
 
 class App extends Component {
 
-  componentDidMount () {}
+  componentDidMount() {
+  }
 
-  componentDidShow () {}
+  componentDidShow() {
+  }
 
-  componentDidHide () {}
+  componentDidHide() {
+  }
 
-  componentDidCatchError () {}
+  componentDidCatchError() {
+  }
 
   /*
    * 指定config的类型声明为: Taro.Config

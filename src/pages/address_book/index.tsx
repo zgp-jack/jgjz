@@ -227,8 +227,7 @@ export default function AddressBook() {
           duration: 1000
         })
         setIsShowEdit(false)
-
-        /** 在本地删除当前数据 */ 
+        /** 在本地list删除当前数据 */ 
         let newList: ADDRESS_BOOK_LIST[] = [...list]
         let editId:number = editItemData.id
         newList.map((Pitem,Pindex)=>{
@@ -238,6 +237,12 @@ export default function AddressBook() {
             }
           })
         })
+        /** 删除已选中的数据 */
+        let newSelectd: PERSON_DATA[] = [...selectd]
+        newSelectd.map((Sitem, Sindex) => {
+          Sitem.id == editId ? newSelectd.splice(Sindex,1):''
+        })
+        setSelectd(newSelectd)
       }else{
         Taro.showToast({
           title: res.message,

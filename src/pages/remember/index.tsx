@@ -21,6 +21,7 @@ import { getCountUrl } from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import useList from '@/hooks/list'
+import ListProvider from '@/components/list_provider'
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -54,7 +55,7 @@ const Remember = () => {
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '874',
+    work_note: '873',
     worker_id: '',
     business_type: [],
     expend_type: '',
@@ -75,7 +76,6 @@ const Remember = () => {
     }
   }
   const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
-  console.log("list", list)
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -356,22 +356,30 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-
+            
             <View className="statistics-flow">
               <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
-              <View className="bokkeeping-list">
-                {list.map(item => (
-                  <Block>
-                    <View className="bokkeeping-list-head">{item.date}</View>
-                    <View className="bokkeeping-list-content">
-                      {item.list.map(p => (
-                        (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay list={[p]} type={p.business_type} /> :
-                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />)
-                      ))}
-                    </View>
-                  </Block>
-                ))}
-              </View>
+              <ListProvider
+                increasing={increasing}
+                loading={loading}
+                errMsg={errMsg}
+                hasmore={hasmore}
+                length={list.length}
+              >
+                <View className="bokkeeping-list">
+                  {list.map(item => (
+                    <Block key={item.date}>
+                      <View className="bokkeeping-list-head">{item.date}</View>
+                      <View className="bokkeeping-list-content">
+                        {item.list.map(p => (
+                          (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay key={p.id} list={[p]} type={p.business_type} /> :
+                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type} />)
+                        ))}
+                      </View>
+                    </Block>
+                  ))}
+                </View>
+              </ListProvider>
             </View>
           </View>
         </View>

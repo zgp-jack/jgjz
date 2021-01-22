@@ -42,7 +42,7 @@
             display: flex;
             height: 80px;
             width: 80px;
-            background-color: #5B80FB;
+            background-color: rgb(91,128,251);
             justify-content: center;
             align-items: center;
             color: #FFFFFF;
@@ -51,15 +51,6 @@
               position: absolute;
               width: 100%;
               bottom: 0;
-              &::after{
-                content:"已记";
-                position: absolute;
-                bottom: 5px;
-                color: #18A2FE;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 19px;
-              }
             }
             .choose-image{
               width: 50%;
@@ -69,10 +60,23 @@
           }
           .choose-box{
             border: 2px solid #FF7777;
-            opacity: .7;
+            background-color:rgba(91,128,251,.5)
           }
           .recorded-box{
-            background: #FFAB47;
+            background: rgb(255,171,71);
+            &::after{
+              content:"已记";
+              position: absolute;
+              bottom: 5px;
+              color: #18A2FE;
+              left: 50%;
+              transform: translateX(-50%);
+              font-size: 19px;
+            }
+          }
+          .recorded-choose-box{
+            background-color: rgba(255,171,71, .5);
+            border: 2px solid #FF7777;
           }
           Text{
             display: inline-block;

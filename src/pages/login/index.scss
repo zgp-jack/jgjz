@@ -23,9 +23,10 @@
       font-size: 30px;
       position: relative;
       display: inline-block;
-    }
-    .login-type-title:first-child {
-      border-right: 1px solid #c7c6c6;
+
+      &:first-child {
+        border-right: 1px solid #c7c6c6;
+      }
     }
     .login-active {
       color: #333;
@@ -84,8 +85,7 @@
         height: 40px;
         position: absolute;
         right: 0;
-        background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-clone.png")
-          no-repeat;
+        background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-clone.png") no-repeat;
         background-size: 100% 100%;
         filter: grayscale(100%);
         z-index: 1;
@@ -95,8 +95,7 @@
         height: 40px;
         position: absolute;
         right: 0;
-        background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-open.png")
-          no-repeat;
+        background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-open.png") no-repeat;
         background-size: 100% 100%;
         filter: grayscale(100%);
         z-index: 1;

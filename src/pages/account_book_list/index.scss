@@ -1,4 +1,4 @@
-page{
+page {
   background-color: #f7f6f9 !important;
 }
 .account-right-icon {
@@ -20,16 +20,17 @@ page{
   .account-book-flex {
     display: flex;
     justify-content: space-between;
-    margin:65px 0;
+    margin: 65px 0;
     .account-book-align {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 50%;
       color: #151515;
-    }
-    .account-book-align:first-child {
-      border-right: 1px solid #c7c6c6;
+      
+      &:first-child {
+        border-right: 1px solid #c7c6c6;
+      }
     }
   }
 
@@ -46,15 +47,18 @@ page{
       bottom: 38px;
       left: 20px;
     }
-    .account-book-add {
+    .account-book-top-btn {
       position: absolute;
-      font-size: 28px;
       bottom: 38px;
       right: 20px;
-      background: #fff;
-      color: #333;
-      padding: 6px 30px;
-      border-radius: 8px;
+      .account-book-add {
+        font-size: 26px;
+        background: #fff;
+        color: #333;
+        padding: 6px 25px;
+        border-radius: 8px;
+        margin-left: 20px;
+      }
     }
   }
   .account-book-item {
@@ -78,19 +82,19 @@ page{
       .account-book-title {
         display: flex;
         justify-content: space-between;
-        .account-book-edit{
-            color:#A7A7A7;
-            font-size: 28px;
+        .account-book-edit {
+          color: #a7a7a7;
+          font-size: 28px;
         }
       }
     }
   }
-  .account-book-btn{
-      color: #FFF;
-      background: #0099FF;
-      border-radius: 10px;
-      font-size:30px;
-      height: 85px;
-      line-height:85px;
+  .account-book-btn {
+    color: #fff;
+    background: #0099ff;
+    border-radius: 10px;
+    font-size: 30px;
+    height: 85px;
+    line-height: 85px;
   }
 }

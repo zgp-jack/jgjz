@@ -54,15 +54,29 @@
     "miniprogram": {
       "list": [
         {
-          "name": "通讯录",
-          "pathName": "pages/address_book/index",
+          "id": -1,
+          "name": "pages/person_borrowing/index",
+          "pathName": "pages/person_borrowing/index",
           "query": "",
           "scene": null
         },
         {
-          "name": "登录",
-          "pathName": "pages/login/index",
+          "id": -1,
+          "name": "pages/person_record/index",
+          "pathName": "pages/person_record/index",
           "query": "",
+          "scene": null
+        },
+        {
+          "id": -1,
+          "name": "pages/person_detail/index",
+          "pathName": "pages/person_detail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "通讯录",
+          "pathName": "pages/address_book/index",
           "scene": null
         }
       ]

@@ -1,7 +1,7 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
 import classnames from 'classnames'
-import PersonInputProps from './inter.d'
+import PersonInputProps from './inter'
 import './index.scss'
 
 export default function ContentInput({ title, change, value, type }: PersonInputProps){

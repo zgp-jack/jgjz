@@ -54,3 +54,35 @@
         border-top-color: #fff;
     }
 }
+.overtime-text{
+  margin-top: 40px;
+  margin-right: 40px;
+}
+.person-record-overtime{
+    position: relative;
+    .overtime-icon{
+        transform: scale(1.5);
+        width: 22px;
+        height: 22px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -11px;
+    }
+    .overtime-icon::before,
+    .overtime-icon::after{
+        content: "";
+        position: absolute;
+        height: 22px;
+        width: 1.5px;
+        top: 2px;
+        right: 12px;
+        background: #808080;
+    }
+    .overtime-icon::before{
+      transform: rotate(45deg);
+    }
+    .overtime-icon::after{
+      transform: rotate(-45deg);
+    }
+}

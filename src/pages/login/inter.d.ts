@@ -18,8 +18,21 @@ export interface LoginConfig {
 
 // 登录-验证码  接口返回的数据类型
 export interface UserGetCodeLoginParams {
-  /** 验证码的手机号 */
+  /** 手机号 */
   tel: string,
-  code: string,
-  pass: string
+  /** 验证码 */
+  code?: string,
+  /** 密码 */
+  pass?: string,
+  /** 登录方式 */
+  type: string
+}
+
+
+// 用户登录成功后台返回信息
+export interface UserResult {
+  /** 用户token  */
+  token: string,
+  /** 用户id  */
+  yupao_id: number
 }

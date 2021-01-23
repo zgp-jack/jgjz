@@ -35,7 +35,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   }, [props.show])
 
   useEffect(() => {
-    if (filterData.start_business_time.split('-').length !== 3) return
+    if (filterData && filterData.start_business_time.split('-').length !== 3) return
     eventCenter.on(AddressBookConfirmEvent, (data) => {
       console.log('data', data)
       let _data: any = {}

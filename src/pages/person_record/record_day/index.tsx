@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import RecordDayPostData from './inter.d'
 import { worktime, overtime } from './config'
@@ -11,6 +11,8 @@ import userAddRecordAction from '../api'
 import './index.scss'
 
 export default function RecordDay() {
+  // 时间年月日
+  const [dateText, setDateText] = useState<string>('')
   // 是否日期组件
   const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长组件
@@ -30,6 +32,13 @@ export default function RecordDay() {
     work_time_hour: '0',
     overtime: ''
   })
+  // 日期文本显示年月日
+  useEffect(() => {
+    let date = postData.business_time
+    let dateArr: string[] = date.split('-')
+    let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
+    setDateText(dataStr)
+  }, [postData.business_time])
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string,value?:string,typeString?:string) => {
     let postdata: any = { ...postData }
@@ -71,11 +80,16 @@ export default function RecordDay() {
       <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} worktime={worktime} />
       {isPickerOverTime && <WorkTime close={() => setIsPickerOverTime(false)} setTime={(value) => setMoreTime(value, false)} set={(value) => setTime(value,false)} worktime={overtime} isClose={false} />}
     </View>
-    {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={() => setIsPickerDate(false)} change={(val) => userUpdatePostData(val, 'business_time')} />}
+    {isPickerDate && <PickerDate
+      date={postData.business_time}
+      DeletePickerDate={() => setIsPickerDate(false)}
+      change={(val) => userUpdatePostData(val, 'business_time')}
+      dateText={dateText}
+    />}
     {isPickerLeader && <PickerLeader leader="张三" DeletePickerLeader={() => setIsPickerLeader(false)} />}
     <PickerMark text={'Hello world!'} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
-      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
+      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
       {!isPickerOverTime && <View className="person-record-component-item" onClick={() => setIsPickerOverTime(true)}>加班时长</View>}
     </View>

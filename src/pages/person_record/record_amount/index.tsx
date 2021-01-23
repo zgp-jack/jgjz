@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerDate from '@/components/picker_date'
@@ -13,7 +13,8 @@ import './index.scss'
 
 
 export default function RecordAmoumt() {
-
+  // 时间年月日
+  const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
   const [isPickerSubitem, setIsPickSubitem] = useState<boolean>(false)
   // 是否显示日期组件
@@ -33,6 +34,13 @@ export default function RecordAmoumt() {
     work_note: '890',
     worker_id: '1693'
   })
+  // 日期文本显示年月日
+  useEffect(() => {
+    let date = postData.business_time
+    let dateArr: string[] = date.split('-')
+    let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
+    setDateText(dataStr)
+  }, [postData.business_time])
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }
@@ -67,11 +75,16 @@ export default function RecordAmoumt() {
         set={(data) => { userUpdatePostData(data.id, 'unit_work_type') }}
       />
     }
-    {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'business_time')} />}
+    {isPickerDate && <PickerDate
+      date={postData.business_time}
+      DeletePickerDate={DeletePickerDate}
+      change={(val) => userUpdatePostData(val, 'business_time')}
+      dateText={dateText}
+    />}
     {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={'Hello world!'} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
-      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
+      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
       {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickSubitem(true); }}>{postData.unit_work_type ? postData.unit_work_type : '分项'}</View>}
     </View>

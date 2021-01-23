@@ -7,6 +7,7 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import {GetCountParams} from "@/pages/remember/inter";
 import {getTodayDate} from "@/utils/index";
+import { ADDRESSBOOKTYPE_GROUP } from '@/config/';
 
 interface FilterProps<T> {
   data: T
@@ -16,6 +17,11 @@ interface FilterProps<T> {
   personOrGroup: boolean/*个人账本筛选还是班组筛选*/
   handleSplitDate: (date: string) => string/*处理日期*/
   resetFilter: () => void
+}
+
+enum AddressBook {
+  alone = 'alone',
+  group = 'group'
 }
 
 const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
@@ -74,6 +80,23 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   const handleReset = () => {
     props.resetFilter()
   }
+  const handleGoToAddressBook = (type: AddressBook) => {
+    let _data: string[] = []
+    if (type === AddressBook.alone) {
+      _data = (filterData.worker_id as string[])
+    }
+    if (type === AddressBook.group) {
+      _data = (filterData.group_leader as string[])
+    }
+    Taro.navigateTo({ url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP}&data=${JSON.stringify(_data)}` })
+    // Taro.navigateTo({ url: `/pages/address_book/index?id=${filterData.work_note}&type=${type}&data=${JSON.stringify(_data)}` })
+  }
+  const handleGroupLeaderLength = () => {
+    return (filterData.group_leader as string[]).length
+  }
+  const handleWorkerIdLength = () => {
+    return (filterData.worker_id as string[]).length
+  }
   if (!filterData) return null
   return (
     <View className={"filter " + (props.show ? "show-filter" : '')}>
@@ -130,21 +153,22 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
             </View>
             {/*班组账本选择工友*/}
             {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
-                                          onClick={() => Taro.navigateTo({url: '/pages/address_book/index?id=874&type=group&data=[]'})}>
+                                          onClick={() => handleGoToAddressBook(AddressBook.alone)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择工友</View>
                 <View className="filter-picker-value">
-                  <View>全部工友</View>
+                  <View>{handleWorkerIdLength() ? '共' + handleWorkerIdLength() + '人' : '全部工友'}</View>
                   <Image src={arrowRight} className="filter-arrow"/>
                 </View>
               </View>
             </View>}
             {/*个人账本筛选选择班组长*/}
-            {props.personOrGroup && <View className="filter-block-row filter-block-row-small">
+            {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
+                                          onClick={() => handleGoToAddressBook(AddressBook.group)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择班组长</View>
                 <View className="filter-picker-value">
-                  <View>全部班组长</View>
+                  <View>{handleGroupLeaderLength() ? '共' + handleGroupLeaderLength() + '人' : '全部班组长'}</View>
                   <Image src={arrowRight} className="filter-arrow"/>
                 </View>
               </View>

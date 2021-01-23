@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter} from '@tarojs/taro'
+import Taro, { useEffect, useState, useRouter, eventCenter} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -25,6 +25,7 @@ import PickerWorkTime from "@/components/picker/picker-work-time";
 import PickerUnit from "@/components/picker/picker-unit";
 import PickerOverTime from "@/components/picker/picker-over-time";
 import ListProvider from '@/components/list_provider'
+import { AddressBookConfirmEvent } from '@/config/events'
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -36,6 +37,23 @@ const Remember = () => {
   /*打开picker弹窗（调试使用）*/
   const [showPicker, setShowPicker] = useState(false)
   const {params} = useRouter()
+  useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
+      console.log(data)
+      if (data.length) {
+        let selectData: any = []
+        data.forEach(item => {
+          selectData.push(item.id)
+        })
+        if (ledgerType == 1) {
+          setFilterData({...filterData, worker_id: selectData})
+        } else {
+          setFilterData({...filterData, group_leader: selectData})
+        }
+      }
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  }, [])
   console.log('params:', params)
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
@@ -61,7 +79,7 @@ const Remember = () => {
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '873',
+    work_note: '874',
     worker_id: '',
     business_type: [],
     expend_type: '',

@@ -11,7 +11,7 @@ import msg from '@/utils/msg'
 import { getWorkers, postAdd_Person, deletedPerson, editWordkerInfo } from './api'
 import PromptBox from '@/components/popup/index'
 import './index.scss'
-import { objDeepCopy } from '@/utils/index'
+import {objDeepCopy} from '@/utils/index'
 
 
 export default function AddressBook() {
@@ -37,7 +37,6 @@ export default function AddressBook() {
   const disableCheckImg: string = `${IMGCDNURL}ws/on_check.png`
   /** 已选择check图片 */
   const onCheckdImg: string = `${IMGCDNURL}ws/ckeckd.png`
-
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   /**是否显示添加工友弹窗*/
@@ -73,7 +72,7 @@ export default function AddressBook() {
     // 判断是单选 则拿到当前数据然后退出
     if (type === ADDRESSBOOKTYPE_ALONE) {
       let data: PERSON_DATA = list[pIndex].data[cIndex]
-      eventCenter.trigger(AddressBookConfirmEvent, data)
+      eventCenter.trigger(AddressBookConfirmEvent, [data])
       Taro.navigateBack()
       return
     }
@@ -480,7 +479,7 @@ export default function AddressBook() {
           "list_content": true,
           "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
           "list_content_filter": true,
-        })} >
+        })}>
           {filterList.map((item, pIndex) => (
             <View className="item_person" key={item.id}>
               <View className="left" onClick={() => filterSelect(pIndex, item.id)}>
@@ -491,14 +490,16 @@ export default function AddressBook() {
                     src={item.is_in_work_note ? `${disableCheckImg}` : item.is_check ? `${onCheckdImg}` : `${normalCheckImg}`}
                   />}
 
-                <View className="avatar" style={{ background: item.name_color }}>{item.name.substring(0, 2)}</View>
+                <View className="avatar" style={{background: item.name_color}}>{item.name.substring(0, 2)}</View>
                 <View className="name_tle">
                   <Text className="name">{item.name}</Text>
                   {item.tel && <Text className="tel">{item.tel}</Text>}
                 </View>
               </View>
               <View className="setting">
-                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); }} ></Image>
+                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => {
+                  e.stopPropagation();
+                }}></Image>
               </View>
             </View>
           ))
@@ -529,8 +530,8 @@ export default function AddressBook() {
         showTitleButton={false}
         confirmText="确定"
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: '' },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: '' }
+          {name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: ''},
+          {name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: ''}
         ]}
         confirm={(data) => addConfirm(data)}
         cancel={addCancel}
@@ -541,8 +542,8 @@ export default function AddressBook() {
         titleText="修改工友"
         confirmText="确定"
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel }
+          {name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name},
+          {name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel}
         ]}
         confirm={(data) => editWorkerConfirm(data)}
         cancel={() => setIsShowEdit(false)}

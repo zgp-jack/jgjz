@@ -9,22 +9,23 @@ import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
+import { validNumber } from '@/utils/v'
+import msg from '@/utils/msg'
 import './index.scss'
-import { getTodayDate, objDeepCopy } from '@/utils/index'
+import { getTodayDate } from '@/utils/index'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
 
 export default function Expenditure(){
   // 支出提交数据
   const [postData, setPostData] = useState<ExpenditurePostData>({
     business_type: 4,
-    expend_type: '',
+    expend_type: 5,
     business_time: getTodayDate(),
     group_leader: '',
     note: '',
-    money: '0.00',
+    money: '',
     identity: 2,
     work_note: '890',
-    worker_id: '1693',
   })
   // 分类数据
   const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: ''})
@@ -60,15 +61,35 @@ export default function Expenditure(){
 
   // 提交借支数据
   const userPostAcion = () => {
-    userAddBorrowAction(postData).then((res) => {
-      debugger
+    let params: ExpenditurePostData = {
+      business_type: 5,
+      expend_type: 5,
+      business_time: isPickerDate ? postData.business_time : '',
+      group_leader: isPickerLeader ? groupLeader.id : '',
+      note: postData.note,
+      money: postData.money,
+      identity: 2,
+      work_note: '890',
+      worker_id: '1693',
+    }
+    if(postData.money){
+      if (!validNumber(params.money)) {
+        msg('请输入正确的金额')
+        return
+      }
+    }
+    userAddBorrowAction(params).then((res) => {
+      console.log(res)
     })
   }
 
   // 用户点击 班组长 圆角按钮 选择
   const userTapGroupLeaderBtn = () => {
-    
-    Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE})
+    if(groupLeader.id){
+      setIsPickerLeader(true)
+    }else{
+      Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE })
+    }
   }
 
   // 用户关闭 日期组件
@@ -107,7 +128,7 @@ export default function Expenditure(){
       {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
-        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{postData.expend_type ? postData.expend_type : '分类'}</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{typeData.id ? typeData.name : '分类'}</View>}
         {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn() }>班组长</View>}
       </View>

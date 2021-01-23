@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 15:29:50
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-20 15:38:59
+ * @LastEditTime: 2021-01-23 14:55:48
  * @Description: interface for borrow
  */
 
@@ -11,7 +11,7 @@ export default interface BorrowPostData {
   /** 借支类型 */ 
   business_type: 4 | 5,
   /** 分类 */
-  expend_type: string,
+  expend_type: number,
   /** 日期 */
   business_time: string,
   /** 班组长id */

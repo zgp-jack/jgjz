@@ -2,10 +2,9 @@ import Taro, { useState, useEffect, Config, eventCenter, useRouter } from '@taro
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
-import { IMGCDNURL } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP } from '@/config/index'
 import { AddressBookConfirmEvent } from '@/config/events'
-import AddressBookProps, { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS } from './index.d'
-import InitProvider from '@/components/init_provider'
+import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS } from './index.d'
 import { InputValue } from '@/components/popup/index.d'
 import classnames from 'classnames'
 import msg from '@/utils/msg'
@@ -16,23 +15,22 @@ import { objDeepCopy } from '@/utils/index'
 
 
 export default function AddressBook() {
-  const { params } = useRouter()
+
+  // 获取当前显示的类型 默认个人选择
+  const router = useRouter()
+  const { type = ADDRESSBOOKTYPE_GROUP, id } = router.params
+
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
   useEffect(() => {
-    if (!params.id) return
+    if (!id) return
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */
-    getWorkers({ work_note: params.id }).then((res) => {
+    getWorkers({ work_note: id }).then((res) => {
       setList(res.data)
     })
-  }, [params])
-  /** 组件 单选 类型 */
-  const aloneType: string = 'alone'
-  /** 组件 多选 类型 */
-  const groupType: string = 'group'
-  /** 组件 离场 类型 */
-  const leaveType: string = 'leave'
+  }, [])
+
   /** 未选择check图片 */
   const normalCheckImg: string = `${IMGCDNURL}ws/check.png`
   /** 不可选择check图片 */
@@ -73,8 +71,10 @@ export default function AddressBook() {
   /** 选中或者取消选中 */
   const selectItem = (pIndex: number, cIndex: number, isInNote: number) => {
     // 判断是单选 则拿到当前数据然后退出
-    if (params.type === aloneType) {
+    if (type === ADDRESSBOOKTYPE_ALONE) {
       let data: PERSON_DATA = list[pIndex].data[cIndex]
+      eventCenter.trigger(AddressBookConfirmEvent, data)
+      Taro.navigateBack()
       return
     }
     // 如果是 多选或者 离场 的情况 那么久选择或者取消
@@ -175,10 +175,10 @@ export default function AddressBook() {
       /** 从已存在的字母表中找到当前字母的上一个字母 */
       let lastLetter: string = ''
       for (let i = 0; i < letter.length; i++) {
-        if (letterIndex == 0){
+        if (letterIndex == 0) {
           letterIndex = 0
           break;
-        }else{
+        } else {
           letterIndex--
           if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
             lastLetter = letter[letterIndex]
@@ -192,9 +192,9 @@ export default function AddressBook() {
         data: [newPerson]
       }
 
-      if (letterIndex == 0){
+      if (letterIndex == 0) {
         newList.splice(0, 0, newLetterData)
-      }else{
+      } else {
         //在newList中插入新的数据
         newList.map((item, index) => {
           if (item.name_py == lastLetter) {
@@ -202,7 +202,7 @@ export default function AddressBook() {
           }
         })
       }
-      
+
       setList([...newList])
     }
     /** 修改已选中的数据 */
@@ -298,7 +298,7 @@ export default function AddressBook() {
           if (letterIndex == 0) {
             letterIndex = 0
             break;
-          }else{
+          } else {
             letterIndex--
             if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
               lastLetter = letter[letterIndex]
@@ -323,10 +323,10 @@ export default function AddressBook() {
           })
         })
         //在newList中插入新的数据
-        if (letterIndex == 0){
+        if (letterIndex == 0) {
           newList.splice(0, 0, newLetterData)
           console.log(newList)
-        }else{
+        } else {
           newList.map((item, index) => {
             if (item.name_py == lastLetter) {
               newList.splice(index + 1, 0, newLetterData)
@@ -361,8 +361,8 @@ export default function AddressBook() {
           Pitem.data.map((Citem, Cindex) => {
             if (Citem.id == editId) {
               newList[Pindex].data.splice(Cindex, 1)
-              if (newList[Pindex].data.length < 1){
-                newList.splice(Pindex,1)
+              if (newList[Pindex].data.length < 1) {
+                newList.splice(Pindex, 1)
               }
               setList(newList)
             }
@@ -432,21 +432,20 @@ export default function AddressBook() {
   /** 确定提交 */
   const submitSelect = () => {
     eventCenter.trigger(AddressBookConfirmEvent, selectd)
-    debugger
     Taro.navigateBack()
   }
 
   return (
     <View className="AddressBook">
       {/* 已选中工友 */}
-      {params.type !== aloneType && <Selectd selectd={selectd} deletePerson={deletePerson} />}
+      {type !== ADDRESSBOOKTYPE_ALONE && <Selectd selectd={selectd} deletePerson={deletePerson} />}
 
       {/* 搜索组件 */}
       <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} />
       {/* 通讯录列表 */}
       <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
         "list_content": true,
-        "list_content-alone": params.type === aloneType,
+        "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
       })} >
         {list.map((pItem, pIndex) => (
           <View className="item" key={pItem.name_py} id={pItem.name_py == "#" ? 'view_' : 'view' + pItem.name_py}>
@@ -456,7 +455,7 @@ export default function AddressBook() {
                 <View className="left" onClick={() => selectItem(pIndex, cIndex, cItem.is_in_work_note)}>
 
                   {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
-                  {params.type !== aloneType && <Image className='item_checkbox' src={cItem.is_in_work_note ? `${disableCheckImg}` : cItem.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
+                  {type !== ADDRESSBOOKTYPE_ALONE && <Image className='item_checkbox' src={cItem.is_in_work_note ? `${disableCheckImg}` : cItem.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
 
                   <View className="avatar" style={{ background: cItem.name_color }}>{cItem.name.substring(0, 2)}</View>
                   <View className="name_tle">
@@ -479,7 +478,7 @@ export default function AddressBook() {
       {value &&
         <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
           "list_content": true,
-          "list_content-alone": params.type === aloneType,
+          "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
           "list_content_filter": true,
         })} >
           {filterList.map((item, pIndex) => (
@@ -487,7 +486,10 @@ export default function AddressBook() {
               <View className="left" onClick={() => filterSelect(pIndex, item.id)}>
 
                 {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
-                {params.type !== aloneType && <Image className='item_checkbox' src={item.is_in_work_note ? `${disableCheckImg}` : item.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
+                {type !== ADDRESSBOOKTYPE_ALONE &&
+                  <Image className='item_checkbox'
+                    src={item.is_in_work_note ? `${disableCheckImg}` : item.is_check ? `${onCheckdImg}` : `${normalCheckImg}`}
+                  />}
 
                 <View className="avatar" style={{ background: item.name_color }}>{item.name.substring(0, 2)}</View>
                 <View className="name_tle">
@@ -511,7 +513,7 @@ export default function AddressBook() {
         ))}
       </View>
       {/* 底部组件 当非个人类型时显示 */}
-      {params.type !== aloneType &&
+      {type !== ADDRESSBOOKTYPE_ALONE &&
         <View className="bottom_all">
           <View className="bottom_all_box" onClick={() => allSelect()}>
             <Image className="bottom_all_img" src={isAllSelect ? `${IMGCDNURL}ws/ckeckd.png` : `${IMGCDNURL}ws/check.png`} />

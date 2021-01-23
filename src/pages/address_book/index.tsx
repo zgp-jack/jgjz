@@ -11,14 +11,14 @@ import msg from '@/utils/msg'
 import { getWorkers, postAdd_Person, deletedPerson, editWordkerInfo } from './api'
 import PromptBox from '@/components/popup/index'
 import './index.scss'
-import { objDeepCopy } from '@/utils/index'
+import {objDeepCopy} from '@/utils/index'
 
 
 export default function AddressBook() {
 
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
-  const { type = ADDRESSBOOKTYPE_GROUP, id = '23' } = router.params
+  const { type = ADDRESSBOOKTYPE_GROUP, id } = router.params
 
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
@@ -37,7 +37,6 @@ export default function AddressBook() {
   const disableCheckImg: string = `${IMGCDNURL}ws/on_check.png`
   /** 已选择check图片 */
   const onCheckdImg: string = `${IMGCDNURL}ws/ckeckd.png`
-
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   /**是否显示添加工友弹窗*/
@@ -71,9 +70,9 @@ export default function AddressBook() {
   /** 选中或者取消选中 */
   const selectItem = (pIndex: number, cIndex: number, isInNote: number) => {
     // 判断是单选 则拿到当前数据然后退出
-    if (type === ADDRESSBOOKTYPE_ALONE){
+    if (type === ADDRESSBOOKTYPE_ALONE) {
       let data: PERSON_DATA = list[pIndex].data[cIndex]
-      eventCenter.trigger(AddressBookConfirmEvent,data)
+      eventCenter.trigger(AddressBookConfirmEvent, [data])
       Taro.navigateBack()
       return
     }
@@ -175,10 +174,10 @@ export default function AddressBook() {
       /** 从已存在的字母表中找到当前字母的上一个字母 */
       let lastLetter: string = ''
       for (let i = 0; i < letter.length; i++) {
-        if (letterIndex == 0){
+        if (letterIndex == 0) {
           letterIndex = 0
           break;
-        }else{
+        } else {
           letterIndex--
           if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
             lastLetter = letter[letterIndex]
@@ -192,9 +191,9 @@ export default function AddressBook() {
         data: [newPerson]
       }
 
-      if (letterIndex == 0){
+      if (letterIndex == 0) {
         newList.splice(0, 0, newLetterData)
-      }else{
+      } else {
         //在newList中插入新的数据
         newList.map((item, index) => {
           if (item.name_py == lastLetter) {
@@ -298,7 +297,7 @@ export default function AddressBook() {
           if (letterIndex == 0) {
             letterIndex = 0
             break;
-          }else{
+          } else {
             letterIndex--
             if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
               lastLetter = letter[letterIndex]
@@ -323,10 +322,10 @@ export default function AddressBook() {
           })
         })
         //在newList中插入新的数据
-        if (letterIndex == 0){
+        if (letterIndex == 0) {
           newList.splice(0, 0, newLetterData)
           console.log(newList)
-        }else{
+        } else {
           newList.map((item, index) => {
             if (item.name_py == lastLetter) {
               newList.splice(index + 1, 0, newLetterData)
@@ -361,8 +360,8 @@ export default function AddressBook() {
           Pitem.data.map((Citem, Cindex) => {
             if (Citem.id == editId) {
               newList[Pindex].data.splice(Cindex, 1)
-              if (newList[Pindex].data.length < 1){
-                newList.splice(Pindex,1)
+              if (newList[Pindex].data.length < 1) {
+                newList.splice(Pindex, 1)
               }
               setList(newList)
             }
@@ -431,29 +430,28 @@ export default function AddressBook() {
   }
   /** 确定提交 */
   const submitSelect = () => {
-    console.log(selectd)
     eventCenter.trigger(AddressBookConfirmEvent, selectd)
     Taro.navigateBack()
   }
 
   return (
-      <View className="AddressBook">
-        {/* 已选中工友 */}
-        {type !== ADDRESSBOOKTYPE_ALONE && <Selectd selectd={selectd} deletePerson={deletePerson} />}
+    <View className="AddressBook">
+      {/* 已选中工友 */}
+      {type !== ADDRESSBOOKTYPE_ALONE && <Selectd selectd={selectd} deletePerson={deletePerson} />}
 
-        {/* 搜索组件 */}
-        <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} />
-        {/* 通讯录列表 */}
-        <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
-          "list_content": true,
-          "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
-        })} >
-          {list.map((pItem, pIndex) => (
-            <View className="item" key={pItem.name_py} id={pItem.name_py == "#" ? 'view_' : 'view' + pItem.name_py}>
-              <Text className="title">{pItem.name_py}</Text>
-              {pItem.data.map((cItem, cIndex) => (
-                <View className="item_person" key={cItem.id}>
-                  <View className="left" onClick={() => selectItem(pIndex, cIndex, cItem.is_in_work_note)}>
+      {/* 搜索组件 */}
+      <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} />
+      {/* 通讯录列表 */}
+      <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
+        "list_content": true,
+        "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
+      })} >
+        {list.map((pItem, pIndex) => (
+          <View className="item" key={pItem.name_py} id={pItem.name_py == "#" ? 'view_' : 'view' + pItem.name_py}>
+            <Text className="title">{pItem.name_py}</Text>
+            {pItem.data.map((cItem, cIndex) => (
+              <View className="item_person" key={cItem.id}>
+                <View className="left" onClick={() => selectItem(pIndex, cIndex, cItem.is_in_work_note)}>
 
                   {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
                   {type !== ADDRESSBOOKTYPE_ALONE && <Image className='item_checkbox' src={cItem.is_in_work_note ? `${disableCheckImg}` : cItem.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
@@ -481,7 +479,7 @@ export default function AddressBook() {
           "list_content": true,
           "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
           "list_content_filter": true,
-        })} >
+        })}>
           {filterList.map((item, pIndex) => (
             <View className="item_person" key={item.id}>
               <View className="left" onClick={() => filterSelect(pIndex, item.id)}>
@@ -492,14 +490,16 @@ export default function AddressBook() {
                     src={item.is_in_work_note ? `${disableCheckImg}` : item.is_check ? `${onCheckdImg}` : `${normalCheckImg}`}
                   />}
 
-                <View className="avatar" style={{ background: item.name_color }}>{item.name.substring(0, 2)}</View>
+                <View className="avatar" style={{background: item.name_color}}>{item.name.substring(0, 2)}</View>
                 <View className="name_tle">
                   <Text className="name">{item.name}</Text>
                   {item.tel && <Text className="tel">{item.tel}</Text>}
                 </View>
               </View>
               <View className="setting">
-                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); }} ></Image>
+                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => {
+                  e.stopPropagation();
+                }}></Image>
               </View>
             </View>
           ))
@@ -507,14 +507,14 @@ export default function AddressBook() {
         </ScrollView>}
 
 
-        {/* 右侧字母表 */}
-        <View className="right_nav">
-          {list.map((item) => (
-            <Text className='right-nav-text' key={item.name_py} onClick={() => toView('view' + item.name_py)}>{item.name_py}</Text>
-          ))}
-        </View>
-        {/* 底部组件 当非个人类型时显示 */}
-        {type !== ADDRESSBOOKTYPE_ALONE &&
+      {/* 右侧字母表 */}
+      <View className="right_nav">
+        {list.map((item) => (
+          <Text className='right-nav-text' key={item.name_py} onClick={() => toView('view' + item.name_py)}>{item.name_py}</Text>
+        ))}
+      </View>
+      {/* 底部组件 当非个人类型时显示 */}
+      {type !== ADDRESSBOOKTYPE_ALONE &&
         <View className="bottom_all">
           <View className="bottom_all_box" onClick={() => allSelect()}>
             <Image className="bottom_all_img" src={isAllSelect ? `${IMGCDNURL}ws/ckeckd.png` : `${IMGCDNURL}ws/check.png`} />
@@ -530,8 +530,8 @@ export default function AddressBook() {
         showTitleButton={false}
         confirmText="确定"
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: '' },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: '' }
+          {name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: ''},
+          {name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: ''}
         ]}
         confirm={(data) => addConfirm(data)}
         cancel={addCancel}
@@ -542,8 +542,8 @@ export default function AddressBook() {
         titleText="修改工友"
         confirmText="确定"
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel }
+          {name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name},
+          {name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel}
         ]}
         confirm={(data) => editWorkerConfirm(data)}
         cancel={() => setIsShowEdit(false)}

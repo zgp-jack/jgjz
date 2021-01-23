@@ -3,7 +3,7 @@ import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
 import { IMGCDNURL } from '@/config/index'
-import { AddressBookConfimEvent } from '@/config/events'
+import { AddressBookConfirmEvent } from '@/config/events'
 import AddressBookProps, { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS } from './index.d'
 import InitProvider from '@/components/init_provider'
 import { InputValue } from '@/components/popup/index.d'
@@ -411,7 +411,7 @@ export default function AddressBook() {
   }
   /** 确定提交 */
   const submitSelect = () => {
-    eventCenter.trigger(AddressBookConfimEvent, selectd)
+    eventCenter.trigger(AddressBookConfirmEvent, selectd)
     debugger
     Taro.navigateBack()
   }

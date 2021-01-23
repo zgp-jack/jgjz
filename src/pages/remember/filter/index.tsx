@@ -1,13 +1,14 @@
-import Taro, {useState, useEffect} from '@tarojs/taro'
+import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
 import {View, Image, Picker} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
 import arrowRight from "@/images/arrow-right.png";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
-import {GetCountParams} from "@/pages/remember/inter";
+import {AddressBookParams, GetCountParams} from "@/pages/remember/inter";
 import {getTodayDate} from "@/utils/index";
 import {ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_GROUP} from "@/config/index";
+import {AddressBookConfirmEvent} from "@/config/events";
 
 interface FilterProps<T> {
   data: T
@@ -26,20 +27,37 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   const {businessType} = localStore
   /*本地筛选数据*/
   const [filterData, setFilterData] = useState<GetCountParams>(props.data)
-  console.log(getTodayDate())
 
   useEffect(() => {
     if (props.data) {
-      let start_business_time = props.data.start_business_time
-      let end_business_time = props.data.end_business_time
-      let _data: GetCountParams = {
-        ...props.data,
-        start_business_time: start_business_time.split('-').length == 3 ? start_business_time : start_business_time + '-01',
-        end_business_time: end_business_time.split('-').length == 3 ? end_business_time : getTodayDate()
-      }
-      setFilterData(JSON.parse(JSON.stringify(_data)))
+      initData()
     }
-  }, [props.data])
+  }, [])
+
+  useEffect(() => {
+    if (filterData.start_business_time.split('-').length !== 3) return
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
+      let _data: any = {}
+      if (props.personOrGroup) {
+        _data = {...filterData, worker_id: data}
+      } else {
+        _data = {...filterData, group_leader: data}
+      }
+      initData(_data)
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  }, [])
+
+  const initData = (data = props.data) => {
+    let start_business_time = data.start_business_time
+    let end_business_time = data.end_business_time
+    let _data: GetCountParams = {
+      ...data,
+      start_business_time: start_business_time.split('-').length == 3 ? start_business_time : start_business_time + '-01',
+      end_business_time: (end_business_time.split('-').length == 3 ? end_business_time : getTodayDate())
+    }
+    setFilterData(JSON.parse(JSON.stringify(_data)))
+  }
   /*开始时间筛选*/
   const onStartDate = e => {
     setFilterData({...filterData, start_business_time: e.detail.value})
@@ -77,20 +95,20 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
     props.resetFilter()
   }
   const handleGoToAddressBook = (type) => {
-    let _data: string[] = []
+    let _data: AddressBookParams[] = []
     if (type === ADDRESSBOOKTYPE_ALONE) {
-      _data = (filterData.worker_id as string[])
+      _data = (filterData.worker_id as AddressBookParams[])
     }
     if (type === ADDRESSBOOKTYPE_GROUP) {
-      _data = (filterData.group_leader as string[])
+      _data = (filterData.group_leader as AddressBookParams[])
     }
-    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${type}&data=${JSON.stringify(_data)}`})
+    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP}&data=${JSON.stringify(_data)}`})
   }
   const handleGroupLeaderLength = () => {
-    return (filterData.group_leader as string[]).length
+    return (filterData.group_leader as AddressBookParams[]).length
   }
   const handleWorkerIdLength = () => {
-    return (filterData.worker_id as string[]).length
+    return (filterData.worker_id as AddressBookParams[]).length
   }
   if (!filterData) return null
   return (

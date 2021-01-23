@@ -16,7 +16,7 @@ import meter from '@/images/ic_gl.png'
 import Filter from "./filter/index";
 import {get} from "@/utils/request";
 import {getBusiness} from './api'
-import {GetCountParams, GetCountResult} from "@/pages/remember/inter";
+import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/remember/inter";
 import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
@@ -32,22 +32,7 @@ Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 const Remember = () => {
   const {params} = useRouter()
-  useEffect(() => {
-    eventCenter.on(AddressBookConfirmEvent, (data) => {
-      if (data.length) {
-        let selectData: any = []
-        data.forEach(item => {
-          selectData.push(item.id)
-        })
-        if (ledgerType == 1) {
-          setFilterData({...filterData, worker_id: selectData})
-        } else {
-          setFilterData({...filterData, group_leader: selectData})
-        }
-      }
-    })
-    return () => eventCenter.off(AddressBookConfirmEvent)
-  }, [])
+
   console.log('params:', params)
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
@@ -74,7 +59,7 @@ const Remember = () => {
     start_business_time: '',
     end_business_time: '',
     work_note: '874',
-    worker_id: '',
+    worker_id: [],
     business_type: [],
     expend_type: '',
     expense_account: '',
@@ -86,17 +71,25 @@ const Remember = () => {
   /*获取统计数据，请求参数*/
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
   /*数组转字符串*/
-  const handleArrayToString = (data?: string[] | string) => {
-    if (typeof data === 'string') return data
+  const handleArrayToString = (data: string[] | string): string => {
+    if (typeof data === 'string') return data;
     return (data as string[]).join(',')
+  }
+  const handleAddressBookParams = (data: AddressBookParams[] | string) => {
+    if (typeof data === 'string') return data;
+    let result: string[] = [];
+    (data as AddressBookParams[]).forEach(item => {
+      result.push(String(item.id))
+    })
+    return result.join(',')
   }
   // 参数处理
   const actionParams = () => {
     return {
       ...filterData,
       business_type: handleArrayToString(filterData.business_type),
-      group_leader: handleArrayToString(filterData.group_leader),
-      worker_id: handleArrayToString(filterData.worker_id)
+      group_leader: handleAddressBookParams(filterData.group_leader),
+      worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
   const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
@@ -190,6 +183,7 @@ const Remember = () => {
   }
   /*确认筛选*/
   const handleConfirmFilter = (data: GetCountParams) => {
+    console.log(data)
     if (JSON.stringify(data) != JSON.stringify(filterData)) {
       setFilterData(data)
       setIsFilter(true)
@@ -238,7 +232,7 @@ const Remember = () => {
   /*是否显示筛选了哪些内容*/
   const handleShowFilterResult = () => {
     let {is_note, business_type, group_leader, worker_id} = filterData
-    return (is_note == '1' || business_type.length || (group_leader as string[]).length || (worker_id as string[]).length)
+    return (is_note == '1' || business_type.length || (group_leader as AddressBookParams[]).length || (worker_id as AddressBookParams[]).length)
   }
   return (
     <View className={"remember" + (showFilter ? ' stop-move' : '')}>
@@ -277,9 +271,10 @@ const Remember = () => {
             <View className="filter-info" onClick={() => setShowFilter(true)}>
               <View className="filter-info-box overwords">
                 {
-                  (filterData.group_leader as string[]).length > 1 &&
+                  ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
                   <Text>
-                    共<Text className="filter-info-blue">{(filterData.group_leader as string[]).length}</Text>人
+                    共<Text
+                    className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
                     <Text className="filter-info-line">|</Text>
                   </Text>
                 }
@@ -463,12 +458,15 @@ const Remember = () => {
         showFilter &&
         <View className="mask" onClick={() => setShowFilter(false)}/>
       }
-      <Filter data={filterData} personOrGroup={personOrGroup} confirmFilter={data => handleConfirmFilter(data)}
-              show={showFilter}
-              close={() => setShowFilter(false)}
-              handleSplitDate={(date) => handleSplitDate(date)}
-              resetFilter={handleResetFilter}
-      />
+      {
+        showFilter &&
+        <Filter data={filterData} personOrGroup={personOrGroup} confirmFilter={data => handleConfirmFilter(data)}
+                show={showFilter}
+                close={() => setShowFilter(false)}
+                handleSplitDate={(date) => handleSplitDate(date)}
+                resetFilter={handleResetFilter}
+        />
+      }
     </View>
   )
 }

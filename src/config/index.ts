@@ -35,5 +35,5 @@ export const VERSION: string = '1.0.0'
 // * 小程序token标识
 export const MINITOKEN: string = 'mini_app'
 // * 小程序通讯录确定事件名
-
+export const submitGroup: string = 'submitGroup'
 

@@ -129,7 +129,8 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
               </View>
             </View>
             {/*班组账本选择工友*/}
-            {!props.personOrGroup && <View className="filter-block-row filter-block-row-small">
+            {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
+                                          onClick={() => Taro.navigateTo({url: '/pages/address_book/index?id=874&type=group&data=[]'})}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择工友</View>
                 <View className="filter-picker-value">

@@ -1,8 +1,8 @@
-import Taro, { useState, useEffect, Config, useRouter } from '@tarojs/taro'
+import Taro, { useState, useEffect, Config, eventCenter } from '@tarojs/taro'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
-import { IMGCDNURL } from '@/config/index'
+import { IMGCDNURL, submitGroup } from '@/config/index'
 import AddressBookProps, { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_CONFIRM_DATA, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA, EDIT_CONFIRM_DATA} from './index.d'
 import InitProvider from '@/components/init_provider'
 import { InputValue } from '@/components/popup/index.d'
@@ -402,6 +402,12 @@ export default function AddressBook({
     setList(newList)
   }
 
+  /** 确定提交 */
+  const submitSelect = () => {
+    eventCenter.trigger(submitGroup, selectd)
+    debugger
+    Taro.navigateBack()
+  }
 
   return (
     <InitProvider loading={loading} errMsg={errMsg}>
@@ -485,7 +491,7 @@ export default function AddressBook({
             <Image className="bottom_all_img" src={isAllSelect ? `${IMGCDNURL}ws/ckeckd.png` : `${IMGCDNURL}ws/check.png` }  />
             <Text className="bottom_all_text" >全选</Text>
           </View>
-          <View className="button">
+          <View className="button" onClick={()=> submitSelect()}>
             确定（{selectd.length}人）
           </View>
         </View>}

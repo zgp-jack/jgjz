@@ -36,6 +36,7 @@ const Remember = () => {
   /*打开picker弹窗（调试使用）*/
   const [showPicker, setShowPicker] = useState(false)
   const {params} = useRouter()
+  console.log('params:', params)
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
   const {businessType} = localStore
@@ -74,6 +75,7 @@ const Remember = () => {
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
   /*数组转字符串*/
   const handleArrayToString = (data?: string[] | string) => {
+    if (typeof data === 'string') return data
     return (data as string[]).join(',')
   }
   // 参数处理

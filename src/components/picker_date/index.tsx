@@ -10,17 +10,10 @@ export default function PickerDate({
     img = `${IMGCDNURL}zgp/date_icon.png`,
     title = '日期',
     date = getTodayDate(),
+    dateText,
     change,
     DeletePickerDate
 }:PickerDateProps){
-
-  // 日期文本显示年月日
-  const [dateText, setDateText] = useState<string>('')
-  useEffect(() => {
-    let dateArr: string[] = date.split('-')
-    let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
-    setDateText(dataStr)
-  }, [date])
 
   // 用户重置picker
   const userChangePicker = (e: any) => {

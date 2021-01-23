@@ -2,7 +2,7 @@
  * @Author: jack_zgp
  * @Date: 2021-01-20 16:26:46
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 16:34:51
+ * @LastEditTime: 2021-01-23 16:22:22
  * @Description: interface for picker_date
  */
 
@@ -20,4 +20,6 @@ export default interface PickerDateProps {
   DeletePickerDate: () => void
   /** 日期被改变 */  
   change: (val: string) => void
+  /** 时间文本 */
+  dateText: string
 }

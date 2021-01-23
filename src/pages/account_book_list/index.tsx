@@ -88,7 +88,7 @@ export default function AccountBook() {
                   <Image className="account-gong-icon" src={`${IMGCDNURL}gl/Bookkeeping-icon.png`}></Image> 记工</View>
                 <View className="account-book-align" onClick={() => Taro.navigateTo({ url: '/pages/person_borrowing/index' })}><Image className="account-zhang-icon" src={`${IMGCDNURL}gl/record-work-icon.png`}></Image>记账</View>
             </View>
-              <Button className="account-book-btn" onClick={() => enterTheRecordBook(`/pages/remember/index?accountId=${item.id}&accountName=${item.name}&ledgerType=${item.identity}`)}>进入记工账本</Button>
+              <Button className="account-book-btn" onClick={() => enterTheRecordBook(`/pages/remember/index?id=${item.id}&name=${item.name}&type=${item.identity}`)}>进入记工账本</Button>
           </View>
         </View>
         ))}

@@ -2,7 +2,6 @@ import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Image, Text, Input } from '@tarojs/components'
 import PickerOption from '@/components/picker/picker-option'
 import { IMGCDNURL } from '@/config/index'
-import useInit from '@/hooks/init'
 import userGetExpendType, { userEditExpendType, userAddExpendType, userDelExpendType } from './api'
 import PickerTypeProps, { PopupInputGroup }  from './inter.d'
 import ClassifyItem from '@/store/classify/inter'
@@ -26,6 +25,8 @@ function PickerType({
 
   // input-name
   const inputName: string = 'name'
+  // 是否已经加载过分类数据 
+  const [loading, setLoading] = useState<boolean>(false)
   // 是否显示picker
   const [show, setShow] = useState<boolean>(false)
   // 是否显示添加 修改弹窗
@@ -43,14 +44,24 @@ function PickerType({
   }
 
   // 获取stroe里面的数据
-  const { data, loading } = useInit(userGetExpendType, {}, [])
   const localStore = useLocalStore(() => ClassifySubitem);
-  const { addClassifySubitem, initClassifySubitem, delClassifySubitem, editClassifySubitem, status } = localStore
+  const { addClassifySubitem, initClassifySubitem, delClassifySubitem, editClassifySubitem, status, types } = localStore
+
+
+  // 初始化分类数据
+  const initClassifySubitemData = () => {
+    if (loading || status) return
+    userGetExpendType({}).then(res => {
+      if (res.code === 0) {
+        setLoading(true)
+        initClassifySubitem(res.data)
+      }
+    })
+  }
 
   useEffect(() => {
-    if (loading) return
-    initClassifySubitem(data)
-  }, [data])
+    initClassifySubitemData()
+  }, [])
 
 
   // 用户新增 请求
@@ -140,8 +151,8 @@ function PickerType({
           show={show}
           confirm={(data) => userSurePicker(data)}
           add={() => userEditItemType() }
-          data={data}
-          status={status && !loading}
+          data={types}
+          status={status}
           edit={(data, i) => { current = i; userEditItemType(data); }}
           del={(id, i) => { userDelExpendTypeAction(id, i) }}
         />}

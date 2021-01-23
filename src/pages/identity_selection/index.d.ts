@@ -2,7 +2,7 @@
  * @Author: lcxmxkg
  * @Date: 2021-01-22 21:08:06
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-23 09:42:53
+ * @LastEditTime: 2021-01-23 10:29:05
  * @Description: interface for identity/*
  */
 
@@ -25,4 +25,10 @@ export interface CreateConfigList {
   tips: string,
   /** 创建图片 **/
   img: string
+}
+
+// 添加账本 接口返回数据类型
+export interface CreateResultType {
+  /** 新建的账本id */ 
+  work_note_id: number
 }

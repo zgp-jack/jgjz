@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 16:26:46
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 17:42:02
+ * @LastEditTime: 2021-01-23 11:24:49
  * @Description: interface for picker
  */
 import ClassifyItem from '@/store/classify/inter.d'
@@ -17,8 +17,10 @@ export default interface PickerTypeProps {
   title?: string,
   /** 内容 */
   value: string,
-  /** 关闭事件 */
+  /** 右侧 X 关闭事件 */
   close?: () => void,
+  /** 右上角 option组件 关闭事件 */
+  onOptionClose?: () => void,
   /** 获取值 */
   set?: (data: ClassifyItem) => void,
   /** 是否显示option-picker */

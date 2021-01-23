@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter, eventCenter} from '@tarojs/taro'
+import Taro, {useEffect, useState} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -20,23 +20,18 @@ import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/remembe
 import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
+import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
-import {AddressBookConfirmEvent} from "@/config/events";
-
-/*账本类型 1：个人账本 2：班组账本*/
-Taro.setStorageSync('ledgerType', '1')
-const ledgerType = Taro.getStorageSync('ledgerType')
-Taro.setNavigationBarTitle({title: (ledgerType == '1' ? '个人' : '班组') + '记工账本'})
-Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 const Remember = () => {
-  const {params} = useRouter()
-
-  console.log('params:', params)
   /*记工类型数据*/
-  const localStore = useLocalStore(() => RememberStore)
-  const {businessType} = localStore
+  const rememberStore = useLocalStore(() => RememberStore)
+  const _accountBookInfo = useLocalStore(() => AccountBookInfo)
+  const {businessType} = rememberStore
+  const {accountBookInfo} = _accountBookInfo
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '1' ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
     work_time: "0",
@@ -48,7 +43,7 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(ledgerType == '1')
+  const [personOrGroup] = useState(accountBookInfo.identity == '1')
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -240,7 +235,7 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords">{params.accountName}记工账本</View>
+          <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
                 onClick={() => Taro.navigateTo({url: '/pages/account_book_list/index'})}>切换记工本</View>
@@ -275,10 +270,13 @@ const Remember = () => {
                   <Text>
                     共<Text
                     className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
-                    <Text className="filter-info-line">|</Text>
                   </Text>
                 }
-
+                {
+                  (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
+                    && (filterData.business_type as string[]).length > 0)
+                  &&
+                  <Text className="filter-info-line">|</Text>}
                 {
                   (filterData.business_type as string[]).length > 0 && <Text>
                     {
@@ -290,7 +288,7 @@ const Remember = () => {
                   </Text>
                 }
                 {
-                  ((filterData.business_type as string[]).length > 0 && filterData.is_note == '1') &&
+                  (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
                   <Text className="filter-info-line">|</Text>
                 }
                 {

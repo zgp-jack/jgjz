@@ -22,7 +22,7 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
-import {AddressBookConfirmEvent} from "@/config/events";
+import {submitGroup} from "@/config/index";
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -33,10 +33,20 @@ Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 const Remember = () => {
   const {params} = useRouter()
   useEffect(() => {
-    eventCenter.on(AddressBookConfirmEvent, (data: any) => {
-      console.log('eventData', data)
+    eventCenter.on(submitGroup, (data) => {
+      if (data.length) {
+        let selectData: any = []
+        data.forEach(item => {
+          selectData.push(item.id)
+        })
+        if (ledgerType == 1) {
+          setFilterData({...filterData, worker_id: selectData})
+        } else {
+          setFilterData({...filterData, group_leader: selectData})
+        }
+      }
     })
-    return () => eventCenter.off(AddressBookConfirmEvent)
+    return () => eventCenter.off(submitGroup)
   }, [])
   console.log('params:', params)
   /*记工类型数据*/
@@ -63,7 +73,7 @@ const Remember = () => {
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '873',
+    work_note: '874',
     worker_id: '',
     business_type: [],
     expend_type: '',

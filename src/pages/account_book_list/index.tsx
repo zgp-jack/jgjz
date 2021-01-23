@@ -14,9 +14,10 @@ import './index.scss'
 
 export default function AccountBook() {
 
-
+  // 获取记工本store
   const localStore = useLocalStore(() => AccountBookAction);
   const { setAccountBoookInfo } = localStore
+
   /** 获取所有记工列表 */
   const { loading, data, errMsg, setLoading } = useInit(getWorkNotes, {}, [])
   /** 被修改的数据 */ 

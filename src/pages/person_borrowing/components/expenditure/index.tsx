@@ -52,8 +52,8 @@ export default function Expenditure(){
   useEffect(() => {
     // 监听到了 班组长的回调 然后设置班组长的信息
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      console.log(data)
       setGroupLeader({id: data.id, name: data.name})
+      setIsPickerLeader(true)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   },[])
@@ -67,7 +67,7 @@ export default function Expenditure(){
 
   // 用户点击 班组长 圆角按钮 选择
   const userTapGroupLeaderBtn = () => {
-    setIsPickerLeader(true)
+    
     Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE})
   }
 
@@ -104,7 +104,7 @@ export default function Expenditure(){
         />
       }
       {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'business_time')} />}
-      {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
+      {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{postData.expend_type ? postData.expend_type : '分类'}</View>}

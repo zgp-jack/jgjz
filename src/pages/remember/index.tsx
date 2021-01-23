@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter} from '@tarojs/taro'
+import Taro, {useEffect, useState, useRouter, eventCenter} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -21,10 +21,8 @@ import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import useList from '@/hooks/list'
-import PickerWorkTime from "@/components/picker/picker-work-time";
-import PickerUnit from "@/components/picker/picker-unit";
-import PickerOverTime from "@/components/picker/picker-over-time";
 import ListProvider from '@/components/list_provider'
+import {AddressBookConfirmEvent} from "@/config/events";
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -33,9 +31,13 @@ Taro.setNavigationBarTitle({title: (ledgerType == '1' ? '个人' : '班组') + '
 Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 
 const Remember = () => {
-  /*打开picker弹窗（调试使用）*/
-  const [showPicker, setShowPicker] = useState(false)
   const {params} = useRouter()
+  useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent, (data: any) => {
+      console.log('eventData', data)
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  }, [])
   console.log('params:', params)
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
@@ -87,7 +89,7 @@ const Remember = () => {
       worker_id: handleArrayToString(filterData.worker_id)
     }
   }
-  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
+  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -234,7 +236,7 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords" onClick={() => setShowPicker(true)}>{params.accountName}记工账本</View>
+          <View className="header-title overwords">{params.accountName}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
                 onClick={() => Taro.navigateTo({url: '/pages/account_book_list/index'})}>切换记工本</View>
@@ -380,7 +382,7 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-            
+
             <View className="statistics-flow">
               <View
                 className="statistics-title">{handleMonthShow()}月全部流水</View>
@@ -399,7 +401,8 @@ const Remember = () => {
                   </Block>
                 ))}
               </View>
-              <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
+              <View
+                className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth}月全部流水</View>
               <ListProvider
                 increasing={increasing}
                 loading={loading}
@@ -413,8 +416,10 @@ const Remember = () => {
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay key={p.id} list={[p]} type={p.business_type} /> :
-                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type} />)
+                          (p.business_type == 1 || p.business_type == 2) ?
+                            <WorkCountDay key={p.id} list={[p]} type={p.business_type}/> :
+                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                              <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type}/>)
                         ))}
                       </View>
                     </Block>
@@ -454,7 +459,6 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
-      <PickerOverTime show={showPicker} confirm={() => console.log(123)} close={() => setShowPicker(false)}/>
     </View>
   )
 }

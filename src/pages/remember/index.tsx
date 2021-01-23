@@ -35,6 +35,7 @@ const Remember = () => {
   /*打开picker弹窗（调试使用）*/
   const [showPicker, setShowPicker] = useState(false)
   const {params} = useRouter()
+  console.log('params:', params)
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
   const {businessType} = localStore

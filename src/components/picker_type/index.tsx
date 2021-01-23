@@ -2,9 +2,8 @@ import Taro,{ useState, useEffect } from '@tarojs/taro'
 import { View, Image, Text, Input }  from '@tarojs/components'
 import PickerOption from '@/components/picker/picker-option'
 import { IMGCDNURL } from '@/config/index'
-import useInit from '@/hooks/init'
 import userGetExpendType, { userAddExpendType, userDelExpendType, userEditExpendType} from './api'
-import PickerTypeProps, { PopupInputGroup } from './inter.d'
+import PickerTypeProps from './inter.d'
 import Popup from '@/components/popup'
 import { InputItem } from '@/components/popup/index.d'
 import { observer, useLocalStore } from '@tarojs/mobx'
@@ -22,6 +21,7 @@ function PickerType({
   value =  '无分类',
   hideImg = false,
   close,
+  onOptionClose,
   set,
   show,
   setShow,
@@ -29,6 +29,8 @@ function PickerType({
 
   // input-name
   const inputName: string = 'name'
+  // 是否已经加载过分类数据 
+  const [loading, setLoading] = useState<boolean>(false)
   // 是否显示添加 修改弹窗
   const [showPopup, setShowPopup] = useState<boolean>(false)
   // 添加 修改弹窗 input 内容
@@ -44,13 +46,23 @@ function PickerType({
   }
 
   // 获取stroe里面的数据
-  const { data, loading } = useInit(userGetExpendType,{},[])
   const localStore = useLocalStore(() => ClassifyType);
   const { initClassifyType, addClassifyType, delClassifyType, editClassifyType, status, types } = localStore
+
+  // 初始化分类数据
+  const initClassifyTypeData = () => {
+    if (loading || status) return
+    userGetExpendType({}).then(res => {
+      if (res.code === 0){
+        setLoading(true)
+        initClassifyType(res.data)
+      }
+    })
+  }
+
   useEffect(() => {
-    if(loading) return
-    initClassifyType(data)
-  },[data])
+    initClassifyTypeData();
+  },[])
 
   // 用户新增 请求
   const userEditData = (data) => {
@@ -136,12 +148,12 @@ function PickerType({
       {/* picker弹窗 */}
       {show &&
         <PickerOption
-          close={() => setShow(false)}
+          close={() => { setShow(false); onOptionClose && onOptionClose()}}
           show={show}
           confirm={(data) => userSurePicker(data)}
           add={() => userEditItemType()}
           data={types}
-          status={status && !loading}
+          status={status}
           edit={(data, i) => { current = i;userEditItemType(data);}}
           del={(id, i) => { userDelExpendTypeAction(id,i) } }
         />}

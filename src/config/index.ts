@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:00:19
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-22 19:22:13
+ * @LastEditTime: 2021-01-23 11:40:57
  * @Description: 项目配置项文件、全局配置项
  ! @rules: 1.key 为全大写  2.注释在上方
  */
@@ -34,6 +34,10 @@ export const SERVERPHONE: string = '400-838-1888'
 export const VERSION: string = '1.0.0'
 // * 小程序token标识
 export const MINITOKEN: string = 'mini_app'
-// * 小程序通讯录确定事件名
-export const submitGroup: string = 'submitGroup'
+// * 通信录类型 - 个人
+export const  ADDRESSBOOKTYPE_ALONE: string = 'alone'
+// * 通信录类型 - 班组
+export const ADDRESSBOOKTYPE_GROUP: string = 'group'
+// * 通信录类型 - 离场
+export const ADDRESSBOOKTYPE_LEAVE: string = 'leave'
 

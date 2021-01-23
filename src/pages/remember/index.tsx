@@ -454,7 +454,6 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
-      <PickerOverTime show={showPicker} confirm={() => console.log(123)} close={() => setShowPicker(false)}/>
     </View>
   )
 }

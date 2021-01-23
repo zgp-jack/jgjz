@@ -77,6 +77,12 @@
         {
           "name": "通讯录",
           "pathName": "pages/address_book/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "demo",
+          "pathName": "pages/index/index",
           "scene": null
         }
       ]

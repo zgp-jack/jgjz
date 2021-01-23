@@ -42,7 +42,7 @@ export default function IdentitySelection() {
       name: data.name,
       identity: identityTpe
     }
-    /** 发送添加工友数据给后台 */
+    /** 发送数据给后台 */
     userAddWorkNotesAction(params).then((r) => {
       msg(r.message)
       if (r.code === 0) {

@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter} from '@tarojs/taro'
+import Taro, {useEffect, useState, useRouter, eventCenter} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -22,7 +22,7 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
-import {submitGroup} from "@/config/index";
+import {AddressBookConfirmEvent} from "@/config/events";
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -33,7 +33,7 @@ Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
 const Remember = () => {
   const {params} = useRouter()
   useEffect(() => {
-    eventCenter.on(submitGroup, (data) => {
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
       if (data.length) {
         let selectData: any = []
         data.forEach(item => {
@@ -46,7 +46,7 @@ const Remember = () => {
         }
       }
     })
-    return () => eventCenter.off(submitGroup)
+    return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
   console.log('params:', params)
   /*记工类型数据*/
@@ -99,7 +99,7 @@ const Remember = () => {
       worker_id: handleArrayToString(filterData.worker_id)
     }
   }
-  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
+  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -411,7 +411,8 @@ const Remember = () => {
                   </Block>
                 ))}
               </View>
-              <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
+              <View
+                className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth}月全部流水</View>
               <ListProvider
                 increasing={increasing}
                 loading={loading}
@@ -425,8 +426,10 @@ const Remember = () => {
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay key={p.id} list={[p]} type={p.business_type} /> :
-                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type} />)
+                          (p.business_type == 1 || p.business_type == 2) ?
+                            <WorkCountDay key={p.id} list={[p]} type={p.business_type}/> :
+                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                              <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type}/>)
                         ))}
                       </View>
                     </Block>

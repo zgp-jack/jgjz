@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:20:27
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-18 15:02:23
+ * @LastEditTime: 2021-01-23 15:27:25
  * @Description: 全局验证类逻辑
  ! @rules: 1.function name 请使用小驼峰命名 2.返回值必须声明  3.注释请参照已有方法给出
  */
@@ -64,6 +64,18 @@ export function randIntNumber(min: number = 0, max: number = 20): number {
 */
 export function getRandNumber(min: number = 0, max: number = 20): number {
   return min + (Math.random() * (max - min));
+}
+
+
+/**
+ * @name: validNumber for jsxin
+ * @params val: 需要被验证的数字
+ * @return boolean
+ * @description 判断 ${val} 是否是一个数字 可以是浮点数
+*/
+export function validNumber(val: string): boolean {
+  let reg = /^[0-9]+.?[0-9]*$/;   
+  return reg.test(val)
 }
 
 /**

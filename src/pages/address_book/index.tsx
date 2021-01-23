@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, Config, eventCenter } from '@tarojs/taro'
+import Taro, { useState, useEffect, Config, eventCenter,useRouter } from '@tarojs/taro'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
@@ -19,6 +19,8 @@ export default function AddressBook({
   type = 'group',
   confim
 }: AddressBookProps) {
+  const { params } = useRouter()
+  console.log("params", params)
   /** 组件 单选 类型 */ 
   const aloneType: string = 'alone'
   /** 组件 多选 类型 */

@@ -12,7 +12,7 @@ import { addressBookAll, updateWordkerInfo, workersAdd, deleteWorker } from '@/u
 import { GET_WORKERS_ALL_PARAMS, ADDRESS_BOOK_LIST, ADD_CONFIRM_DATA, EDIT_WORKER_RESULT, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA, PERSON_DATA, DeletedParams } from './index.d'
 
 /** 请求当前记工本 所有工友数据 */ 
-export default function getWorkers(params: GET_WORKERS_ALL_PARAMS) {
+export function getWorkers(params: GET_WORKERS_ALL_PARAMS) {
   return get<GET_WORKERS_ALL_PARAMS, ADDRESS_BOOK_LIST[]>(addressBookAll, params)
 }
 /** 添加工友接口 */ 

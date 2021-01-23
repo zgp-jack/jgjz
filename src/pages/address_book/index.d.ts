@@ -10,8 +10,7 @@
 export default interface AddressBookProps {
   /** 通讯录类型  alone:个人 leave:离场 group: 班组多选  @default alone */ 
   type?: 'alone' | 'leave' | 'group',
-  /** 确认事件 */ 
-  confim?: (data: AddressBookConfimType[]) => void
+  id:string
 }
 
 // 组件确定返回值

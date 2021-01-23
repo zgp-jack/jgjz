@@ -175,10 +175,15 @@ export default function AddressBook() {
       /** 从已存在的字母表中找到当前字母的上一个字母 */
       let lastLetter: string = ''
       for (let i = 0; i < letter.length; i++) {
-        letterIndex--
-        if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
-          lastLetter = letter[letterIndex]
+        if (letterIndex == 0){
+          letterIndex = 0
           break;
+        }else{
+          letterIndex--
+          if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
+            lastLetter = letter[letterIndex]
+            break;
+          }
         }
       }
       /** 需要添加的数据 */
@@ -186,12 +191,18 @@ export default function AddressBook() {
         name_py: newPerson.name_py,
         data: [newPerson]
       }
-      //在newList中插入新的数据
-      newList.map((item, index) => {
-        if (item.name_py == lastLetter) {
-          newList.splice(index + 1, 0, newLetterData)
-        }
-      })
+
+      if (letterIndex == 0){
+        newList.splice(0, 0, newLetterData)
+      }else{
+        //在newList中插入新的数据
+        newList.map((item, index) => {
+          if (item.name_py == lastLetter) {
+            newList.splice(index + 1, 0, newLetterData)
+          }
+        })
+      }
+      
       setList([...newList])
     }
     /** 修改已选中的数据 */
@@ -283,12 +294,16 @@ export default function AddressBook() {
         let letterIndex: number = letter.indexOf(res.data.name_py)
         /** 从已存在的字母表中找到当前字母的上一个字母 */
         let lastLetter: string = ''
-        debugger
         for (let i = 0; i < letter.length; i++) {
-          letterIndex > 0 ? letterIndex-- : letterIndex = 0
-          if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
-            lastLetter = letter[letterIndex]
+          if (letterIndex == 0) {
+            letterIndex = 0
             break;
+          }else{
+            letterIndex--
+            if (modernLetter.indexOf(letter[letterIndex]) !== -1) {
+              lastLetter = letter[letterIndex]
+              break;
+            }
           }
         }
         /** 需要添加的数据 */
@@ -300,20 +315,25 @@ export default function AddressBook() {
         newList.map((Pitem, Pindex) => {
           Pitem.data.map((Citem, Cindex) => {
             if (Citem.id == newWorkerInfo.id) {
-              //在newList中插入新的数据
-              newList.map((item, index) => {
-                if (item.name_py == lastLetter) {
-                  newList.splice(index + 1, 0, newLetterData)
-                }
-              })
               newList[Pindex].data.splice(Cindex, 1)
-              if (newList[Pindex].data.length < 1){
-                newList.splice(Pindex,1)
+              if (newList[Pindex].data.length < 1) {
+                newList.splice(Pindex, 1)
               }
-              setList(newList)
             }
           })
         })
+        //在newList中插入新的数据
+        if (letterIndex == 0){
+          newList.splice(0, 0, newLetterData)
+          console.log(newList)
+        }else{
+          newList.map((item, index) => {
+            if (item.name_py == lastLetter) {
+              newList.splice(index + 1, 0, newLetterData)
+            }
+          })
+        }
+        setList(newList)
       }
       /** 修改已选中的数据 */
       let newSelectd = [...selectd]

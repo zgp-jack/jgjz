@@ -75,6 +75,7 @@ const Remember = () => {
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
   /*数组转字符串*/
   const handleArrayToString = (data?: string[] | string) => {
+    if (typeof data === 'string') return data
     return (data as string[]).join(',')
   }
   // 参数处理

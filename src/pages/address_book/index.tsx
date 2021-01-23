@@ -18,17 +18,41 @@ export default function AddressBook() {
 
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
-  const { type = ADDRESSBOOKTYPE_GROUP, id } = router.params
+  const { type = ADDRESSBOOKTYPE_GROUP, id,data } = router.params
 
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
+  /** 已选择的工友 */
+  const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
     if (!id) return
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */
     getWorkers({ work_note: id }).then((res) => {
-      setList(res.data)
+      let newData: PERSON_DATA[] = JSON.parse(data)
+      //如果上一个 页面有 传数据 过来
+      if (newData) {
+        //上一个页面传过来的数据 默认选中
+        let newListData = res.data
+        newListData.map((Pitem,Pindex)=>{
+          Pitem.data.map((Citem, Cindex)=>{
+            newData.map((dataItem)=>{
+              if (Citem.id == dataItem.id) {
+                newListData[Pindex].data[Cindex].is_check = true
+              }
+            })
+          })
+        })
+        //上一个页面传过来的数据 默认选中
+        let newSelectd:PERSON_DATA[] = []
+        newData.map((dataItem)=>{
+          newSelectd.push(dataItem)
+        })
+        setSelectd(newSelectd)
+        setList(newListData)
+      }
     })
+
   }, [])
 
   /** 未选择check图片 */
@@ -37,8 +61,7 @@ export default function AddressBook() {
   const disableCheckImg: string = `${IMGCDNURL}ws/on_check.png`
   /** 已选择check图片 */
   const onCheckdImg: string = `${IMGCDNURL}ws/ckeckd.png`
-  /** 已选择的工友 */
-  const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
+ 
   /**是否显示添加工友弹窗*/
   const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
   /**是否显示编辑工友弹窗*/

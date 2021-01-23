@@ -2,7 +2,7 @@
  * @Author: lcmxkg
  * @Date: 2021年01月22日10:26:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-22 21:19:33
+ * @LastEditTime: 2021-01-23 09:27:39
  * @Description: 记工-账本列表
  */
 // 数据列表
@@ -31,8 +31,8 @@ interface RECORD_WORK_DATA {
 export interface ADD_RECORD_WORK_PARAMS {
   /** 记工名称 */
   name:string
-  /** 记工 */
-  action?:string
+  /** 记工行为 1: 编辑 '' : 其他 */
+  action?: '1' | ''
 }
 
 // 修改记工本信息

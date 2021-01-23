@@ -1,5 +1,7 @@
+@import '@/styles/common.scss';
+
 page {
-  background-color: #f7f6f9 !important;
+  background-color: #f7f6f9;
 }
 .account-right-icon {
   width: 20px;
@@ -52,11 +54,13 @@ page {
       bottom: 38px;
       right: 20px;
       .account-book-add {
+        display: block;
         font-size: 26px;
         background: #fff;
         color: #333;
-        padding: 6px 25px;
-        border-radius: 8px;
+        padding: 0 25px;
+        border-radius: 5px;
+        line-height: 50px;
         margin-left: 20px;
       }
     }
@@ -65,8 +69,9 @@ page {
     margin: 20px 0;
     background: #fff;
     position: relative;
+    @include shadow();
     .account-book-type-personal {
-      color: #0099ff;
+      color: $color;
       background: #dbf1ff;
       padding: 5px 20px;
       font-size: 28px;
@@ -99,10 +104,10 @@ page {
   }
   .account-book-btn {
     color: #fff;
-    background: #0099ff;
+    background: $color;
     border-radius: 10px;
     font-size: 30px;
-    height: 85px;
-    line-height: 85px;
+    line-height: 90px;
+    border-radius: 5px;
   }
 }

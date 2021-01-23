@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { Config, useState } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
 import getWorkNotes, { editWorkNote } from './api'
@@ -8,14 +8,14 @@ import useInit from '@/hooks/init'
 import InitProvider from '@/components/init_provider'
 import PromptBox from '@/components/popup/index'
 import msg from '@/utils/msg'
-import { useLocalStore } from '@tarojs/mobx'
-import AccountBookAction from '@/store/account';
+import { useLocalStore, observer } from '@tarojs/mobx'
+import AccountBookInfo from '@/store/account';
 import './index.scss'
 
-export default function AccountBook() {
+function AccountBook() {
 
   // 获取记工本store
-  const localStore = useLocalStore(() => AccountBookAction);
+  const localStore = useLocalStore(() => AccountBookInfo);
   const { setAccountBoookInfo } = localStore
 
   /** 获取所有记工列表 */
@@ -33,7 +33,6 @@ export default function AccountBook() {
   }
   /** 弹出修改记工弹窗*/
   const useEditBookInfo = (data) => {
-    console.log(data)
     setEditData({id: data.id, name: data.name})
     setAddPopupShow(true)
   }
@@ -116,3 +115,9 @@ export default function AccountBook() {
     </View>
   )
 }
+
+AccountBook.config = {
+  navigationBarTitleText: '我的账本列表'
+} as Config
+
+export default observer(AccountBook)

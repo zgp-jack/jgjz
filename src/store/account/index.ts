@@ -2,17 +2,17 @@
  * @Author: lcmxkg
  * @Date: 2021-01-18 15:29:16
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-23 15:36:13
+ * @LastEditTime: 2021-01-23 15:53:46
  * @Description: 记工本信息
  */
 
 import { action, observable } from 'mobx'
-import AccountBookInfo from './inter.d'
+import AccountBookInfoType from './inter.d'
 
-export class AccountBookAction {
-  /** 是否已经初始化 */
+export class AccountBookInfo {
+  /** 记工本信息 */
   @observable
-  accountBookInfo: AccountBookInfo = {
+  accountBookInfo: AccountBookInfoType = {
     id: 0,
     name: '',
     identity: '',
@@ -26,9 +26,9 @@ export class AccountBookAction {
    * @description 设置当前用户信息
   */
   @action
-  setAccountBoookInfo = (accountBook: AccountBookInfo) => {
+  setAccountBoookInfo = (accountBook: AccountBookInfoType) => {
     this.accountBookInfo = accountBook
   }
 }
 
-export default new AccountBookAction()
+export default new AccountBookInfo()

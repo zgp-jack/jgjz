@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 15:29:50
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-23 14:55:02
+ * @LastEditTime: 2021-01-23 15:57:48
  * @Description: interface for expendiure
  */
 
@@ -23,7 +23,7 @@ export default interface ExpenditurePostData {
   /** 个人/班组 */
   identity: 1 | 2
   /** 记工本ID */
-  work_note?: string
+  work_note?: number
   /** 工人ID */
   worker_id?: string
   /** 上传图片 */

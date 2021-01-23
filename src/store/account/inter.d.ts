@@ -7,7 +7,7 @@
  */
 
 // 用户信息的接口
-export default interface AccountBookInfo {
+export default interface AccountBookInfoType {
   /** 记工id */
   id: number,
   /** 记工名字 */

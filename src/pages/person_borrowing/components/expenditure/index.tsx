@@ -10,12 +10,14 @@ import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { validNumber } from '@/utils/v'
+import { observer, useLocalStore } from '@tarojs/mobx'
+import AccountBookInfo from '@/store/account'
 import msg from '@/utils/msg'
 import './index.scss'
 import { getTodayDate } from '@/utils/index'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
 
-export default function Expenditure(){
+function Expenditure(){
   // 支出提交数据
   const [postData, setPostData] = useState<ExpenditurePostData>({
     business_type: 4,
@@ -25,7 +27,7 @@ export default function Expenditure(){
     note: '',
     money: '',
     identity: 2,
-    work_note: '890',
+    work_note: 0,
   })
   // 分类数据
   const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: ''})
@@ -42,6 +44,11 @@ export default function Expenditure(){
     id: '',
     name: ''
   })
+
+  // 获取记工本数据
+  const localStore = useLocalStore(() => AccountBookInfo);
+  const { accountBookInfo } = localStore
+
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: ExpenditurePostData = { ...postData }
@@ -69,8 +76,7 @@ export default function Expenditure(){
       note: postData.note,
       money: postData.money,
       identity: 2,
-      work_note: '890',
-      worker_id: '1693',
+      work_note: accountBookInfo.id
     }
     if(postData.money){
       if (!validNumber(params.money)) {
@@ -138,3 +144,5 @@ export default function Expenditure(){
     </View>
   )
 }
+
+export default observer(Expenditure)

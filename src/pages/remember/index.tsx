@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter, eventCenter} from '@tarojs/taro'
+import Taro, {useEffect, useState, useRouter} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -99,7 +99,7 @@ const Remember = () => {
       worker_id: handleArrayToString(filterData.worker_id)
     }
   }
-  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
+  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -411,8 +411,7 @@ const Remember = () => {
                   </Block>
                 ))}
               </View>
-              <View
-                className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth}月全部流水</View>
+              <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
               <ListProvider
                 increasing={increasing}
                 loading={loading}
@@ -426,10 +425,8 @@ const Remember = () => {
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          (p.business_type == 1 || p.business_type == 2) ?
-                            <WorkCountDay key={p.id} list={[p]} type={p.business_type}/> :
-                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                              <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type}/>)
+                          (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay key={p.id} list={[p]} type={p.business_type} /> :
+                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type} />)
                         ))}
                       </View>
                     </Block>

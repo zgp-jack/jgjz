@@ -1,4 +1,4 @@
-import { useState } from '@tarojs/taro'
+import { useEffect, useState, eventCenter } from '@tarojs/taro'
 import { View, Button } from  '@tarojs/components'
 import ContentInput from '@/components/picker_input/index'
 import PickerType from '@/components/picker_type'
@@ -7,8 +7,10 @@ import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
+import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
+import { AddressBookConfirmEvent } from '@/config/events'
 import './index.scss'
-import { getTodayDate } from '@/utils/index'
+import { getTodayDate, objDeepCopy } from '@/utils/index'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
 
 export default function Expenditure(){
@@ -34,6 +36,11 @@ export default function Expenditure(){
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 是否显示选择分类
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
+  // 选择的班组长数据
+  const [groupLeader, setGroupLeader] = useState<classifyItem>({
+    id: '',
+    name: ''
+  })
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: ExpenditurePostData = { ...postData }
@@ -41,11 +48,27 @@ export default function Expenditure(){
     setPostData(postdata)
   }
 
+  // 注册时间 监听班组长的选择
+  useEffect(() => {
+    // 监听到了 班组长的回调 然后设置班组长的信息
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
+      setGroupLeader({id: data.id, name: data.name})
+      setIsPickerLeader(true)
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  },[])
+
   // 提交借支数据
   const userPostAcion = () => {
     userAddBorrowAction(postData).then((res) => {
       debugger
     })
+  }
+
+  // 用户点击 班组长 圆角按钮 选择
+  const userTapGroupLeaderBtn = () => {
+    
+    Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE})
   }
 
   // 用户关闭 日期组件
@@ -56,6 +79,16 @@ export default function Expenditure(){
   const DeletePickerLeader = () => {
     setIsPickerLeader(false)
   }
+  // 用户点击分类组件  右上角关闭 
+  const userTapRightTopCloseBtn = () => {
+    // 如果没有设置过分类数据
+    if (!typeData.id){
+      // 关闭options弹窗
+      setShowTypePicker(false)
+      // 关闭 分类 选项
+      setIsPickType(false)
+    }
+  }
 
   return (
     <View>
@@ -63,19 +96,20 @@ export default function Expenditure(){
       {isPickerType && 
         <PickerType 
           value={typeData.name} 
-          close={() => setIsPickType(false)} 
+          close={() => setIsPickType(false) } 
+          onOptionClose={() => userTapRightTopCloseBtn()}
           set={(data) => { setTypeData(data); userUpdatePostData(data.name, 'expend_type')}} 
           show={showTypePicker} 
           setShow={(bool: boolean) => setShowTypePicker(bool) }
         />
       }
       {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'business_time')} />}
-      {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
+      {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
-        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
-        {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
         {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{postData.expend_type ? postData.expend_type : '分类'}</View>}
+        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
+        {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn() }>班组长</View>}
       </View>
       <View className="person-record-btn">
         <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

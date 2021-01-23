@@ -7,9 +7,9 @@
  */
 
 import { post } from '@/utils/request'
-import { IDENTITY_CONFIG } from './index.d'
+import { IDENTITY_CONFIG, CreateResultType } from './index.d'
 import { addWorkNotes } from '@/utils/api'
 
 export default function userAddWorkNotesAction(params: IDENTITY_CONFIG) {
-  return post<IDENTITY_CONFIG>(addWorkNotes, params)
+  return post<IDENTITY_CONFIG, CreateResultType>(addWorkNotes, params)
 }

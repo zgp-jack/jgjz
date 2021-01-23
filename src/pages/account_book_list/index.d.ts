@@ -31,8 +31,8 @@ interface RECORD_WORK_DATA {
 export interface ADD_RECORD_WORK_PARAMS {
   /** 记工名称 */
   name:string
-  /** 记工行为 1: 编辑 '' : 其他 */
-  action?: '1' | ''
+  /** 记工行为 设计缺陷，固定传data */
+  action: string
 }
 
 // 修改记工本信息

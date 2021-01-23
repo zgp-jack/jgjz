@@ -7,10 +7,16 @@ import { Edit_AddressBook_Info, ADD_RECORD_WORK_PARAMS } from './index.d'
 import useInit from '@/hooks/init'
 import InitProvider from '@/components/init_provider'
 import PromptBox from '@/components/popup/index'
-import './index.scss'
 import msg from '@/utils/msg'
+import { useLocalStore } from '@tarojs/mobx'
+import AccountBookAction from '@/store/account';
+import './index.scss'
 
 export default function AccountBook() {
+
+
+  const localStore = useLocalStore(() => AccountBookAction);
+  const { setAccountBoookInfo } = localStore
   /** 获取所有记工列表 */
   const { loading, data, errMsg, setLoading } = useInit(getWorkNotes, {}, [])
   /** 被修改的数据 */ 
@@ -35,19 +41,15 @@ export default function AccountBook() {
     if (data.name) {
       setAddPopupShow(false)
     } else {
-      Taro.showToast({
-        title: '请输入项目名称',
-        icon: 'none',
-        duration: 1000
-      })
+      msg('请输入项目名称')
       return
     }
     /**给后台的参数*/
     let params: ADD_RECORD_WORK_PARAMS = {
       name: data.name,
-      action: '1'
+      action: 'data'
     }
-    /** 发送添加工友数据给后台 */
+    /** 发送数据给后台 */
     editWorkNote(editData.id, params).then((r) => {
       msg(r.message)
       if(r.code === 0){
@@ -57,7 +59,9 @@ export default function AccountBook() {
   }
 
   /** 进入记工账本 */
-  const enterTheRecordBook = (url: string) => {
+  const enterTheRecordBook = (url: string, data) => {
+    // 储存mobx
+    setAccountBoookInfo(data)
     Taro.navigateTo({ url })
   }
   return (
@@ -65,7 +69,9 @@ export default function AccountBook() {
       <View className="account-book-top">
         <Text className="account-book-project">当前共{data.length}个项目</Text>
         <View className="account-book-top-btn">
-          <Text className="account-book-add" onClick={() => Taro.navigateTo({ url: '/pages/identity_selection/index' })}>新建+</Text>
+          <View className="account-book-add" onClick={() => Taro.navigateTo({ url: '/pages/identity_selection/index' })}>
+            新建<Image className="account-add-icon" src={`${IMGCDNURL}gl/add-accout-book.png`}></Image> 
+          </View>
         </View>
       </View>
         <InitProvider loading={loading} errMsg={errMsg}>
@@ -88,12 +94,12 @@ export default function AccountBook() {
                   <Image className="account-gong-icon" src={`${IMGCDNURL}gl/Bookkeeping-icon.png`}></Image> 记工</View>
                 <View className="account-book-align" onClick={() => Taro.navigateTo({ url: '/pages/person_borrowing/index' })}><Image className="account-zhang-icon" src={`${IMGCDNURL}gl/record-work-icon.png`}></Image>记账</View>
             </View>
-              <Button className="account-book-btn" onClick={() => enterTheRecordBook(`/pages/remember/index?accountId=${item.id}&accountName=${item.name}&ledgerType=${item.identity}`)}>进入记工账本</Button>
+              <Button className="account-book-btn" onClick={() => enterTheRecordBook(`/pages/remember/index?accountId=${item.id}&accountName=${item.name}&ledgerType=${item.identity}`, item)}>进入记工账本</Button>
           </View>
         </View>
         ))}
         {
-          // 添加工友组件
+          // 修改记工标题组件
           addPopupShow && <PromptBox
             titleText="修改个人记工账本"
             showTitleButton={false}

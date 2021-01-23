@@ -7,6 +7,7 @@ import ClassifySubitem from '@/store/classify/subitem'
 import RememberStore from '@/store/business/index'
 import PickerStore from '@/store/picker/index'
 import User from '@/store/user'
+import AccountBookAction from '@/store/account'
 import './app.scss'
 import Remember from "@/pages/remember";
 import './styles/common.scss'
@@ -22,7 +23,8 @@ const store = {
   ClassifySubitem,
   RememberStore,
   User,
-  PickerStore
+  PickerStore,
+  AccountBookAction
 }
 
 class App extends Component {

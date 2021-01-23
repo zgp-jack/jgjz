@@ -29,14 +29,15 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   const [filterData, setFilterData] = useState<GetCountParams>(props.data)
 
   useEffect(() => {
-    if (props.data) {
+    if (props.show) {
       initData()
     }
-  }, [])
+  }, [props.show])
 
   useEffect(() => {
     if (filterData.start_business_time.split('-').length !== 3) return
     eventCenter.on(AddressBookConfirmEvent, (data) => {
+      console.log('data', data)
       let _data: any = {}
       if (props.personOrGroup) {
         _data = {...filterData, worker_id: data}
@@ -46,7 +47,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
       initData(_data)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
-  }, [])
+  }, [filterData])
 
   const initData = (data = props.data) => {
     let start_business_time = data.start_business_time
@@ -102,6 +103,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
     if (type === ADDRESSBOOKTYPE_GROUP) {
       _data = (filterData.group_leader as AddressBookParams[])
     }
+    console.log('带回去的参数', _data)
     Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP}&data=${JSON.stringify(_data)}`})
   }
   const handleGroupLeaderLength = () => {

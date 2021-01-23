@@ -458,15 +458,12 @@ const Remember = () => {
         showFilter &&
         <View className="mask" onClick={() => setShowFilter(false)}/>
       }
-      {
-        showFilter &&
-        <Filter data={filterData} personOrGroup={personOrGroup} confirmFilter={data => handleConfirmFilter(data)}
-                show={showFilter}
-                close={() => setShowFilter(false)}
-                handleSplitDate={(date) => handleSplitDate(date)}
-                resetFilter={handleResetFilter}
-        />
-      }
+      <Filter data={filterData} personOrGroup={personOrGroup} confirmFilter={data => handleConfirmFilter(data)}
+              show={showFilter}
+              close={() => setShowFilter(false)}
+              handleSplitDate={(date) => handleSplitDate(date)}
+              resetFilter={handleResetFilter}
+      />
     </View>
   )
 }

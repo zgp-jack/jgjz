@@ -1,9 +1,56 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
+import Taro, { useState } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
+import PromptBox from '@/components/popup/index'
+import { InputValue } from '@/components/popup/index.d'
+import userAddWorkNotesAction from './api'
+import { IDENTITY_CONFIG } from './index.d'
+import createConfig from './config'
+import msg from '@/utils/msg'
 import './index.scss'
 
 export default function IdentitySelection() {
+
+  /** 是否显示新增记工弹窗 */
+  const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
+  /** 新增记工弹窗取消 */
+  const addCancel = () => {
+    setAddPopupShow(false)
+  }
+  /** 个人或班组记工弹窗 */
+  const [addPopupInfo, setAddPopupInfo] = useState<string>('');
+  /** 个人或班组记工弹窗 1: 个人 2 : 班组 */
+  const [identityTpe, setIdentityTpe] = useState<1 | 2>(1);
+
+  /** 创建记工账本 */
+  const createAccountBook = (data) => {
+    setAddPopupInfo(`新建${data.type}记工账本`)
+    setIdentityTpe(data.id)
+    setAddPopupShow(true)
+  }
+
+  /** 新增记工弹窗确定 */
+  const addConfirm = (data: InputValue) => {
+    if (data.name) {
+      setAddPopupShow(false)
+    } else {
+      msg('请输入记工本名称')
+      return
+    }
+    /**给后台的参数*/
+    let params: IDENTITY_CONFIG = {
+      name: data.name,
+      identity: identityTpe
+    }
+    /** 发送添加工友数据给后台 */
+    userAddWorkNotesAction(params).then((r) => {
+      msg(r.message)
+      if (r.code === 0) {
+
+      }
+    })
+  }
+
   return (
     <View className='identity-selection-box'>
       <Image className="identity-back-icon" src={`${IMGCDNURL}common/left-arrow.png`}></Image>
@@ -12,19 +59,29 @@ export default function IdentitySelection() {
         <View className="identity-selection-deail">首次进入请选择您常用的记工方式</View>
 
         <View className="identity-flex">
-          <View className="identity-selection-type">
-            <Image className="identity-icon" src={`${IMGCDNURL}gl/id-personal.png`}></Image>
-            <View className="identity-tag-title">个人记工</View>
-            <View className="identity-tag-deail">适合给自己记</View>
-          </View>
-
-          <View className="identity-selection-type">
-            <Image className="identity-icon" src={`${IMGCDNURL}gl/id-team.png`}></Image>
-            <View className="identity-tag-title">班组记工</View>
-            <View className="identity-tag-deail">适合给多人记</View>
-          </View>
+          {createConfig.map(item => (
+            <View className="identity-selection-type" onClick={() => createAccountBook(item)}>
+              <Image className="identity-icon" src={item.img}></Image>
+              <View className="identity-tag-title">{item.type}记工</View>
+              <View className="identity-tag-deail">{item.tips}</View>
+            </View>
+          ))}
+          
         </View>
       </View>
+      {
+        // 新增记工组件
+        addPopupShow && <PromptBox
+          titleText={addPopupInfo}
+          showTitleButton={false}
+          confirmText="创建"
+          inputGroup={[
+            { name: 'name', title: "项目名称", placeholder: '请输入项目名称', value: '' },
+          ]}
+          confirm={(data) => addConfirm(data)}
+          cancel={addCancel}
+        ></PromptBox>
+      }
     </View>
   )
 }

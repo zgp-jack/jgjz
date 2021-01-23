@@ -75,7 +75,7 @@ const Remember = () => {
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
   /*数组转字符串*/
   const handleArrayToString = (data?: string[] | string) => {
-    // return (data as string[]).join(',')
+    return (data as string[]).join(',')
   }
   // 参数处理
   const actionParams = () => {
@@ -453,7 +453,6 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
-      <PickerOverTime show={showPicker} confirm={() => console.log(123)} close={() => setShowPicker(false)}/>
     </View>
   )
 }

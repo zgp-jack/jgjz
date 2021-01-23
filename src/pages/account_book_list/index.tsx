@@ -63,7 +63,7 @@ export default function AccountBook() {
   return (
     <View className='account-book-box'>
       <View className="account-book-top">
-        <Text className="account-book-project">当前共1个项目</Text>
+        <Text className="account-book-project">当前共{data.length}个项目</Text>
         <View className="account-book-top-btn">
           <Text className="account-book-add" onClick={() => Taro.navigateTo({ url: '/pages/identity_selection/index' })}>新建+</Text>
         </View>

@@ -8,4 +8,4 @@
  */
 
 // 通讯录确定事件
-export const AddressBookConfimEvent:  string =  'addressBookConfimEvent'
+export const AddressBookConfirmEvent: string = 'addressBookConfirmEvent'

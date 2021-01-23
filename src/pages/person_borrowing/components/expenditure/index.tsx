@@ -29,6 +29,8 @@ function Expenditure(){
     identity: 2,
     work_note: 0,
   })
+  // 时间年月日
+  const [dateText, setDateText] = useState<string>('')
   // 分类数据
   const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: ''})
   // 是否显示分类组件
@@ -45,6 +47,14 @@ function Expenditure(){
     name: ''
   })
 
+  // 日期文本显示年月日
+  useEffect(() => {
+    let date = postData.business_time
+    let dateArr: string[] = date.split('-')
+    let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
+    setDateText(dataStr)
+  }, [postData.business_time])
+
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const { accountBookInfo } = localStore
@@ -57,7 +67,7 @@ function Expenditure(){
     setPostData(postdata)
   }
 
-  // 注册时间 监听班组长的选择
+  // 注册事件 监听班组长的选择
   useEffect(() => {
     // 监听到了 班组长的回调 然后设置班组长的信息
     eventCenter.on(AddressBookConfirmEvent, (data) => {
@@ -72,7 +82,7 @@ function Expenditure(){
     let params: ExpenditurePostData = {
       business_type: 5,
       expend_type: 5,
-      business_time: isPickerDate ? postData.business_time : '',
+      business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
       money: postData.money,
@@ -135,12 +145,18 @@ function Expenditure(){
           setShow={(bool: boolean) => setShowTypePicker(bool) }
         />
       }
-      {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'business_time')} />}
+      {isPickerDate && 
+        <PickerDate 
+          date={postData.business_time} 
+          DeletePickerDate={DeletePickerDate} 
+          change={(val) => userUpdatePostData(val, 'business_time')}
+          dateText={dateText}
+        />}
       {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{typeData.id ? typeData.name : '分类'}</View>}
-        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
+        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn() }>班组长</View>}
       </View>
       <View className="person-record-btn">

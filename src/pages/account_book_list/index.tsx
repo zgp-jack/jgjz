@@ -58,11 +58,12 @@ function AccountBook() {
     })
   }
 
-  /** 进入记工账本 */
-  const enterTheRecordBook = (data: RECORD_WORK_DATA) => {
+  /** 进入记工账本 页面跳转之前 设置mobx信息 */
+  const enterTheRecordBook = (data: RECORD_WORK_DATA, url: string) => {
+    console.log(data)
     // 储存mobx
     setAccountBoookInfo(data)
-    Taro.navigateTo({ url: `/pages/remember/index` })
+    Taro.navigateTo({ url })
   }
   return (
     <View className='account-book-box'>
@@ -90,11 +91,14 @@ function AccountBook() {
                 </View>
             </View>
             <View className="account-book-flex">
-                <View className="account-book-align" onClick={() => Taro.navigateTo({ url: '/pages/person_record/index' })}>
-                  <Image className="account-gong-icon" src={`${IMGCDNURL}gl/Bookkeeping-icon.png`}></Image> 记工</View>
-                <View className="account-book-align" onClick={() => Taro.navigateTo({ url: '/pages/person_borrowing/index' })}><Image className="account-zhang-icon" src={`${IMGCDNURL}gl/record-work-icon.png`}></Image>记账</View>
+                <View className="account-book-align" onClick={() => enterTheRecordBook(item, '/pages/person_record/index')}>
+                  <Image className="account-gong-icon" src={`${IMGCDNURL}gl/Bookkeeping-icon.png`}></Image> 记工
+                </View>
+                <View className="account-book-align" onClick={() => enterTheRecordBook(item, '/pages/person_borrowing/index')}>
+                  <Image className="account-zhang-icon" src={`${IMGCDNURL}gl/record-work-icon.png`}></Image>记账
+                </View>
             </View>
-              <Button className="account-book-btn" onClick={() => enterTheRecordBook(item)}>进入记工账本</Button>
+              <Button className="account-book-btn" onClick={() => enterTheRecordBook(item, `/pages/remember/index`)}>进入记工账本</Button>
           </View>
         </View>
         ))}

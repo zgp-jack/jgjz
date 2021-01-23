@@ -12,7 +12,7 @@ import { AddressBookConfirmEvent } from '@/config/events'
 import { validNumber } from '@/utils/v'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import msg from '@/utils/msg'
+import msg, { showBackModal } from '@/utils/msg'
 import './index.scss'
 import { getTodayDate } from '@/utils/index'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
@@ -48,6 +48,7 @@ function Expenditure(){
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const { accountBookInfo } = localStore
+  console.log(accountBookInfo)
 
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
@@ -85,7 +86,11 @@ function Expenditure(){
       }
     }
     userAddBorrowAction(params).then((res) => {
-      console.log(res)
+      if(res.code === 0){
+        showBackModal(res.message)
+      }else{
+        msg(res.message)
+      }
     })
   }
 

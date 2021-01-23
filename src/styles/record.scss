@@ -62,7 +62,10 @@
     align-items: initial;
     .person-record-date-textarea{
         width: 505px;
-        max-height: 150px;
+        font-size: 30px;
+        color: #333333;
+        padding-top: 2px;
+        line-height: 45px;
     }
 }
 .person-record-date .record-reimbursable{

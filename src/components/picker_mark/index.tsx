@@ -16,7 +16,13 @@ export default function PickerMark({
         <View className="person-record-overtime person-record-date person-record-note">
             {hideImg && <Image className="person-record-date-img" src={img} />}
             <View className="person-record-modify-title person-record-date-title">{title}</View>
-            <Textarea autoHeight className="person-record-date-textarea" value={text} placeholder="..." onInput={(e: any) => set&&set(e.detail.value)}></Textarea>
+            <Textarea 
+              autoHeight={true}
+              className="person-record-date-textarea" 
+              value={text} 
+              placeholder="..." 
+              onInput={(e: any) => set&&set(e.detail.value)}
+            ></Textarea>
         </View>
     </View>)
 }

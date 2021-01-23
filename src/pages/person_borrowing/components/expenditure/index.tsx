@@ -9,23 +9,27 @@ import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
 import { getTodayDate } from '@/utils/index'
+import userAddBorrowAction from '@/pages/person_borrowing/api'
 
 export default function Expenditure(){
   // 支出提交数据
   const [postData, setPostData] = useState<ExpenditurePostData>({
-    expend_type: 4,
-    business_type: '',
-    date: getTodayDate(),
-    group_id: '',
+    business_type: 4,
+    expend_type: '',
+    business_time: getTodayDate(),
+    group_leader: '',
     note: '',
-    money: '0.00'
+    money: '0.00',
+    identity: 2,
+    work_note: '890',
+    worker_id: '1693',
   })
   // 分类数据
-  const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
+  const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: ''})
   // 是否显示分类组件
   const [isPickerType, setIsPickType] = useState<boolean>(false)
   // 是否显示日期组件
-  const [isPickerDate, setIsPickerDate] = useState<boolean>(false)
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 是否显示选择分类
@@ -39,7 +43,9 @@ export default function Expenditure(){
 
   // 提交借支数据
   const userPostAcion = () => {
-    console.log(postData)
+    userAddBorrowAction(postData).then((res) => {
+      debugger
+    })
   }
 
   // 用户关闭 日期组件
@@ -58,18 +64,18 @@ export default function Expenditure(){
         <PickerType 
           value={typeData.name} 
           close={() => setIsPickType(false)} 
-          set={(data) => setTypeData(data)} 
+          set={(data) => { setTypeData(data); userUpdatePostData(data.name, 'expend_type')}} 
           show={showTypePicker} 
           setShow={(bool: boolean) => setShowTypePicker(bool) }
         />
       }
-      {isPickerDate && <PickerDate date={postData.date} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'date')} />}
+      {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'business_time')} />}
       {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
-        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true);setShowTypePicker(true)}}>分类</View>}
-        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.date}</View>}
+        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{postData.expend_type ? postData.expend_type : '分类'}</View>}
       </View>
       <View className="person-record-btn">
         <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

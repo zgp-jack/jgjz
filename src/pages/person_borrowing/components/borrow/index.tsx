@@ -5,27 +5,35 @@ import PickerType from '@/components/picker_type'
 import PickerDate from '@/components/picker_date'
 import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
-import { IMGCDNURL } from '@/config/index'
 import BorrowPostData from './inter.d'
+import { getTodayDate } from '@/utils/index'
+import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
+import userAddBorrowAction from '@/pages/person_borrowing/api'
 
-export default function Borrew() {
+export default function Borrow() {
 
   // 是否显示分类组件
-  const [IsPickerType, setIsPickType] = useState<boolean>(true)
+  const [isPickerType, setIsPickType] = useState<boolean>(false)
+  // 是否显示选择分类
+  const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 是否显示日期组件
-  const [IsPickerDate, setIsPickerDate] = useState<boolean>(true)
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
-  const [IsPickerLeader, setIsPickerLeader] = useState<boolean>(true)
-
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
+  // 分类数据
+  const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: '' })
   // 借支提交数据
   const [postData, setPostData] = useState<BorrowPostData>({
-    expend_type: 4,
-    business_type: '',
-    date: '',
-    group_id: '',
+    business_type: 4,
+    expend_type: '',
+    business_time: getTodayDate(),
+    group_leader: '',
     note:  '',
-    money: '0.00'
+    money: '0.00',
+    identity: 2,
+    work_note: '890',
+    worker_id: '1693'
   })
 
   // 用户更新数据
@@ -37,13 +45,14 @@ export default function Borrew() {
 
   // 提交借支数据
   const userPostAcion = () => {
-    console.log(postData)
+    if(parseInt(postData.money)<=0){
+      
+    }
+    userAddBorrowAction(postData).then((res) => {
+      debugger
+    }) 
   }
 
-  // 用户关闭 分类组件
-  const ColsePickerType = () => {
-    setIsPickType(false)
-  }
   // 用户关闭 日期组件
   const DeletePickerDate = () => {
     setIsPickerDate(false)
@@ -55,14 +64,22 @@ export default function Borrew() {
   return (
     <View>
       <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
-      {IsPickerType && <PickerType value="水电费" ColsePickerType={ColsePickerType} />}
-      {IsPickerDate && <PickerDate date={'2021-01-20'} DeletePickerDate={DeletePickerDate} />}
-      {IsPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
-      <PickerMark text={'Hello world!'} />
+      {isPickerType &&
+        <PickerType
+          value={typeData.name}
+          close={() => setIsPickType(false)}
+          set={(data) => { setTypeData(data); userUpdatePostData(data.name,'expend_type')}}
+          show={showTypePicker}
+          setShow={(bool: boolean) => setShowTypePicker(bool)}
+        />
+      }
+      {isPickerDate && <PickerDate date={postData.business_time} DeletePickerDate={DeletePickerDate} change={(val) => userUpdatePostData(val, 'business_time')} />}
+      {isPickerLeader && <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />}
+      <PickerMark text={postData.note} set={(data) => userUpdatePostData(data,'note')} />
       <View className="person-record-component">
-          {!IsPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>2021-01-20</View>}
-          {!IsPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
-          {!IsPickerType && <View className="person-record-component-item" onClick={() => setIsPickType(true)}>分类</View>}
+        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{postData.business_time}</View>}
+        {!isPickerLeader && <View className="person-record-component-item" onClick={() => setIsPickerLeader(true)}>班组长</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{postData.expend_type ? postData.expend_type : '分类'}</View>}
       </View>
       <View className="person-record-btn">
         <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

@@ -2,6 +2,7 @@ export interface PickerProps {
   close: () => void
   show: boolean
   confirm: (activeTime: PickerData) => void
+  value: PickerData[]
 }
 
 export interface PickerData {

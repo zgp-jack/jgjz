@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 20:29:21
+ * @LastEditTime: 2021-01-22 20:49:23
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
@@ -10,7 +10,7 @@
 import Taro from '@tarojs/taro'
 import { MINITOKEN, VERSION, REQUESTURL } from '@/config/index'
 import { UserInfo } from '@/config/store'
-import { User } from '@/store/user/inter.d'
+import User from '@/store/user/inter.d'
 import { Request, RequestBase, RequestHeader, Result } from './inter.d'
 
 
@@ -40,8 +40,8 @@ function getRequestHeaderInfo(): RequestHeader {
     'content-type': 'application/x-www-form-urlencoded',
     source: MINITOKEN,
     version: VERSION,
-    uid: 20021907,
-    token: '0e976cb74e736736f39254ea7ee1def0787054ddaf8ab4ddaedc850daefe16d1',
+    uid: 20021014,
+    token: 'f46cad96333edb484b8f14b5cfff5952787054ddaf8ab4ddaedc850daefe16d1',
   }
 
   // 获取用户信息
@@ -50,7 +50,6 @@ function getRequestHeaderInfo(): RequestHeader {
     'content-type': 'application/x-www-form-urlencoded',
     uid: userInfo.userId,
     token: userInfo.token,
-    time: userInfo.tokenTime,
     source: MINITOKEN,
     version: VERSION
   } : {

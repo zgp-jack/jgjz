@@ -16,8 +16,6 @@ export default interface RecordDayPostData {
   group_leader: string,
   /** 备注 */
   note: string,
-  /** 记工数量 */
-  unit_num: string
   /** 个人/班组 */
   identity: 1 | 2
   /** 记工本ID */
@@ -26,10 +24,12 @@ export default interface RecordDayPostData {
   worker_id?: string
   /** 上传图片url */
   img_url?: string
-  /** 单位 */
-  unit: string
-  /** 分项 */
-  unit_work_type?: string
+  /** 上班事件 */
+  work_time: string
+  /** ??? */
+  work_time_hour: string
+  /** 加班时间 */
+  overtime: string
 }
  export interface WorkTimeProps {
    // id

@@ -10,8 +10,16 @@
 export default interface WorkTimeProps {
   // 组件数据
   worktime?: WorkTimeDataType[]
-  // 是否可以关闭
+  // 是否加班组件
   isClose?: boolean
+  /** 上班值 */
+  workValue?: workValueType
+  /** 获取值 */
+  set: (number) => void
+  /** 更多获取值 */
+  setTime: (number) => void
+  /** 关闭加班组件 */
+  close?: () => void
 }
 
 export interface WorkTimeDataType {
@@ -19,4 +27,8 @@ export interface WorkTimeDataType {
   id: number
   // text 文本
   text: string
+}
+interface workValueType {
+  work_time: string,
+  work_time_hour: string
 }

@@ -8,12 +8,10 @@
 
  // 更多加班时间 选择组件
  export default interface MoreWorkTimeProps {
-    /** 取消组件 */
-    WorktimeCancle: () => void
+  /** 更多加班组件/上班组件 */
+  isMoreWork?: boolean
+  /** 取消组件 */
+  WorktimeCancle: () => void
+  /** 获取值 */
+  set: (number) => void
  }
- // 
-//  export interface MoreWorkTimeType {
-//     num:number,
-//     id:string,
-//     selected:false
-// }

@@ -39,7 +39,7 @@ export default function RecordAmoumt() {
     postdata[type] = val
     setPostData(postdata)
   }
-  // 提交借支数据
+  // 提交数据
   const userPostAcion = () => {
     userAddRecordAction(postData).then((res) => {
       debugger

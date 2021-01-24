@@ -16,11 +16,17 @@
   // 组件标题
   title?:string
   // 单位值
-  value:string
+  value: UnitTpey
   // 获取值
   set: (PickerData) => void
  }
 export interface PickerData {
   id: number
+  value: string
+}
+export interface UnitTpey {
+  /** id */
+  id: number
+  /** name */
   value: string
 }

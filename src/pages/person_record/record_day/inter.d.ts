@@ -1,8 +1,8 @@
 /*
  * @Author: jack_zgp
  * @Date: 2021-01-20 15:05:10
- * @LastEditors: jack_zgp
- * @LastEditTime: 2021-01-20 15:08:06
+ * @LastEditors: jsxin
+ * @LastEditTime: 2021-01-24 18:12:25
  * @Description: interface for record_day
  */
 
@@ -29,9 +29,10 @@ export default interface RecordDayPostData {
   /** 加班时间 */
   overtime: string
 }
- export interface WorkTimeProps {
-   // id
-   id: number
-   // text值
-   text: string
- }
+
+export interface WorkTimeProps {
+  // id
+  id: number
+  // text值
+  text: string
+}

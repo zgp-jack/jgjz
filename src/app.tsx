@@ -1,6 +1,5 @@
 import Taro, {Component, Config} from '@tarojs/taro'
 import {Provider} from '@tarojs/mobx'
-import WorkTeam from './pages/work_team/record_work/index'
 import CounterStore from '@/store/counter'
 import ClassifyType from '@/store/classify'
 import ClassifySubitem from '@/store/classify/subitem'
@@ -8,8 +7,8 @@ import RememberStore from '@/store/business/index'
 import PickerStore from '@/store/picker/index'
 import User from '@/store/user'
 import AccountBookAction from '@/store/account'
-import './app.scss'
 import Remember from "@/pages/remember";
+import './app.scss'
 import './styles/common.scss'
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -52,9 +51,11 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/business/money/index',
+
+      'pages/remember/index',
       'pages/business/expenditure/index',
       'pages/business/borrow/index',
-      'pages/remember/index',
+      
       'pages/login/index', //登录
       'pages/work_team/record_work/index',
       'pages/index/index', // 首页

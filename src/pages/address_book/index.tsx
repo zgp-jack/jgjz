@@ -18,13 +18,14 @@ export default function AddressBook() {
 
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
-  const { type = ADDRESSBOOKTYPE_GROUP, id,data } = router.params
+  const { type = ADDRESSBOOKTYPE_GROUP, id ,data } = router.params
 
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
+    console.log(id)
     if (!id) return
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */

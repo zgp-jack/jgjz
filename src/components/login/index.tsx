@@ -95,51 +95,51 @@ function Login({
   return (
     <Block>
       {show &&
-      <View className='login-box'>
-        <Image className="close-login-icon" src={`${IMGCDNURL}gl/close-login.png`} onClick={() => setShow && setShow(false)}></Image>
-        <Image className="logo-icon" src={`${IMGCDNURL}gl/logo.png`} ></Image>
+        <View className='login-box'>
+          <Image className="close-login-icon" src={`${IMGCDNURL}gl/close-login.png`} onClick={() => setShow && setShow(false)}></Image>
+          <Image className="logo-icon" src={`${IMGCDNURL}gl/logo.png`} ></Image>
 
-        <View className="login-type">
-          {loginConfig.map(item => (
-            <View
-              key={item.id}
-              onClick={() => userChangePublishedItem(item.id)}
-              className={classnames({
-                'login-type-title': true,
-                'login-active': id === item.id
-              })}>
-              <Text className='published-item-title'>{item.title}</Text>
-            </View>
-          ))}
-        </View>
-
-        <View className="login-form">
-          <View className="login-form-item">
-            <Image className="login-phone-icon" src={`${IMGCDNURL}gl/phone.png`} ></Image>
-            <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} onInput={(e) => userEnterForm(e, 'tel')} />
+          <View className="login-type">
+            {loginConfig.map(item => (
+              <View
+                key={item.id}
+                onClick={() => userChangePublishedItem(item.id)}
+                className={classnames({
+                  'login-type-title': true,
+                  'login-active': id === item.id
+                })}>
+                <Text className='published-item-title'>{item.title}</Text>
+              </View>
+            ))}
           </View>
 
-          {id === codeWay &&
+          <View className="login-form">
             <View className="login-form-item">
-              <Image className="login-passcode" src={`${IMGCDNURL}gl/pass-code.png`} ></Image>
-              <Input className="input-item-text" placeholder="请输入验证码" type="number" maxLength={6} onInput={(e: any) => userEnterForm(e, 'code')} />
-              <Text className="get-code" onClick={() => userGetCode(paramsData.tel)}>{text}</Text>
-            </View>}
+              <Image className="login-phone-icon" src={`${IMGCDNURL}gl/phone.png`} ></Image>
+              <Input className="input-item-text" placeholder="请输入手机号码" type="number" maxLength={11} onInput={(e) => userEnterForm(e, 'tel')} />
+            </View>
 
-          {id === passWay &&
-            <View className="login-form-item">
-              <Image className="login-passlock" src={`${IMGCDNURL}gl/pass-lock.png`} ></Image>
-              <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
-              <Text className={classnames({
-                'login-eyes-clone': true,
-                'login-eyes-open': !showPass
-              })}
-                onClick={() => setSHowPass(!showPass)}></Text>
-            </View>}
-        </View>
+            {id === codeWay &&
+              <View className="login-form-item">
+                <Image className="login-passcode" src={`${IMGCDNURL}gl/pass-code.png`} ></Image>
+                <Input className="input-item-text" placeholder="请输入验证码" type="number" maxLength={6} onInput={(e: any) => userEnterForm(e, 'code')} />
+                <Text className="get-code" onClick={() => userGetCode(paramsData.tel)}>{text}</Text>
+              </View>}
 
-        <Button className="login-push-btn" onClick={() => userLoginAction()}>登录</Button>
-      </View>}
+            {id === passWay &&
+              <View className="login-form-item">
+                <Image className="login-passlock" src={`${IMGCDNURL}gl/pass-lock.png`} ></Image>
+                <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
+                <Text className={classnames({
+                  'login-eyes-clone': true,
+                  'login-eyes-open': !showPass
+                })}
+                  onClick={() => setSHowPass(!showPass)}></Text>
+              </View>}
+          </View>
+
+          <Button className="login-push-btn" onClick={() => userLoginAction()}>登录</Button>
+        </View>}
     </Block>
   )
 }

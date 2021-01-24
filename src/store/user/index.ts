@@ -10,7 +10,7 @@ import { action, observable } from 'mobx'
 import UserInfo from './inter.d'
 
 export class User {
-  /** 是否已经初始化 */
+  /** 用户信息初始化 */
   @observable
   user: UserInfo = {
     token: '',

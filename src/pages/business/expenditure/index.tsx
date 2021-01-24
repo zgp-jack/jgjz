@@ -37,8 +37,8 @@ export default function ModifyBorrow() {
     work_note: 0,
     group_leader: '',
     money: '',
-    created_time: '',
-    business_time: '',
+    created_time_string: '',
+    busienss_time_string: '',
     note: '',
     work_note_name: '',
     expend_type_name: '',
@@ -127,8 +127,8 @@ export default function ModifyBorrow() {
     />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail 
-      dateValue={data.business_time} 
-      submitValue={data.created_time} 
+      dateValue={data.busienss_time_string} 
+      submitValue={data.created_time_string} 
       projectValue={data.work_note_name} 
       leader={data.group_leader_name}
     />

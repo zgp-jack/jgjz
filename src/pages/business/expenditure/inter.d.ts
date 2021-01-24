@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-24 10:25:31
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-24 14:36:34
+ * @LastEditTime: 2021-01-24 18:57:35
  * @Description: 个人流水支出 接口
  */
 
@@ -19,9 +19,9 @@ export interface BusinessInfoResult {
   /** 借支备注 */
   note: string
   /** 创建时间 */
-  created_time: string
+  created_time_string: string
   /** 借支时间 */
-  business_time: string
+  busienss_time_string: string
   /** 借支项目名称 */
   work_note_name: string
   /** 借支分类名称 */

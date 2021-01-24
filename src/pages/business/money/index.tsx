@@ -15,7 +15,7 @@ export default function ModifyMoney() {
 
   // 根据路由获取id参数
   const router = useRouter()
-  const { id = '11144' } = router.params
+  const { id = '11151' } = router.params
   // 借支提交数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -29,8 +29,8 @@ export default function ModifyMoney() {
     work_note: 0,
     group_leader: '',
     money: '',
-    created_time: '',
-    business_time: '',
+    created_time_string: '',
+    busienss_time_string: '',
     note: '',
     work_note_name: '',
     expend_type_name: '',
@@ -114,7 +114,7 @@ export default function ModifyMoney() {
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
     <PickerLeader leader={data.group_leader_name} rightClose={false}  />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.created_time} submitValue={data.business_time} projectValue={data.work_note_name} />
+    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
       <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>

@@ -99,13 +99,8 @@ function RecordDay() {
   // 设置获取值 加班/上班
   const setTime = (item:number,isClose:boolean) => {
     if (isClose) {
-      if (item == 0) {
-        userUpdatePostData('1', 'work_time', '0', 'work_time_hour')
-      } else if (item == 1) {
-        userUpdatePostData('0.5', 'work_time', '0', 'work_time_hour')
-      } else if(item == 2){
-        userUpdatePostData('0', 'work_time', '0','work_time_hour')
-      }
+      let arr = ['1','0.5','0']
+      userUpdatePostData(arr[item], 'work_time', '0', 'work_time_hour')
     } else {
       userUpdatePostData('0', 'overtime')
     }
@@ -136,7 +131,7 @@ function RecordDay() {
       dateText={dateText}
     />}
     {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => setIsPickerLeader(false)} />}
-    <PickerMark text={'Hello world!'} set={(val) => userUpdatePostData(val, 'note')} />
+    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}

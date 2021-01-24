@@ -7,11 +7,13 @@ import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerUnit from '@/components/picker_unit'
 import PickerSubitem from '@/components/picker_subitem'
-import RecordAmountPostData from './inter.d'
+import RecordAmountPostData, { UnitTpey } from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { getTodayDate } from '@/utils/index'
+import msg, { showBackModal } from '@/utils/msg'
+import { validNumber } from '@/utils/v'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
@@ -35,7 +37,7 @@ function RecordAmoumt() {
     group_leader: '',
     note: '',
     unit_num: '',
-    unit: {id: 0,value:''},
+    unit: 0,
     unit_work_type:'',
     identity: 2,
   })
@@ -78,14 +80,24 @@ function RecordAmoumt() {
       note: postData.note,
       work_note: accountBookInfo.id,
       business_time: postData.business_time,
-      unit: postData.unit.id,
+      unit: postData.unit,
       identity: 2,
       business_type: 2,
       unit_num: postData.unit_num,
       unit_work_type: isPickerSubitem ? postData.unit_work_type : ''
     }
+    if (postData.unit_num) {
+      if (!validNumber(params.unit_num)) {
+        msg('请输入正确的工量')
+        return
+      }
+    }
     userAddRecordAction(params).then((res) => {
-      debugger
+      if (res.code === 0) {
+        showBackModal(res.message)
+      } else {
+        msg(res.message)
+      }
     })
   }
   // 用户点击 班组长 圆角按钮 选择
@@ -120,7 +132,7 @@ function RecordAmoumt() {
   }
   return (<View>
     <ContentInput title='工量' value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
-    <PickerUnit value={postData.unit} set={(data) => userUpdatePostData(data.id,'unit')} />
+    <PickerUnit set={(data) => userUpdatePostData(data.id,'unit')} />
     {isPickerSubitem &&
       <PickerSubitem
         value={typeData.name}

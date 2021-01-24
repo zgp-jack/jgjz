@@ -18,14 +18,14 @@ export default interface RecordAmountPostData {
   note: string,
   /** 记工数量 */
   unit_num: string
-  /** 个人/班组 */
+  /** 个人/班组 1班组 2个人 */
   identity: 1 | 2
   /** 记工本ID */
   work_note?: number
   /** 上传图片url */
   img_url?: string
   /** 单位 */
-  unit: UnitTpey | number
+  unit: number
   /** 分项 */
   unit_work_type?: string
 }

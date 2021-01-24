@@ -15,8 +15,6 @@
   img?:string
   // 组件标题
   title?:string
-  // 单位值
-  value: UnitTpey
   // 获取值
   set: (PickerData) => void
  }
@@ -24,9 +22,15 @@ export interface PickerData {
   id: number
   value: string
 }
-export interface UnitTpey {
+export interface UnitType {
   /** id */
   id: number
   /** name */
   value: string
+}
+export interface UnitTpeyProps {
+  /** id */
+  id: number
+  /** name */
+  name: string
 }

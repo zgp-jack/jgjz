@@ -48,6 +48,9 @@ export const userEditUnitWorkType: string = `UnitWorkType/update`
 // 记账类别-删除
 export const userDelUnitWorkType: string = `UnitWorkType/delete`
 
+// ! 计量单位
+export const userGetUnit: string = `unit/get`
+
 // ! 登录注册
 // 登录-获取验证码
 export const userGetCode: string = `code/get`

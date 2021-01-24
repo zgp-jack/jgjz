@@ -39,7 +39,7 @@ function Borrow() {
   // 借支提交数据
   const [postData, setPostData] = useState<BorrowPostData>({
     business_type: 4,
-    expend_type: 4,
+    expend_type: 0,
     business_time: getTodayDate(),
     group_leader: '',
     note:  '',
@@ -51,7 +51,6 @@ function Borrow() {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const { accountBookInfo } = localStore
-  console.log(accountBookInfo)
 
   // 日期文本显示年月日
   useEffect(() => {
@@ -78,11 +77,17 @@ function Borrow() {
     setPostData(postdata)
   }
 
+  // 用户选择分类数据
+  const userChangePickerType = (data) => {
+    setTypeData(data);
+    userUpdatePostData(data.id, 'expend_type')
+  }
+
   // 提交借支数据
   const userPostAcion = () => {
     let params: BorrowPostData = {
       business_type: 4,
-      expend_type: 4,
+      expend_type: isPickerType ? postData.expend_type : 0,
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
@@ -141,7 +146,7 @@ function Borrow() {
           value={typeData.name}
           close={() => setIsPickType(false)}
           onOptionClose={() => userTapRightTopCloseBtn()}
-          set={(data) => { setTypeData(data); userUpdatePostData(data.name,'expend_type')}}
+          set={(data) => { userChangePickerType(data)}}
           show={showTypePicker}
           setShow={(bool: boolean) => setShowTypePicker(bool)}
         />

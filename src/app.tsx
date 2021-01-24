@@ -50,7 +50,11 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+
       'pages/remember/index',
+      'pages/personl_business/expenditure/index',
+      'pages/personl_business/borrow/index',
+      
       'pages/login/index', //登录
       'pages/work_team/record_work/index',
       'pages/index/index', // 首页

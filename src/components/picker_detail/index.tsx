@@ -9,13 +9,19 @@ export default function PickerDetail({
     submitTitle = '提交时间',
     submitValue = '',
     projectName = '项目名称',
-    projectValue = ''
+    projectValue = '',
+    leaderTitle = '班组长',
+    leader = ''
 }:PickerDetailProps){
 
     return (<View>
         <View className="person-record-overtime person-record-date">
             <View className="person-record-modify-title person-record-date-title">{dateTitle}</View>
             <Text className="person-record-modify">{dateValue}</Text>
+        </View>
+        <View className="person-record-overtime person-record-date">
+          <View className="person-record-modify-title person-record-date-title">{leaderTitle}</View>
+          <Text className="person-record-modify">{leader}</Text>
         </View>
         <View className="person-record-overtime person-record-date">
             <View className="person-record-modify-title person-record-date-title">{submitTitle}</View>

@@ -15,12 +15,6 @@ import { TypeAction } from '@/pages/work_team/record_work/index.d'
 import './index.scss'
 
 
-interface dataList {
-  name: string,
-  check?: boolean
-}
-
-
 export default function RecordWork() {
   // 获取stroe数据
   const localStore = useLocalStore(() => RememberTypeItem);
@@ -60,18 +54,6 @@ export default function RecordWork() {
   // 时间选择文本显示
   const [timeText, setTimeText] = useState<string>('');
   const [startDate, setStartDate] = useState<string>(nowTime)//筛选开始日期
-
-
-  let dataList = [{name: "王五", check: true}, {name: "王五"}, {name: "王五"}, {name: "王五"}, {
-    name: "王五",
-    status: true,
-    check: true
-  }, {name: "王五"}, {name: "王五"}, {name: "王五", status: true}]
-  let emptyCount = 6 - (dataList.length + 2) % 6;
-  let emptyArray: dataList[] = []
-  for (let index = 0; index < emptyCount; index++) {
-    emptyArray.push({name: ''})
-  }
 
   useEffect(() => {
     /**获取本地格式化日期 eg:2021/01/21*/

@@ -13,6 +13,7 @@ import './index.scss'
 
 function IdentitySelection({
   show = false,
+  setShow
 }: IdentityProps) {
   // export default function IdentitySelection() {
 
@@ -60,7 +61,7 @@ function IdentitySelection({
     <Block>
       {show &&
         <View className='identity-selection-box'>
-          <Image className="identity-back-icon" src={`${IMGCDNURL}common/left-arrow.png`}></Image>
+          <Image className="identity-back-icon" onClick={() => setShow && setShow(false)} src={`${IMGCDNURL}common/left-arrow.png`}></Image>
           <View className="identity-book-item">
             <View className="identity-selection-title">欢迎使用鱼泡记工账本</View>
             <View className="identity-selection-deail">首次进入请选择您常用的记工方式</View>

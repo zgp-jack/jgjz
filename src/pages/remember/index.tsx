@@ -19,6 +19,7 @@ import {getBusiness} from './api'
 import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/remember/inter";
 import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
+import User from "@/store/user";
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
@@ -27,10 +28,13 @@ import Login from '@/components/login/index'
 
 const Remember = () => {
   /*记工类型数据*/
+  const _userInfo = useLocalStore(() => User)
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
-  const {businessType} = rememberStore
+  const { user } = _userInfo
+  const { businessType } = rememberStore
   const {accountBookInfo} = _accountBookInfo
+  
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '1' ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
@@ -217,14 +221,19 @@ const Remember = () => {
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
     let url = `/pages/work_team/record_work/index?type=${type}`;
-    Taro.navigateTo({
-      url: url
-    })
+    handIsLogin() && Taro.navigateTo({ url: url })
   }
 
   const handNavigateTo = (url: string) => {
-    // setShowLogin(true)
-    Taro.navigateTo({ url })
+    handIsLogin() && Taro.navigateTo({ url })
+  }
+
+  const handIsLogin = () => {/*是否登录*/
+    if (!user.login) {
+      setShowLogin(true)
+      return false
+    }
+    return true
   }
   /*1转为01*/
   const handleMonthShow = (month = filterMonth) => {

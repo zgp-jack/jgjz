@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 16:26:46
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-23 11:24:49
+ * @LastEditTime: 2021-01-24 11:19:37
  * @Description: interface for picker
  */
 import ClassifyItem from '@/store/classify/inter.d'
@@ -19,6 +19,8 @@ export default interface PickerTypeProps {
   value: string,
   /** 右侧 X 关闭事件 */
   close?: () => void,
+  /** 是否显示右侧关闭按钮  */
+  rightClose?: boolean
   /** 右上角 option组件 关闭事件 */
   onOptionClose?: () => void,
   /** 获取值 */

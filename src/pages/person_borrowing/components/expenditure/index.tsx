@@ -81,7 +81,7 @@ function Expenditure(){
   const userPostAcion = () => {
     let params: ExpenditurePostData = {
       business_type: 5,
-      expend_type: 5,
+      expend_type: isPickerType ? postData.expend_type : 0,
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
@@ -112,6 +112,11 @@ function Expenditure(){
       Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE })
     }
   }
+  // 用户选择分类数据
+  const userChangePickerType = (data) => {
+    setTypeData(data); 
+    userUpdatePostData(data.id, 'expend_type')
+  }
 
   // 用户关闭 日期组件
   const DeletePickerDate = () => {
@@ -140,7 +145,7 @@ function Expenditure(){
           value={typeData.name} 
           close={() => setIsPickType(false) } 
           onOptionClose={() => userTapRightTopCloseBtn()}
-          set={(data) => { setTypeData(data); userUpdatePostData(data.name, 'expend_type')}} 
+          set={(data) => userChangePickerType(data)} 
           show={showTypePicker} 
           setShow={(bool: boolean) => setShowTypePicker(bool) }
         />

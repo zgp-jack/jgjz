@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:15:01
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-22 11:14:51
+ * @LastEditTime: 2021-01-24 10:43:14
  * @Description: 存放所有的API请求接口
  ! @rules: 1. 导出的接口名 小驼峰  2.注释: 功能模块名 + 接口概述 3.功能模块相同的接口放在一起
  */
@@ -21,6 +21,12 @@ export const useGetIndexBusiness: string = `business/get-index-business`
 export const userGetBusinessLists: string = `business/get-business`
 // 记工-记工接口
 export const userAddBorrow: string = `business/add`
+// 记工-获取单个流水记录
+export const userGetBusinessInfo: string =  `business/get-one/`
+// 记工-删除单个流水记录
+export const userDelBusinessInfo: string = `business/delete`
+// 记工-修改单个流水记录
+export const userEditBusinessInfo: string = `business/update/`
 
 // ! 记账类别
 // 记账类别-获取已有类别

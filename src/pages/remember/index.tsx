@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter} from '@tarojs/taro'
+import Taro, {useEffect, useState} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -16,31 +16,23 @@ import meter from '@/images/ic_gl.png'
 import Filter from "./filter/index";
 import {get} from "@/utils/request";
 import {getBusiness} from './api'
-import {GetCountParams, GetCountResult} from "@/pages/remember/inter";
+import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/remember/inter";
 import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
+import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
-import PickerWorkTime from "@/components/picker/picker-work-time";
-import PickerUnit from "@/components/picker/picker-unit";
-import PickerOverTime from "@/components/picker/picker-over-time";
 import ListProvider from '@/components/list_provider'
 import Login from '@/components/login/index'
 
-/*账本类型 1：个人账本 2：班组账本*/
-Taro.setStorageSync('ledgerType', '1')
-const ledgerType = Taro.getStorageSync('ledgerType')
-Taro.setNavigationBarTitle({title: (ledgerType == '1' ? '个人' : '班组') + '记工账本'})
-Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
-
 const Remember = () => {
-  /*打开picker弹窗（调试使用）*/
-  const [showPicker, setShowPicker] = useState(false)
-  const {params} = useRouter()
-  console.log('params:', params)
   /*记工类型数据*/
-  const localStore = useLocalStore(() => RememberStore)
-  const {businessType} = localStore
+  const rememberStore = useLocalStore(() => RememberStore)
+  const _accountBookInfo = useLocalStore(() => AccountBookInfo)
+  const {businessType} = rememberStore
+  const {accountBookInfo} = _accountBookInfo
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '1' ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
     work_time: "0",
@@ -52,7 +44,7 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(ledgerType == '1')
+  const [personOrGroup] = useState(accountBookInfo.identity == '1')
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -62,8 +54,8 @@ const Remember = () => {
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '873',
-    worker_id: '',
+    work_note: accountBookInfo.id.toString(),
+    worker_id: [],
     business_type: [],
     expend_type: '',
     expense_account: '',
@@ -75,20 +67,28 @@ const Remember = () => {
   /*获取统计数据，请求参数*/
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
   /*数组转字符串*/
-  const handleArrayToString = (data?: string[] | string) => {
-    if (typeof data === 'string') return data
+  const handleArrayToString = (data: string[] | string): string => {
+    if (typeof data === 'string') return data;
     return (data as string[]).join(',')
+  }
+  const handleAddressBookParams = (data: AddressBookParams[] | string) => {
+    if (typeof data === 'string') return data;
+    let result: string[] = [];
+    (data as AddressBookParams[]).forEach(item => {
+      result.push(String(item.id))
+    })
+    return result.join(',')
   }
   // 参数处理
   const actionParams = () => {
     return {
       ...filterData,
       business_type: handleArrayToString(filterData.business_type),
-      group_leader: handleArrayToString(filterData.group_leader),
-      worker_id: handleArrayToString(filterData.worker_id)
+      group_leader: handleAddressBookParams(filterData.group_leader),
+      worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getBusiness, actionParams())
+  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -179,6 +179,7 @@ const Remember = () => {
   }
   /*确认筛选*/
   const handleConfirmFilter = (data: GetCountParams) => {
+    console.log(data)
     if (JSON.stringify(data) != JSON.stringify(filterData)) {
       setFilterData(data)
       setIsFilter(true)
@@ -232,7 +233,7 @@ const Remember = () => {
   /*是否显示筛选了哪些内容*/
   const handleShowFilterResult = () => {
     let {is_note, business_type, group_leader, worker_id} = filterData
-    return (is_note == '1' || business_type.length || (group_leader as string[]).length || (worker_id as string[]).length)
+    return (is_note == '1' || business_type.length || (group_leader as AddressBookParams[]).length || (worker_id as AddressBookParams[]).length)
   }
   return (
     <View className={"remember" + (showFilter ? ' stop-move' : '')}>
@@ -240,7 +241,7 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords" onClick={() => setShowPicker(true)}>{params.accountName}记工账本</View>
+          <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
             onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
@@ -271,13 +272,17 @@ const Remember = () => {
             <View className="filter-info" onClick={() => setShowFilter(true)}>
               <View className="filter-info-box overwords">
                 {
-                  (filterData.group_leader as string[]).length > 1 &&
+                  ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
                   <Text>
-                    共<Text className="filter-info-blue">{(filterData.group_leader as string[]).length}</Text>人
-                    <Text className="filter-info-line">|</Text>
+                    共<Text
+                    className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
                   </Text>
                 }
-
+                {
+                  (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
+                    && (filterData.business_type as string[]).length > 0)
+                  &&
+                  <Text className="filter-info-line">|</Text>}
                 {
                   (filterData.business_type as string[]).length > 0 && <Text>
                     {
@@ -289,7 +294,7 @@ const Remember = () => {
                   </Text>
                 }
                 {
-                  ((filterData.business_type as string[]).length > 0 && filterData.is_note == '1') &&
+                  (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
                   <Text className="filter-info-line">|</Text>
                 }
                 {
@@ -386,7 +391,7 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-            
+
             <View className="statistics-flow">
               <View
                 className="statistics-title">{handleMonthShow()}月全部流水</View>
@@ -405,7 +410,8 @@ const Remember = () => {
                   </Block>
                 ))}
               </View>
-              <View className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth }月全部流水</View>
+              <View
+                className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth}月全部流水</View>
               <ListProvider
                 increasing={increasing}
                 loading={loading}
@@ -419,8 +425,10 @@ const Remember = () => {
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          (p.business_type == 1 || p.business_type == 2) ? <WorkCountDay key={p.id} list={[p]} type={p.business_type} /> :
-                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type} />)
+                          (p.business_type == 1 || p.business_type == 2) ?
+                            <WorkCountDay key={p.id} list={[p]} type={p.business_type}/> :
+                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                              <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type}/>)
                         ))}
                       </View>
                     </Block>

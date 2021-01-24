@@ -7,12 +7,17 @@ import './index.scss'
 
 export default function WorkTime({
   worktime = [{ id: 0, text: "1个工" }, { id: 1, text: "半个工" }, { id: 2, text: "休息"}],
-  isClose = true
+  isClose = true,
+  setTime,
+  set,
+  close
 }: WorkTimeProps) {
   // 选中id
   const [selectTime, setSelectTime] = useState<number>(0)
   // 是否关闭 更多
-  const [IsMorkTime, setIsMorkTIme] = useState<boolean>(false)
+  const [isMorkTime, setIsMorkTIme] = useState<boolean>(false)
+  // 时间值
+  const [timeValue, setTimeValue] = useState<number>(0)
   return (
     <View className={classnames({
       "person-record-worktime person-record-overtime": true,
@@ -23,16 +28,23 @@ export default function WorkTime({
         <View className={classnames({
           "worktime": true,
           "worktime-active": selectTime === item.id
-        })} key={item.id} onClick={() => setSelectTime(item.id)} >{item.text}</View>
+        })} key={item.id} onClick={() => { set(item.id); setSelectTime(item.id); setTimeValue(0)}} >{item.text}</View>
       ))}
       <View className={classnames({
         "worktime worktime-select": true,
         "worktime-active": worktime.length === selectTime
-      })} onClick={() => { setSelectTime(worktime.length); setIsMorkTIme(true)}}>
-        <Text className="worktime-select-time">0小时</Text>
+      })} onClick={() => {setIsMorkTIme(true)}}>
+        <Text className="worktime-select-time">{`${timeValue}小时`}</Text>
       </View>
-      {!isClose && <Text className="overtime-icon"></Text>}
-      {IsMorkTime && <MoreWorkTime WorktimeCancle={() => setIsMorkTIme(false) } />}
+      {!isClose && <Text className="overtime-icon" onClick={close}></Text>}
+      {isMorkTime && <MoreWorkTime 
+        set={(value) => {
+          (isClose || value) ? setSelectTime(worktime.length) : setSelectTime(0);
+          setTimeValue(value);
+          setTime(value)
+        }}
+        isMoreWork={isClose} 
+        WorktimeCancle={() => setIsMorkTIme(false) } />}
     </View>
   )
 }

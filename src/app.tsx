@@ -52,7 +52,6 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/remember/index',
-      'pages/login/index', //登录
       'pages/work_team/record_work/index',
       'pages/index/index', // 首页
       'pages/person_record/index', //个人记工

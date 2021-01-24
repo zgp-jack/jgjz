@@ -85,7 +85,8 @@ function Login({
         Taro.setStorageSync(UserInfo, userInfo)
         // 储存mobx
         setUserInfo(userInfo)
-
+        //关闭弹窗
+        setShow && setShow(false);
       } else {
         msg(res.message)
       }

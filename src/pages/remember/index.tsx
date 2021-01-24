@@ -25,6 +25,7 @@ import PickerWorkTime from "@/components/picker/picker-work-time";
 import PickerUnit from "@/components/picker/picker-unit";
 import PickerOverTime from "@/components/picker/picker-over-time";
 import ListProvider from '@/components/list_provider'
+import Login from '@/components/login/index'
 
 /*账本类型 1：个人账本 2：班组账本*/
 Taro.setStorageSync('ledgerType', '1')
@@ -97,8 +98,8 @@ const Remember = () => {
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
 
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
-
-
+  /* 登陆弹窗 */
+  const [showLogin, setShowLogin] = useState(false)
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
@@ -219,6 +220,11 @@ const Remember = () => {
       url: url
     })
   }
+
+  const handNavigateTo = (url: string) => {
+    // setShowLogin(true)
+    Taro.navigateTo({ url })
+  }
   /*1转为01*/
   const handleMonthShow = (month = filterMonth) => {
     return Number(month) < 10 ? `0${month}` : month
@@ -237,7 +243,7 @@ const Remember = () => {
           <View className="header-title overwords" onClick={() => setShowPicker(true)}>{params.accountName}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
-                onClick={() => Taro.navigateTo({url: '/pages/account_book_list/index'})}>切换记工本</View>
+            onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
@@ -426,7 +432,7 @@ const Remember = () => {
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="feedback" onClick={() => Taro.navigateTo({url: '/pages/feedback/index'})}>
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
               <Image src={feedback} className="feedback-icon"/>
               意见反馈
             </View>
@@ -454,6 +460,8 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
+
+      <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>
     </View>
   )
 }

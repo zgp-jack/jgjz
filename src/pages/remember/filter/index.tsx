@@ -1,12 +1,14 @@
-import Taro, {useState, useEffect} from '@tarojs/taro'
+import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
 import {View, Image, Picker} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
 import arrowRight from "@/images/arrow-right.png";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
-import {GetCountParams} from "@/pages/remember/inter";
+import {AddressBookParams, GetCountParams} from "@/pages/remember/inter";
 import {getTodayDate} from "@/utils/index";
+import {ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_GROUP} from "@/config/index";
+import {AddressBookConfirmEvent} from "@/config/events";
 
 interface FilterProps<T> {
   data: T
@@ -18,26 +20,45 @@ interface FilterProps<T> {
   resetFilter: () => void
 }
 
+
 const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   /*记工类型数据*/
   const localStore = useLocalStore(() => RememberStore)
   const {businessType} = localStore
   /*本地筛选数据*/
   const [filterData, setFilterData] = useState<GetCountParams>(props.data)
-  console.log(getTodayDate())
 
   useEffect(() => {
-    if (props.data) {
-      let start_business_time = props.data.start_business_time
-      let end_business_time = props.data.end_business_time
-      let _data: GetCountParams = {
-        ...props.data,
-        start_business_time: start_business_time.split('-').length == 3 ? start_business_time : start_business_time + '-01',
-        end_business_time: end_business_time.split('-').length == 3 ? end_business_time : getTodayDate()
-      }
-      setFilterData(JSON.parse(JSON.stringify(_data)))
+    if (props.show) {
+      initData()
     }
-  }, [props.data])
+  }, [props.show])
+
+  useEffect(() => {
+    if (filterData && filterData.start_business_time.split('-').length !== 3) return
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
+      console.log('data', data)
+      let _data: any = {}
+      if (props.personOrGroup) {
+        _data = {...filterData, worker_id: data}
+      } else {
+        _data = {...filterData, group_leader: data}
+      }
+      initData(_data)
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  }, [filterData])
+
+  const initData = (data = props.data) => {
+    let start_business_time = data.start_business_time
+    let end_business_time = data.end_business_time
+    let _data: GetCountParams = {
+      ...data,
+      start_business_time: start_business_time.split('-').length == 3 ? start_business_time : start_business_time + '-01',
+      end_business_time: (end_business_time.split('-').length == 3 ? end_business_time : getTodayDate())
+    }
+    setFilterData(JSON.parse(JSON.stringify(_data)))
+  }
   /*开始时间筛选*/
   const onStartDate = e => {
     setFilterData({...filterData, start_business_time: e.detail.value})
@@ -73,6 +94,23 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   /*点击重置，重置筛选数据*/
   const handleReset = () => {
     props.resetFilter()
+  }
+  const handleGoToAddressBook = (type) => {
+    let _data: AddressBookParams[] = []
+    if (type === ADDRESSBOOKTYPE_ALONE) {
+      _data = (filterData.worker_id as AddressBookParams[])
+    }
+    if (type === ADDRESSBOOKTYPE_GROUP) {
+      _data = (filterData.group_leader as AddressBookParams[])
+    }
+    console.log('带回去的参数', _data)
+    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP}&data=${JSON.stringify(_data)}`})
+  }
+  const handleGroupLeaderLength = () => {
+    return (filterData.group_leader as AddressBookParams[]).length
+  }
+  const handleWorkerIdLength = () => {
+    return (filterData.worker_id as AddressBookParams[]).length
   }
   if (!filterData) return null
   return (
@@ -130,21 +168,22 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
             </View>
             {/*班组账本选择工友*/}
             {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
-                                          onClick={() => Taro.navigateTo({url: '/pages/address_book/index?id=874&type=group&data=[]'})}>
+                                          onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_ALONE)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择工友</View>
                 <View className="filter-picker-value">
-                  <View>全部工友</View>
+                  <View>{handleWorkerIdLength() ? '共' + handleWorkerIdLength() + '人' : '全部工友'}</View>
                   <Image src={arrowRight} className="filter-arrow"/>
                 </View>
               </View>
             </View>}
             {/*个人账本筛选选择班组长*/}
-            {props.personOrGroup && <View className="filter-block-row filter-block-row-small">
+            {!props.personOrGroup && <View className="filter-block-row filter-block-row-small"
+                                           onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_GROUP)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择班组长</View>
                 <View className="filter-picker-value">
-                  <View>全部班组长</View>
+                  <View>{handleGroupLeaderLength() ? '共' + handleGroupLeaderLength() + '人' : '全部班组长'}</View>
                   <Image src={arrowRight} className="filter-arrow"/>
                 </View>
               </View>

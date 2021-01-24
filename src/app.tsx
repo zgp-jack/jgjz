@@ -52,8 +52,8 @@ class App extends Component {
     pages: [
 
       'pages/remember/index',
-      'pages/personl_business/expenditure/index',
-      'pages/personl_business/borrow/index',
+      'pages/business/expenditure/index',
+      'pages/business/borrow/index',
       
       'pages/login/index', //登录
       'pages/work_team/record_work/index',

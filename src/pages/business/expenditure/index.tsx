@@ -9,7 +9,7 @@ import getExpenditureInfo, { delExpenditureBusiness, editExpenditureBusiness } f
 import ClassifyItem from '@/store/classify/inter.d'
 import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
 import './index.scss'
-import { editBorrowBusiness } from '@/pages/personl_business/borrow/api'
+import { editBorrowBusiness } from '@/pages/business/borrow/api'
 
 export default function ModifyBorrow() {
 

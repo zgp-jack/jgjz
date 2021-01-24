@@ -6,19 +6,20 @@ import PickerLeaderProps from './inter.d'
 import './index.scss'
 
 export default function PickerLeader({
-    hideImg = true,
-    img = `${IMGCDNURL}zgp/leader_icon.png`,
-    title = '班组长',
-    leader = '',
-    DeletePickerLeader
+  hideImg = true,
+  img = `${IMGCDNURL}zgp/leader_icon.png`,
+  title = '班组长',
+  leader = '',
+  DeletePickerLeader,
+  rightClose = true
 }:PickerLeaderProps){
 
-    return (<View>
+  return (<View>
       <View className="person-record-overtime person-record-date" onClick={() => Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE })}>
-          {hideImg && <Image className="person-record-date-img" src={img} />}
-          <View className="person-record-modify-title person-record-date-title">{title}</View>
-          <Text className="person-record-date-text">{leader}</Text>
-          <Text className="overtime-icon" onClick={(e) => {e.stopPropagation();DeletePickerLeader()}}></Text>
+        {hideImg && <Image className="person-record-date-img" src={img} />}
+        <View className="person-record-modify-title person-record-date-title">{title}</View>
+        <Text className="person-record-date-text">{leader}</Text>
+        {rightClose && <Text className="overtime-icon" onClick={(e) => {e.stopPropagation();DeletePickerLeader && DeletePickerLeader()}}></Text>}
       </View>
-    </View>)
+  </View>)
 }

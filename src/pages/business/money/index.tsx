@@ -1,35 +1,27 @@
-import Taro, { useState, useRouter, useEffect } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
-import msg, { showActionModal, showBackModal } from '@/utils/msg'
-import PickerMark from '@/components/picker_mark'
 import PickerType from '@/components/picker_type'
+import PickerLeader from '@/components/picker_leader'
+import PickerMark from '@/components/picker_mark'
+import getBusinessMoneyInfo , { delBusinessMoney, editBusinessMoney} from './api'
 import PickerDetail from '@/components/picker_detail'
-import getExpenditureInfo, { delExpenditureBusiness, editExpenditureBusiness } from './api'
-import ClassifyItem from '@/store/classify/inter.d'
 import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
+import msg, { showBackModal, showActionModal } from '@/utils/msg'
+import { AddressBookConfirmEvent } from '@/config/events'
 import './index.scss'
-import { editBorrowBusiness } from '@/pages/business/borrow/api'
 
-export default function ModifyBorrow() {
+export default function ModifyMoney() {
 
   // 根据路由获取id参数
   const router = useRouter()
-  const { id = '' } = router.params
-  // 是否显示分类数据
-  const [show, setShow] = useState<boolean>(false)
-  // 分类数据
-  const [typeData, setTypeData] = useState<ClassifyItem>({
-    id: '',
-    name: ''
-  })
+  const { id = '11144' } = router.params
   // 借支提交数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
-    expend_type: '',
+    group_leader: '',
     note: '',
-    money: '',
-    group_leader: ''
+    money: ''
   })
   // 接口返回数据
   const [data, setData] = useState<BusinessInfoResult>({
@@ -46,23 +38,31 @@ export default function ModifyBorrow() {
     group_leader_name: ''
   })
 
+  // 等id 读取出来之后就 读取该详情
   useEffect(() => {
     if (id) {
       userGetBusinessInfo()
     }
   }, [id])
 
+  // 注册全局事件 监听是否切换班组长信息
+  useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent,(data) => {
+      setData({...data,group_leader: data.id, group_leader_name: data.name})
+      setPostData({...postData, group_leader: data.id})
+    })
+    return eventCenter.off(AddressBookConfirmEvent)
+  },[])
+
   // 初始化流水数据
   const userGetBusinessInfo = () => {
-    getExpenditureInfo(id).then(res => {
+    getBusinessMoneyInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
         setData(mydata)
-        setTypeData({ id: mydata.expend_type || '', name: mydata.expend_type_name || '' })
-        setPostData({ 
-          ...postData, 
-          expend_type: mydata.expend_type || '', 
-          note: mydata.note || "", 
+        setPostData({
+          ...postData,
+          note: mydata.note || "",
           money: mydata.money || '',
           group_leader: mydata.group_leader || ''
         })
@@ -79,11 +79,6 @@ export default function ModifyBorrow() {
     setPostData(postdata)
   }
 
-  // 用户修改分类信息
-  const userChangePickerType = (data: ClassifyItem) => {
-    setTypeData(data)
-    setPostData({ ...postData, expend_type: data.id })
-  }
 
   // 用户删除流水
   const userDeleteBusiness = () => {
@@ -92,7 +87,7 @@ export default function ModifyBorrow() {
       showCancel: true,
       success: (res) => {
         if (res.confirm) {
-          delExpenditureBusiness(id).then(res => {
+          delBusinessMoney(id).then(res => {
             if (res.code === 0) {
               showBackModal(res.message)
             } else {
@@ -106,7 +101,7 @@ export default function ModifyBorrow() {
 
   // 用户修改流水
   const userEditBusiness = () => {
-    editBorrowBusiness(postData).then(res => {
+    editBusinessMoney(postData).then(res => {
       if (res.code === 0) {
         showBackModal(res.message)
       } else {
@@ -115,23 +110,11 @@ export default function ModifyBorrow() {
     })
   }
 
-
   return (<View>
-    <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money" />
-    <PickerType
-      value={typeData.name}
-      show={show}
-      setShow={() => { setShow(!show) }}
-      rightClose={false}
-      set={(data) => userChangePickerType(data)}
-    />
-    <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail 
-      dateValue={data.business_time} 
-      submitValue={data.created_time} 
-      projectValue={data.work_note_name} 
-      leader={data.group_leader_name}
-    />
+    <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
+    <PickerLeader leader={data.group_leader_name} rightClose={false}  />
+    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
+    <PickerDetail dateValue={data.created_time} submitValue={data.business_time} projectValue={data.work_note_name} />
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
       <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>

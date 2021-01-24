@@ -51,6 +51,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/business/money/index',
       'pages/business/expenditure/index',
       'pages/business/borrow/index',
       'pages/remember/index',

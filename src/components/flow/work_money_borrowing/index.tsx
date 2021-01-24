@@ -1,8 +1,9 @@
 import Taro, { View, Image, Block} from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
+import { PropsData } from './idnex.d'
 import './index.scss'
 
-export default function WorkMoneyBorrowing({ list=[], type}) {
+export default function WorkMoneyBorrowing({ list = [], type = 1 }: PropsData) {
 
 /**
 * @name: goDetail

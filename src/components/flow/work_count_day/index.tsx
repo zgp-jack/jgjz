@@ -4,7 +4,7 @@ import { IMGCDNURL } from '@/config/index'
 import { PropsData } from './idnex.d'
 import './index.scss'
 
-export default function WorkCountDay({ list=[], type }) {
+export default function WorkCountDay({ list = [], type = 1 }: PropsData) {
 
   /**
    * @name: goDetail

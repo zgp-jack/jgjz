@@ -55,6 +55,9 @@ export default function RecordWork() {
   const [timeText, setTimeText] = useState<string>('');
   const [startDate, setStartDate] = useState<string>(nowTime)//筛选开始日期
 
+  const [workerId, setWorkerId] = useState<number[]>([])
+  
+
   useEffect(() => {
     /**获取本地格式化日期 eg:2021/01/21*/
     let timeNow = new Date().toLocaleDateString()
@@ -139,7 +142,7 @@ export default function RecordWork() {
             </View>
             <ScrollView className='record-work-scroll' scrollY enableFlex>
               <View className='record-worker-list'>
-                {currentIndex == index && <WorkerList></WorkerList>}
+                {currentIndex == index && <WorkerList setWorkerId={setWorkerId} workerId={workerId}></WorkerList>}
               </View>
               <View className={typeItem == 1 ? 'record-work-table-content padding':'record-work-table-content'}>
                 <View className='record-work-table-head'>
@@ -151,11 +154,11 @@ export default function RecordWork() {
                     <FlowList currentIndex={currentIndex} params={startDate} types={types}></FlowList>
                   </View>
                 )}
-                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) && <RecordDay business_type={2} business_time='2021-01-24' group_leader='1' note='2' unit='2' identity={1} unit_num='3' />}
-                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) && <RecordAmoumt />}
-                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) && <RecordMoney />}
-                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) && <Borrow />}
-                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) && <Expenditure />}
+                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) && <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} work_note='873' identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) && <RecordAmoumt workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) && <RecordMoney workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) && <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) && <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
               </View>
             </ScrollView>
           </SwiperItem>

@@ -8,7 +8,7 @@ import getWorkerList from './api'
 import './index.scss'
 
 
-export default function RecordWork() {
+export default function RecordWork({workerId,setWorkerId}) {
 
   const { loading, data, errMsg, setLoading } = useInit(getWorkerList, { business_time: '2021-01-24', action: '1' }, { business_worker_id: [], note_worker:[]})
   const [worker, setWorker] = useState<WorkerData[]>([])
@@ -38,15 +38,42 @@ export default function RecordWork() {
     setEmptyCount(emptCount)
   },[data])
 
+
+  const chooseWorker = function (index:number) {
+    let workerData = JSON.parse(JSON.stringify(worker))
+    let workerItem = workerData[index];
+    let workerIdArray = [...workerId]
+    if (workerItem.check) {
+      workerItem.check = false;
+      let i = workerIdArray.findIndex(item => item == workerItem.id);
+      if (i != -1) workerIdArray.splice(i, 1)
+    }else{
+      workerItem.check = true;
+      let i = workerIdArray.findIndex(item => item == workerItem.id);
+      if (i == -1) workerIdArray.push(workerItem.id);
+    }
+    setWorker(workerData)
+    setWorkerId(workerIdArray)
+  }
   
   
   return (
     <View className='record-work-check-person'>
+      <View className='record-work-check-person'>
+        <View className='record-work-person-head'>
+          <View className='record-work-person-title'>
+            <View>选择工友（已选<Text>3</Text>人）</View>
+            <View>全选未记</View>
+          </View>
+          <View className='record-work-person-disc'>黄色块代表此工友当日已有记工</View>
+        </View>
+      </View>
       <View className='record-work-person-content'>
-        {worker.map((obj) => (
+        {worker.map((obj,index) => (
           <View className='record-work-person-item' key={obj.id}>
             <View
               className={obj.check ? (obj.recorded ? 'record-work-person-box choose-box recorded-choose-box' : 'record-work-person-box choose-box') : (obj.recorded ? 'record-work-person-box recorded-box' : 'record-work-person-box')}
+              onClick={()=>chooseWorker(index)}
             >{obj.alias}
               {(obj.recorded && !obj.check) &&
                 <Image src={`${IMGCDNURL}yc/recorded.png`} mode='widthFix' className='recorded-image'></Image>}

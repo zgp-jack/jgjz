@@ -10,7 +10,7 @@ import { getTodayDate } from '@/utils/index'
 import userAddRecordAction from '../api'
 import './index.scss'
 
-export default function RecordDay() {
+export default function RecordDay({ workerId = '', type = 1, work_note = '', identity = 1 }) {
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否日期组件
@@ -21,17 +21,25 @@ export default function RecordDay() {
   const [isPickerOverTime, setIsPickerOverTime] = useState<boolean>(true)
   // 记工天提交数据
   const [postData, setPostData] = useState<RecordDayPostData>({
-    business_type: 1,
+    business_type: type,
     business_time: getTodayDate(),
     group_leader: '',
     note: '',
-    identity: 2,
-    work_note: '890',
-    worker_id: '1693',
+    identity: identity,
+    work_note: work_note,
+    worker_id: workerId,
     work_time: '1',
     work_time_hour: '0',
     overtime: ''
   })
+  useEffect(()=>{
+    let params = { ...postData};
+    params.worker_id = workerId;
+    params.business_type = type;
+    params.work_note = work_note;
+    params.identity = identity;
+    setPostData(params)
+  }, [workerId, type, work_note, identity])
   // 日期文本显示年月日
   useEffect(() => {
     let date = postData.business_time
@@ -48,9 +56,8 @@ export default function RecordDay() {
   }
   // 提交借支数据
   const userPostAcion = () => {
-    debugger
     userAddRecordAction(postData).then((res) => {
-      debugger
+      
     })
   }
   // 设置获取值

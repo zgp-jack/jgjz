@@ -17,12 +17,24 @@ export interface GetCountParams {
   expend_type?: string
   unit_work_type?: string
   expense_account?: string
-  group_leader?: string | string[]
-  worker_id?: string[] | string
+  group_leader: AddressBookParams[] | string
+  worker_id: AddressBookParams[] | string
   page: number
 }
 
 export interface GetCountResult {
   count: any
   count_num: any
+}
+
+export interface AddressBookParams {
+  id: number
+  is_check: boolean
+  is_deleted: number
+  is_in_work_note: number
+  is_self: number
+  name: string
+  name_color: string
+  name_py: string
+  tel?: string
 }

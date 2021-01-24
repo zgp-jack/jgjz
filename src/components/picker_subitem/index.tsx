@@ -29,7 +29,7 @@ function PickerType({
 
   // input-name
   const inputName: string = 'name'
-  // 是否已经加载过分类数据 
+  // 是否已经加载过分项数据 
   const [loading, setLoading] = useState<boolean>(false)
   // 是否显示添加 修改弹窗
   const [showPopup, setShowPopup] = useState<boolean>(false)
@@ -50,7 +50,7 @@ function PickerType({
   const { addClassifySubitem, initClassifySubitem, delClassifySubitem, editClassifySubitem, status, types } = localStore
 
 
-  // 初始化分类数据
+  // 初始化分项数据
   const initClassifySubitemData = () => {
     if (loading || status) return
     userGetExpendType({}).then(res => {
@@ -140,7 +140,7 @@ function PickerType({
 
   return (
     <View>
-      <View className="person-record-overtime person-record-date" onClick={() => setShow(true)}>
+      <View className="person-record-overtime person-record-date" onClick={() => {setShow(true)}}>
         {!hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
         <Input className="person-record-date-text" value={value} placeholder='请添加您的分项' disabled></Input>
@@ -162,7 +162,7 @@ function PickerType({
 
       {/* 新增弹窗 */}
       {showPopup && <Popup
-        titleText={id ? '修改分类' : '添加分类'}
+        titleText={id ? '修改分项' : '添加分项'}
         showTitleButton={false}
         inputGroup={popupData}
         confirmText='确定'

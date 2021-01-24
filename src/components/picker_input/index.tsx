@@ -31,7 +31,7 @@ export default function ContentInput({ title, change, value, type, maxLength = 2
           <Input 
             type="number" 
             value={value} 
-            placeholder={`0`} 
+            placeholder={`0.00`} 
             className="work-amount-input" 
             onInput={(e: any) => change(e.detail.value, type)}
             onFocus={() => setFocus(true)}

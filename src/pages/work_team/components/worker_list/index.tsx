@@ -218,21 +218,46 @@ export default function RecordWork({workerId,setWorkerId}) {
     timeOutEvent = 0;
   }
 
-  /** 修改工友-接口请求 */
+
+  /**
+  * @name: editWorkerConfirm
+  * @params inputData 输入框编辑数据
+  * @return void
+  * @description 修改工友-接口请求
+  */
   const editWorkerConfirm = (inputData: InputValue) => {
+    /**获取班组工友数据*/ 
+    let workerData = JSON.parse(JSON.stringify(worker))
+    /**发送编辑请求*/ 
     editWordkerInfo(selectWorker.id, { name: inputData.name, tel: inputData.tel || '' }).then(res => {
       msg(res.message)
       if (res.code != 0) {
         return
       }
+      /**重新设置修改后数据*/ 
+      workerData.forEach((item:any) => {
+        if (item.id == selectWorker.id) {
+          item.name = inputData.name;
+          item.tel = inputData.tel;
+          item.alias = inputData.name.substring(inputData.name.length - 2)
+        }
+      });
+      setWorker(workerData)
+      /**隐藏修改弹窗*/ 
       setIsShowEdit(false)
     })
   }
   
 
-  /** 删除事件 */
+
+  /**
+  * @name: movePerson
+  * @params null
+  * @return void
+  * @description 移除工友事件
+  */
   const movePerson = () => {
-    let workerData = JSON.parse(JSON.stringify(Worker))
+    let workerData = JSON.parse(JSON.stringify(worker))
     let workId = {
       id: selectWorker.id
     }

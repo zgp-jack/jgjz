@@ -55,7 +55,7 @@ interface PERSON_DATA {
 //获取所有工友的接口 传给后台的参数
 export interface GET_WORKERS_ALL_PARAMS {
   //记账本id
-  work_note:string
+  work_note:number
 }
 
 //获取所有工友的接口 后台返回值

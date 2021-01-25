@@ -1,4 +1,4 @@
-import Taro, {Config, useState} from '@tarojs/taro'
+import Taro, { Config, useState, useEffect} from '@tarojs/taro'
 import {View, Text, Image, Button} from '@tarojs/components'
 import {IMGCDNURL} from '@/config/index'
 import getWorkNotes, {editWorkNote} from './api'
@@ -20,6 +20,9 @@ function AccountBook() {
 
   /** 获取所有记工列表 */
   const {loading, data, errMsg, setLoading} = useInit(getWorkNotes, {}, [])
+  // useEffect(() => {
+  //   console.log(data)
+  // },[data])
   /** 被修改的数据 */
   const [editData, setEditData] = useState<Edit_AddressBook_Info>({
     id: 0,

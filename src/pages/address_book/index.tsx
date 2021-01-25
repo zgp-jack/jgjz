@@ -22,7 +22,7 @@ function AddressBook() {
   const { accountBookInfo } = localStore
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
-  const { type = ADDRESSBOOKTYPE_GROUP, data = '' } = router.params
+  const { type = ADDRESSBOOKTYPE_GROUP,data } = router.params
 
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
@@ -102,7 +102,7 @@ function AddressBook() {
     // 判断是单选 则拿到当前数据然后退出
     if (type === ADDRESSBOOKTYPE_ALONE) {
       let data: PERSON_DATA = list[pIndex].data[cIndex]
-      eventCenter.trigger(AddressBookConfirmEvent, data)
+      eventCenter.trigger(AddressBookConfirmEvent, [data])
       Taro.navigateBack()
       return
     }

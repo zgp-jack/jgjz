@@ -1,4 +1,4 @@
-import Taro, { useState, useRouter, useEffect, eventCenter } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerLeader from '@/components/picker_leader'
@@ -16,13 +16,12 @@ import './index.scss'
 export default function BusinessAmount() {
   // 根据路由获取id参数
   const router = useRouter()
-  const { id = '11151' } = router.params
-  // 是否显示分类组件
-  const [IsPickerType, setIsPickType] = useState<boolean>(true)
-  // 是否显示日期组件
-  const [IsPickerDate, setIsPickerDate] = useState<boolean>(true)
+  const { id = '' } = router.params
   // 是否显示班组长 组件
-  const [IsPickerLeader, setIsPickerLeader] = useState<boolean>(true)
+  const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
+    id: '',
+    name: ''
+  })
   // 是否显示分项数据
   const [show, setShow] = useState<boolean>(false)
   // 分项数据
@@ -62,17 +61,15 @@ export default function BusinessAmount() {
   }
   useEffect(() => {
     if (id) {
-      Taro.setNavigationBarTitle({ title: '修改工量' })
       userGetBusinessInfo()
     }
   }, [id])
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      setData({ ...data, group_leader: data.id, group_leader_name: data.name })
-      setPostData({ ...postData, group_leader: data.id })
+      setGroupLeader({id: data.id, name: data.name})
     })
-    return eventCenter.off(AddressBookConfirmEvent)
+    return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
   // 初始化流水数据
   const userGetBusinessInfo = () => {
@@ -84,6 +81,7 @@ export default function BusinessAmount() {
           unit_num: mydata.unit_num || ''
         })
         setTypeData({ id: mydata.unit_work_type, name: mydata.unit_work_type_name })
+        setGroupLeader({ id: mydata.group_leader || '', name: mydata.group_leader_name || ''})
         setPostData({
           ...postData,
           unit_work_type: mydata.unit_work_type || '',
@@ -102,10 +100,17 @@ export default function BusinessAmount() {
     setTypeData(data)
     setPostData({ ...postData, unit_work_type: data.name })
   }
+
+  // 用户清除 分项信息
+  const userClearSubitemType = () => {
+    setTypeData({id: '', name: ''})
+    setPostData({ ...postData, unit_work_type: ''})
+  }
+
   // 用户删除流水
   const userDeleteBusiness = () => {
     showActionModal({
-      msg: '您确定删除该笔借支吗？',
+      msg: '您确定删除该信息吗？',
       showCancel: true,
       success: (res) => {
         if (res.confirm) {
@@ -122,8 +127,11 @@ export default function BusinessAmount() {
   }
   // 用户修改流水
   const userEditBusiness = () => {
-    debugger
-    editBorrowBusiness(postData).then(res => {
+    let params: UserEditBusinessInfo = {
+      ...postData,
+      group_leader: groupLeader.id
+    }
+    editBorrowBusiness(params).then(res => {
       if (res.code === 0) {
         showBackModal(res.message)
       } else {
@@ -131,30 +139,31 @@ export default function BusinessAmount() {
       }
     })
   }
-  // 用户关闭 分类组件
-  const ColsePickerType = () => {
-    setIsPickType(false)
-  }
-  // 用户关闭班组 组件
+
+  // 用户 删除 班组长
   const DeletePickerLeader = () => {
-    setIsPickerLeader(false)
+    setGroupLeader({id: '', name: ''})
   }
   return (<View>
-    <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num" />
-    <PickerUnitWara set={(data) => userUpdatePostData(data.id,'unit')} />
+    <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
+    <PickerUnitWara set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
       value={typeData.name}
       show={show}
       setShow={() => { setShow(!show) }}
-      rightClose={false}
       set={(data) => userChangePickerType(data)}
+      close={() => userClearSubitemType()}
     />
-    <PickerLeader leader={'张三'} DeletePickerLeader={DeletePickerLeader} />
-    <PickerMark text={'Hello world!'} />
-    <PickerDetail dateValue='2021-1-21' submitValue="2021年1月20日" projectValue='国际' />
+    <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => DeletePickerLeader()} />
+    <PickerMark text={postData.note} />
+    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
       <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
     </View>
   </View>)
 }
+
+BusinessAmount.config = {
+  navigationBarTitleText: '修改工量'
+} as Config

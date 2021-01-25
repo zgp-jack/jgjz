@@ -12,7 +12,8 @@ import { observer, useLocalStore } from '@tarojs/mobx'
 import User from '@/store/user';
 import { UserGetCodeLoginParams, LoginProps } from './inter.d'
 import './index.scss'
-
+import getWorkNotes from '../../pages/account_book_list/api'
+import useInit from '@/hooks/init'
 function Login({
   show = false,
   setShow
@@ -21,6 +22,8 @@ function Login({
   const localStore = useLocalStore(() => User);
   const { setUserInfo } = localStore
 
+  /** 获取所有记工列表 */
+  const { data, setLoading } = useInit(getWorkNotes, {}, [])
   /** 当前高亮key */
   const [id, setId] = useState<string>(loginConfig[0].id)
   /** 是否显示密码 */
@@ -85,6 +88,12 @@ function Login({
         Taro.setStorageSync(UserInfo, userInfo)
         // 储存mobx
         setUserInfo(userInfo)
+        setLoading(true)
+        if(data.length < 1){
+          Taro.redirectTo({
+            url: '/pages/identity_selection/index'
+          })
+        }
         //关闭弹窗
         setShow && setShow(false);
       } else {

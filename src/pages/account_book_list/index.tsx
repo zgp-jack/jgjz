@@ -78,7 +78,7 @@ function AccountBook() {
       <InitProvider loading={loading} errMsg={errMsg}>
         {data.map((item) => (
           <View className="account-book-personal account-book-item" key={item.id}>
-            {item.identity == '1' ? <Text className="account-book-type-personal">个人记工</Text>
+            {item.identity == '2' ? <Text className="account-book-type-personal">个人记工</Text>
               :
               <Text className="account-book-type-team">班组记工</Text>
             }

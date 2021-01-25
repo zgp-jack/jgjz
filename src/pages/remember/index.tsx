@@ -118,6 +118,15 @@ const Remember = () => {
   useEffect(() => {
     initParams()
   }, [filterMonth, filterYear])
+
+  const handIsLogin = () => {/*是否登录*/
+    console.log(user.login, "8888888")
+    if (!user.login) {
+      setShowLogin(true)
+      return false
+    }
+    return true
+  }
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -149,6 +158,10 @@ const Remember = () => {
   }
   /*上一个月份日期*/
   const prevMonth = () => {
+    if(!handIsLogin()){
+      handIsLogin()
+      return 
+    }
     if (filterMonth == 1) {
       setFilterYear(filterYear - 1)
       setFilterMonth(12)
@@ -158,6 +171,10 @@ const Remember = () => {
   }
   /*下一个月份日期*/
   const nextMonth = () => {
+    if (!handIsLogin()) {
+      handIsLogin()
+      return
+    }
     if (filterMonth == 12) {
       setFilterYear(filterYear + 1)
       setFilterMonth(1)
@@ -167,6 +184,10 @@ const Remember = () => {
   }
   /*日期选择器选择*/
   const onFilterDateChange = (e) => {
+    if (!handIsLogin()) {
+      handIsLogin()
+      return
+    }
     const date = e.detail.value
     setCurrentYearMonth(date)
     const yearAndMonth = date.split('-')
@@ -228,13 +249,7 @@ const Remember = () => {
     handIsLogin() && Taro.navigateTo({ url })
   }
 
-  const handIsLogin = () => {/*是否登录*/
-    if (!user.login) {
-      setShowLogin(true)
-      return false
-    }
-    return true
-  }
+
   /*1转为01*/
   const handleMonthShow = (month = filterMonth) => {
     return Number(month) < 10 ? `0${month}` : month
@@ -273,12 +288,12 @@ const Remember = () => {
                   <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                    onClick={() => setShowFilter(true)}>
+                onClick={() => {!handIsLogin() ? handIsLogin() : setShowFilter(true)}}>
                 <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
-            <View className="filter-info" onClick={() => setShowFilter(true)}>
+              <View className="filter-info" onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
               <View className="filter-info-box overwords">
                 {
                   ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&

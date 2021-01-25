@@ -26,7 +26,7 @@ export interface RecordPostData {
   /** 个人/班组 */
   identity: 1 | 2
   /** 记工本ID */
-  work_note?: string
+  work_note?: number
   /** 工人ID */
   worker_id?: string
   /** 上传图片url */

@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:15:01
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-24 10:43:14
+ * @LastEditTime: 2021-01-24 15:04:19
  * @Description: 存放所有的API请求接口
  ! @rules: 1. 导出的接口名 小驼峰  2.注释: 功能模块名 + 接口概述 3.功能模块相同的接口放在一起
  */
@@ -47,6 +47,9 @@ export const userAddUnitWorkType: string = `UnitWorkType/add`
 export const userEditUnitWorkType: string = `UnitWorkType/update`
 // 记账类别-删除
 export const userDelUnitWorkType: string = `UnitWorkType/delete`
+
+// ! 计量单位
+export const userGetUnit: string = `unit/get`
 
 // ! 登录注册
 // 登录-获取验证码
@@ -95,5 +98,8 @@ export const addWorkNotes: string = 'work-notes/add'
 
 //修改记工本
 export const editWorkNotes: string = 'work-notes/edit-work-note'
+
+// 获取单个记工本工友
+export const WorkerList: string = 'workers/get-note-workers/873'
 
 

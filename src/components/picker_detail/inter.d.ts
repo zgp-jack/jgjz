@@ -19,7 +19,7 @@
     // 班组长
     leaderTitle?: string
     // 班组长
-    leader: string
+    leader?: string
      // 项目名称
      projectName?:string
      // 项目

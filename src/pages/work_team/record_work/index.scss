@@ -9,37 +9,47 @@ page{
   flex-direction: column;
   .record-work-head{
     height: 100px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     padding: 0 30px;
     background-color: white;
+    position: fixed;
+    top: 0;
+    z-index: 1;
   }
   .record-work-swiper{
-    height: calc(100vh - 100px);
-    .record-work-head-date{
-      height: 100px;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      color: #333333;
-      font-weight: 500;
-      padding: 0 30px;
-      background-color: white;
-      .record-work-head-choose-date{
+    height: 100vh;
+    .record-work-item{
+      top: 0;
+      padding-top: 100px;
+      height: calc(100vh - 100px) !important;
+      .record-work-head-date{
+        height: 100px;
         display: flex;
         flex-direction: row;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
-        .record-work-date{
-          text-align: end;
-          margin-right: 20px;
+        color: #333333;
+        font-weight: 500;
+        padding: 0 30px;
+        background-color: white;
+        .record-work-head-choose-date{
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: center;
+          .record-work-date{
+            text-align: end;
+            margin-right: 20px;
+          }
+        }
+        Image{
+          width: 20px;
         }
       }
-      Image{
-        width: 20px;
-      }
     }
+    
   }
   .record-work-scroll{
     height: calc(100vh - 200px);

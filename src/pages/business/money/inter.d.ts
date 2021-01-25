@@ -2,8 +2,8 @@
  * @Author: jsxin
  * @Date: 2021-01-24 10:25:31
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-24 18:57:35
- * @Description: 个人流水支出 接口
+ * @LastEditTime: 2021-01-24 18:58:07
+ * @Description: 记工钱 接口
  */
 
 // 初始化支出详情 接口返回数据
@@ -38,12 +38,10 @@ export interface UserDelBusinessInfo {
   id: string
 }
 
-// 用户修改借支流水操作
+// 用户修改记工钱水操作
 export interface UserEditBusinessInfo {
   /** 需要被修改的流水id */
   id: string
-  /** 借支分类id */
-  expend_type: string,
   /** 借支备注 */
   note: string,
   /** 借支金额 */

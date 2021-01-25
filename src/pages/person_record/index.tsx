@@ -10,7 +10,7 @@ export default function PersonRecord(){
     // 切换记工type值
     const [recordnum, setRecordnum] = useState<number>(1);
     // 切换Tap
-    const Changetype = (id,title) => {
+    const Changetype = (id:number,title:string) => {
       setRecordnum(id)
       Taro.setNavigationBarTitle({ title: `个人${title}` }) 
     }

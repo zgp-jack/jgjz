@@ -1,29 +1,18 @@
-import Taro, {Config, useEffect, useState, useRouter} from '@tarojs/taro'
-import {View, Text, Picker, Input, Image, ScrollView, Block, Swiper, SwiperItem} from '@tarojs/components'
-import WorkCountDay from '@/components/flow/work_count_day/index'
-import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
-import WorkerList from '@/pages/work_team/components/worker_list/index'
-import ListProvider from '@/components/list_provider'
-import {IMGCDNURL} from '@/config/index'
-import { useLocalStore } from '@tarojs/mobx'
-import { GetWorkFlowParams, TypeAction} from './index.d'
-import RememberTypeItem from '@/store/business';
-import useList from '@/hooks/list'
-import getFlowlists from './api'
+import Taro, { useEffect, useState, useRouter, Config} from '@tarojs/taro'
+import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team/components/flow_list/index'
 import RecordDay from '@/pages/person_record/record_day/index'
 import RecordAmoumt from '@/pages/person_record/record_amount/index'
 import RecordMoney from '@/pages/person_record/record_money/index'
 import Borrow from '@/pages/person_borrowing/components/borrow/index'
 import Expenditure from '@/pages/person_borrowing/components/expenditure/index'
+import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
+import WorkerList from '@/pages/work_team/components/worker_list/index'
+import RememberTypeItem from '@/store/business';
+import {IMGCDNURL} from '@/config/index'
+import { useLocalStore } from '@tarojs/mobx'
+import { TypeAction } from '@/pages/work_team/record_work/index.d'
 import './index.scss'
-
-
-interface dataList {
-  name: string,
-  check?: boolean
-}
 
 
 export default function RecordWork() {
@@ -66,23 +55,14 @@ export default function RecordWork() {
   const [timeText, setTimeText] = useState<string>('');
   const [startDate, setStartDate] = useState<string>(nowTime)//筛选开始日期
 
-
-  let dataList = [{name: "王五", check: true}, {name: "王五"}, {name: "王五"}, {name: "王五"}, {
-    name: "王五",
-    status: true,
-    check: true
-  }, {name: "王五"}, {name: "王五"}, {name: "王五", status: true}]
-  let emptyCount = 6 - (dataList.length + 2) % 6;
-  let emptyArray: dataList[] = []
-  for (let index = 0; index < emptyCount; index++) {
-    emptyArray.push({name: ''})
-  }
+  const [workerId, setWorkerId] = useState<number[]>([])
+  
 
   useEffect(() => {
     /**获取本地格式化日期 eg:2021/01/21*/
-    let nowTime = new Date().toLocaleDateString()
+    let timeNow = new Date().toLocaleDateString()
     /**按照格式初始化时间*/
-    let timeStr = initTime(nowTime)[0];
+    let timeStr = initTime(timeNow)[0];
     setTimeText(timeStr)
   }, [])
 
@@ -104,7 +84,7 @@ export default function RecordWork() {
    * @return void
    * @description 滑动滑块的时候切换当前的index
    */
-  const switchTab = (e) => {
+  const switchTab = (e:any) => {
     /**当前滑块的index*/
     let index = e.detail.current;
     /**保存当前滑块index*/
@@ -139,30 +119,30 @@ export default function RecordWork() {
 */
   const switchTable = (e:any) => {
     /**点击元素type值*/ 
-    let type:number = e.currentTarget.dataset.type;
+    let typeNum:number = e.currentTarget.dataset.type;
     /**保存type值*/ 
-    SetTypeItem(type)
+    SetTypeItem(typeNum)
   }
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
-        <WorkTeamTable types={types} index={currentIndex} onChange={changeTable}/>
+        <WorkTeamTable types={types} index={currentIndex} onChange={changeTable} />
       </View>
-      <Swiper className="record-work-swiper" current={currentIndex} duration={300} onChange={(e) => switchTab(e)}>
+      <Swiper className='record-work-swiper' current={currentIndex} duration={300} onChange={(e) => switchTab(e)}>
         {types.map((item,index) => (
-          <SwiperItem key={item.id}>
+          <SwiperItem key={item.id} className='record-work-item'>
             <View className='record-work-head-date'>
               <View className='record-work-head-title'>选择日期：</View>
               <View className='record-work-head-choose-date'>
                 <Picker mode='date' onChange={changeTime} value={startDate}>
-                  <Input className='record-work-date' type='text' disabled value={timeText}/>
+                  <Input className='record-work-date' type='text' disabled value={timeText} />
                 </Picker>
-                <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
+                <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix' />
               </View>
             </View>
-            <ScrollView className="record-work-scroll" scrollY enableFlex>
-              <View className="record-worker-list">
-                <WorkerList></WorkerList>
+            <ScrollView className='record-work-scroll' scrollY enableFlex>
+              <View className='record-worker-list'>
+                {currentIndex == index && <WorkerList setWorkerId={setWorkerId} workerId={workerId}></WorkerList>}
               </View>
               <View className={typeItem == 1 ? 'record-work-table-content padding':'record-work-table-content'}>
                 <View className='record-work-table-head'>
@@ -174,11 +154,11 @@ export default function RecordWork() {
                     <FlowList currentIndex={currentIndex} params={startDate} types={types}></FlowList>
                   </View>
                 )}
-                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) && <RecordDay/>}
-                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) && <RecordAmoumt/>}
-                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) && <RecordMoney/>}
-                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) && <Borrow/>}
-                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) && <Expenditure/>}
+                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) && <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} work_note='873' identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) && <RecordAmoumt workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) && <RecordMoney workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) && <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) && <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
               </View>
             </ScrollView>
           </SwiperItem>

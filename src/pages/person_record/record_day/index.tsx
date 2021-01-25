@@ -115,12 +115,11 @@ function RecordDay() {
   }
   return (<View>
     <View className="person-record-time">
-      <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} worktime={worktime} />
+      <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} />
       {isPickerOverTime && <WorkTime 
         close={() => setIsPickerOverTime(false)} 
         setTime={(value) => setMoreTime(value, false)} 
         set={(value) => setTime(value,false)} 
-        worktime={overtime} 
         isClose={false} />
       }
     </View>

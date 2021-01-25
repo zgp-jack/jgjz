@@ -20,6 +20,8 @@ export default interface WorkTimeProps {
   setTime: (number) => void
   /** 关闭加班组件 */
   close?: () => void
+  /** 修改的选中值  */
+  selected?: SelectedValue
 }
 
 export interface WorkTimeDataType {
@@ -31,4 +33,16 @@ export interface WorkTimeDataType {
 interface workValueType {
   work_time: string,
   work_time_hour: string
+}
+interface SelectedValue {
+  // 选中id
+  id:number
+  // 选中值
+  value: number
+}
+export interface WorkTime {
+  // id
+  id: number
+  // text值
+  text: string
 }

@@ -29,10 +29,11 @@ function AddressBook() {
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
-    if (!accountBookInfo.id) return
+    let id = accountBookInfo.id || 11193
+    if (!id) return
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */
-    getWorkers({ work_note: accountBookInfo.id }).then((res) => {
+    getWorkers({ work_note: id }).then((res) => {
       
       //如果上一个 页面有 传数据 过来
       if (data) {
@@ -102,6 +103,7 @@ function AddressBook() {
     // 判断是单选 则拿到当前数据然后退出
     if (type === ADDRESSBOOKTYPE_ALONE) {
       let data: PERSON_DATA = list[pIndex].data[cIndex]
+      console.log(data)
       eventCenter.trigger(AddressBookConfirmEvent, data)
       Taro.navigateBack()
       return

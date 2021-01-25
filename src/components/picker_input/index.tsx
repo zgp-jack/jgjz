@@ -10,7 +10,7 @@ export default function ContentInput({ title, change, value, type, maxLength = 2
 
   // 监听输入框的值
   useEffect(() => {
-    let _value: string = value
+    let _value: string = value || ''
     let index: number = _value.indexOf('.')
     // 如果说是小数 那么就要准备切割
     if (index !== -1){

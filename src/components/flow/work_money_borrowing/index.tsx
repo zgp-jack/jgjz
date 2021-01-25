@@ -1,23 +1,31 @@
-import Taro, { View, Image, Block} from '@tarojs/components'
+import Taro from '@tarojs/taro'
+import { View, Image, Block} from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
-import { PropsData } from './idnex.d'
+import { PropsData } from './index.d'
 import './index.scss'
 
 export default function WorkMoneyBorrowing({ list = [], type = 1 }: PropsData) {
 
 /**
 * @name: goDetail
-* @params id:流水信息id  action: 当前流水类型
+* @params id:流水信息id  action: 当前流水类型 3: 工钱 4: 借支 5: 支出
 * @return void
 * @description 点击流水跳转到对应的详情修改页
 */
   const goDetail = (id: number, action: number) => {
-    action == 3 && Taro.navigateTo({ url: `/pages/business/borrow/index?id=${id}` })
-    action == 4 && Taro.navigateTo({url: `/pages/business/borrow/index?id=${id}`})
-    action == 5 && Taro.navigateTo({ url: `/pages/business/expenditure/index?id=${id}` })
+    let url: string = ''
+    if(action === 3){
+      url = `/pages/business/money/index?id=${id}` 
+    }else if(action === 4){
+      url = `/pages/business/borrow/index?id=${id}`
+    }else{
+      url = `/pages/business/expenditure/index?id=${id}`
+    }
+    Taro.navigateTo({ url})
   }
   return (
-    list.map(item=>(
+    <Block>
+    {list.map(item=>(
       <Block key={item.id}>
         <View className='bokkeeping-list-container'>
           <View className='bokkeeping-list-item' onClick={() => goDetail(item.id,item.business_type)}>
@@ -34,8 +42,7 @@ export default function WorkMoneyBorrowing({ list = [], type = 1 }: PropsData) {
             </View>
           </View>
         </View>
-      </Block>
-    ))
-    
+      </Block>))}
+    </Block>
   )
 }

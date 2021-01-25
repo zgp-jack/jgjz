@@ -34,8 +34,7 @@ const Remember = () => {
   const { user } = _userInfo
   const { businessType } = rememberStore
   const {accountBookInfo} = _accountBookInfo
-  
-  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '1' ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 1 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
@@ -48,7 +47,7 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == '1')
+  const [personOrGroup] = useState(accountBookInfo.identity == 1)
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -58,7 +57,7 @@ const Remember = () => {
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '873',
+    work_note: accountBookInfo.id + '',
     worker_id: [],
     business_type: [],
     expend_type: '',
@@ -100,7 +99,6 @@ const Remember = () => {
   /*筛选月份*/
   const [filterMonth, setFilterMonth] = useState(month)
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
-
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
   /* 登陆弹窗 */
   const [showLogin, setShowLogin] = useState(false)
@@ -417,30 +415,11 @@ const Remember = () => {
             </View>
 
             <View className="statistics-flow">
-              <View
-                className="statistics-title">{handleMonthShow()}月全部流水</View>
-              <View className="bokkeeping-list">
-                {list.map(item => (
-                  <Block>
-                    <View className="bokkeeping-list-head">{item.date}</View>
-                    <View className="bokkeeping-list-content">
-                      {item.list.map(p => (
-                        (p.business_type == 1 || p.business_type == 2) ?
-                          <WorkCountDay list={[p]} type={p.business_type}/> :
-                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>)
-                      ))}
-                    </View>
-                  </Block>
-                ))}
-              </View>
-              <View
-                className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth}月全部流水</View>
               <ListProvider
                 increasing={increasing}
                 loading={loading}
                 errMsg={errMsg}
-                hasmore={hasmore}
+                hasmore={false}
                 length={list.length}
               >
                 <View className="bokkeeping-list">
@@ -449,10 +428,12 @@ const Remember = () => {
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          (p.business_type == 1 || p.business_type == 2) ?
-                            <WorkCountDay key={p.id} list={[p]} type={p.business_type}/> :
-                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                              <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type}/>)
+                          <Block key={p.id}>
+                            {/* 如果是记工天 记工量 */}
+                            {(p.business_type == 1 || p.business_type == 2) && <WorkCountDay list={[p]} type={p.business_type} />}
+                            {/* 如果是 记工钱、 借支、 支出 */}
+                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                          </Block>
                         ))}
                       </View>
                     </Block>

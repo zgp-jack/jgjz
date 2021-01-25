@@ -61,18 +61,19 @@ function AccountBook() {
 
   /** 进入记工账本 页面跳转之前 设置mobx信息 */
   const enterTheRecordBook = (data: RECORD_WORK_DATA, type: string) => {
+    console.log(type, data.identity)
     // 储存mobx
     setAccountBoookInfo(data)
     let url: string = ''
     // 判断是 record:记工 borrow:记账 还是 account:进入记工本
     if(type == 'record'){
-      if (data.identity == '1') { // 班组记工
+      if (data.identity == 1) { // 班组记工
         url = '/pages/person_record/index'
       } else { // 个人记工
         url = '/pages/person_record/index'
       }
     }else if(type == 'borrow'){
-      if (data.identity == '1') { // 班组记账
+      if (data.identity == 1) { // 班组记账
         url = '/pages/person_record/index'
       } else { // 个人记账
         url = '/pages/person_borrowing/index'
@@ -95,7 +96,7 @@ function AccountBook() {
       <InitProvider loading={loading} errMsg={errMsg}>
         {data.map((item) => (
           <View className="account-book-personal account-book-item" key={item.id}>
-            {item.identity == '1' ? <Text className="account-book-type-personal">个人记工</Text>
+            {item.identity == 2 ? <Text className="account-book-type-personal">个人记工</Text>
               :
               <Text className="account-book-type-team">班组记工</Text>
             }

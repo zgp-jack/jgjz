@@ -11,7 +11,7 @@ import msg, { showBackModal, showActionModal } from '@/utils/msg'
 import { AddressBookConfirmEvent } from '@/config/events'
 import './index.scss'
 
-export default function ModifyMoney() {
+export default function BusinessMoney() {
 
   // 根据路由获取id参数
   const router = useRouter()

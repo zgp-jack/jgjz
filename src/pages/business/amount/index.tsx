@@ -13,7 +13,7 @@ import { AddressBookConfirmEvent } from '@/config/events'
 import getBorrowInfo, { delBorrowBusiness, editBorrowBusiness } from './api'
 import './index.scss'
 
-export default function ModifyAmount() {
+export default function BusinessAmount() {
   // 根据路由获取id参数
   const router = useRouter()
   const { id = '11151' } = router.params

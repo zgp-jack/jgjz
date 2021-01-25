@@ -2,7 +2,7 @@
  * @Author: lcmxkg
  * @Date: 2021年01月22日10:26:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-25 14:20:45
+ * @LastEditTime: 2021-01-25 16:09:19
  * @Description: 记工-账本列表
  */
 // 数据列表
@@ -21,8 +21,8 @@ interface RECORD_WORK_DATA {
   id:number,
   /** 记工名称 */
   name:string,
-  /** 记工-1是个人-2是班组 */
-  identity:string,
+  /** 记工-1是班组-2是个人 */
+  identity: number,
   /**  是否归档状态 */
   status:number,
 }

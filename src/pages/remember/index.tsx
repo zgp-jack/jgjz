@@ -30,7 +30,7 @@ const Remember = () => {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {businessType} = rememberStore
   const {accountBookInfo} = _accountBookInfo
-  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '1' ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 1 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
@@ -43,7 +43,7 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == '1')
+  const [personOrGroup] = useState(accountBookInfo.identity == 1)
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/

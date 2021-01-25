@@ -1,4 +1,4 @@
-import Taro, { useState, useRouter, useEffect } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import msg, { showActionModal, showBackModal } from '@/utils/msg'
@@ -8,6 +8,7 @@ import PickerDetail from '@/components/picker_detail'
 import getBorrowInfo, { delBorrowBusiness,editBorrowBusiness } from './api'
 import ClassifyItem from '@/store/classify/inter.d'
 import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
+import { AddressBookConfirmEvent } from '@/config/events'
 import './index.scss'
 
 export default function ModifyBorrow() {
@@ -47,9 +48,18 @@ export default function ModifyBorrow() {
 
   useEffect(() => {
     if(id){
+      Taro.setNavigationBarTitle({ title: '修改借支' })
       userGetBusinessInfo()
     }
   },[id])
+  // 注册全局事件 监听是否切换班组长信息
+  useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
+      setData({ ...data, group_leader: data.id, group_leader_name: data.name })
+      setPostData({ ...postData, group_leader: data.id })
+    })
+    return eventCenter.off(AddressBookConfirmEvent)
+  }, [])
 
   // 初始化流水数据
   const userGetBusinessInfo = () => {

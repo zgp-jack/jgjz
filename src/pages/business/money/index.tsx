@@ -41,6 +41,7 @@ export default function ModifyMoney() {
   // 等id 读取出来之后就 读取该详情
   useEffect(() => {
     if (id) {
+      Taro.setNavigationBarTitle({ title: '修改工钱' })
       userGetBusinessInfo()
     }
   }, [id])
@@ -83,7 +84,7 @@ export default function ModifyMoney() {
   // 用户删除流水
   const userDeleteBusiness = () => {
     showActionModal({
-      msg: '您确定删除该笔借支吗？',
+      msg: '您确定删除该笔工钱吗？',
       showCancel: true,
       success: (res) => {
         if (res.confirm) {

@@ -29,6 +29,7 @@ function AddressBook() {
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
+    console.log(accountBookInfo.id)
     if (!accountBookInfo.id) return
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */
@@ -59,7 +60,6 @@ function AddressBook() {
         setList(res.data)
       }
     })
-
   }, [])
 
   /** 未选择check图片 */

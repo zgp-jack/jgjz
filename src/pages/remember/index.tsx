@@ -53,7 +53,7 @@ const Remember = () => {
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: '873',
+    work_note: accountBookInfo.id + '',
     worker_id: [],
     business_type: [],
     expend_type: '',
@@ -95,7 +95,6 @@ const Remember = () => {
   /*筛选月份*/
   const [filterMonth, setFilterMonth] = useState(month)
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
-
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
 
 
@@ -390,8 +389,8 @@ const Remember = () => {
               <View
                 className="statistics-title">{handleMonthShow()}月全部流水</View>
               <View className="bokkeeping-list">
-                {list.map(item => (
-                  <Block>
+                {list.map((item, i) => (
+                  <Block key={i}>
                     <View className="bokkeeping-list-head">{item.date}</View>
                     <View className="bokkeeping-list-content">
                       {item.list.map(p => (

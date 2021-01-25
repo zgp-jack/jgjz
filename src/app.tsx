@@ -54,6 +54,7 @@ class App extends Component {
       'pages/business/money/index',
 
       'pages/remember/index',
+      'pages/login/index', //登录
       'pages/business/expenditure/index',
       'pages/business/borrow/index',
       'pages/business/amount/index',

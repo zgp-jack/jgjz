@@ -22,3 +22,10 @@ export interface WorkerParams {
 
 
 
+interface DeletedParams {
+  /** 工友id */
+  id: number
+}
+
+
+

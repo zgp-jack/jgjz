@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import RecordDayPostData from './inter.d'
+import RecordDayPostData, { PropsData } from './inter.d'
 import { worktime, overtime } from './config'
 import WorkTime from '@/pages/person_borrowing/components/work_time/index'
 import PickerDate from '@/components/picker_date/index'
@@ -16,7 +16,7 @@ import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import './index.scss'
 
-function RecordDay() {
+function RecordDay({ workerId,type}:PropsData) {
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否日期组件
@@ -27,14 +27,15 @@ function RecordDay() {
   const [isPickerOverTime, setIsPickerOverTime] = useState<boolean>(false)
   // 记工天提交数据
   const [postData, setPostData] = useState<RecordDayPostData>({
-    business_type: 1,
+    business_type: type,
     business_time: getTodayDate(),
     group_leader: '',
     note: '',
     identity: 2,
     work_time: '1',
     work_time_hour: '0',
-    overtime: ''
+    overtime: '',
+    worker_id: workerId
   })
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<classifyItem>({
@@ -78,15 +79,17 @@ function RecordDay() {
   // 提交借支数据
   const userPostAcion = () => {
     let params: RecordDayPostData = {
-      business_type: 1,
-      identity: 2,
+      business_type: type || 1,
+      identity: Number(accountBookInfo.identity),
       work_time: postData.work_time,
       work_time_hour: postData.work_time_hour,
       overtime: isPickerOverTime ? postData.overtime:'',
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
-      work_note: accountBookInfo.id
+      work_note: accountBookInfo.id,
+      worker_id: workerId
+      
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {

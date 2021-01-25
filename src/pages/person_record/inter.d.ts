@@ -1,8 +1,8 @@
 /*
  * @Author: jack_zgp
  * @Date: 2021-01-20 16:26:46
- * @LastEditors: jack_zgp
- * @LastEditTime: 2021-01-20 16:47:42
+ * @LastEditors: jsxin
+ * @LastEditTime: 2021-01-25 18:08:30
  * @Description: interface for person_record
  */
 
@@ -14,7 +14,7 @@
  }
 export interface RecordPostData {
   /** 记工类型 */
-  business_type: 1 | 2 | 3,
+  business_type: number,
   /** 日期 */
   business_time: string,
   /** 班组长id */
@@ -24,7 +24,7 @@ export interface RecordPostData {
   /** 记工金额 */
   money?: string
   /** 个人/班组 */
-  identity: 1 | 2
+  identity: number
   /** 记工本ID */
   work_note?: number
   /** 工人ID */

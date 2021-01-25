@@ -11,6 +11,7 @@ import WorkerList from '@/pages/work_team/components/worker_list/index'
 import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
 import { useLocalStore } from '@tarojs/mobx'
+import PromptBox from '@/components/popup/index'
 import { TypeAction } from '@/pages/work_team/record_work/index.d'
 import './index.scss'
 
@@ -30,6 +31,7 @@ export default function RecordWork() {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 当前选择的类型 1 记工 2记账
   const [typeItem, SetTypeItem]=useState<number>(1);
+
 
   /**
    * @name: initTime
@@ -123,6 +125,7 @@ export default function RecordWork() {
     /**保存type值*/ 
     SetTypeItem(typeNum)
   }
+
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
@@ -154,11 +157,11 @@ export default function RecordWork() {
                     <FlowList currentIndex={currentIndex} params={startDate} types={types}></FlowList>
                   </View>
                 )}
-                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) && <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} work_note='873' identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) && <RecordAmoumt workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) && <RecordMoney workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) && <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) && <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) && <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} />}
+                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) && <RecordAmoumt workerId={workerId.join(',')} type={types[currentIndex].id} />}
+                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) && <RecordMoney workerId={workerId.join(',')} type={types[currentIndex].id} />}
+                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) && <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} />}
+                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) && <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} />}
               </View>
             </ScrollView>
           </SwiperItem>

@@ -1,7 +1,7 @@
-
-import Taro, { View, Image, Block } from '@tarojs/components'
+import Taro from '@tarojs/taro'
+import { View, Image, Block } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
-import { PropsData } from './idnex.d'
+import { PropsData } from './index.d'
 import './index.scss'
 
 export default function WorkCountDay({ list = [], type = 1 }: PropsData) {

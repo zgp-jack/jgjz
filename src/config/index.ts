@@ -40,4 +40,6 @@ export const  ADDRESSBOOKTYPE_ALONE: string = 'alone'
 export const ADDRESSBOOKTYPE_GROUP: string = 'group'
 // * 通信录类型 - 离场
 export const ADDRESSBOOKTYPE_LEAVE: string = 'leave'
+// * 通信录类型 - 班组-需要在通讯录发接口
+export const ADDRESSBOOKTYPE_GROUP_ADD: string = 'groupAdd'
 

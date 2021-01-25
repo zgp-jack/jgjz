@@ -84,6 +84,8 @@ export interface SEARCH_PROPS {
   onSearch?: (val: string) => void,
   /** 用户搜索行为 */
   value?: string,
+  /** 单选还是多选 */ 
+  type: string
 }
 
 // 添加工友弹窗确定 的值

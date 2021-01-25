@@ -4,7 +4,7 @@ import AccountBookInfo from '@/store/account/index'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
-import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP, ADDRESSBOOKTYPE_GROUP_ADD } from '@/config/index'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS } from './index.d'
 import { InputValue } from '@/components/popup/index.d'
@@ -13,7 +13,6 @@ import msg from '@/utils/msg'
 import { getWorkers, postAdd_Person, deletedPerson, editWordkerInfo } from './api'
 import PromptBox from '@/components/popup/index'
 import './index.scss'
-import {objDeepCopy} from '@/utils/index'
 
 
 function AddressBook() {
@@ -23,13 +22,12 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   const { type = ADDRESSBOOKTYPE_GROUP,data } = router.params
-
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
-    console.log(accountBookInfo.id)
+    console.log("mobx中的账本ID",accountBookInfo.id)
     if (!accountBookInfo.id) return
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */
@@ -266,7 +264,7 @@ function AddressBook() {
     newIsAllSelect ? setSelectd(newSelectd) : setSelectd([])
   }
   /** 修改工友  */
-  const bossEditWorkerinfo = (i: number, data: PERSON_DATA) => {
+  const bossEditWorkerinfo = ( data: PERSON_DATA) => {
     setEditItemData(data)
     setIsShowEdit(true)
   }
@@ -372,6 +370,17 @@ function AddressBook() {
         }
       })
       setSelectd(newSelectd)
+      /** 修改搜索出来的数据 */ 
+      let newFilterList = [...filterList]
+      /** 判断是否有搜索数据 */ 
+      if (newFilterList.length > 0){
+        newFilterList.map((FItem, Findex) => {
+          if (FItem.id == newWorkerInfo.id) {
+            newFilterList[Findex] = newWorkerInfo
+          }
+        })
+        setFilterList(newFilterList)
+      }
     })
   }
   /** 删除事件 */
@@ -414,7 +423,7 @@ function AddressBook() {
   // 用户搜索操作
   const userSearchAction = (val: string) => {
     setValue(val)
-    let lists: ADDRESS_BOOK_LIST[] = objDeepCopy(list)
+    let lists: ADDRESS_BOOK_LIST[] = JSON.parse(JSON.stringify(list))
     let _lists: PERSON_DATA[] = []
     lists.forEach(item => {
       let items: PERSON_DATA[] = item.data
@@ -429,9 +438,9 @@ function AddressBook() {
   }
   // 搜索后的数据 选择
   const filterSelect = (index: number, id: number) => {
-    let newSelectd = [...selectd]
-    let newList = [...list]
-    let newFilterList = [...filterList]
+    let newSelectd = JSON.parse(JSON.stringify(selectd))
+    let newList = JSON.parse(JSON.stringify(list))
+    let newFilterList = JSON.parse(JSON.stringify(filterList))
     /** 搜索列表选中或取消 */
     newFilterList[index].is_check = !newFilterList[index].is_check
     setFilterList(newFilterList)
@@ -445,8 +454,7 @@ function AddressBook() {
           newSelectd.splice(selectdIndex, 1)
         }
       })
-    }
-    setFilterList(newFilterList)
+    }  
     setSelectd(newSelectd)
     //  选中或者取消 所有列表中的数据
     newList.map((listItem, listIndex) => {
@@ -470,7 +478,7 @@ function AddressBook() {
       {type !== ADDRESSBOOKTYPE_ALONE && <Selectd selectd={selectd} deletePerson={deletePerson} />}
 
       {/* 搜索组件 */}
-      <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} />
+      <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} type={type}/>
       {/* 通讯录列表 */}
       <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
         "list_content": true,
@@ -493,7 +501,7 @@ function AddressBook() {
                   </View>
                 </View>
                 <View className="setting">
-                  <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(cIndex, cItem) }} ></Image>
+                  <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(cItem) }}></Image>
                 </View>
               </View>
             ))
@@ -527,15 +535,12 @@ function AddressBook() {
                 </View>
               </View>
               <View className="setting">
-                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => {
-                  e.stopPropagation();
-                }}></Image>
+                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(item) }} ></Image>
               </View>
             </View>
           ))
           }
         </ScrollView>}
-
 
       {/* 右侧字母表 */}
       <View className="right_nav">

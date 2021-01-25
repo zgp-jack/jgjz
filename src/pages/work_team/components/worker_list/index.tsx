@@ -83,7 +83,7 @@ export default function RecordWork({workerId,setWorkerId}) {
             <Text className='record-work-person-text'>{obj.name}</Text>
           </View>)
         )}
-        <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?id=874&type=group&data=[]' })}>
+        <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?id=874&type=groupAdd' })}>
           <View className='record-work-person-box'><Image 
             src={`${IMGCDNURL}yc/add.png`}
             mode='widthFix' 

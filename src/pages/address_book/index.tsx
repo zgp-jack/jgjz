@@ -1,4 +1,6 @@
 import Taro, { useState, useEffect, Config, eventCenter, useRouter } from '@tarojs/taro'
+import { observer, useLocalStore } from '@tarojs/mobx'
+import AccountBookInfo from '@/store/account/index'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
@@ -14,8 +16,10 @@ import './index.scss'
 import {objDeepCopy} from '@/utils/index'
 
 
-export default function AddressBook() {
-
+function AddressBook() {
+  //获取账本id
+  const localStore = useLocalStore(() => AccountBookInfo);
+  const { accountBookInfo } = localStore
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   const { type = ADDRESSBOOKTYPE_GROUP, id,data } = router.params
@@ -25,10 +29,10 @@ export default function AddressBook() {
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
-    if (!id) return
+    if (!accountBookInfo.id) return
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */
-    getWorkers({ work_note: id }).then((res) => {
+    getWorkers({ work_note: accountBookInfo.id }).then((res) => {
       let newData: PERSON_DATA[] = JSON.parse(data)
       //如果上一个 页面有 传数据 过来
       if (newData) {
@@ -579,3 +583,5 @@ export default function AddressBook() {
 AddressBook.config = {
   navigationBarTitleText: '选择需要添加的工友'
 } as Config
+
+export default observer(AddressBook)

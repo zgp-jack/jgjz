@@ -50,6 +50,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/account_book_list/index',  //记工账本列表
       'pages/business/money/index',
 
       'pages/remember/index',
@@ -63,7 +64,7 @@ class App extends Component {
       'pages/person_borrowing/index', // 个人借支/支出
       'pages/person_detail/index', // 个人记工-借支 详情页/修改页
       'pages/feedback/index',   //意见反馈
-      'pages/account_book_list/index',  //记工账本列表
+      
       'pages/identity_selection/index', //身份选择
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用

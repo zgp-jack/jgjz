@@ -22,25 +22,21 @@ function AddressBook() {
   const { accountBookInfo } = localStore
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
-  const { type = ADDRESSBOOKTYPE_GROUP, id ,data } = router.params
+  const { type = ADDRESSBOOKTYPE_GROUP, data = '' } = router.params
 
   /** 通信录列表数据 */
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
-<<<<<<< HEAD
     if (!accountBookInfo.id) return
-=======
-    console.log(id)
-    if (!id) return
->>>>>>> e24b9f54fe2c1a4884689441b03dd4e184eff13d
     /** 获取所有通讯录列表 */
     /** 保存一份获取到的数据 */
     getWorkers({ work_note: accountBookInfo.id }).then((res) => {
-      let newData: PERSON_DATA[] = JSON.parse(data)
+      
       //如果上一个 页面有 传数据 过来
-      if (newData) {
+      if (data) {
+        let newData: PERSON_DATA[] = JSON.parse(data)
         //上一个页面传过来的数据 默认选中
         let newListData = res.data
         newListData.map((Pitem,Pindex)=>{
@@ -59,6 +55,8 @@ function AddressBook() {
         })
         setSelectd(newSelectd)
         setList(newListData)
+      }else{
+        setList(res.data)
       }
     })
 
@@ -104,7 +102,7 @@ function AddressBook() {
     // 判断是单选 则拿到当前数据然后退出
     if (type === ADDRESSBOOKTYPE_ALONE) {
       let data: PERSON_DATA = list[pIndex].data[cIndex]
-      eventCenter.trigger(AddressBookConfirmEvent, [data])
+      eventCenter.trigger(AddressBookConfirmEvent, data)
       Taro.navigateBack()
       return
     }

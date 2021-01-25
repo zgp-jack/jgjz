@@ -5,6 +5,7 @@ import msg, { showActionModal, showBackModal } from '@/utils/msg'
 import PickerMark from '@/components/picker_mark'
 import PickerType from '@/components/picker_type'
 import PickerDetail from '@/components/picker_detail'
+import PickerLeader from '@/components/picker_leader'
 import getExpenditureInfo, { delExpenditureBusiness, editExpenditureBusiness } from './api'
 import ClassifyItem from '@/store/classify/inter.d'
 import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
@@ -125,6 +126,18 @@ export default function ModifyBorrow() {
     })
   }
 
+  // 用户删除班组长
+  const userClearGroupLeader = () => {
+    setData({...data, group_leader_name: '', group_leader: ''})
+    setPostData({...postData, group_leader: ''})
+  }
+
+  // 用户删除分类
+  const userClearPickerType = () => {
+    setData({ ...data, expend_type_name: '', expend_type: '' })
+    setPostData({ ...postData, expend_type: '' })
+  }
+
 
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money" />
@@ -132,9 +145,10 @@ export default function ModifyBorrow() {
       value={typeData.name}
       show={show}
       setShow={() => { setShow(!show) }}
-      rightClose={false}
+      close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
+    <PickerLeader leader={data.group_leader_name} DeletePickerLeader={() => userClearGroupLeader} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail 
       dateValue={data.busienss_time_string} 

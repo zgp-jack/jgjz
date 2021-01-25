@@ -35,7 +35,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   }, [props.show])
 
   useEffect(() => {
-    if (filterData.start_business_time.split('-').length !== 3) return
+    if (filterData && filterData.start_business_time.split('-').length !== 3) return
     eventCenter.on(AddressBookConfirmEvent, (data) => {
       console.log('data', data)
       let _data: any = {}
@@ -178,8 +178,8 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
               </View>
             </View>}
             {/*个人账本筛选选择班组长*/}
-            {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
-                                          onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_GROUP)}>
+            {!props.personOrGroup && <View className="filter-block-row filter-block-row-small"
+                                           onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_GROUP)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择班组长</View>
                 <View className="filter-picker-value">

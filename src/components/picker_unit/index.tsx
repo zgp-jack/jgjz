@@ -1,36 +1,53 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
-import PickerUnitProps from './inter.d'
+import { observer, useLocalStore } from '@tarojs/mobx'
+import PickerUnitProps, { UnitType } from './inter.d'
 import PickerUnit from "@/components/picker/picker-unit/index"
 import './index.scss'
+import userGetExpendType from './api'
+import UnitStore from '@/store/unit';
 
 export default function PickerUnitWare({
     hideImg = true,
     img = `${IMGCDNURL}zgp/unit_icon.png`,
     title = '单位',
-    value = '平方米',
     set
 }:PickerUnitProps){
   // 是否显示PickerUnit
   const [isPickerUnit, setIsPickerUnit] = useState<boolean>(false)
-  // value值更新
-  const [initValue, setInitValue] = useState<string>(value)
-  let unitValue = [
-    { id: 1, value: '平方米' },
-    { id: 2, value: '立方米'},
-    { id: 3, value: '吨' },
-    { id: 4, value: '米' },
-    { id: 5, value: '个' },
-    { id: 6, value: '次' },
-    { id: 7, value: '天' }
-  ]
+  // 选中的单位
+  const [selectUnit, setSelectUnit] = useState <UnitType>({id: 0,value: ''})
+  // 是否已经加载过计量单位 
+  const [loading, setLoading] = useState<boolean>(false)
+  // 获取stroe里面的数据
+  const localStore = useLocalStore(() => UnitStore);
+  const { initUnitData, unitdata, status } = localStore
+  // 获取计量单位
+  const initUnitDataFun = () => {
+    if (loading || status){
+      setSelectUnit(unitdata[0])
+      return
+    } 
+    userGetExpendType({}).then((res) => {
+      if(res.code == 0){
+        let unitData:UnitType[] = [];
+        res.data.forEach((item) => unitData.push({id:item.id,value:item.name}))
+        setLoading(true)
+        setSelectUnit(unitData[0])
+        initUnitData(unitData)
+      }
+    })
+  }
+  useEffect(() => {
+    initUnitDataFun()
+  }, [])
   return (<View>
     <View className="person-record-overtime person-record-date" onClick={() => {setIsPickerUnit(true)}}>
       {hideImg && <Image className="person-record-date-img" src={img} />}
       <View className="person-record-modify-title person-record-date-title">{title}</View>
-      <Text className="person-record-date-text">{initValue}</Text>
+      <Text className="person-record-date-text">{selectUnit.value}</Text>
     </View>
-    {isPickerUnit && <PickerUnit show={isPickerUnit} close={() => setIsPickerUnit(false)} value={unitValue} confirm={(data) => {setIsPickerUnit(false); setInitValue(data.value); set(data) }} />}
+    {isPickerUnit && <PickerUnit show={isPickerUnit} close={() => setIsPickerUnit(false)} value={unitdata} confirm={(data) => { setIsPickerUnit(false); setSelectUnit(data); set(data) }} />}
   </View>)
 }

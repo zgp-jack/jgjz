@@ -17,22 +17,24 @@ let current = 0
 function PickerType({
   img = `${IMGCDNURL}zgp/subitem_icon.png`,
   title = '分项',
-  value = '',
+  value = '无分项',
   hideImg = false,
+  close,
+  onOptionClose,
   set,
-  close
+  show,
+  setShow,
+  rightClose = true
 }: PickerTypeProps) {
 
   // input-name
   const inputName: string = 'name'
-  // 是否已经加载过分类数据 
+  // 是否已经加载过分项数据 
   const [loading, setLoading] = useState<boolean>(false)
-  // 是否显示picker
-  const [show, setShow] = useState<boolean>(false)
   // 是否显示添加 修改弹窗
   const [showPopup, setShowPopup] = useState<boolean>(false)
   // 添加 修改弹窗 input 内容
-  const [popupData, setPopupData] = useState<PopupInputGroup[]>([{ title: '分类名称:', name: inputName, placeholder: '请输入分类名称', value: '' }])
+  const [popupData, setPopupData] = useState<PopupInputGroup[]>([{ title: '分项名称:', name: inputName, placeholder: '请输入分项名称', value: '' }])
   // 修改弹窗的id
   const [id, setId] = useState<string>('')
   // 用户确认选择picker
@@ -48,7 +50,7 @@ function PickerType({
   const { addClassifySubitem, initClassifySubitem, delClassifySubitem, editClassifySubitem, status, types } = localStore
 
 
-  // 初始化分类数据
+  // 初始化分项数据
   const initClassifySubitemData = () => {
     if (loading || status) return
     userGetExpendType({}).then(res => {
@@ -121,7 +123,7 @@ function PickerType({
   // 用户删除数据
   const userDelExpendTypeAction = (id: string, i: number) => {
     showActionModal({
-      msg: '是否删除该分类？',
+      msg: '是否删除该分项？',
       showCancel: true,
       success: (res) => {
         if (res.confirm) {
@@ -138,16 +140,16 @@ function PickerType({
 
   return (
     <View>
-      <View className="person-record-overtime person-record-date" onClick={() => setShow(true)}>
+      <View className="person-record-overtime person-record-date" onClick={() => {setShow(true)}}>
         {!hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
-        <Input className="person-record-date-text" value={value} placeholder='请添加您的分类' disabled></Input>
-        <Text className="overtime-icon" onClick={() => { close && close() }}></Text>
+        <Input className="person-record-date-text" value={value} placeholder='请添加您的分项' disabled></Input>
+        {rightClose && <Text className="overtime-icon" onClick={(e) => { e.stopPropagation(); close && close() }}></Text>}
       </View>
 
       {show &&
         <PickerOption
-          close={() => setShow(false)}
+          close={() => { setShow(false); onOptionClose && onOptionClose()}}
           show={show}
           confirm={(data) => userSurePicker(data)}
           add={() => userEditItemType() }
@@ -160,7 +162,7 @@ function PickerType({
 
       {/* 新增弹窗 */}
       {showPopup && <Popup
-        titleText={id ? '修改分类' : '添加分类'}
+        titleText={id ? '修改分项' : '添加分项'}
         showTitleButton={false}
         inputGroup={popupData}
         confirmText='确定'

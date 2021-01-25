@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useRouter } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerType from '@/components/picker_type'
@@ -8,6 +8,11 @@ import PickerDetail from '@/components/picker_detail'
 import './index.scss'
 
 export default function ModifyBorrow() {
+
+  const router = useRouter()
+  const { id = '' } = router.params
+
+  console.log(id)
 
   // 借支提交数据
   const [postData, setPostData] = useState<any>({

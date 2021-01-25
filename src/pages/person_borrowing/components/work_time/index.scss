@@ -22,9 +22,12 @@
         background-color: #0099FF;
     }
     .worktime-select{
-        padding-right: 22px;
+      min-width: 120px;
+      width: auto;
+      max-width: 140px;
     }
     .worktime-select-time{
+        margin-right: 20px;
         position: relative;
     }
     .worktime-select-time::before{

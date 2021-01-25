@@ -15,6 +15,7 @@
     bottom: 0;
 }
 .moreworktime-btn{
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -61,4 +62,68 @@
 .worktime-active{
     color: #fff;
     background-color: #0099FF;
+}
+.person-record-overtime{
+    position: relative;
+    padding: 28px 0 28px 30px;
+    margin-right: 30px;
+    .overtime-icon{
+        transform: scale(1.5);
+        width: 22px;
+        height: 22px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -11px;
+    }
+    .overtime-icon::before,
+    .overtime-icon::after{
+        content: "";
+        position: absolute;
+        height: 22px;
+        width: 1.5px;
+        top: 2px;
+        right: 12px;
+        background: #808080;
+    }
+    .overtime-icon::before{
+      transform: rotate(45deg);
+    }
+    .overtime-icon::after{
+      transform: rotate(-45deg);
+    }
+}
+.no-over-time{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  background-color: #fff;
+  font-size: 28px;
+  color: #808080;
+}
+.no-over-time-btn{
+  width: 200px;
+  height: 70px;
+  margin: 10px auto;
+  background-color: #EDEDED;
+  line-height: 70px;
+  text-align: center;
+  border-radius: 5px;
+}
+.no-over-time-content{
+  margin-bottom: 90px;
+}
+.ismorework{
+  width: 160px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -18px;
+  margin-left: -40px;
+}
+.workcolor{
+  color: #FF4C4C;
 }

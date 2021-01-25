@@ -2,8 +2,8 @@
  * @Author: jsxin
  * @Date: 2021-01-20 18:30:09
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 14:30:56
- * @Description: 请求分类的接口
+ * @LastEditTime: 2021-01-24 13:54:00
+ * @Description: 请求分项的接口
  */
 
 import ClassifyItem, { AddClassifyItem } from '@/store/classify/inter.d'

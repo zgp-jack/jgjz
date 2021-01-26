@@ -2,17 +2,8 @@ import Taro, {useEffect, useState, useDidShow} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
-import filter from '@/images/ic_sx.png'
-import remember from '@/images/ic_gt.png'
-import debt from '@/images/ic_jz.png'
-import expenditure from '@/images/ic_zc.png'
-import feedback from '@/images/ic_yjfk.png'
-import arrowRight from '@/images/arrow-right.png'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-import filterActive from '@/images/ic_sx_blue.png'
-import wage from '@/images/ic_gq.png'
-import meter from '@/images/ic_gl.png'
 import Filter from "./filter/index";
 import {get} from "@/utils/request";
 import {getBusiness} from './api'
@@ -24,6 +15,7 @@ import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
 import User from '@/store/user'
+import {IMGCDNURL} from "@/config/index";
 
 const Remember = () => {
   /*记工类型数据*/
@@ -273,7 +265,8 @@ const Remember = () => {
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
                     onClick={() => setShowFilter(true)}>
-                <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
+                <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
+                       className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
@@ -310,9 +303,8 @@ const Remember = () => {
                     <Text>有备注</Text>
                   </Text>
                 }
-                {/*<Text className="overwords">生活费哈哈哈哈</Text>*/}
               </View>
-              <Image src={arrowRight} className="filter-info-arrow"/>
+              <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
             </View>}
             {/*记工统计*/}
             <View className="statistics">
@@ -320,7 +312,7 @@ const Remember = () => {
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
-                    <Image src={remember} className="statistics-icon"/>
+                    <Image src={IMGCDNURL + 'lxy/ic_gt.png'} className="statistics-icon"/>
                     <View className="remember-values">
                       <View className="remember-value">
                         <Text className="remember-value-text">上班</Text>
@@ -344,7 +336,7 @@ const Remember = () => {
               <View className="statistics-bookkeeping statistics-bookkeeping-unit">
                 {counts.work_money && <View className="bookkeeping-row wage-meter">
                   <View className="bookkeeping-content">
-                    <Image src={wage} className="statistics-icon"/>
+                    <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         临时工资
@@ -358,7 +350,7 @@ const Remember = () => {
                   counts.count_unit.map((item, i) => (
                     <View className="bookkeeping-row wage-meter" key={i}>
                       <View className="bookkeeping-content">
-                        <Image src={meter} className="statistics-icon"/>
+                        <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon"/>
                         <View className="bookkeeping-values">
                           <View className="bookkeeping-label">
                             {item.unit}
@@ -378,7 +370,7 @@ const Remember = () => {
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
-                    <Image src={debt} className="statistics-icon"/>
+                    <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         借支
@@ -390,7 +382,7 @@ const Remember = () => {
 
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
-                    <Image src={expenditure} className="statistics-icon"/>
+                    <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         支出
@@ -436,7 +428,7 @@ const Remember = () => {
         <View className="footer">
           <View className="footer-container">
             <View className="feedback" onClick={() => Taro.navigateTo({url: '/pages/feedback/index'})}>
-              <Image src={feedback} className="feedback-icon"/>
+              <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon"/>
               意见反馈
             </View>
             <View className="footer-buttons">

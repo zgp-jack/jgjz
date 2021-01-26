@@ -170,10 +170,6 @@
               margin-left: 0;
             }
 
-            Text {
-              white-space: nowrap;
-            }
-
             .filter-info-blue {
               color: $color;
             }
@@ -236,13 +232,13 @@
                     margin-bottom: 10px;
                   }
 
-                  Text {
+                  .remember-value-text {
                     font-size: 30px;
                     font-weight: 500;
                     color: #333333;
                   }
 
-                  Text:first-child {
+                  .remember-value-text:first-child {
                     font-size: 26px;
                     color: #808080;
                     margin-right: 22px;

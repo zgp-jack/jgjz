@@ -30,6 +30,8 @@ export interface BusinessInfoResult {
   expend_type: string
   /** 班组长名字 */
   group_leader_name: string
+  /*工友id*/
+  worker_id: string
 }
 
 // 用户删除借支流水操作
@@ -50,4 +52,6 @@ export interface UserEditBusinessInfo {
   money: string,
   /** 班组长id */
   group_leader: string
+  /*工友id*/
+  worker_id: string
 }

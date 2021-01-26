@@ -1,7 +1,5 @@
 import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import RecordDayPostData, { PropsData } from './inter.d'
-import { worktime, overtime } from './config'
 import WorkTime from '@/pages/person_borrowing/components/work_time/index'
 import PickerDate from '@/components/picker_date/index'
 import PickerLeader from '@/components/picker_leader/index'
@@ -11,9 +9,11 @@ import AccountBookInfo from '@/store/account'
 import { AddressBookConfirmEvent } from '@/config/events'
 import msg, { showBackModal } from '@/utils/msg'
 import { getTodayDate } from '@/utils/index'
-import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
+import RecordDayPostData, { PropsData } from './inter.d'
+import { worktime, overtime } from './config'
+import userAddRecordAction from '../api'
 import './index.scss'
 
 function RecordDay({ workerId,type}:PropsData) {
@@ -117,14 +117,15 @@ function RecordDay({ workerId,type}:PropsData) {
     }
   }
   return (<View>
-    <View className="person-record-time">
+    <View className='person-record-time'>
       <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} worktime={worktime} />
       {isPickerOverTime && <WorkTime 
         close={() => setIsPickerOverTime(false)} 
         setTime={(value) => setMoreTime(value, false)} 
         set={(value) => setTime(value,false)} 
         worktime={overtime} 
-        isClose={false} />
+        isClose={false}
+      />
       }
     </View>
     {isPickerDate && <PickerDate
@@ -135,13 +136,13 @@ function RecordDay({ workerId,type}:PropsData) {
     />}
     {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => setIsPickerLeader(false)} />}
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
-    <View className="person-record-component">
-      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-      {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
-      {!isPickerOverTime && <View className="person-record-component-item" onClick={() => setIsPickerOverTime(true)}>加班时长</View>}
+    <View className='person-record-component'>
+      {!isPickerDate && <View className='person-record-component-item' onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+      {!isPickerLeader && <View className='person-record-component-item' onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
+      {!isPickerOverTime && <View className='person-record-component-item' onClick={() => setIsPickerOverTime(true)}>加班时长</View>}
     </View>
-    <View className="person-record-btn">
-      <Button className="person-record-save" onClick={userPostAcion} >确认记工</Button>
+    <View className='person-record-btn'>
+      <Button className='person-record-save' onClick={userPostAcion} >确认记工</Button>
     </View>
   </View>)
 }

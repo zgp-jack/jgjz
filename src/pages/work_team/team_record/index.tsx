@@ -1,21 +1,26 @@
-import Taro, { useEffect, useState, useRouter, Config} from '@tarojs/taro'
+import Taro, {useEffect, useState, useRouter, Config} from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team/components/flow_list/index'
-import RecordDay from '@/pages/person_record/record_day/index'
-import RecordAmoumt from '@/pages/person_record/record_amount/index'
-import RecordMoney from '@/pages/person_record/record_money/index'
-import Borrow from '@/pages/person_borrowing/components/borrow/index'
-import Expenditure from '@/pages/person_borrowing/components/expenditure/index'
+import RecordDay from '@/pages/work_team/components/record-work/record_day/index'
+import RecordAmoumt from '@/pages/work_team/components/record-work/record_amount/index'
+import RecordMoney from '@/pages/work_team/components/record-work/record_money/index'
+import Borrow from '@/pages/work_team/components/record_borrow/borrow/index'
+import Expenditure from '@/pages/work_team/components/record_borrow/expenditure/index'
 import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
 import WorkerList from '@/pages/work_team/components/worker_list/index'
 import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
 import { useLocalStore } from '@tarojs/mobx'
-import { TypeAction } from '@/pages/work_team/record_work/index.d'
+import PromptBox from '@/components/popup/index'
+import { TypeAction } from '@/pages/work_team/team_record/index.d'
 import './index.scss'
+import AccountBookInfo from "@/store/account";
 
 
 export default function RecordWork() {
+  /*获取账本数据*/
+  const _accountBookInfo = useLocalStore(() => AccountBookInfo)
+  const {accountBookInfo} = _accountBookInfo
   // 获取stroe数据
   const localStore = useLocalStore(() => RememberTypeItem);
   // 获取remebertype数据
@@ -29,7 +34,8 @@ export default function RecordWork() {
   //定义当前选择的type项
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 当前选择的类型 1 记工 2记账
-  const [typeItem, SetTypeItem]=useState<number>(1);
+  const [typeItem, SetTypeItem] = useState<number>(1);
+
 
   /**
    * @name: initTime
@@ -50,13 +56,16 @@ export default function RecordWork() {
   }
   //定义当前时间
   const nowTime = initTime(new Date().toLocaleDateString())[1]
- 
+
   // 时间选择文本显示
   const [timeText, setTimeText] = useState<string>('');
   const [startDate, setStartDate] = useState<string>(nowTime)//筛选开始日期
 
   const [workerId, setWorkerId] = useState<number[]>([])
-  
+
+  useEffect(() => {
+    console.log('workerId', workerId)
+  }, [workerId])
 
   useEffect(() => {
     /**获取本地格式化日期 eg:2021/01/21*/
@@ -84,7 +93,7 @@ export default function RecordWork() {
    * @return void
    * @description 滑动滑块的时候切换当前的index
    */
-  const switchTab = (e:any) => {
+  const switchTab = (e: any) => {
     /**当前滑块的index*/
     let index = e.detail.current;
     /**保存当前滑块index*/
@@ -111,54 +120,66 @@ export default function RecordWork() {
     SetTypeItem(1)
   }
 
-/**
-* @name: switchTable
-* @params e 点击事件对象
-* @return void
-* @description 点击班组下方table切换记工记账或流水
-*/
-  const switchTable = (e:any) => {
-    /**点击元素type值*/ 
-    let typeNum:number = e.currentTarget.dataset.type;
-    /**保存type值*/ 
+  /**
+   * @name: switchTable
+   * @params e 点击事件对象
+   * @return void
+   * @description 点击班组下方table切换记工记账或流水
+   */
+  const switchTable = (e: any) => {
+    /**点击元素type值*/
+    let typeNum: number = e.currentTarget.dataset.type;
+    /**保存type值*/
     SetTypeItem(typeNum)
   }
+
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
-        <WorkTeamTable types={types} index={currentIndex} onChange={changeTable} />
+        <WorkTeamTable types={types} index={currentIndex} onChange={changeTable}/>
       </View>
       <Swiper className='record-work-swiper' current={currentIndex} duration={300} onChange={(e) => switchTab(e)}>
-        {types.map((item,index) => (
+        {types.map((item, index) => (
           <SwiperItem key={item.id} className='record-work-item'>
             <View className='record-work-head-date'>
               <View className='record-work-head-title'>选择日期：</View>
               <View className='record-work-head-choose-date'>
                 <Picker mode='date' onChange={changeTime} value={startDate}>
-                  <Input className='record-work-date' type='text' disabled value={timeText} />
+                  <Input className='record-work-date' type='text' disabled value={timeText}/>
                 </Picker>
-                <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix' />
+                <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
               </View>
             </View>
             <ScrollView className='record-work-scroll' scrollY enableFlex>
               <View className='record-worker-list'>
-                {currentIndex == index && <WorkerList setWorkerId={setWorkerId} workerId={workerId}></WorkerList>}
+                {currentIndex == index &&
+                <WorkerList workNote={accountBookInfo.id} setWorkerId={(data: number[]) => setWorkerId(data)}
+                            workerId={workerId} startDate={startDate}/>}
               </View>
-              <View className={typeItem == 1 ? 'record-work-table-content padding':'record-work-table-content'}>
+              <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
                 <View className='record-work-table-head'>
-                  <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'} data-type={1} onClick={(e) => switchTable(e)}><Text>{type == '1'? '记账' : '记工' }</Text></View>
-                  <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'} data-type={2} onClick={(e) => switchTable(e)}><Text>流水</Text></View>
+                  <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'}
+                        data-type={1} onClick={(e) => switchTable(e)}><Text>{type == '1' ? '记账' : '记工'}</Text></View>
+                  <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'}
+                        data-type={2} onClick={(e) => switchTable(e)}><Text>流水</Text></View>
                 </View>
                 {typeItem == 2 && (currentIndex == index) && (
                   <View className='record-work-flow'>
                     <FlowList currentIndex={currentIndex} params={startDate} types={types}></FlowList>
                   </View>
                 )}
-                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) && <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} work_note='873' identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) && <RecordAmoumt workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) && <RecordMoney workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) && <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
-                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) && <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1} />}
+                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) &&
+                <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} work_note='873'
+                           identity={1}/>}
+                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) &&
+                <RecordAmoumt workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873}
+                              identity={1}/>}
+                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) &&
+                <RecordMoney workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1}/>}
+                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) &&
+                <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
+                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) &&
+                <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
               </View>
             </ScrollView>
           </SwiperItem>

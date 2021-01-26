@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-26 18:10:08
+ * @LastEditTime: 2021-01-26 19:37:22
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'
@@ -76,7 +76,7 @@ export function getTodayDate(type: string = 'd'): string {
  * @return void 无返回值
  * @description 拨打电话
  */
-export function enterTheRecordBook(data: RECORD_WORK_DATA, type: string){
+export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "borrow" |  "account"){
   let url: string = ''
   // 判断是 record:记工 borrow:记账 还是 account:进入记工本
   if (type == 'record') {

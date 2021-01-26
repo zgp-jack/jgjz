@@ -16,6 +16,7 @@ import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
 import User from '@/store/user'
 import { IMGCDNURL } from "@/config/index";
+import { enterTheRecordBook } from '@/utils/index'
 
 const Index = () => {
   /*记工类型数据*/
@@ -434,9 +435,9 @@ const Index = () => {
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
                 <View className="footer-button footer-button-bookkeeping" data-type={1}
-                  onClick={(e) => goRecord(e)}>记账</View>
+                  onClick={() => enterTheRecordBook(accountBookInfo, "borrow")}>记账</View>
                 <View className="footer-button footer-button-remember" data-type={2}
-                  onClick={(e) => goRecord(e)}>记工</View>
+                  onClick={() => enterTheRecordBook(accountBookInfo, "record")}>记工</View>
               </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>

@@ -17,7 +17,7 @@ export interface WorkerReqData {
 
 export interface WorkerParams {
   business_time: string
-  action?: string
+  action?: number
   workNote: number
 }
 
@@ -25,7 +25,8 @@ export interface WorkerParams {
 
 interface DeletedParams {
   /** 工友id */
-  id: number
+  workId: number
+  work_note: number
 }
 
 

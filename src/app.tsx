@@ -59,7 +59,7 @@ class App extends Component {
       'pages/business/workday/index',
     
       // 'pages/business/workday/index',
-      'pages/work_team/record_work/index',
+      // 'pages/work_team/record_work/index',
       'pages/work_team/team_record/index',
       'pages/index/index', // 首页
       'pages/person_record/index', //个人记工

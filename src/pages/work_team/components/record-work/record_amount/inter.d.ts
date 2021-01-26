@@ -2,7 +2,7 @@
  * @Author: jack_zgp
  * @Date: 2021-01-20 15:05:10
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-25 18:17:27
+ * @LastEditTime: 2021-01-26 14:13:49
  * @Description: interface for record_amount
  */
 
@@ -12,16 +12,14 @@ export default interface RecordAmountPostData {
   business_type: number,
   /** 日期 */
   business_time: string,
-  /** 班组长id */
-  group_leader: string,
   /** 备注 */
-  note: string,
+  note?: string,
   /** 记工数量 */
   unit_num: string
   /** 个人/班组 1班组 2个人 */
   identity: number
   /** 记工本ID */
-  work_note?: number
+  work_note: number
   /** 上传图片url */
   img_url?: string
   /** 单位 */
@@ -29,7 +27,7 @@ export default interface RecordAmountPostData {
   /** 分项 */
   unit_work_type?: string
   /**班组选择工人*/ 
-  worker_id?: string
+  worker_id: string
 }
 export interface UnitTpey {
   /** id */
@@ -41,4 +39,5 @@ export interface UnitTpey {
 export interface PropsData {
   workerId: string
   type: number
+  businessTime: string
 }

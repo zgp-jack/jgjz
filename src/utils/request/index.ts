@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-26 16:52:33
+ * @LastEditTime: 2021-01-26 19:23:23
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
@@ -35,23 +35,9 @@ function requestShowToast(show: boolean): void {
  * @tips 只有在用户信息存在的情况下我们才会传入用户信息
  */
 function getRequestHeaderInfo(): RequestHeader {
-
-  return {
-    'content-type': 'application/x-www-form-urlencoded',
-    source: MINITOKEN,
-    version: VERSION,
-<<<<<<< HEAD
-    uid: 20021907,
-    token: '0e976cb74e736736f39254ea7ee1def0787054ddaf8ab4ddaedc850daefe16d1',
-=======
-    uid: 20002613,
-    token: 'f1caf427ddcccc81fb8ea6aa7421c639787054ddaf8ab4ddaedc850daefe16d1',
->>>>>>> 622ebc74b81ff09ee9214a2f32d1f9d5718d690b
-  }
-
   // 获取用户信息
   let userInfo: User = Taro.getStorageSync(UserInfo)
-  const requestHeader: RequestHeader = userInfo&&userInfo.login ? {
+  const requestHeader: RequestHeader = userInfo.login ? {
     'content-type': 'application/x-www-form-urlencoded',
     uid: userInfo.userId,
     token: userInfo.token,

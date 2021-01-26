@@ -7,7 +7,7 @@
  */
 
 import {showModal} from '@/utils/msg';
-
+import Taro from '@tarojs/taro'
 /**
  * @name: objDeepCopy for jsxin
  * @params source: T 要被拷贝的对象

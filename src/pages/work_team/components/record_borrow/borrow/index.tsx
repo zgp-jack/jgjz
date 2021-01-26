@@ -1,25 +1,21 @@
 import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
 import {View, Button} from '@tarojs/components'
 import PickerType from '@/components/picker_type'
-import PickerDate from '@/components/picker_date'
-import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
-import { getTodayDate } from '@/utils/index'
-import { AddressBookConfirmEvent } from '@/config/events'
-import { observer, useLocalStore } from '@tarojs/mobx'
+import {AddressBookConfirmEvent} from '@/config/events'
+import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
-import { validNumber } from '@/utils/v'
-import msg, { showBackModal } from '@/utils/msg'
+import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
+import {validNumber} from '@/utils/v'
+import msg, {showBackModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
 import userAddBorrowAction from '@/pages/work_team/components/record_borrow/api'
 import ContentInput from '@/components/picker_input/index'
 import './index.scss'
-import BorrowPostData, {BorrowProps} from './inter.d'
+import BorrowPostData, {BookkeepingProps} from './inter.d'
 
 
-
-function Borrow(props: BorrowProps) {
+function Borrow(props: BookkeepingProps) {
   useEffect(() => {
     console.log('props123', props)
   }, [props])
@@ -51,7 +47,7 @@ function Borrow(props: BorrowProps) {
     group_leader: '',
     note: '',
     money: '',
-    identity: parseInt(accountBookInfo.identity),
+    identity: accountBookInfo.identity,
     work_note: 0,
   })
 
@@ -95,7 +91,7 @@ function Borrow(props: BorrowProps) {
       // group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
       money: postData.money,
-      identity: parseInt(accountBookInfo.identity),
+      identity: accountBookInfo.identity,
       work_note: accountBookInfo.id,
       worker_id: props.workerId
     }

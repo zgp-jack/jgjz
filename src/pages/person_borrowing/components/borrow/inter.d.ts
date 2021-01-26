@@ -30,7 +30,7 @@ export default interface BorrowPostData {
   img_url?: string
 }
 
-export interface BorrowProps {
+export interface BookkeepingProps {
   workerId: string
   type: string
   businessTime: string

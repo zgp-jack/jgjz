@@ -9,7 +9,7 @@
 // 支出默认提交数据
 export default interface ExpenditurePostData {
   /** 支出类型 4借支 5支出 */
-  business_type: 4 | 5,
+  business_type: number,
   /** 分类 */
   expend_type: number,
   /** 日期 */
@@ -21,7 +21,7 @@ export default interface ExpenditurePostData {
   /** 支出金额 */
   money: string
   /** 个人/班组 */
-  identity: 1 | 2
+  identity: number
   /** 记工本ID */
   work_note?: number
   /** 工人ID */

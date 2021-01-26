@@ -9,7 +9,7 @@
 // 借支默认提交数据
 export default interface BorrowPostData {
   /** 借支类型 */
-  business_type: 4 | 5,
+  business_type: number,
   /** 分类 */
   expend_type: number,
   /** 日期 */
@@ -30,7 +30,7 @@ export default interface BorrowPostData {
   img_url?: string
 }
 
-export interface BorrowProps {
+export interface BookkeepingProps {
   workerId: string
   type: string
   businessTime: string

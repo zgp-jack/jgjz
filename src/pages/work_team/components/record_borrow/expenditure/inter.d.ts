@@ -11,7 +11,7 @@ export default interface ExpenditurePostData {
   /** 支出类型 4借支 5支出 */
   business_type: number,
   /** 分类 */
-  expend_type: number,
+  expend_type: string,
   /** 日期 */
   business_time: string,
   /** 班组长id */

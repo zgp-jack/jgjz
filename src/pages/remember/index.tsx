@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState} from '@tarojs/taro'
+import Taro, {useEffect, useState, useDidShow} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -87,7 +87,7 @@ const Remember = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
+  const {loading, increasing, list, errMsg, hasmore, setParams, setLoading} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -96,7 +96,15 @@ const Remember = () => {
   const [filterMonth, setFilterMonth] = useState(month)
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
+  /*是否重新请求流水列表*/
+  const [reloadList, setReloadList] = useState(false)
 
+  useDidShow(() => {
+    setReloadList(true)
+    if (reloadList) {
+      setLoading(true)
+    }
+  })
 
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
@@ -403,9 +411,11 @@ const Remember = () => {
                         {item.list.map(p => (
                           <Block key={p.id}>
                             {/* 如果是记工天 记工量 */}
-                            {(p.business_type == 1 || p.business_type == 2) && <WorkCountDay list={[p]} type={p.business_type} />}
+                            {(p.business_type == 1 || p.business_type == 2) &&
+                            <WorkCountDay list={[p]} type={p.business_type}/>}
                             {/* 如果是 记工钱、 借支、 支出 */}
-                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>}
                           </Block>
                         ))}
                       </View>

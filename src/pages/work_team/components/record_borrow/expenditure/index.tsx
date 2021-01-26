@@ -21,10 +21,12 @@ function Expenditure(props: BookkeepingProps) {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
+  // 分类数据
+  const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
   // 支出提交数据
   const [postData, setPostData] = useState<ExpenditurePostData>({
     business_type: 5,
-    expend_type: 5,
+    expend_type: typeData.id,
     business_time: props.businessTime,
     group_leader: '',
     note: '',
@@ -34,8 +36,7 @@ function Expenditure(props: BookkeepingProps) {
   })
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
-  // 分类数据
-  const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
+
   // 是否显示分类组件
   const [isPickerType, setIsPickType] = useState<boolean>(false)
   // 是否显示日期组件
@@ -79,13 +80,14 @@ function Expenditure(props: BookkeepingProps) {
   const userPostAcion = () => {
     let params: ExpenditurePostData = {
       business_type: 5,
-      expend_type: 5,
+      expend_type: typeData.id,
       business_time: props.businessTime,
       group_leader: '',
       note: postData.note,
       money: postData.money,
       identity: accountBookInfo.identity,
-      work_note: accountBookInfo.id
+      work_note: accountBookInfo.id,
+      worker_id: props.workerId
     }
     if (postData.money) {
       if (!validNumber(params.money)) {

@@ -42,7 +42,7 @@ function Borrow(props: BookkeepingProps) {
   // 借支提交数据
   const [postData, setPostData] = useState<BorrowPostData>({
     business_type: 4,
-    expend_type: 0,
+    expend_type: typeData.id,
     business_time: props.businessTime,
     group_leader: '',
     note: '',
@@ -86,7 +86,7 @@ function Borrow(props: BookkeepingProps) {
   const userPostAcion = () => {
     let params: BorrowPostData = {
       business_type: 4,
-      expend_type: 4,
+      expend_type: typeData.id,
       business_time: props.businessTime,
       // group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,

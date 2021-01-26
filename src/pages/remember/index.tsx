@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState} from '@tarojs/taro'
+import Taro, {useEffect, useState, useDidShow} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
@@ -35,7 +35,7 @@ const Remember = () => {
   const { user } = _userInfo
   const { businessType } = rememberStore
   const {accountBookInfo} = _accountBookInfo
-  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 1 ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
@@ -48,7 +48,7 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == 1)
+  const [personOrGroup] = useState(accountBookInfo.identity == 2)
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -92,7 +92,7 @@ const Remember = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  const {loading, increasing, list, hasmore, setParams, errMsg} = useList(getBusiness, actionParams())
+  const {loading, increasing, list, errMsg, hasmore, setParams, setLoading} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -103,6 +103,16 @@ const Remember = () => {
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
   /* 登陆弹窗 */
   const [showLogin, setShowLogin] = useState(false)
+  /*是否重新请求流水列表*/
+  const [reloadList, setReloadList] = useState(false)
+
+  useDidShow(() => {
+    setReloadList(true)
+    if (reloadList) {
+      setLoading(true)
+    }
+  })
+
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
@@ -338,12 +348,14 @@ const Remember = () => {
                     <Image src={remember} className="statistics-icon"/>
                     <View className="remember-values">
                       <View className="remember-value">
-                        <Text>上班</Text>
-                        <Text>{counts.work_time}个工</Text>
-                        {counts.work_time_hour != '0' && <Text>+{counts.work_time_hour}小时</Text>}
+                        <Text className="remember-value-text">上班</Text>
+                        <Text className="remember-value-text">{counts.work_time}个工</Text>
+                        {counts.work_time_hour != '0' &&
+                        <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
                       </View>
                       {counts.overtime != '0' &&
-                      <View className="remember-value"><Text>加班</Text><Text>{counts.overtime}小时</Text></View>}
+                      <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
+                        className="remember-value-text">{counts.overtime}小时</Text></View>}
                     </View>
                   </View>
                 </View>
@@ -431,9 +443,11 @@ const Remember = () => {
                         {item.list.map(p => (
                           <Block key={p.id}>
                             {/* 如果是记工天 记工量 */}
-                            {(p.business_type == 1 || p.business_type == 2) && <WorkCountDay list={[p]} type={p.business_type} />}
+                            {(p.business_type == 1 || p.business_type == 2) &&
+                            <WorkCountDay list={[p]} type={p.business_type}/>}
                             {/* 如果是 记工钱、 借支、 支出 */}
-                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>}
                           </Block>
                         ))}
                       </View>

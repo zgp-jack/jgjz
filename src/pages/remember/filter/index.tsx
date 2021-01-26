@@ -103,7 +103,6 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
     if (type === ADDRESSBOOKTYPE_GROUP) {
       _data = (filterData.group_leader as AddressBookParams[])
     }
-    console.log('带回去的参数', _data)
     Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP}&data=${JSON.stringify(_data)}`})
   }
   const handleGroupLeaderLength = () => {
@@ -204,8 +203,8 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
           </View>
         </View>
         <View className="filter-footer">
-          <View className="filter-footer-reset" onClick={handleReset}>重置</View>
-          <View className="filter-footer-confirm" onClick={onFilterConfirm}>确定</View>
+          <View className="filter-footer-btn filter-footer-reset" onClick={handleReset}>重置</View>
+          <View className="filter-footer-btn filter-footer-confirm" onClick={onFilterConfirm}>确定</View>
         </View>
       </View>
     </View>

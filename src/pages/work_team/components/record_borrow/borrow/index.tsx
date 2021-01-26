@@ -1,9 +1,7 @@
-import {useState, useEffect, eventCenter} from '@tarojs/taro'
+import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
 import {View, Button} from '@tarojs/components'
-import ContentInput from '../../../../components/picker_input/index'
 import PickerType from '@/components/picker_type'
 import PickerMark from '@/components/picker_mark'
-import BorrowPostData, {BookkeepingProps} from './inter.d'
 import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
@@ -11,8 +9,11 @@ import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import {validNumber} from '@/utils/v'
 import msg, {showBackModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
+import userAddBorrowAction from '@/pages/work_team/components/record_borrow/api'
+import ContentInput from '@/components/picker_input/index'
 import './index.scss'
-import userAddBorrowAction from '@/pages/person_borrowing/api'
+import BorrowPostData, {BookkeepingProps} from './inter.d'
+
 
 function Borrow(props: BookkeepingProps) {
   useEffect(() => {
@@ -41,7 +42,7 @@ function Borrow(props: BookkeepingProps) {
   // 借支提交数据
   const [postData, setPostData] = useState<BorrowPostData>({
     business_type: 4,
-    expend_type: 0,
+    expend_type: typeData.id,
     business_time: props.businessTime,
     group_leader: '',
     note: '',
@@ -85,7 +86,7 @@ function Borrow(props: BookkeepingProps) {
   const userPostAcion = () => {
     let params: BorrowPostData = {
       business_type: 4,
-      expend_type: 4,
+      expend_type: typeData.id,
       business_time: props.businessTime,
       // group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
@@ -163,18 +164,19 @@ function Borrow(props: BookkeepingProps) {
       {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader}/>}
       */}
       <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
-      <View className="person-record-component">
-        {!isPickerType && <View className="person-record-component-item" onClick={() => {
+      <View className='person-record-component'>
+        {!isPickerType && <View className='person-record-component-item' onClick={() => {
           setIsPickType(true);
           setShowTypePicker(true)
-        }}>{typeData.id ? typeData.name : '分类'}</View>}
+        }}
+        >{typeData.id ? typeData.name : '分类'}</View>}
         {!isPickerDate &&
-        <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+        <View className='person-record-component-item' onClick={() => setIsPickerDate(true)}>{dateText}</View>}
         {/*{!isPickerLeader &&
         <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}*/}
       </View>
-      <View className="person-record-btn">
-        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>
+      <View className='person-record-btn'>
+        <Button className='person-record-save' onClick={() => userPostAcion()}>确认记工</Button>
       </View>
     </View>
   )

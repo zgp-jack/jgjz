@@ -14,9 +14,16 @@ import { getTodayDate } from '@/utils/index'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
+import WorkDayComponent from '@/components/work_day'
 import './index.scss'
 
 function RecordDay() {
+  // 记工天 是否是工
+  const [isWrok, setIsWork] = useState<boolean>(true)
+  // 上班时长的数据
+  const [workTime, setWorkTime] = useState({value: '', text: ''})
+
+
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否日期组件
@@ -113,15 +120,34 @@ function RecordDay() {
       userUpdatePostData(item, 'overtime')
     }
   }
+
+  const useChangeWorkTime = (data,type:string) => {
+    setWorkTime(data)
+    setIsWork(type === 'first' ? true : false)
+  }
   return (<View>
     <View className="person-record-time">
-      <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} />
+      <WorkDayComponent 
+        change={(data,type) => useChangeWorkTime(data,type)}
+        value={workTime}
+        isSelect={!isWrok}
+        type='work'
+      />
+
+      <WorkDayComponent
+        change={(data, type) => useChangeWorkTime(data, type)}
+        value={workTime}
+        isSelect={!isWrok}
+        type='over'
+      />
+
+      {/* <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} />
       {isPickerOverTime && <WorkTime 
         close={() => setIsPickerOverTime(false)} 
         setTime={(value) => setMoreTime(value, false)} 
         set={(value) => setTime(value,false)} 
         isClose={false} />
-      }
+      } */}
     </View>
     {isPickerDate && <PickerDate
       date={postData.business_time}

@@ -11,15 +11,17 @@ import getBorrowInfo, { delBorrowBusiness, editBorrowBusiness } from './api'
 import './index.scss'
 
 export default function ModifyWorkDay(){
+
+  // 根据路由获取id参数
+  const router = useRouter()
+  const { id } = router.params
+
   /** 修改选中 id */
   let selectedWork: SelectedValue = {id: 0,value: 0};
   const [selectwork, setselectWork] = useState<SelectedValue>({id: 0,value: 0});
   /** 修改选中值 */
   let selectedOver: SelectedValue = { id: 0, value: 0 };
   const [selectover, setselectOver] = useState<SelectedValue>({ id: 0, value: 0 });
-  // 根据路由获取id参数
-  const router = useRouter()
-  const { id } = router.params
   // 提交工量数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -167,6 +169,13 @@ export default function ModifyWorkDay(){
       userUpdatePostData(item, 'overtime')
     }
   }
+
+  // 用户清空班组长
+  const userClearLeader =() => {
+    setGroupLeader({id: '', name: ''})
+  }
+
+
   return (<View>
     <View className="person-record-time">
       <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value, true)} selected={selectwork} />
@@ -177,7 +186,7 @@ export default function ModifyWorkDay(){
         isClose={false}
         selected={selectover} />
     </View>
-    <PickerLeader leader={groupLeader.name} />
+    <PickerLeader leader={groupLeader.name}  DeletePickerLeader={()=>userClearLeader()} />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <PickerDetail
       dateValue={data.busienss_time_string}

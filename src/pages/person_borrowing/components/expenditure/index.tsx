@@ -58,7 +58,6 @@ function Expenditure(){
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const { accountBookInfo } = localStore
-  console.log(accountBookInfo)
 
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {

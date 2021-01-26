@@ -78,7 +78,7 @@ export default function BusinessAmount() {
     getBorrowInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
-        setSelectedUnit(Number(mydata.unit))
+        setSelectedUnit(Number(mydata.unit)-1)
         setData({
           ...mydata,
           unit_num: mydata.unit_num || ''
@@ -168,5 +168,8 @@ export default function BusinessAmount() {
 }
 
 BusinessAmount.config = {
-  navigationBarTitleText: '修改工量'
+  navigationBarTitleText: '修改工量',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
 } as Config

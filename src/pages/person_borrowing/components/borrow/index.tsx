@@ -3,7 +3,7 @@ import {View, Button} from '@tarojs/components'
 import ContentInput from '../../../../components/picker_input/index'
 import PickerType from '@/components/picker_type'
 import PickerMark from '@/components/picker_mark'
-import BorrowPostData, {BookkeepingProps} from './inter.d'
+import BorrowPostData from './inter.d'
 import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
@@ -13,13 +13,11 @@ import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
 import msg, {showBackModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
+import { getTodayDate } from '@/utils/index'
 import './index.scss'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
 
-function Borrow(props: BookkeepingProps) {
-  useEffect(() => {
-    console.log('props123', props)
-  }, [props])
+function Borrow() {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
@@ -44,7 +42,7 @@ function Borrow(props: BookkeepingProps) {
   const [postData, setPostData] = useState<BorrowPostData>({
     business_type: 4,
     expend_type: 0,
-    business_time: props.businessTime,
+    business_time: getTodayDate(),
     group_leader: '',
     note: '',
     money: '',
@@ -87,20 +85,22 @@ function Borrow(props: BookkeepingProps) {
   const userPostAcion = () => {
     let params: BorrowPostData = {
       business_type: 4,
-      expend_type: 4,
-      business_time: props.businessTime,
-      // group_leader: isPickerLeader ? groupLeader.id : '',
+      expend_type: isPickerType ? postData.expend_type : 0,
+      business_time: postData.business_time,
+      group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
       money: postData.money,
       identity: accountBookInfo.identity,
-      work_note: accountBookInfo.id,
-      worker_id: props.workerId
+      work_note: accountBookInfo.id
     }
-    if (postData.money) {
+    if (params.money) {
       if (!validNumber(params.money)) {
         msg('请输入正确的金额')
         return
       }
+    }else{
+      msg('金额不能为空')
+      return
     }
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
@@ -163,7 +163,6 @@ function Borrow(props: BookkeepingProps) {
         dateText={dateText}
       />}
       {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader}/>}
-     
       <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => {
@@ -172,8 +171,7 @@ function Borrow(props: BookkeepingProps) {
         }}>{typeData.id ? typeData.name : '分类'}</View>}
         {!isPickerDate &&
         <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-        {/*{!isPickerLeader &&
-        <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}*/}
+        {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
       </View>
       <View className="person-record-btn">
         <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

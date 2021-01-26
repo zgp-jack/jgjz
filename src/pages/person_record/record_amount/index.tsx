@@ -7,7 +7,7 @@ import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerUnit from '@/components/picker_unit'
 import PickerSubitem from '@/components/picker_subitem'
-import RecordAmountPostData, { UnitTpey, PropsData } from './inter.d'
+import RecordAmountPostData from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
@@ -19,7 +19,7 @@ import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
 
 
-function RecordAmoumt({ workerId, type }: PropsData) {
+function RecordAmoumt() {
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
@@ -32,7 +32,7 @@ function RecordAmoumt({ workerId, type }: PropsData) {
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 记工量提交数据
   const [postData, setPostData] = useState<RecordAmountPostData>({
-    business_type: type || 1,
+    business_type: 1,
     business_time: getTodayDate(),
     group_leader: '',
     note: '',
@@ -40,7 +40,6 @@ function RecordAmoumt({ workerId, type }: PropsData) {
     unit: 0,
     unit_work_type:'',
     identity: 2,
-    worker_id: workerId
   })
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<classifyItem>({
@@ -83,10 +82,9 @@ function RecordAmoumt({ workerId, type }: PropsData) {
       business_time: postData.business_time,
       unit: postData.unit,
       identity: Number(accountBookInfo.identity),
-      business_type: type || 2,
+      business_type: 2,
       unit_num: postData.unit_num,
       unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
-      worker_id: workerId
     }
     if (postData.unit_num) {
       if (!validNumber(params.unit_num)) {
@@ -119,10 +117,6 @@ function RecordAmoumt({ workerId, type }: PropsData) {
       // 关闭 分类 选项
       setIsPickSubitem(false)
     }
-  }
-  // 用户关闭 分类组件
-  const ColsePickerType = () => {
-    setIsPickSubitem(false)
   }
   // 用户关闭 日期组件
   const DeletePickerDate = () => {

@@ -1,10 +1,11 @@
-import Taro, {useState, useRouter, useEffect, eventCenter} from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import {View, Button} from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import msg, {showActionModal, showBackModal} from '@/utils/msg'
 import PickerMark from '@/components/picker_mark'
 import PickerType from '@/components/picker_type'
 import PickerDetail from '@/components/picker_detail'
+import PickerLeader from '@/components/picker_leader'
 import getBorrowInfo, {delBorrowBusiness, editBorrowBusiness} from './api'
 import ClassifyItem from '@/store/classify/inter.d'
 import {BusinessInfoResult, UserEditBusinessInfo} from './inter.d'
@@ -18,10 +19,13 @@ export default function BusinessBorrow() {
   const {id = ''} = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
-  // 班组长数据
-  const [leaderData, setLeaderData] = useState<ClassifyItem>({id: '', name: ''})
   // 分类数据
   const [typeData, setTypeData] = useState<ClassifyItem>({
+    id: '',
+    name: ''
+  })
+  // 选择的班组长数据
+  const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
     id: '',
     name: ''
   })
@@ -50,22 +54,24 @@ export default function BusinessBorrow() {
     worker_id: ''
   })
   useEffect(() => {
-    console.log('123', data)
-  }, [data])
-  useEffect(() => {
     if (id) {
-      Taro.setNavigationBarTitle({title: '修改借支'})
       userGetBusinessInfo()
     }
   }, [id])
-
+  // 注册全局事件 监听是否切换班组长信息
+  useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
+      setGroupLeader({ id: data.id, name: data.name })
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  }, [])
   // 初始化流水数据
   const userGetBusinessInfo = () => {
     getBorrowInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
         setData(mydata)
-        setLeaderData({id: mydata.group_leader, name: mydata.group_leader_name})
+        setGroupLeader({ id: mydata.group_leader, name: mydata.group_leader_name })
         setTypeData({id: mydata.expend_type, name: mydata.expend_type_name})
         setPostData({
           ...postData,
@@ -115,7 +121,8 @@ export default function BusinessBorrow() {
   // 用户修改流水
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
-      ...postData
+      ...postData,
+      group_leader: groupLeader.id
     }
     editBorrowBusiness(params).then(res => {
       if (res.code === 0) {
@@ -126,14 +133,14 @@ export default function BusinessBorrow() {
     })
   }
 
-  // 用户删除班组长
-  const userClearGroupLeader = () => {
-    setLeaderData({id: '', name: ''})
+  // 用户清空班组长
+  const userClearLeader = () => {
+    setGroupLeader({ id: '', name: '' })
   }
-
 
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
+    <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => userClearLeader()} />
     <PickerType
       value={typeData.name}
       show={show}
@@ -155,3 +162,9 @@ export default function BusinessBorrow() {
     </View>
   </View>)
 }
+BusinessBorrow.config = {
+  navigationBarTitleText: '修改支出',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
+} as Config

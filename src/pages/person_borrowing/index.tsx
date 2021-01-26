@@ -1,5 +1,5 @@
-import Taro, { connectSocket, useState } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import Taro, { useState, Config } from '@tarojs/taro'
+import { View } from '@tarojs/components'
 import Borrow from './components/borrow'
 import Expenditure from './components/expenditure'
 import tallyConfig from './config'
@@ -12,7 +12,6 @@ export default function PersonTally(){
   // 用户改变tab
   const userChangeTab = (id: number, title: string) => {
     setId(id)
-    Taro.setNavigationBarTitle({ title: `个人记${title}`}) 
   }
 
   return (
@@ -36,5 +35,8 @@ export default function PersonTally(){
 }
 
 PersonTally.config = {
-    navigationBarTitleText: '个人记借支',
-}
+  navigationBarTitleText: '个人记账',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
+} as Config

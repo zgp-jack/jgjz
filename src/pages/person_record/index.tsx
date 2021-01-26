@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import RecordDay from './record_day/index'
 import RecordAmoumt from './record_amount/index'
@@ -32,5 +32,8 @@ export default function PersonRecord(){
     )
 }
 PersonRecord.config = {
-    navigationBarTitleText: '个人记工天',
-}
+  navigationBarTitleText: '个人记工',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
+} as Config

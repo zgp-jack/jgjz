@@ -14,7 +14,6 @@ import AccountBookInfo from "@/store/account";
 import { UserGetCodeLoginParams, LoginProps } from './inter.d'
 import './index.scss'
 import getWorkNotes from '../../pages/account_book_list/api'
-import useInit from '@/hooks/init'
 function Login({
   show = false,
   setShow

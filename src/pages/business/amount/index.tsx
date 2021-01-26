@@ -22,6 +22,8 @@ export default function BusinessAmount() {
     id: '',
     name: ''
   })
+  // 默认选中单位
+  const [selectedUnit, setSelectedUnit] = useState<number>(0)
   // 是否显示分项数据
   const [show, setShow] = useState<boolean>(false)
   // 分项数据
@@ -76,6 +78,7 @@ export default function BusinessAmount() {
     getBorrowInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
+        setSelectedUnit(Number(mydata.unit))
         setData({
           ...mydata,
           unit_num: mydata.unit_num || ''
@@ -146,7 +149,7 @@ export default function BusinessAmount() {
   }
   return (<View>
     <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
-    <PickerUnitWara set={(data) => userUpdatePostData(data.id,'unit')}  />
+    <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
       value={typeData.name}
       show={show}

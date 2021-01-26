@@ -17,6 +17,8 @@
   title?:string
   // 获取值
   set: (PickerData) => void
+  // 默认值
+  selected?: number
  }
 export interface PickerData {
   id: number

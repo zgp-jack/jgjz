@@ -30,7 +30,7 @@ const Remember = () => {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {businessType} = rememberStore
   const {accountBookInfo} = _accountBookInfo
-  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '2' ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
@@ -43,7 +43,7 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == '2')
+  const [personOrGroup] = useState(accountBookInfo.identity == 2)
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -403,9 +403,11 @@ const Remember = () => {
                         {item.list.map(p => (
                           <Block key={p.id}>
                             {/* 如果是记工天 记工量 */}
-                            {(p.business_type == 1 || p.business_type == 2) && <WorkCountDay list={[p]} type={p.business_type} />}
+                            {(p.business_type == 1 || p.business_type == 2) &&
+                            <WorkCountDay list={[p]} type={p.business_type}/>}
                             {/* 如果是 记工钱、 借支、 支出 */}
-                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>}
                           </Block>
                         ))}
                       </View>

@@ -176,7 +176,7 @@ export default function RecordWork() {
                 {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) &&
                 <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
                 {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) &&
-                <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1}/>}
+                <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
               </View>
             </ScrollView>
           </SwiperItem>

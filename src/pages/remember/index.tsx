@@ -105,7 +105,11 @@ const Remember = () => {
   useDidShow(() => {
     setReloadList(true)
     if (reloadList) {
+      if (!user.login) return
       setLoading(true)
+      const params = actionParams()
+      initData(params)
+      setParams({...params}, true)
     }
   })
 

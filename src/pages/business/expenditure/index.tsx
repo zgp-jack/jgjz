@@ -11,6 +11,7 @@ import getExpenditureInfo, {delExpenditureBusiness, editExpenditureBusiness} fro
 import ClassifyItem from '@/store/classify/inter.d'
 import {BusinessInfoResult, UserEditBusinessInfo} from './inter.d'
 import './index.scss'
+import PickerCoworkers from "@/components/picker_coworkers";
 
 export default function BusinessExpenditure() {
 
@@ -19,8 +20,8 @@ export default function BusinessExpenditure() {
   const {id = ''} = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
-  // 班组长数据
-  const [leaderData, setLeaderData] = useState<ClassifyItem>({id: '', name: ''})
+  // 工友数据
+  const [coworkersData, setCoworkersData] = useState<ClassifyItem>({id: '', name: ''})
   // 借支提交数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -43,7 +44,8 @@ export default function BusinessExpenditure() {
     expend_type_name: '',
     expend_type: '',
     group_leader_name: '',
-    worker_id: ''
+    worker_id: '',
+    worker_name: ''
   })
 
   useEffect(() => {
@@ -54,8 +56,8 @@ export default function BusinessExpenditure() {
 
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
-    eventCenter.on(AddressBookConfirmEvent, (leader) => {
-      setLeaderData({id: leader.id, name: leader.name})
+    eventCenter.on(AddressBookConfirmEvent, (coworkers) => {
+      setCoworkersData({id: coworkers.id, name: coworkers.name})
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
@@ -66,7 +68,7 @@ export default function BusinessExpenditure() {
       if (res.code === 0) {
         let mydata = res.data
         setData({...mydata})
-        setLeaderData({id: mydata.group_leader || '', name: mydata.group_leader_name || ''})
+        setCoworkersData({id: mydata.worker_id || '', name: mydata.worker_name || ''})
         setPostData({
           ...postData,
           expend_type: mydata.expend_type || '',
@@ -97,7 +99,7 @@ export default function BusinessExpenditure() {
   // 用户删除流水
   const userDeleteBusiness = () => {
     showActionModal({
-      msg: '您确定删除该笔借支吗？',
+      msg: '您确定删除该笔支出吗？',
       showCancel: true,
       success: (res) => {
         if (res.confirm) {
@@ -117,7 +119,7 @@ export default function BusinessExpenditure() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: leaderData.id
+      worker_id: coworkersData.id
     }
     editExpenditureBusiness(params).then(res => {
       if (res.code === 0) {
@@ -129,8 +131,8 @@ export default function BusinessExpenditure() {
   }
 
   // 用户删除班组长
-  const userClearGroupLeader = () => {
-    setLeaderData({id: '', name: ''})
+  const userClearGroupCoworkers = () => {
+    setCoworkersData({id: '', name: ''})
   }
 
   // 用户删除分类
@@ -151,6 +153,7 @@ export default function BusinessExpenditure() {
       close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
+    <PickerCoworkers leader={coworkersData.name} DeletePickerCoworkers={userClearGroupCoworkers}/>
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
     <PickerDetail
       dateValue={data.busienss_time_string}

@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import classnames from 'classnames'
 import MoreWorkTimeProps from './inter.d'

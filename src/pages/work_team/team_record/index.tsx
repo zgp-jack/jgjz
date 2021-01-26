@@ -11,10 +11,10 @@ import WorkerList from '@/pages/work_team/components/worker_list/index'
 import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
 import { useLocalStore } from '@tarojs/mobx'
+import AccountBookInfo from "@/store/account";
 import PromptBox from '@/components/popup/index'
 import { TypeAction } from '@/pages/work_team/team_record/index.d'
 import './index.scss'
-import AccountBookInfo from "@/store/account";
 
 
 export default function RecordWork() {
@@ -30,7 +30,7 @@ export default function RecordWork() {
   // 获取路由参数type 1 记账 2 记工
   let {type} = router.params;
   //定义页面切换类型
-  const types: TypeAction[] = type == '1' ? businessType.slice(3) : businessType.slice(0, 3);
+  const types: TypeAction[] = Number(type) == 1 ? businessType.slice(3) : businessType.slice(0, 3);
   //定义当前选择的type项
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 当前选择的类型 1 记工 2记账

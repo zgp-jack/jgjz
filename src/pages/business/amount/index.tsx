@@ -101,7 +101,7 @@ export default function BusinessAmount() {
   // 用户修改分类信息
   const userChangePickerType = (data: ClassifyItem) => {
     setTypeData(data)
-    setPostData({ ...postData, unit_work_type: data.name })
+    setPostData({ ...postData, unit_work_type: data.id })
   }
 
   // 用户清除 分项信息
@@ -155,10 +155,10 @@ export default function BusinessAmount() {
       show={show}
       setShow={() => { setShow(!show) }}
       set={(data) => userChangePickerType(data)}
-      close={() => userClearSubitemType()}
+      rightClose={false}
     />
     <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => DeletePickerLeader()} />
-    <PickerMark text={postData.note} />
+    <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>

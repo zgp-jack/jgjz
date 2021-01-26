@@ -90,7 +90,8 @@ function RecordDay() {
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
-      work_note: accountBookInfo.id,
+      work_note: accountBookInfo.id
+      
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {

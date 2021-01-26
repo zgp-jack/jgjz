@@ -57,8 +57,7 @@ class App extends Component {
       'pages/business/borrow/index',
       'pages/business/amount/index',
       'pages/business/workday/index',
-      
-      'pages/login/index', //登录
+    
       // 'pages/business/workday/index',
       'pages/work_team/record_work/index',
       'pages/work_team/team_record/index',

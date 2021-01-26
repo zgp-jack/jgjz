@@ -10,6 +10,7 @@ import { isPhone } from '@/utils/v'
 import { UserInfo } from '@/config/store'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import User from '@/store/user';
+import AccountBookInfo from "@/store/account";
 import { UserGetCodeLoginParams, LoginProps } from './inter.d'
 import './index.scss'
 import getWorkNotes from '../../pages/account_book_list/api'
@@ -18,10 +19,10 @@ function Login({
   show = false,
   setShow
 }: LoginProps) {
-
-  const localStore = useLocalStore(() => User);
-  const { setUserInfo } = localStore
-
+  const _userInfo = useLocalStore(() => User)
+  const _accountBookInfo = useLocalStore(() => AccountBookInfo)
+  const { setUserInfo } = _userInfo
+  const { setAccountBoookInfo } = _accountBookInfo
   /** 获取所有记工列表 */
   const { data, setLoading } = useInit(getWorkNotes, {}, [])
   /** 当前高亮key */
@@ -78,22 +79,31 @@ function Login({
     userGetCodeLoginAction(params).then(res => {
       msg(res.message)
       if (res.code == 0) {
+        setLoading(true)
         // 设置用户信息
         let userInfo = {
           token: res.data.token,
           userId: res.data.yupao_id,
           login: true,
         }
+        // let params = {
+        //   id: 1,
+        //   name: name,
+        //   identity: id,
+        //   status: 0
+        // }
+        // // 储存mobx
+        // setAccountBoookInfo()
         // 缓存本地
         Taro.setStorageSync(UserInfo, userInfo)
         // 储存mobx
         setUserInfo(userInfo)
-        setLoading(true)
-        if(data.length < 1){
-          Taro.redirectTo({
-            url: '/pages/identity_selection/index'
-          })
-        }
+        console.log(getWorkNotes,"datadatadatadatadatadatadata")
+        // if(data.length < 1){
+        //   Taro.redirectTo({
+        //     url: '/pages/identity_selection/index'
+        //   })
+        // }
         //关闭弹窗
         setShow && setShow(false);
       } else {

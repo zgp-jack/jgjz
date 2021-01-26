@@ -4,18 +4,18 @@ import { IMGCDNURL } from '@/config/index'
 import PromptBox from '@/components/popup/index'
 import { InputValue } from '@/components/popup/index.d'
 import userAddWorkNotesAction from './api'
-import { IDENTITY_CONFIG } from './index.d'
+import { IDENTITY_CONFIG, Remember_Config } from './index.d'
 import createConfig from './config'
 import msg from '@/utils/msg'
 import getWorkNotes from '../account_book_list/api'
 import useInit from '@/hooks/init'
-import User from "@/store/user";
+import AccountBookInfo from "@/store/account";
 import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'
 
 function IdentitySelection() {
-  const _userInfo = useLocalStore(() => User)
-  const { user } = _userInfo
+  const localStore = useLocalStore(() => AccountBookInfo);
+  const { setAccountBoookInfo } = localStore
 
   /** 获取所有记工列表 */
   const { data } = useInit(getWorkNotes, {}, [])
@@ -65,6 +65,14 @@ function IdentitySelection() {
     userAddWorkNotesAction(params).then((r) => {
       msg(r.message)
       if (r.code === 0) {
+        let params: Remember_Config = { 
+          id:r.data.work_note_id,
+          name: name,
+          identity: id,
+          status: 0
+        }
+        // 储存mobx
+        setAccountBoookInfo(params)
         Taro.redirectTo({
           url: '/pages/remember/index'
         })

@@ -8,8 +8,8 @@
 
 // 获取通讯录列表
 import { get, post, del, put } from '@/utils/request'
-import { addressBookAll, updateWordkerInfo, workersAdd, deleteWorker } from '@/utils/api'
-import { GET_WORKERS_ALL_PARAMS, ADDRESS_BOOK_LIST, ADD_CONFIRM_DATA, EDIT_WORKER_RESULT, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA, PERSON_DATA, DeletedParams } from './index.d'
+import { addressBookAll, updateWordkerInfo, workersAdd, deleteWorker, addNoteWorkersUrl } from '@/utils/api'
+import { GET_WORKERS_ALL_PARAMS, ADDRESS_BOOK_LIST, ADD_CONFIRM_DATA, EDIT_WORKER_RESULT, ADD_PERSON_PARAMS, ADD_PERSON_RESULT_DATA, PERSON_DATA, DeletedParams, ADD_NOTE_WORKERS_PARAMS } from './index.d'
 
 /** 请求当前记工本 所有工友数据 */ 
 export function getWorkers(params: GET_WORKERS_ALL_PARAMS) {
@@ -29,4 +29,9 @@ export function editWordkerInfo(id: number, params: ADD_CONFIRM_DATA){
 /** 删除工友 */ 
 export const deletedPerson = (params: DeletedParams) => {
   return del<DeletedParams, []>(deleteWorker + params.id)
+}
+
+/** 记工本添加工人 */
+export const addNoteWorkers = (params: ADD_NOTE_WORKERS_PARAMS) =>{ 
+  return post<ADD_NOTE_WORKERS_PARAMS, []>(addNoteWorkersUrl,params)
 }

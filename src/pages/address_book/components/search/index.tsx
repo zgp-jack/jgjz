@@ -1,8 +1,9 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View, Text, Image, Input } from '@tarojs/components'
-import { IMGCDNURL } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE } from '@/config/index'
 import classnames from 'classnames'
 import { SEARCH_PROPS } from '../../index.d'
+// import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP, ADDRESSBOOKTYPE_GROUP_ADD } from '@/config/index'
 import './index.scss'
 
 export default function TestComponent(props: SEARCH_PROPS) {
@@ -32,7 +33,7 @@ export default function TestComponent(props: SEARCH_PROPS) {
           ></Input>
           {value && <Image className="input_box_clear" src={`${IMGCDNURL}ws/search-clear.png`} onClick={() => onSearch && onSearch('')} ></Image>}
         </View>
-        {!value && type == 'group' && 
+        {!value && type !== ADDRESSBOOKTYPE_ALONE && 
         <View className="add">
           <View className="add_botton" onClick={()=>addClick()}>
             <Text>添加工友</Text>

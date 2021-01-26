@@ -126,3 +126,9 @@ interface DeletedParams {
   /** 工友id */ 
   id: number
 }
+// 记工本添加工人params
+export interface ADD_NOTE_WORKERS_PARAMS {
+  worker_ids:string
+  work_note:string,
+  action:string
+}

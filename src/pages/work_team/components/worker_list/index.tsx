@@ -308,12 +308,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
             <Text className='record-work-person-text'>{obj.name}</Text>
           </View>)
         )}
-<<<<<<< HEAD
         <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?id=874&type=groupAdd' })}>
-=======
-        {/* 添加工友 */}
-        <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?id=874&type=group&data=[]' })}>
->>>>>>> 622ebc74b81ff09ee9214a2f32d1f9d5718d690b
           <View className='record-work-person-box'><Image 
             src={`${IMGCDNURL}yc/add.png`}
             mode='widthFix'

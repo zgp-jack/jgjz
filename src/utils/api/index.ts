@@ -82,6 +82,9 @@ export const getCountUrl: string = 'business/get-count'
 //删除工人
 export const deleteWorker: string = 'workers/delete/'
 
+//记工本添加工人
+export const addNoteWorkersUrl: string = 'workers/add-note-workers'
+
 
 // !流水列表
 // 获取流水

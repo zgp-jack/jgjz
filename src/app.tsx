@@ -51,20 +51,12 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/remember/index',
-<<<<<<< HEAD
-      'pages/login/index', //登录
-      'pages/business/money/index',
-=======
       'pages/account_book_list/index',  //记工账本列表
       'pages/business/money/index',
-
-      
->>>>>>> 622ebc74b81ff09ee9214a2f32d1f9d5718d690b
       'pages/business/expenditure/index',
       'pages/business/borrow/index',
       'pages/business/amount/index',
       // 'pages/business/workday/index',
-      
       'pages/login/index', //登录
       'pages/work_team/team_record/index',
       'pages/index/index', // 首页
@@ -72,7 +64,6 @@ class App extends Component {
       'pages/person_borrowing/index', // 个人借支/支出
       'pages/person_detail/index', // 个人记工-借支 详情页/修改页
       'pages/feedback/index',   //意见反馈
-      'pages/account_book_list/index',
       'pages/identity_selection/index', //身份选择
       'pages/example_mobx/index', // 示例 mobx 使用
       'pages/example_useInit/index', // 示例 useInit 使用

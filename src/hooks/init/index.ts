@@ -16,6 +16,8 @@ import produce from 'immer'
 
 export default function useInit<T, P>(api: APIFunc<T, P>, params: P ,data: T) {
 
+  console.log(`useInit被触发-${api.name}`)
+
   // result 所有的状态保存
   const [result, setResult] = useState<FetchResult<T>>({ loading: true, errMsg: '', data });
   const { loading } = result;

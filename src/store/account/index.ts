@@ -15,7 +15,7 @@ export class AccountBookInfo {
   accountBookInfo: AccountBookInfoType = {
     id: 0,
     name: '',
-    identity: '',
+    identity: 1,
     status: 0
   }
 

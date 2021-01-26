@@ -388,30 +388,11 @@ const Remember = () => {
             </View>
 
             <View className="statistics-flow">
-              <View
-                className="statistics-title">{handleMonthShow()}月全部流水</View>
-              <View className="bokkeeping-list">
-                {list.map((item, i) => (
-                  <Block key={i}>
-                    <View className="bokkeeping-list-head">{item.date}</View>
-                    <View className="bokkeeping-list-content">
-                      {item.list.map(p => (
-                        (p.business_type == 1 || p.business_type == 2) ?
-                          <WorkCountDay list={[p]} type={p.business_type}/> :
-                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>)
-                      ))}
-                    </View>
-                  </Block>
-                ))}
-              </View>
-              <View
-                className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth}月全部流水</View>
               <ListProvider
                 increasing={increasing}
                 loading={loading}
                 errMsg={errMsg}
-                hasmore={hasmore}
+                hasmore={false}
                 length={list.length}
               >
                 <View className="bokkeeping-list">
@@ -420,10 +401,12 @@ const Remember = () => {
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          (p.business_type == 1 || p.business_type == 2) ?
-                            <WorkCountDay key={p.id} list={[p]} type={p.business_type}/> :
-                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                              <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type}/>)
+                          <Block key={p.id}>
+                            {/* 如果是记工天 记工量 */}
+                            {(p.business_type == 1 || p.business_type == 2) && <WorkCountDay list={[p]} type={p.business_type} />}
+                            {/* 如果是 记工钱、 借支、 支出 */}
+                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                          </Block>
                         ))}
                       </View>
                     </Block>

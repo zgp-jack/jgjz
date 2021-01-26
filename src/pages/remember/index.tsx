@@ -25,6 +25,7 @@ import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
 import Login from '@/components/login/index'
+import { errMsg } from '@/utils/msg'
 
 const Remember = () => {
   /*记工类型数据*/
@@ -91,7 +92,7 @@ const Remember = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  const {loading, increasing, list, hasmore, setParams} = useList(getBusiness, actionParams())
+  const {loading, increasing, list, hasmore, setParams, errMsg} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -419,6 +420,7 @@ const Remember = () => {
                 increasing={increasing}
                 loading={loading}
                 hasmore={false}
+                errMsg={errMsg}
                 length={list.length}
               >
                 <View className="bokkeeping-list">

@@ -23,8 +23,6 @@ function Login({
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const { setUserInfo } = _userInfo
   const { setAccountBoookInfo } = _accountBookInfo
-  /** 获取所有记工列表 */
-  const { data, setLoading } = useInit(getWorkNotes, {}, [])
   /** 当前高亮key */
   const [id, setId] = useState<string>(loginConfig[0].id)
   /** 是否显示密码 */
@@ -79,35 +77,39 @@ function Login({
     userGetCodeLoginAction(params).then(res => {
       msg(res.message)
       if (res.code == 0) {
-        setLoading(true)
         // 设置用户信息
         let userInfo = {
           token: res.data.token,
           userId: res.data.yupao_id,
           login: true,
         }
-        // let params = {
-        //   id: 1,
-        //   name: name,
-        //   identity: id,
-        //   status: 0
-        // }
-        // // 储存mobx
-        // setAccountBoookInfo()
-        // 缓存本地
+        getUserNotesList()
+        
+        // 将用户信息缓存本地
         Taro.setStorageSync(UserInfo, userInfo)
         // 储存mobx
         setUserInfo(userInfo)
-        console.log(getWorkNotes,"datadatadatadatadatadatadata")
-        // if(data.length < 1){
-        //   Taro.redirectTo({
-        //     url: '/pages/identity_selection/index'
-        //   })
-        // }
-        //关闭弹窗
-        setShow && setShow(false);
       } else {
         msg(res.message)
+      }
+    })
+  }
+
+  // 获取用户记工本列表
+  const getUserNotesList = () => {
+    getWorkNotes().then(res => {
+      if(res.code === 0){
+        let mydata = res.data
+        if(mydata.length){
+          // 储存mobx
+          setAccountBoookInfo(mydata[0])
+          //关闭弹窗
+          setShow && setShow(false);
+        }else{
+          Taro.redirectTo({
+            url: '/pages/identity_selection/index?type=1'
+          })
+        }
       }
     })
   }

@@ -32,6 +32,8 @@ export interface BusinessInfoResult {
   group_leader_name: string
   /*工友id*/
   worker_id: string
+  /*工友名字*/
+  worker_name: string
 }
 
 // 用户删除借支流水操作

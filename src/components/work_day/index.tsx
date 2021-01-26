@@ -2,7 +2,7 @@ import Taro,{ useState } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import classnames from 'classnames'
 import { workTimeData, workTimePickerData, overTimeData } from './config'
-import MoreWorkTime from '@/pages/person_borrowing/components/moreworktime'
+import MoreWorkTime from '@/components/moreworktime'
 import { WorkDayComponentProps } from  './inter.d'
 import './index.scss'
 

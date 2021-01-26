@@ -79,15 +79,21 @@ page {
       background: #dbf1ff;
       padding: 5px 20px;
       font-size: 28px;
+      position: absolute;
+      left: 0;
+      top: 0;
     }
     .account-book-type-team {
       color: #fe8d29;
       background: #ffefd1;
       padding: 5px 20px;
       font-size: 28px;
+      position: absolute;
+      left: 0;
+      top: 0;
     }
     .account-book-tag-box {
-      padding: 45px 20px;
+      padding: 80px 20px 45px;
       .account-book-title {
         display: flex;
         justify-content: space-between;

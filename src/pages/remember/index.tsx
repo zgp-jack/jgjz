@@ -29,12 +29,12 @@ import { errMsg } from '@/utils/msg'
 
 const Remember = () => {
   /*记工类型数据*/
-  const _userInfo = useLocalStore(() => User)
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
-  const { user } = _userInfo
-  const { businessType } = rememberStore
+  const _user = useLocalStore(() => User)
+  const {businessType} = rememberStore
   const {accountBookInfo} = _accountBookInfo
+  const {user} = _user
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
@@ -117,7 +117,7 @@ const Remember = () => {
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
   useEffect(() => {
-    if (!filterData.start_business_time || !filterData.end_business_time) return
+    if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
     const params = actionParams()
     initData(params)
     setParams({...params}, true)

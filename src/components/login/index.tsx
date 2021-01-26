@@ -82,12 +82,11 @@ function Login({
           userId: res.data.yupao_id,
           login: true,
         }
-        getUserNotesList()
-        
         // 将用户信息缓存本地
         Taro.setStorageSync(UserInfo, userInfo)
         // 储存mobx
         setUserInfo(userInfo)
+        getUserNotesList()
       } else {
         msg(res.message)
       }

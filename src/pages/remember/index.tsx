@@ -91,7 +91,7 @@ const Remember = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
+  const {loading, increasing, list, hasmore, setParams} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -418,7 +418,6 @@ const Remember = () => {
               <ListProvider
                 increasing={increasing}
                 loading={loading}
-                errMsg={errMsg}
                 hasmore={false}
                 length={list.length}
               >

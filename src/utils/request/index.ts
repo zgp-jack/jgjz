@@ -36,13 +36,13 @@ function requestShowToast(show: boolean): void {
  */
 function getRequestHeaderInfo(): RequestHeader {
 
-  return {
-    'content-type': 'application/x-www-form-urlencoded',
-    source: MINITOKEN,
-    version: VERSION,
-    uid: 20021014,
-    token: 'f46cad96333edb484b8f14b5cfff5952787054ddaf8ab4ddaedc850daefe16d1',
-  }
+  // return {
+  //   'content-type': 'application/x-www-form-urlencoded',
+  //   source: MINITOKEN,
+  //   version: VERSION,
+  //   uid: 20021014,
+  //   token: 'f46cad96333edb484b8f14b5cfff5952787054ddaf8ab4ddaedc850daefe16d1',
+  // }
 
   // 获取用户信息
   let userInfo: User = Taro.getStorageSync(UserInfo)

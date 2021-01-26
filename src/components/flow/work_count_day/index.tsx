@@ -15,9 +15,9 @@ export default function WorkCountDay({list = [], type = 1}: PropsData) {
   const goDetail = (id: number, action: number) => {
     let url: string = ''
     if(action === 1){
-      url = `/pages/work_team_business/workday/index?id=${id}`
+      url = `/pages/business/workday/index?id=${id}`
     }else{
-      url = `/pages/work_team_business/amount/index?id=${id}`
+      url = `/pages/business/amount/index?id=${id}`
     }
     Taro.navigateTo({ url })
   }

@@ -11,7 +11,6 @@ import ClassifyItem from '@/store/classify/inter.d'
 import {BusinessInfoResult, UserEditBusinessInfo} from './inter.d'
 import {AddressBookConfirmEvent} from '@/config/events'
 import './index.scss'
-import PickerCoworkers from "@/components/picker_coworkers";
 
 export default function BusinessBorrow() {
 
@@ -55,7 +54,6 @@ export default function BusinessBorrow() {
     expend_type: '',
     group_leader_name: '',
     worker_id: '',
-    worker_name: ''
   })
   useEffect(() => {
     if (id) {
@@ -158,8 +156,7 @@ export default function BusinessBorrow() {
       rightClose={false}
       set={(data) => userChangePickerType(data)}
     />
-    <PickerCoworkers leader={coworkersData.name} DeletePickerCoworkers={userClearGroupCoworkers}/>
-
+    
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
     <PickerDetail
       dateValue={data.busienss_time_string}

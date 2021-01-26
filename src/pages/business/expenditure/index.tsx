@@ -11,7 +11,6 @@ import getExpenditureInfo, {delExpenditureBusiness, editExpenditureBusiness} fro
 import ClassifyItem from '@/store/classify/inter.d'
 import {BusinessInfoResult, UserEditBusinessInfo} from './inter.d'
 import './index.scss'
-import PickerCoworkers from "@/components/picker_coworkers";
 
 export default function BusinessExpenditure() {
 
@@ -47,8 +46,7 @@ export default function BusinessExpenditure() {
     expend_type_name: '',
     expend_type: '',
     group_leader_name: '',
-    worker_id: '',
-    worker_name: ''
+    worker_id: ''
   })
 
   useEffect(() => {
@@ -160,7 +158,6 @@ export default function BusinessExpenditure() {
       close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
-    <PickerCoworkers leader={groupLeader.name} DeletePickerCoworkers={userClearGroupCoworkers}/>
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
     <PickerDetail
       dateValue={data.busienss_time_string}

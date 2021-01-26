@@ -81,7 +81,7 @@ function RecordAmoumt() {
       work_note: accountBookInfo.id,
       business_time: postData.business_time,
       unit: postData.unit,
-      identity: Number(accountBookInfo.identity),
+      identity: accountBookInfo.identity,
       business_type: 2,
       unit_num: postData.unit_num,
       unit_work_type: isPickerSubitem ? postData.unit_work_type : '',

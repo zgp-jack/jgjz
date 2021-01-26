@@ -1,6 +1,13 @@
 .login-box {
   padding: 20px 60px;
   background-color: #fff;
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #F6F6F6;
+  right: 0;
   .close-login-icon {
     width: 30px;
     height: 30px;
@@ -14,7 +21,6 @@
   .login-type {
     display: flex;
     width: 100%;
-    height: 100%;
     padding: 0 40px;
     .login-type-title {
       width: 50%;

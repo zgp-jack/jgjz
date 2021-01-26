@@ -10,13 +10,13 @@ import { IMGCDNURL } from '@/config/index'
 
 const createConfig: CreateConfigList[] =[
   {
-    id: 1,
+    id: 2,
     type: '个人',
     tips: '适合给个人记',
     img: `${IMGCDNURL}gl/id-personal.png`
   },
   {
-    id: 2,
+    id: 1,
     type: '班组',
     tips: '适合给多人记',
     img: `${IMGCDNURL}gl/id-team.png`

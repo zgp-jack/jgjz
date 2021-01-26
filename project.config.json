@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "mini_bookkeeping",
   "description": "this is yupao bookkeeping",
-  "appid": "touristappid",
+  "appid": "wx2e0c4fafe2aa2e36",
   "setting": {
     "urlCheck": true,
     "es6": false,

@@ -19,16 +19,20 @@ import {getBusiness} from './api'
 import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/remember/inter";
 import {getCountUrl} from "@/utils/api";
 import {observer, useLocalStore} from '@tarojs/mobx'
+import User from "@/store/user";
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
+import Login from '@/components/login/index'
 
 const Remember = () => {
   /*记工类型数据*/
+  const _userInfo = useLocalStore(() => User)
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
-  const {businessType} = rememberStore
+  const { user } = _userInfo
+  const { businessType } = rememberStore
   const {accountBookInfo} = _accountBookInfo
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 1 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
@@ -87,7 +91,7 @@ const Remember = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
+  const {loading, increasing, list, hasmore, setParams} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -96,8 +100,8 @@ const Remember = () => {
   const [filterMonth, setFilterMonth] = useState(month)
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
-
-
+  /* 登陆弹窗 */
+  const [showLogin, setShowLogin] = useState(false)
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
@@ -112,6 +116,15 @@ const Remember = () => {
   useEffect(() => {
     initParams()
   }, [filterMonth, filterYear])
+
+  const handIsLogin = () => {/*是否登录*/
+    console.log(user.login, "8888888")
+    if (!user.login) {
+      setShowLogin(true)
+      return false
+    }
+    return true
+  }
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -143,6 +156,10 @@ const Remember = () => {
   }
   /*上一个月份日期*/
   const prevMonth = () => {
+    if(!handIsLogin()){
+      handIsLogin()
+      return 
+    }
     if (filterMonth == 1) {
       setFilterYear(filterYear - 1)
       setFilterMonth(12)
@@ -152,6 +169,10 @@ const Remember = () => {
   }
   /*下一个月份日期*/
   const nextMonth = () => {
+    if (!handIsLogin()) {
+      handIsLogin()
+      return
+    }
     if (filterMonth == 12) {
       setFilterYear(filterYear + 1)
       setFilterMonth(1)
@@ -161,6 +182,10 @@ const Remember = () => {
   }
   /*日期选择器选择*/
   const onFilterDateChange = (e) => {
+    if (!handIsLogin()) {
+      handIsLogin()
+      return
+    }
     const date = e.detail.value
     setCurrentYearMonth(date)
     const yearAndMonth = date.split('-')
@@ -215,10 +240,14 @@ const Remember = () => {
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
     let url = `/pages/work_team/record_work/index?type=${type}`;
-    Taro.navigateTo({
-      url: url
-    })
+    handIsLogin() && Taro.navigateTo({ url: url })
   }
+
+  const handNavigateTo = (url: string) => {
+    handIsLogin() && Taro.navigateTo({ url })
+  }
+
+
   /*1转为01*/
   const handleMonthShow = (month = filterMonth) => {
     return Number(month) < 10 ? `0${month}` : month
@@ -237,7 +266,7 @@ const Remember = () => {
           <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
-                onClick={() => Taro.navigateTo({url: '/pages/account_book_list/index'})}>切换记工本</View>
+            onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
@@ -257,12 +286,12 @@ const Remember = () => {
                   <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                    onClick={() => setShowFilter(true)}>
+                onClick={() => {!handIsLogin() ? handIsLogin() : setShowFilter(true)}}>
                 <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
-            <View className="filter-info" onClick={() => setShowFilter(true)}>
+              <View className="filter-info" onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
               <View className="filter-info-box overwords">
                 {
                   ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
@@ -389,7 +418,6 @@ const Remember = () => {
               <ListProvider
                 increasing={increasing}
                 loading={loading}
-                errMsg={errMsg}
                 hasmore={false}
                 length={list.length}
               >
@@ -416,7 +444,7 @@ const Remember = () => {
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="feedback" onClick={() => Taro.navigateTo({url: '/pages/feedback/index'})}>
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
               <Image src={feedback} className="feedback-icon"/>
               意见反馈
             </View>
@@ -444,6 +472,8 @@ const Remember = () => {
               handleSplitDate={(date) => handleSplitDate(date)}
               resetFilter={handleResetFilter}
       />
+
+      <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>
     </View>
   )
 }

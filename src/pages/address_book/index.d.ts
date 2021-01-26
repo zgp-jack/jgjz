@@ -132,3 +132,13 @@ export interface ADD_NOTE_WORKERS_PARAMS {
   work_note:string,
   action:string
 }
+/** 请求当前记工本 已选中的工友数据params */
+export interface GET_NOTE_WORKERS_PARAMS {
+  business_time:string,
+  action:string,
+  workNote:number
+}
+/** 请求当前记工本 已选中的工友数据的返回数据 */
+export interface GET_NOTE_WORKERS_data{
+  note_worker:PERSON_DATA[]
+}

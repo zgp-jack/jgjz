@@ -85,6 +85,12 @@ export const deleteWorker: string = 'workers/delete/'
 //记工本添加工人
 export const addNoteWorkersUrl: string = 'workers/add-note-workers'
 
+//记工本离场
+export const deleteNoteWorkersUrl: string = 'workers/delete-note-workers'
+
+//账本中已选中的工友数据
+export const getNoteWorkersUrl: string = 'workers/get-note-workers/'
+
 
 // !流水列表
 // 获取流水

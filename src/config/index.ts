@@ -42,4 +42,6 @@ export const ADDRESSBOOKTYPE_GROUP: string = 'group'
 export const ADDRESSBOOKTYPE_LEAVE: string = 'leave'
 // * 通信录类型 - 班组-需要在通讯录发接口
 export const ADDRESSBOOKTYPE_GROUP_ADD: string = 'groupAdd'
+// * 通信录类型 - 班组-需要在通讯录发接口-离场
+export const ADDRESSBOOKTYPE_GROUP_DEL: string = 'groupDel'
 

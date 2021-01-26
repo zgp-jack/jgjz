@@ -80,6 +80,8 @@ function AccountBook() {
       }
     }else{ // 记工记工本
       url = `/pages/remember/index`
+      Taro.reLaunch({ url })
+      return
     }
     Taro.navigateTo({ url })
   }

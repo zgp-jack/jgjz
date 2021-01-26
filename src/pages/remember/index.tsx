@@ -30,7 +30,11 @@ const Remember = () => {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {businessType} = rememberStore
   const {accountBookInfo} = _accountBookInfo
+<<<<<<< HEAD
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 1 ? '个人' : '班组') + '记工账本'})
+=======
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '2' ? '个人' : '班组') + '记工账本'})
+>>>>>>> xiaoyu
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
@@ -43,7 +47,11 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
+<<<<<<< HEAD
   const [personOrGroup] = useState(accountBookInfo.identity == 1)
+=======
+  const [personOrGroup] = useState(accountBookInfo.identity == '2')
+>>>>>>> xiaoyu
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -308,12 +316,14 @@ const Remember = () => {
                     <Image src={remember} className="statistics-icon"/>
                     <View className="remember-values">
                       <View className="remember-value">
-                        <Text>上班</Text>
-                        <Text>{counts.work_time}个工</Text>
-                        {counts.work_time_hour != '0' && <Text>+{counts.work_time_hour}小时</Text>}
+                        <Text className="remember-value-text">上班</Text>
+                        <Text className="remember-value-text">{counts.work_time}个工</Text>
+                        {counts.work_time_hour != '0' &&
+                        <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
                       </View>
                       {counts.overtime != '0' &&
-                      <View className="remember-value"><Text>加班</Text><Text>{counts.overtime}小时</Text></View>}
+                      <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
+                        className="remember-value-text">{counts.overtime}小时</Text></View>}
                     </View>
                   </View>
                 </View>

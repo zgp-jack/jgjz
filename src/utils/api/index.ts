@@ -100,7 +100,7 @@ export const addWorkNotes: string = 'work-notes/add'
 export const editWorkNotes: string = 'work-notes/edit-work-note'
 
 // 获取单个记工本工友
-export const WorkerList: string = 'workers/get-note-workers/873'
+export const WorkerList: string = 'workers/get-note-workers/'
 
 // 离场某个工友
 export const removeWorker: string = 'workers/delete-note-workers/'

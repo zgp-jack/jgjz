@@ -3,7 +3,7 @@ import { WorkerList, removeWorker } from '@/utils/api'
 import { WorkerReqData, WorkerParams, DeletedParams} from './index.d'
 
 export default function getWorkerList(params: WorkerParams) {
-  return get<WorkerParams, WorkerReqData>(WorkerList, params)
+  return get<WorkerParams, WorkerReqData>(WorkerList + params.workNote, params)
 }
 
 

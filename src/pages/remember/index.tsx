@@ -240,7 +240,7 @@ const Remember = () => {
 
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
-    let url = `/pages/work_team/record_work/index?type=${type}`;
+    let url = `/pages/work_team/team_record/index?type=${type}`;
     handIsLogin() && Taro.navigateTo({ url: url })
   }
 

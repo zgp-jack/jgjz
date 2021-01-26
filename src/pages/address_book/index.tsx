@@ -4,13 +4,13 @@ import AccountBookInfo from '@/store/account/index'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
-import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP } from '@/config/index'
-import { AddressBookConfirmEvent } from '@/config/events'
-import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS } from './index.d'
-import { InputValue } from '@/components/popup/index.d'
+import {IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP} from '@/config/index'
+import {AddressBookConfirmEvent} from '@/config/events'
+import {ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS} from './index.d'
+import {InputValue} from '@/components/popup/index.d'
 import classnames from 'classnames'
 import msg from '@/utils/msg'
-import { getWorkers, postAdd_Person, deletedPerson, editWordkerInfo } from './api'
+import {getWorkers, postAdd_Person, deletedPerson, editWordkerInfo} from './api'
 import PromptBox from '@/components/popup/index'
 import './index.scss'
 import {objDeepCopy} from '@/utils/index'
@@ -40,9 +40,9 @@ function AddressBook() {
         let newData: PERSON_DATA[] = JSON.parse(data)
         //上一个页面传过来的数据 默认选中
         let newListData = res.data
-        newListData.map((Pitem,Pindex)=>{
-          Pitem.data.map((Citem, Cindex)=>{
-            newData.map((dataItem)=>{
+        newListData.map((Pitem, Pindex) => {
+          Pitem.data.map((Citem, Cindex) => {
+            newData.map((dataItem) => {
               if (Citem.id == dataItem.id) {
                 newListData[Pindex].data[Cindex].is_check = true
               }
@@ -50,8 +50,8 @@ function AddressBook() {
           })
         })
         //上一个页面传过来的数据 默认选中
-        let newSelectd:PERSON_DATA[] = []
-        newData.map((dataItem)=>{
+        let newSelectd: PERSON_DATA[] = []
+        newData.map((dataItem) => {
           newSelectd.push(dataItem)
         })
         setSelectd(newSelectd)
@@ -274,7 +274,7 @@ function AddressBook() {
   }
   /** 修改工友-接口请求 */
   const editWorkerConfirm = (data: InputValue) => {
-    editWordkerInfo(editItemData.id, { name: data.name, tel: data.tel || '' }).then(res => {
+    editWordkerInfo(editItemData.id, {name: data.name, tel: data.tel || ''}).then(res => {
       msg(res.message)
       if (res.code != 0) {
         return
@@ -469,93 +469,99 @@ function AddressBook() {
   return (
     <View className="AddressBook">
       {/* 已选中工友 */}
-      {type !== ADDRESSBOOKTYPE_ALONE && <Selectd selectd={selectd} deletePerson={deletePerson} />}
+      {type !== ADDRESSBOOKTYPE_ALONE && <Selectd selectd={selectd} deletePerson={deletePerson}/>}
 
       {/* 搜索组件 */}
-      <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} />
+      <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value}/>
       {/* 通讯录列表 */}
       <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
         "list_content": true,
         "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
-      })} >
+      })}>
         {list.map((pItem, pIndex) => (
-          <View className="item" key={pItem.name_py} id={pItem.name_py == "#" ? 'view_' : 'view' + pItem.name_py}>
-            <Text className="title">{pItem.name_py}</Text>
-            {pItem.data.map((cItem, cIndex) => (
-              <View className="item_person" key={cItem.id}>
-                <View className="left" onClick={() => selectItem(pIndex, cIndex, cItem.is_in_work_note)}>
+            <View className="item" key={pItem.name_py} id={pItem.name_py == "#" ? 'view_' : 'view' + pItem.name_py}>
+              <Text className="title">{pItem.name_py}</Text>
+              {pItem.data.map((cItem, cIndex) => (
+                <View className="item_person" key={cItem.id}>
+                  <View className="left" onClick={() => selectItem(pIndex, cIndex, cItem.is_in_work_note)}>
 
-                  {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
-                  {type !== ADDRESSBOOKTYPE_ALONE && <Image className='item_checkbox' src={cItem.is_in_work_note ? `${disableCheckImg}` : cItem.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
+                    {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
+                    {type !== ADDRESSBOOKTYPE_ALONE && <Image className='item_checkbox'
+                                                              src={cItem.is_in_work_note ? `${disableCheckImg}` : cItem.is_check ? `${onCheckdImg}` : `${normalCheckImg}`}/>}
 
-                  <View className="avatar" style={{ background: cItem.name_color }}>{cItem.name.substring(0, 2)}</View>
-                  <View className="name_tle">
-                    <Text className="name">{cItem.name}</Text>
-                    {cItem.tel && <Text className="tel">{cItem.tel}</Text>}
+                    <View className="avatar" style={{background: cItem.name_color}}>{cItem.name.substring(0, 2)}</View>
+                    <View className="name_tle">
+                      <Text className="name">{cItem.name}</Text>
+                      {cItem.tel && <Text className="tel">{cItem.tel}</Text>}
+                    </View>
+                  </View>
+                  <View className="setting">
+                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => {
+                      e.stopPropagation();
+                      bossEditWorkerinfo(cIndex, cItem)
+                    }}></Image>
                   </View>
                 </View>
-                <View className="setting">
-                  <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(cIndex, cItem) }} ></Image>
-                </View>
-              </View>
-            ))
-            }
-          </View>
-        )
+              ))
+              }
+            </View>
+          )
         )}
       </ScrollView>
 
       {/* 筛选列表 */}
       {value &&
-        <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
-          "list_content": true,
-          "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
-          "list_content_filter": true,
-        })}>
-          {filterList.map((item, pIndex) => (
-            <View className="item_person" key={item.id}>
-              <View className="left" onClick={() => filterSelect(pIndex, item.id)}>
+      <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
+        "list_content": true,
+        "list_content-alone": type === ADDRESSBOOKTYPE_ALONE,
+        "list_content_filter": true,
+      })}>
+        {filterList.map((item, pIndex) => (
+          <View className="item_person" key={item.id}>
+            <View className="left" onClick={() => filterSelect(pIndex, item.id)}>
 
-                {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
-                {type !== ADDRESSBOOKTYPE_ALONE &&
-                  <Image className='item_checkbox'
-                    src={item.is_in_work_note ? `${disableCheckImg}` : item.is_check ? `${onCheckdImg}` : `${normalCheckImg}`}
-                  />}
+              {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
+              {type !== ADDRESSBOOKTYPE_ALONE &&
+              <Image className='item_checkbox'
+                     src={item.is_in_work_note ? `${disableCheckImg}` : item.is_check ? `${onCheckdImg}` : `${normalCheckImg}`}
+              />}
 
-                <View className="avatar" style={{background: item.name_color}}>{item.name.substring(0, 2)}</View>
-                <View className="name_tle">
-                  <Text className="name">{item.name}</Text>
-                  {item.tel && <Text className="tel">{item.tel}</Text>}
-                </View>
-              </View>
-              <View className="setting">
-                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => {
-                  e.stopPropagation();
-                }}></Image>
+              <View className="avatar" style={{background: item.name_color}}>{item.name.substring(0, 2)}</View>
+              <View className="name_tle">
+                <Text className="name">{item.name}</Text>
+                {item.tel && <Text className="tel">{item.tel}</Text>}
               </View>
             </View>
-          ))
-          }
-        </ScrollView>}
+            <View className="setting">
+              <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => {
+                e.stopPropagation();
+              }}></Image>
+            </View>
+          </View>
+        ))
+        }
+      </ScrollView>}
 
 
       {/* 右侧字母表 */}
       <View className="right_nav">
         {list.map((item) => (
-          <Text className='right-nav-text' key={item.name_py} onClick={() => toView('view' + item.name_py)}>{item.name_py}</Text>
+          <Text className='right-nav-text' key={item.name_py}
+                onClick={() => toView('view' + item.name_py)}>{item.name_py}</Text>
         ))}
       </View>
       {/* 底部组件 当非个人类型时显示 */}
       {type !== ADDRESSBOOKTYPE_ALONE &&
-        <View className="bottom_all">
-          <View className="bottom_all_box" onClick={() => allSelect()}>
-            <Image className="bottom_all_img" src={isAllSelect ? `${IMGCDNURL}ws/ckeckd.png` : `${IMGCDNURL}ws/check.png`} />
-            <Text className="bottom_all_text" >全选</Text>
-          </View>
-          <View className="button" onClick={() => submitSelect()}>
-            确定（{selectd.length}人）
-          </View>
-        </View>}
+      <View className="bottom_all">
+        <View className="bottom_all_box" onClick={() => allSelect()}>
+          <Image className="bottom_all_img"
+                 src={isAllSelect ? `${IMGCDNURL}ws/ckeckd.png` : `${IMGCDNURL}ws/check.png`}/>
+          <Text className="bottom_all_text">全选</Text>
+        </View>
+        <View className="button" onClick={() => submitSelect()}>
+          确定（{selectd.length}人）
+        </View>
+      </View>}
       {/* // 添加工友组件 */}
       {addPopupShow && <PromptBox
         titleText="添加工友"

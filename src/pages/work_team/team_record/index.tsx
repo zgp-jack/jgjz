@@ -1,17 +1,18 @@
 import Taro, {useEffect, useState, useRouter, Config} from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team/components/flow_list/index'
-import RecordDay from '@/pages/person_record/record_day/index'
-import RecordAmoumt from '@/pages/person_record/record_amount/index'
-import RecordMoney from '@/pages/person_record/record_money/index'
-import Borrow from '@/pages/person_borrowing/components/borrow/index'
-import Expenditure from '@/pages/person_borrowing/components/expenditure/index'
+import RecordDay from '@/pages/work_team/components/record-work/record_day/index'
+import RecordAmoumt from '@/pages/work_team/components/record-work/record_amount/index'
+import RecordMoney from '@/pages/work_team/components/record-work/record_money/index'
+import Borrow from '@/pages/work_team/components/record_borrow/borrow/index'
+import Expenditure from '@/pages/work_team/components/record_borrow/expenditure/index'
 import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
 import WorkerList from '@/pages/work_team/components/worker_list/index'
 import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
-import {useLocalStore} from '@tarojs/mobx'
-import {TypeAction} from '@/pages/work_team/record_work/index.d'
+import { useLocalStore } from '@tarojs/mobx'
+import PromptBox from '@/components/popup/index'
+import { TypeAction } from '@/pages/work_team/team_record/index.d'
 import './index.scss'
 import AccountBookInfo from "@/store/account";
 
@@ -34,6 +35,7 @@ export default function RecordWork() {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 当前选择的类型 1 记工 2记账
   const [typeItem, SetTypeItem] = useState<number>(1);
+
 
   /**
    * @name: initTime
@@ -130,6 +132,7 @@ export default function RecordWork() {
     /**保存type值*/
     SetTypeItem(typeNum)
   }
+
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>

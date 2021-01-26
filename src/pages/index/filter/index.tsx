@@ -5,7 +5,7 @@ import './index.scss'
 import arrowRight from "@/images/arrow-right.png";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
-import {AddressBookParams, GetCountParams} from "@/pages/remember/inter";
+import {AddressBookParams, GetCountParams} from "@/pages/index/inter";
 import {getTodayDate} from "@/utils/index";
 import {ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_GROUP} from "@/config/index";
 import {AddressBookConfirmEvent} from "@/config/events";

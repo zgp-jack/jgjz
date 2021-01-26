@@ -1,6 +1,7 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
+import { INDEXPAGE } from '@/config/pages'
 import PromptBox from '@/components/popup/index'
 import { InputValue } from '@/components/popup/index.d'
 import userAddWorkNotesAction from './api'
@@ -66,7 +67,7 @@ function IdentitySelection() {
       msg(r.message)
       if (r.code === 0) {
         Taro.redirectTo({
-          url: '/pages/remember/index'
+          url: INDEXPAGE
         })
       }
     })

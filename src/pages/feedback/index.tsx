@@ -6,6 +6,7 @@ import UploadImg from '@/components/upload_img'
 import starConfig from './components/star/config'
 import msg, { showBackModal } from '@/utils/msg'
 import userGetFeedbackAction from './api'
+import { copyWechat } from '@/utils/index'
 import './index.scss'
 
 export default function Feedback() {
@@ -63,7 +64,7 @@ export default function Feedback() {
       <View className='feedback-box'>
           <View className="feedback-wechat">
             <Text className="feedback-introduce">为了提高沟通效率，建议您添加平台微信{wechat}</Text>
-            <Text className="click-copy">点击复制</Text>
+            <Text className="click-copy" onClick={() => copyWechat({ wechat })}>点击复制</Text>
           </View>
 
           <View className="feedback-item">

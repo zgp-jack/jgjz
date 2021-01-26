@@ -20,11 +20,8 @@ export default function BusinessExpenditure() {
   const {id = ''} = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
-  // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
-    id: '',
-    name: ''
-  })
+  // 工友数据
+  const [coworkersData, setCoworkersData] = useState<ClassifyItem>({id: '', name: ''})
   // 借支提交数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -59,8 +56,8 @@ export default function BusinessExpenditure() {
 
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
-    eventCenter.on(AddressBookConfirmEvent, (leader) => {
-      setGroupLeader({ id: leader.group_leader|| '', name: leader.group_leader_name||'' })
+    eventCenter.on(AddressBookConfirmEvent, (coworkers) => {
+      setCoworkersData({id: coworkers.id, name: coworkers.name})
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
@@ -71,7 +68,7 @@ export default function BusinessExpenditure() {
       if (res.code === 0) {
         let mydata = res.data
         setData({...mydata})
-        setGroupLeader({ id: mydata.group_leader, name: mydata.group_leader_name })
+        setCoworkersData({id: mydata.worker_id || '', name: mydata.worker_name || ''})
         setPostData({
           ...postData,
           expend_type: mydata.expend_type || '',
@@ -122,7 +119,7 @@ export default function BusinessExpenditure() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      worker_id: coworkersData.id
     }
     editExpenditureBusiness(params).then(res => {
       if (res.code === 0) {
@@ -135,7 +132,7 @@ export default function BusinessExpenditure() {
 
   // 用户删除班组长
   const userClearGroupCoworkers = () => {
-    setGroupLeader({id: '', name: ''})
+    setCoworkersData({id: '', name: ''})
   }
 
   // 用户删除分类
@@ -144,13 +141,9 @@ export default function BusinessExpenditure() {
     setPostData({...postData, expend_type: ''})
   }
 
-  // 用户清空班组长
-  const userClearLeader = () => {
-    setGroupLeader({ id: '', name: '' })
-  }
+
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
-    <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => userClearLeader()} />
     <PickerType
       value={data.expend_type_name}
       show={show}
@@ -160,7 +153,7 @@ export default function BusinessExpenditure() {
       close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
-    <PickerCoworkers leader={groupLeader.name} DeletePickerCoworkers={userClearGroupCoworkers}/>
+    <PickerCoworkers leader={coworkersData.name} DeletePickerCoworkers={userClearGroupCoworkers}/>
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
     <PickerDetail
       dateValue={data.busienss_time_string}
@@ -175,8 +168,5 @@ export default function BusinessExpenditure() {
 }
 
 BusinessExpenditure.config = {
-  navigationBarTitleText: '修改支出',
-  navigationBarBackgroundColor: '#0099ff',
-  navigationBarTextStyle: 'white',
-  backgroundTextStyle: "dark"
+  navigationBarTitleText: '修改支出'
 } as Config

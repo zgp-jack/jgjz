@@ -2,11 +2,12 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 20:29:09
+ * @LastEditTime: 2021-01-26 19:37:22
  * @Description: 常用助手函数
  */
-
+import Taro from '@tarojs/taro'
 import {showModal} from '@/utils/msg';
+import { RECORD_WORK_DATA } from '@/pages/account_book_list/index.d'
 
 /**
  * @name: objDeepCopy for jsxin
@@ -66,4 +67,32 @@ export function getTodayDate(type: string = 'd'): string {
   if (type === 'y') return `${y}`
   if (type === 'm') return `${y}-${_m}`
   return `${y}-${_m}-${_d}`
+}
+
+
+/**
+ * @name: enterTheRecordBook for jsxin
+ * @params phone: string 需要拨号的号码
+ * @return void 无返回值
+ * @description 拨打电话
+ */
+export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "borrow" |  "account"){
+  let url: string = ''
+  // 判断是 record:记工 borrow:记账 还是 account:进入记工本
+  if (type == 'record') {
+    if (data.identity == 1) { // 班组记工
+      url = '/pages/work_team/team_record/index?type=2'
+    } else { // 个人记工
+      url = '/pages/person_record/index'
+    }
+  } else if (type == 'borrow') {
+    if (data.identity == 1) { // 班组记账
+      url = '/pages/work_team/team_record/index?type=1 '
+    } else { // 个人记账
+      url = '/pages/person_borrowing/index'
+    }
+  } else { // 记工记工本
+    url = `/pages/index/index`
+  }
+  Taro.navigateTo({ url })
 }

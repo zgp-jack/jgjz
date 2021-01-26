@@ -2,7 +2,7 @@ import Taro, {useEffect, eventCenter} from '@tarojs/taro'
 import {View, Text, Button} from '@tarojs/components'
 import './index.scss'
 
-export default function Index() {
+export default function Index_() {
 
   useEffect(() => {
     eventCenter.on('test', (aa: string) => {

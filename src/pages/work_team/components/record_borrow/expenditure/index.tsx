@@ -143,7 +143,10 @@ function Expenditure(props: BookkeepingProps) {
       {isPickerType &&
       <PickerType
         value={typeData.name}
-        close={() => setIsPickType(false)}
+        close={() => {
+          setIsPickType(false)
+          setTypeData({id: '', name: ''})
+        }}
         onOptionClose={() => userTapRightTopCloseBtn()}
         set={(data) => userChangePickerType(data)}
         show={showTypePicker}

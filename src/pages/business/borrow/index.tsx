@@ -11,6 +11,7 @@ import ClassifyItem from '@/store/classify/inter.d'
 import {BusinessInfoResult, UserEditBusinessInfo} from './inter.d'
 import {AddressBookConfirmEvent} from '@/config/events'
 import './index.scss'
+import PickerCoworkers from "@/components/picker_coworkers";
 
 export default function BusinessBorrow() {
 
@@ -19,6 +20,8 @@ export default function BusinessBorrow() {
   const {id = ''} = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
+  // 工友数据
+  const [coworkersData, setCoworkersData] = useState<ClassifyItem>({id: '', name: ''})
   // 分类数据
   const [typeData, setTypeData] = useState<ClassifyItem>({
     id: '',
@@ -51,7 +54,8 @@ export default function BusinessBorrow() {
     expend_type_name: '',
     expend_type: '',
     group_leader_name: '',
-    worker_id: ''
+    worker_id: '',
+    worker_name: ''
   })
   useEffect(() => {
     if (id) {
@@ -71,7 +75,7 @@ export default function BusinessBorrow() {
       if (res.code === 0) {
         let mydata = res.data
         setData(mydata)
-        setGroupLeader({ id: mydata.group_leader, name: mydata.group_leader_name })
+        setGroupLeader({ id: mydata.group_leader || '', name: mydata.group_leader_name || '' })
         setTypeData({id: mydata.expend_type, name: mydata.expend_type_name})
         setPostData({
           ...postData,
@@ -137,6 +141,10 @@ export default function BusinessBorrow() {
   const userClearLeader = () => {
     setGroupLeader({ id: '', name: '' })
   }
+  // 用户删除班组长
+  const userClearGroupCoworkers = () => {
+    setCoworkersData({id: '', name: ''})
+  }
 
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
@@ -150,6 +158,8 @@ export default function BusinessBorrow() {
       rightClose={false}
       set={(data) => userChangePickerType(data)}
     />
+    <PickerCoworkers leader={coworkersData.name} DeletePickerCoworkers={userClearGroupCoworkers}/>
+
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
     <PickerDetail
       dateValue={data.busienss_time_string}

@@ -23,13 +23,16 @@ import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
+import User from '@/store/user'
 
 const Remember = () => {
   /*记工类型数据*/
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
+  const _user = useLocalStore(() => User)
   const {businessType} = rememberStore
   const {accountBookInfo} = _accountBookInfo
+  const {user} = _user
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
@@ -110,7 +113,7 @@ const Remember = () => {
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
   useEffect(() => {
-    if (!filterData.start_business_time || !filterData.end_business_time) return
+    if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
     const params = actionParams()
     initData(params)
     setParams({...params}, true)

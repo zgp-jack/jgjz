@@ -38,12 +38,7 @@ export interface WorkTimeProps {
   // text值
   text: string
 }
-export interface WorkTimeType {
-  /** 后台提交数据 */
-  value: string,
-  /** 前台展示文本 */
-  text: string
-}
+
 export interface PropsData {
   workerId: string
   type: number

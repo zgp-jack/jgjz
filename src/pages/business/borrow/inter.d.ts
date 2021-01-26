@@ -8,7 +8,7 @@
 
 // 初始化借支详情 接口返回数据
 export interface BusinessInfoResult {
-  /** 当前详情id */ 
+  /** 当前详情id */
   id: number
   /** 当前记工本 id */
   work_note: number
@@ -30,11 +30,13 @@ export interface BusinessInfoResult {
   expend_type: string
   /** 班组长名字 */
   group_leader_name: string
+  /*工友id*/
+  worker_id: string
 }
 
 // 用户删除借支流水操作
 export interface UserDelBusinessInfo {
-  /** 需要被删除的流水id */ 
+  /** 需要被删除的流水id */
   id: string
 }
 
@@ -50,4 +52,6 @@ export interface UserEditBusinessInfo {
   money: string,
   /** 班组长id */
   group_leader: string
+  /*工友id*/
+  worker_id: string
 }

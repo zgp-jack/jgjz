@@ -84,6 +84,8 @@ export interface SEARCH_PROPS {
   onSearch?: (val: string) => void,
   /** 用户搜索行为 */
   value?: string,
+  /** 单选还是多选 */ 
+  type: string
 }
 
 // 添加工友弹窗确定 的值
@@ -123,4 +125,20 @@ export interface ADD_PERSON_RESULT_DATA {
 interface DeletedParams {
   /** 工友id */ 
   id: number
+}
+// 记工本添加工人params
+export interface ADD_NOTE_WORKERS_PARAMS {
+  worker_ids:string
+  work_note:string,
+  action:string
+}
+/** 请求当前记工本 已选中的工友数据params */
+export interface GET_NOTE_WORKERS_PARAMS {
+  business_time:string,
+  action:string,
+  workNote:number
+}
+/** 请求当前记工本 已选中的工友数据的返回数据 */
+export interface GET_NOTE_WORKERS_data{
+  note_worker:PERSON_DATA[]
 }

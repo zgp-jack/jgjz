@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:00:19
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-26 15:55:49
+ * @LastEditTime: 2021-01-26 19:17:36
  * @Description: 项目配置项文件、全局配置项
  ! @rules: 1.key 为全大写  2.注释在上方
  */

@@ -64,7 +64,6 @@ class App extends Component {
       'pages/index/index', // 首页
       'pages/person_record/index', //个人记工
       'pages/person_borrowing/index', // 个人借支/支出
-      'pages/person_detail/index', // 个人记工-借支 详情页/修改页
       'pages/feedback/index',   //意见反馈
       
       'pages/identity_selection/index', //身份选择

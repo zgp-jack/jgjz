@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import RecordDayPostData from './inter.d'
+import RecordDayPostData, { WorkTimeType } from './inter.d'
 import PickerDate from '@/components/picker_date/index'
 import PickerLeader from '@/components/picker_leader/index'
 import PickerMark from '@/components/picker_mark/index'
@@ -16,15 +16,14 @@ import WorkDayComponent from '@/components/work_day'
 import './index.scss'
 
 function RecordDay() {
-  // 记工天 是否是工
+  // 记工天 是否选中上班更多
   const [isWrok, setIsWork] = useState<boolean>(true)
-  // 是否选中 over
+  // 是否选中加班更多
   const [isOver, setIsOver] = useState<boolean>(true)
   // 上班时长的数据
-  const [workTime, setWorkTime] = useState({value: '1', text: '一个工'})
+  const [workTime, setWorkTime] = useState<WorkTimeType>({value: '1', text: '一个工'})
   // 加班时长的数据
-  const [overTime, setOverTime] = useState({ value: '0', text: '无加班' })
-
+  const [overTime, setOverTime] = useState<WorkTimeType>({ value: '0', text: '无加班' })
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否日期组件
@@ -67,10 +66,9 @@ function RecordDay() {
   const localStore = useLocalStore(() => AccountBookInfo);
   const { accountBookInfo } = localStore
   // 用户更新数据
-  const userUpdatePostData = (val: string, type: string,value?:string,typeString?:string) => {
+  const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }
     postdata[type] = val
-    typeString && (postdata[typeString] = value);
     setPostData(postdata)
   }
   // 用户点击 班组长 圆角按钮 选择

@@ -2,7 +2,7 @@
  * @Author: jack_zgp
  * @Date: 2021-01-20 15:05:10
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-25 18:06:35
+ * @LastEditTime: 2021-01-26 16:20:13
  * @Description: interface for record_day
  */
 
@@ -42,4 +42,11 @@ export interface WorkTimeProps {
 export interface PropsData {
   workerId: string
   type: number
+}
+
+export interface WorkTimeType {
+  /** 后台提交数据 */
+  value: string,
+  /** 前台展示文本 */
+  text: string
 }

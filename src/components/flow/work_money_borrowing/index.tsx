@@ -15,11 +15,11 @@ export default function WorkMoneyBorrowing({ list = [], type = 1 }: PropsData) {
   const goDetail = (id: number, action: number) => {
     let url: string = ''
     if(action === 3){
-      url = `/pages/business/money/index?id=${id}` 
+      url = `/pages/work_team_business/money/index?id=${id}` 
     }else if(action === 4){
-      url = `/pages/business/borrow/index?id=${id}`
+      url = `/pages/work_team_business/borrow/index?id=${id}`
     }else{
-      url = `/pages/business/expenditure/index?id=${id}`
+      url = `/pages/work_team_business/expenditure/index?id=${id}`
     }
     Taro.navigateTo({ url})
   }

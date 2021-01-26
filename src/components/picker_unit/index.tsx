@@ -12,6 +12,7 @@ export default function PickerUnitWare({
     hideImg = true,
     img = `${IMGCDNURL}zgp/unit_icon.png`,
     title = '单位',
+    selected = 0,
     set
 }:PickerUnitProps){
   // 是否显示PickerUnit
@@ -26,7 +27,7 @@ export default function PickerUnitWare({
   // 获取计量单位
   const initUnitDataFun = () => {
     if (loading || status){
-      setSelectUnit(unitdata[0])
+      setSelectUnit(unitdata[selected])
       return
     } 
     userGetExpendType({}).then((res) => {
@@ -34,14 +35,14 @@ export default function PickerUnitWare({
         let unitData:UnitType[] = [];
         res.data.forEach((item) => unitData.push({id:item.id,value:item.name}))
         setLoading(true)
-        setSelectUnit(unitData[0])
+        setSelectUnit(unitData[selected])
         initUnitData(unitData)
       }
     })
   }
   useEffect(() => {
     initUnitDataFun()
-  }, [])
+  }, [selected])
   return (<View>
     <View className="person-record-overtime person-record-date" onClick={() => {setIsPickerUnit(true)}}>
       {hideImg && <Image className="person-record-date-img" src={img} />}

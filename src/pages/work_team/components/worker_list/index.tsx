@@ -1,7 +1,7 @@
-import Taro, {useEffect, useState} from '@tarojs/taro'
+import Taro, {useDidShow, useEffect, useState} from '@tarojs/taro'
 import {View, Text, Image} from '@tarojs/components'
 import useInit from '@/hooks/init'
-import { IMGCDNURL } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_GROUP_DEL } from '@/config/index'
 import PromptBox from '@/components/popup/index'
 import { editWordkerInfo } from '@/pages/address_book/api'
 import msg from '@/utils/msg'
@@ -15,12 +15,13 @@ interface RecordWorkProps {
   setWorkerId: (data: number[]) => void
   workNote: number
   startDate: string
+  type: number
 }
 
-function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProps) {
-  const {loading, data, errMsg, setLoading} = useInit(getWorkerList, {
+function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWorkProps) {
+  const { data, setLoading} = useInit(getWorkerList, {
     business_time: startDate,
-    action: '4',
+    action: type,
     workNote: workNote
   }, {business_worker_id: [], note_worker: []})
   const [worker, setWorker] = useState<WorkerData[]>([])
@@ -33,20 +34,26 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
   const [selectWorker, setSelectWorker] = useState<WorkerData>({
     id: 1, is_self: 0, name: '', name_color: '', name_py: '', tel: ''
   });
+  /** 是否第一次显示 */
+  const [firstShow, setFirstShow] = useState<boolean>(false)
+
   /**定时器*/
   let timeOutEvent = 0
 
   useEffect(() => {
     setLoading(true)
   }, [startDate])
+
   useEffect(() => {
     if (!data || !data.business_worker_id) return
     let businessWorker = JSON.parse(JSON.stringify(data.business_worker_id));
     let workerData = JSON.parse(JSON.stringify(data.note_worker));
     workerData.forEach((item: any) => {
       businessWorker.forEach((obj: any) => {
-        if (obj == item.id) {
-          item.recorded = true
+        if (type == 1 || type == 2 || type == 3){
+          if (obj == item.id) {
+            item.recorded = true
+          }
         }
       })
       /**处理工友数据是自己*/ 
@@ -56,17 +63,22 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
       /**截取工友名字后两个字*/ 
       item.alias = item.name.substring(item.name.length - 2)
     })
-    
-    setWorker(workerData);
     /**为了ui显示增加空工友数据*/ 
     let emptyObjCount = 6 - (workerData.length + 2) % 6;
     let emptCount: WorkerData[] = []
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
     }
+    setWorker(workerData);
     setEmptyCount(emptCount)
   },[data])
   
+  useDidShow(()=>{
+    if(firstShow){
+      setLoading(true)
+    }
+    setFirstShow(true)
+  })
   /**
   * @name: chooseWorker
   * @params index 选中工友列表对应下标
@@ -230,23 +242,13 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
   * @description 修改工友-接口请求
   */
   const editWorkerConfirm = (inputData: InputValue) => {
-    /**获取班组工友数据*/ 
-    let workerData = JSON.parse(JSON.stringify(worker))
     /**发送编辑请求*/ 
     editWordkerInfo(selectWorker.id, { name: inputData.name, tel: inputData.tel || '' }).then(res => {
       msg(res.message)
       if (res.code != 0) {
         return
       }
-      /**重新设置修改后数据*/ 
-      workerData.forEach((item:any) => {
-        if (item.id == selectWorker.id) {
-          item.name = inputData.name;
-          item.tel = inputData.tel;
-          item.alias = inputData.name.substring(inputData.name.length - 2)
-        }
-      });
-      setWorker(workerData)
+      setLoading(true)
       /**隐藏修改弹窗*/ 
       setIsShowEdit(false)
     })
@@ -261,18 +263,10 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
   * @description 移除工友事件
   */
   const movePerson = () => {
-    let workerData = JSON.parse(JSON.stringify(worker))
-    let workId = {
-      id: selectWorker.id
-    }
-    removePerson(workId).then((res) => {
+    removePerson({ workId: selectWorker.id, work_note: workNote}).then((res) => {
       msg(res.message)
       if (res.code == 0) {
-        let index = workerData.findIndex(((item:any)=>{
-          return item.id == selectWorker.id
-        }))
-        if (index !== -1) workerData.splice(index,1)
-        setWorker(workerData)
+        setLoading(true)
         setIsShowEdit(false)
       }
     })
@@ -285,9 +279,9 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
         <View className='record-work-person-head'>
           <View className='record-work-person-title'>
             <View className='record-work-person-tip'>选择工友（已选<Text className='record-work-person-text'>{workerId.length}</Text>人）</View>
-            {data.business_worker_id.length == data.note_worker.length ? '' : <View className='record-work-person-all' onClick={() => chooseAll()}>{allChoose ? '取消全选' : '全选未记'}</View>}
+            {data.business_worker_id.length == data.note_worker.length ? '' : <View className='record-work-person-all' onClick={() => chooseAll()}>{allChoose ? '取消全选' : ((type == 1 || type == 2 || type == 3) ? '全选未记' : '全选')}</View>}
           </View>
-          <View className='record-work-person-disc'>黄色块代表此工友当日已有记工</View>
+          <View className='record-work-person-disc'>{(type == 1 || type == 2 || type == 3) ? '黄色块代表此工友当日已有记工' : '长按名字可编辑'}</View>
         </View>
       </View>
       {/* 工友数据列表 */}
@@ -309,8 +303,8 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
           </View>)
         )}
         {/* 添加工友 */}
-        <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?id=874&type=group&data=[]' })}>
-          <View className='record-work-person-box'><Image 
+        <View className='record-work-person-add'>
+          <View className='record-work-person-box' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?id=874&type=${ADDRESSBOOKTYPE_GROUP_ADD}` })}><Image 
             src={`${IMGCDNURL}yc/add.png`}
             mode='widthFix'
           /></View>
@@ -318,7 +312,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate}: RecordWorkProp
         </View>
         {/* 删除工友 */}
         <View className='record-work-person-del'>
-          <View className='record-work-person-box'><Image
+          <View className='record-work-person-box' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?id=874&type=${ADDRESSBOOKTYPE_GROUP_DEL}` })}><Image
             src={`${IMGCDNURL}yc/del.png`}
             mode='widthFix'
           /></View>

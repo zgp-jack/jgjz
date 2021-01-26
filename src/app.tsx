@@ -56,12 +56,12 @@ class App extends Component {
       'pages/business/expenditure/index',
       'pages/business/borrow/index',
       'pages/business/amount/index',
-      // 'pages/business/workday/index',
+      'pages/business/workday/index',
+      // 'pages/work_team/record_work/index',
       'pages/work_team/team_record/index',
       'pages/index/index', // 首页
       'pages/person_record/index', //个人记工
       'pages/person_borrowing/index', // 个人借支/支出
-      'pages/person_detail/index', // 个人记工-借支 详情页/修改页
       'pages/feedback/index',   //意见反馈
       'pages/identity_selection/index', //身份选择
       'pages/example_mobx/index', // 示例 mobx 使用

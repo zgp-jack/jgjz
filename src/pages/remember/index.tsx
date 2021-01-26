@@ -25,7 +25,6 @@ import AccountBookInfo from "@/store/account";
 import useList from '@/hooks/list'
 import ListProvider from '@/components/list_provider'
 import Login from '@/components/login/index'
-import { errMsg } from '@/utils/msg'
 
 const Remember = () => {
   /*记工类型数据*/
@@ -33,8 +32,9 @@ const Remember = () => {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const _user = useLocalStore(() => User)
   const {businessType} = rememberStore
+  const { user } = _user
   const {accountBookInfo} = _accountBookInfo
-  const {user} = _user
+
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/

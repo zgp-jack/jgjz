@@ -9,5 +9,5 @@ export default function getWorkerList(params: WorkerParams) {
 
 /** 删除工友 */
 export function removePerson (params: DeletedParams) {
-  return del<DeletedParams, []>(removeWorker + params.id + '/1')
+  return del<DeletedParams, []>(removeWorker + params.workId + '/' + params.work_note)
 }

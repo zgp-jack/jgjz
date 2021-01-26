@@ -8,6 +8,7 @@ import getBusinessMoneyInfo , { delBusinessMoney, editBusinessMoney} from './api
 import PickerDetail from '@/components/picker_detail'
 import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
 import msg, { showBackModal, showActionModal } from '@/utils/msg'
+import ClassifyItem from '@/store/classify/inter.d'
 import { AddressBookConfirmEvent } from '@/config/events'
 import './index.scss'
 
@@ -16,6 +17,12 @@ export default function BusinessMoney() {
   // 根据路由获取id参数
   const router = useRouter()
   const { id = '11151' } = router.params
+
+  // 选择的班组长数据
+  const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
+    id: '',
+    name: ''
+  })
   // 借支提交数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -49,11 +56,15 @@ export default function BusinessMoney() {
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
     eventCenter.on(AddressBookConfirmEvent,(data) => {
-      setData({...data,group_leader: data.id, group_leader_name: data.name})
-      setPostData({...postData, group_leader: data.id})
+      setGroupLeader({id: data.id, name: data.name})
     })
-    return eventCenter.off(AddressBookConfirmEvent)
+    return () => eventCenter.off(AddressBookConfirmEvent)
   },[])
+
+  // 用户清空班组长
+  const userClearLeader = () => {
+    setGroupLeader({ id: '', name: '' })
+  }
 
   // 初始化流水数据
   const userGetBusinessInfo = () => {
@@ -61,6 +72,7 @@ export default function BusinessMoney() {
       if (res.code === 0) {
         let mydata = res.data
         setData(mydata)
+        setGroupLeader({id: mydata.group_leader, name: mydata.group_leader_name})
         setPostData({
           ...postData,
           note: mydata.note || "",
@@ -102,7 +114,11 @@ export default function BusinessMoney() {
 
   // 用户修改流水
   const userEditBusiness = () => {
-    editBusinessMoney(postData).then(res => {
+    let params: UserEditBusinessInfo = {
+      ...postData,
+      group_leader: groupLeader.id
+    }
+    editBusinessMoney(params).then(res => {
       if (res.code === 0) {
         showBackModal(res.message)
       } else {
@@ -113,7 +129,7 @@ export default function BusinessMoney() {
 
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
-    <PickerLeader leader={data.group_leader_name} rightClose={false}  />
+    <PickerLeader leader={groupLeader.name}  DeletePickerLeader={() => userClearLeader()}  />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">

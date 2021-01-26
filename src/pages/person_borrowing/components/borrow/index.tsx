@@ -8,6 +8,8 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
+import PickerLeader from '@/components/picker_leader'
+import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
 import msg, {showBackModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
@@ -152,7 +154,7 @@ function Borrow(props: BookkeepingProps) {
         setShow={(bool: boolean) => setShowTypePicker(bool)}
       />
       }
-      {/*
+      
       {isPickerDate &&
       <PickerDate
         date={postData.business_time}
@@ -161,7 +163,7 @@ function Borrow(props: BookkeepingProps) {
         dateText={dateText}
       />}
       {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader}/>}
-      */}
+     
       <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => {

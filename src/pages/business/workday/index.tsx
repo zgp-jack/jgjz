@@ -90,17 +90,17 @@ export default function ModifyWorkDay(){
     let overtime = overtime_data || '0'
     if(work_time == '1'){
       selectedWork.id = 0,
-      selectedWork.value = 1
+      selectedWork.value = 0
     }else if(work_time == '0.5'){
       selectedWork.id = 1,
-      selectedWork.value = 0.5
+      selectedWork.value = 0
     } else if (work_time == '0'){
       if (work_time_hour == '0'){
         selectedWork.id = 2,
         selectedWork.value = 0
       }else{
         selectedWork.id = 3,
-        selectedWork.value = parseInt(work_time_hour)
+          selectedWork.value = Number(work_time_hour)
       }
     }
     if (overtime == '0'){
@@ -108,7 +108,7 @@ export default function ModifyWorkDay(){
       selectedOver.value = 0
     }else{
       selectedOver.id = 1;
-      selectedOver.value = parseInt(overtime);
+      selectedOver.value = Number(overtime);
     }
   }
   // 用户删除流水

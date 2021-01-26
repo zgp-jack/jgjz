@@ -13,6 +13,7 @@ export default function WorkTime({
   close,
   selected = {id: 0, value: 0}
 }: WorkTimeProps) {
+
   // 选中id
   const [selectTime, setSelectTime] = useState<number>(selected.id)
   // 是否关闭 更多
@@ -24,6 +25,12 @@ export default function WorkTime({
   useEffect(() => {
     isClose ? setWorkTime(worktimedata) : setWorkTime(overtime);
   }, [worktime])
+
+  useEffect(() => {
+    setSelectTime(selected.id)
+    setTimeValue(selected.value)
+  }, [selected])
+
   return (
     <View className={classnames({
       "person-record-worktime person-record-overtime": true,

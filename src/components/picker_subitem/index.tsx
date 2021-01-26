@@ -143,7 +143,7 @@ function PickerType({
       <View className="person-record-overtime person-record-date" onClick={() => {setShow(true)}}>
         {!hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
-        <Input className="person-record-date-text" value={value} placeholder='请添加您的分项' disabled></Input>
+        <Input className="person-record-date-text" value={value || '无分项'} placeholder='请添加您的分项' disabled></Input>
         {rightClose && <Text className="overtime-icon" onClick={(e) => { e.stopPropagation(); close && close() }}></Text>}
       </View>
 

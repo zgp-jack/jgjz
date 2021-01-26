@@ -51,11 +51,22 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/remember/index',
+<<<<<<< HEAD
       'pages/login/index', //登录
       'pages/business/money/index',
+=======
+      'pages/account_book_list/index',  //记工账本列表
+      'pages/business/money/index',
+
+      
+>>>>>>> 622ebc74b81ff09ee9214a2f32d1f9d5718d690b
       'pages/business/expenditure/index',
       'pages/business/borrow/index',
-      'pages/work_team/record_work/index',
+      'pages/business/amount/index',
+      // 'pages/business/workday/index',
+      
+      'pages/login/index', //登录
+      'pages/work_team/team_record/index',
       'pages/index/index', // 首页
       'pages/person_record/index', //个人记工
       'pages/person_borrowing/index', // 个人借支/支出
@@ -81,10 +92,10 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Remember/>
+        <Remember />
       </Provider>
     )
   }
 }
 
-Taro.render(<App/>, document.getElementById('app'))
+Taro.render(<App />, document.getElementById('app'))

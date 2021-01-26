@@ -1,22 +1,29 @@
-import Taro, {View, Image, Block} from '@tarojs/components'
-import {IMGCDNURL} from '@/config/index'
-import {PropsData} from './idnex.d'
+import Taro from '@tarojs/taro'
+import { View, Image, Block } from '@tarojs/components'
+import { IMGCDNURL } from '@/config/index'
+import { PropsData } from './index.d'
 import './index.scss'
 
 export default function WorkCountDay({list = [], type = 1}: PropsData) {
 
   /**
    * @name: goDetail
-   * @params id:流水信息id  action: 当前流水类型
+   * @params id:流水信息id  action: 当前流水类型 1: 记工天 2: 记工量
    * @return void
    * @description 点击流水跳转到对应的详情修改页
    */
   const goDetail = (id: number, action: number) => {
-    action == 1 && Taro.navigateTo({url: `/pages/business/borrow/index?id=${id}`})
-    action == 2 && Taro.navigateTo({url: `/pages/business/borrow/index?id=${id}`})
+    let url: string = ''
+    if(action === 1){
+      url = `/pages/business/workday/index?id=${id}`
+    }else{
+      url = `/pages/business/amount/index?id=${id}`
+    }
+    Taro.navigateTo({ url })
   }
   return (
-    list.map(item => (
+    <Block>
+    {list.map(item => (
       <Block key={item.id}>
         <View className='bokkeeping-list-container'>
           <View className='bokkeeping-list-item' onClick={() => goDetail(item.id, item.business_type)}>
@@ -34,7 +41,7 @@ export default function WorkCountDay({list = [], type = 1}: PropsData) {
             </View>
           </View>
         </View>
-      </Block>
-    ))
+      </Block>))}
+    </Block>
   )
 }

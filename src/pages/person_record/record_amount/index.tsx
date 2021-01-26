@@ -7,7 +7,7 @@ import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerUnit from '@/components/picker_unit'
 import PickerSubitem from '@/components/picker_subitem'
-import RecordAmountPostData, { UnitTpey } from './inter.d'
+import RecordAmountPostData, { UnitTpey, PropsData } from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
@@ -19,7 +19,7 @@ import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
 
 
-function RecordAmoumt() {
+function RecordAmoumt({ workerId, type }: PropsData) {
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
@@ -32,7 +32,7 @@ function RecordAmoumt() {
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 记工量提交数据
   const [postData, setPostData] = useState<RecordAmountPostData>({
-    business_type: 2,
+    business_type: type || 1,
     business_time: getTodayDate(),
     group_leader: '',
     note: '',
@@ -40,6 +40,7 @@ function RecordAmoumt() {
     unit: 0,
     unit_work_type:'',
     identity: 2,
+    worker_id: workerId
   })
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<classifyItem>({
@@ -81,10 +82,11 @@ function RecordAmoumt() {
       work_note: accountBookInfo.id,
       business_time: postData.business_time,
       unit: postData.unit,
-      identity: 2,
-      business_type: 2,
+      identity: Number(accountBookInfo.identity),
+      business_type: type || 2,
       unit_num: postData.unit_num,
-      unit_work_type: isPickerSubitem ? postData.unit_work_type : ''
+      unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
+      worker_id: workerId
     }
     if (postData.unit_num) {
       if (!validNumber(params.unit_num)) {

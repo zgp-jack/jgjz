@@ -1,7 +1,7 @@
 import Taro, { useEffect } from '@tarojs/taro'
 import ListProvider from '@/components/list_provider'
 import useList from '@/hooks/list'
-import getFlowlists from '@/pages/work_team/record_work/api'
+import getFlowlists from '@/pages/work_team/team_record/api'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import { GetWorkFlowParams } from '@/pages/work_team/record_work/index.d'
@@ -25,7 +25,7 @@ export default function FlowList({currentIndex=0, params='', types=[{id:'1',name
   const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getFlowlists, { ...defaultParams})
   useEffect(()=>{
     setParams({ end_business_time: params, start_business_time: params},true)
-  },[params])
+  },[params, setParams])
 
   return (
       <ListProvider
@@ -39,7 +39,8 @@ export default function FlowList({currentIndex=0, params='', types=[{id:'1',name
           <WorkCountDay list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkCountDay>}
         {(types[currentIndex].id == "3" || types[currentIndex].id == "4" || types[currentIndex].id == "5") &&
           <WorkMoneyBorrowing list={list.length ? list[0].list : []}
-            type={types[currentIndex].id}></WorkMoneyBorrowing>}
+            type={types[currentIndex].id}
+          ></WorkMoneyBorrowing>}
       </ListProvider>
   )
 }

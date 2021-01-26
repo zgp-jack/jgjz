@@ -20,9 +20,7 @@ function AccountBook() {
 
   /** 获取所有记工列表 */
   const {loading, data, errMsg, setLoading} = useInit(getWorkNotes, {}, [])
-  // useEffect(() => {
-  //   console.log(data)
-  // },[data])
+  
   /** 被修改的数据 */
   const [editData, setEditData] = useState<Edit_AddressBook_Info>({
     id: 0,
@@ -62,11 +60,28 @@ function AccountBook() {
   }
 
   /** 进入记工账本 页面跳转之前 设置mobx信息 */
-  const enterTheRecordBook = (data: RECORD_WORK_DATA, url: string) => {
-    // Taro.setStorageSync('ledgerType', data.identity)
+  const enterTheRecordBook = (data: RECORD_WORK_DATA, type: string) => {
+    console.log(type, data.identity)
     // 储存mobx
     setAccountBoookInfo(data)
-    Taro.navigateTo({url})
+    let url: string = ''
+    // 判断是 record:记工 borrow:记账 还是 account:进入记工本
+    if(type == 'record'){
+      if (data.identity == 1) { // 班组记工
+        url = '/pages/person_record/index'
+      } else { // 个人记工
+        url = '/pages/person_record/index'
+      }
+    }else if(type == 'borrow'){
+      if (data.identity == 1) { // 班组记账
+        url = '/pages/person_record/index'
+      } else { // 个人记账
+        url = '/pages/person_borrowing/index'
+      }
+    }else{ // 记工记工本
+      url = `/pages/remember/index`
+    }
+    Taro.navigateTo({ url })
   }
   return (
     <View className='account-book-box'>
@@ -81,7 +96,7 @@ function AccountBook() {
       <InitProvider loading={loading} errMsg={errMsg}>
         {data.map((item) => (
           <View className="account-book-personal account-book-item" key={item.id}>
-            {item.identity == '1' ? <Text className="account-book-type-personal">个人记工</Text>
+            {item.identity == 2 ? <Text className="account-book-type-personal">个人记工</Text>
               :
               <Text className="account-book-type-team">班组记工</Text>
             }
@@ -95,16 +110,16 @@ function AccountBook() {
               </View>
               <View className="account-book-flex">
                 <View className="account-book-align"
-                      onClick={() => enterTheRecordBook(item, '/pages/person_record/index')}>
+                      onClick={() => enterTheRecordBook(item, 'record')}>
                   <Image className="account-gong-icon" src={`${IMGCDNURL}gl/Bookkeeping-icon.png`}></Image> 记工
                 </View>
                 <View className="account-book-align"
-                      onClick={() => enterTheRecordBook(item, '/pages/person_borrowing/index')}>
+                      onClick={() => enterTheRecordBook(item, 'borrow')}>
                   <Image className="account-zhang-icon" src={`${IMGCDNURL}gl/record-work-icon.png`}></Image>记账
                 </View>
               </View>
               <Button className="account-book-btn"
-                      onClick={() => enterTheRecordBook(item, `/pages/remember/index`)}>进入记工账本</Button>
+                      onClick={() => enterTheRecordBook(item, 'account')}>进入记工账本</Button>
             </View>
           </View>
         ))}

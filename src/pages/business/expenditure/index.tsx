@@ -1,28 +1,26 @@
-import Taro, { useState, useRouter, useEffect } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import msg, { showActionModal, showBackModal } from '@/utils/msg'
 import PickerMark from '@/components/picker_mark'
 import PickerType from '@/components/picker_type'
 import PickerDetail from '@/components/picker_detail'
+import PickerLeader from '@/components/picker_leader'
+import { AddressBookConfirmEvent } from '@/config/events'
 import getExpenditureInfo, { delExpenditureBusiness, editExpenditureBusiness } from './api'
 import ClassifyItem from '@/store/classify/inter.d'
 import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
 import './index.scss'
-import { editBorrowBusiness } from '@/pages/business/borrow/api'
 
-export default function ModifyBorrow() {
+export default function BusinessExpenditure() {
 
   // 根据路由获取id参数
   const router = useRouter()
   const { id = '' } = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
-  // 分类数据
-  const [typeData, setTypeData] = useState<ClassifyItem>({
-    id: '',
-    name: ''
-  })
+  // 班组长数据
+  const [leaderData, setLeaderData] = useState<ClassifyItem>({ id: '', name: '' })
   // 借支提交数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -52,13 +50,21 @@ export default function ModifyBorrow() {
     }
   }, [id])
 
+  // 注册全局事件 监听是否切换班组长信息
+  useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent, (leader) => {
+      setLeaderData({ id: leader.id, name: leader.name})
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  },[])
+
   // 初始化流水数据
   const userGetBusinessInfo = () => {
     getExpenditureInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
-        setData(mydata)
-        setTypeData({ id: mydata.expend_type || '', name: mydata.expend_type_name || '' })
+        setData({ ...mydata})
+        setLeaderData({id: mydata.group_leader || '', name: mydata.group_leader_name || ''})
         setPostData({ 
           ...postData, 
           expend_type: mydata.expend_type || '', 
@@ -80,9 +86,9 @@ export default function ModifyBorrow() {
   }
 
   // 用户修改分类信息
-  const userChangePickerType = (data: ClassifyItem) => {
-    setTypeData(data)
-    setPostData({ ...postData, expend_type: data.id })
+  const userChangePickerType = (classify: ClassifyItem) => {
+    setData({...data, expend_type_name: classify.name, expend_type: classify.id})
+    setPostData({ ...postData, expend_type: classify.id })
   }
 
   // 用户删除流水
@@ -106,7 +112,11 @@ export default function ModifyBorrow() {
 
   // 用户修改流水
   const userEditBusiness = () => {
-    editBorrowBusiness(postData).then(res => {
+    let params: UserEditBusinessInfo = {
+      ...postData,
+      group_leader: leaderData.id
+    }
+    editExpenditureBusiness(params).then(res => {
       if (res.code === 0) {
         showBackModal(res.message)
       } else {
@@ -115,22 +125,33 @@ export default function ModifyBorrow() {
     })
   }
 
+  // 用户删除班组长
+  const userClearGroupLeader = () => {
+    setLeaderData({id: '', name: ''})
+  }
+
+  // 用户删除分类
+  const userClearPickerType = () => {
+    setData({ ...data, expend_type_name: '', expend_type: '' })
+    setPostData({ ...postData, expend_type: '' })
+  }
+
 
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money" />
     <PickerType
-      value={typeData.name}
+      value={data.expend_type_name}
       show={show}
       setShow={() => { setShow(!show) }}
-      rightClose={false}
+      close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
+    <PickerLeader leader={leaderData.name} DeletePickerLeader={() => userClearGroupLeader()} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail 
       dateValue={data.busienss_time_string} 
       submitValue={data.created_time_string} 
-      projectValue={data.work_note_name} 
-      leader={data.group_leader_name}
+      projectValue={data.work_note_name}
     />
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
@@ -138,3 +159,7 @@ export default function ModifyBorrow() {
     </View>
   </View>)
 }
+
+BusinessExpenditure.config = {
+  navigationBarTitleText: '修改支出'
+} as Config

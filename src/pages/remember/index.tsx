@@ -30,7 +30,11 @@ const Remember = () => {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {businessType} = rememberStore
   const {accountBookInfo} = _accountBookInfo
-  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '1' ? '个人' : '班组') + '记工账本'})
+<<<<<<< HEAD
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 1 ? '个人' : '班组') + '记工账本'})
+=======
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == '2' ? '个人' : '班组') + '记工账本'})
+>>>>>>> xiaoyu
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
@@ -43,7 +47,11 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == '1')
+<<<<<<< HEAD
+  const [personOrGroup] = useState(accountBookInfo.identity == 1)
+=======
+  const [personOrGroup] = useState(accountBookInfo.identity == '2')
+>>>>>>> xiaoyu
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -214,7 +222,7 @@ const Remember = () => {
 
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
-    let url = `/pages/work_team/record_work/index?type=${type}`;
+    let url = `/pages/work_team/team_record/index?type=${type}`;
     Taro.navigateTo({
       url: url
     })
@@ -308,12 +316,14 @@ const Remember = () => {
                     <Image src={remember} className="statistics-icon"/>
                     <View className="remember-values">
                       <View className="remember-value">
-                        <Text>上班</Text>
-                        <Text>{counts.work_time}个工</Text>
-                        {counts.work_time_hour != '0' && <Text>+{counts.work_time_hour}小时</Text>}
+                        <Text className="remember-value-text">上班</Text>
+                        <Text className="remember-value-text">{counts.work_time}个工</Text>
+                        {counts.work_time_hour != '0' &&
+                        <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
                       </View>
                       {counts.overtime != '0' &&
-                      <View className="remember-value"><Text>加班</Text><Text>{counts.overtime}小时</Text></View>}
+                      <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
+                        className="remember-value-text">{counts.overtime}小时</Text></View>}
                     </View>
                   </View>
                 </View>
@@ -386,30 +396,11 @@ const Remember = () => {
             </View>
 
             <View className="statistics-flow">
-              <View
-                className="statistics-title">{handleMonthShow()}月全部流水</View>
-              <View className="bokkeeping-list">
-                {list.map((item, i) => (
-                  <Block key={i}>
-                    <View className="bokkeeping-list-head">{item.date}</View>
-                    <View className="bokkeeping-list-content">
-                      {item.list.map(p => (
-                        (p.business_type == 1 || p.business_type == 2) ?
-                          <WorkCountDay list={[p]} type={p.business_type}/> :
-                          ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>)
-                      ))}
-                    </View>
-                  </Block>
-                ))}
-              </View>
-              <View
-                className="statistics-title">{Number(filterMonth) < 10 ? `0${filterMonth}` : filterMonth}月全部流水</View>
               <ListProvider
                 increasing={increasing}
                 loading={loading}
                 errMsg={errMsg}
-                hasmore={hasmore}
+                hasmore={false}
                 length={list.length}
               >
                 <View className="bokkeeping-list">
@@ -418,10 +409,12 @@ const Remember = () => {
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          (p.business_type == 1 || p.business_type == 2) ?
-                            <WorkCountDay key={p.id} list={[p]} type={p.business_type}/> :
-                            ((p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                              <WorkMoneyBorrowing key={p.id} list={[p]} type={p.business_type}/>)
+                          <Block key={p.id}>
+                            {/* 如果是记工天 记工量 */}
+                            {(p.business_type == 1 || p.business_type == 2) && <WorkCountDay list={[p]} type={p.business_type} />}
+                            {/* 如果是 记工钱、 借支、 支出 */}
+                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) && <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                          </Block>
                         ))}
                       </View>
                     </Block>

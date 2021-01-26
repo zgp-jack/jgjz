@@ -10,13 +10,13 @@
           justify-content: space-between;
           font-size: 30px;
           padding-right: 24px;
-          View:first-child{
+          .record-work-person-tip{
             font-weight: bold;
-            Text{
+            .record-work-person-text{
               color:#5B80FB
             }
           }
-          View:last-child{
+          .record-work-person-all{
             color:#5B80FB
           }
         }

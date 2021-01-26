@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-24 18:16:08
+ * @LastEditTime: 2021-01-25 10:33:47
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
@@ -40,8 +40,13 @@ function getRequestHeaderInfo(): RequestHeader {
     'content-type': 'application/x-www-form-urlencoded',
     source: MINITOKEN,
     version: VERSION,
+<<<<<<< HEAD
     uid: 20021907,
     token: '0e976cb74e736736f39254ea7ee1def0787054ddaf8ab4ddaedc850daefe16d1',
+=======
+    uid: 20002613,
+    token: 'f1caf427ddcccc81fb8ea6aa7421c639787054ddaf8ab4ddaedc850daefe16d1',
+>>>>>>> 622ebc74b81ff09ee9214a2f32d1f9d5718d690b
   }
 
   // 获取用户信息

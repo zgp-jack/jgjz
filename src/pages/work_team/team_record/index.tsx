@@ -35,6 +35,12 @@ export default function RecordWork() {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 当前选择的类型 1 记工 2记账
   const [typeItem, SetTypeItem] = useState<number>(1);
+  // 上班时长模态框
+  const [showWorkTime, setShowWorkTime] = useState<boolean>(false) 
+  // 加班时长模态框
+  const [showOverTime, setShowOverTime] = useState<boolean>(false)
+  // 分类、分项模态框
+  const [classProject, setClassProject] = useState<boolean>(false)
 
 
   /**
@@ -43,7 +49,7 @@ export default function RecordWork() {
    * @return string
    * @description 滑动滑块的时候切换当前的index
    */
-  var initTime = (time: string): string[] => {
+    let initTime = (time: string): string[] => {
     /**检查字符串格式是哪种  / 或者 | */
     let result = time.search("/")
     /**字符串转换成成数组*/
@@ -153,15 +159,12 @@ export default function RecordWork() {
             <ScrollView className='record-work-scroll' scrollY enableFlex>
               <View className='record-worker-list'>
                 {currentIndex == index &&
-                <WorkerList workNote={accountBookInfo.id} setWorkerId={(data: number[]) => setWorkerId(data)}
-                            workerId={workerId} startDate={startDate}/>}
+                  <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} />}
               </View>
               <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
                 <View className='record-work-table-head'>
-                  <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'}
-                        data-type={1} onClick={(e) => switchTable(e)}><Text>{type == '1' ? '记账' : '记工'}</Text></View>
-                  <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'}
-                        data-type={2} onClick={(e) => switchTable(e)}><Text>流水</Text></View>
+                  <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'} data-type={1} onClick={(e) => switchTable(e)}><Text>{type == '1' ? '记账' : '记工'}</Text></View>
+                  <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'} data-type={2} onClick={(e) => switchTable(e)}><Text>流水</Text></View>
                 </View>
                 {typeItem == 2 && (currentIndex == index) && (
                   <View className='record-work-flow'>
@@ -169,15 +172,13 @@ export default function RecordWork() {
                   </View>
                 )}
                 {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) &&
-                <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} work_note='873'
-                           identity={1}/>}
+                  <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate} />}
                 {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) &&
-                <RecordAmoumt workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873}
-                              identity={1}/>}
+                  <RecordAmoumt workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate} />}
                 {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) &&
-                <RecordMoney workerId={workerId.join(',')} type={types[currentIndex].id} work_note={873} identity={1}/>}
+                  <RecordMoney workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate} />}
                 {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) &&
-                <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
+                <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate} />}
                 {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) &&
                 <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
               </View>

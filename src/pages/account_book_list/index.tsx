@@ -68,13 +68,13 @@ function AccountBook() {
     // 判断是 record:记工 borrow:记账 还是 account:进入记工本
     if(type == 'record'){
       if (data.identity == 1) { // 班组记工
-        url = '/pages/person_record/index'
+        url = '/pages/work_team/team_record/index?type=2'
       } else { // 个人记工
         url = '/pages/person_record/index'
       }
     }else if(type == 'borrow'){
       if (data.identity == 1) { // 班组记账
-        url = '/pages/person_record/index'
+        url = '/pages/work_team/team_record/index?type=1 '
       } else { // 个人记账
         url = '/pages/person_borrowing/index'
       }

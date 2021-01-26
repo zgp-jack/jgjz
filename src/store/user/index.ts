@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:29:16
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-26 14:06:21
+ * @LastEditTime: 2021-01-26 15:35:58
  * @Description: 用户信息管理器
  */
 import Taro from '@tarojs/taro'
@@ -12,11 +12,12 @@ import { UserInfo as user } from '@/config/store'
 
 // 初始化用户信息
 let userInfo: UserInfo = Taro.getStorageSync(user)
+let isLogin: boolean = userInfo && userInfo.login
 
 export class User {
   /** 用户信息初始化 */
   @observable
-  user: UserInfo = userInfo ? userInfo : {
+  user: UserInfo = isLogin ? userInfo : {
     token: '',
     userId: 0,
     login: false,

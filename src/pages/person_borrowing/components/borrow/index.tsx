@@ -155,7 +155,7 @@ function Borrow(props: BorrowProps) {
         setShow={(bool: boolean) => setShowTypePicker(bool)}
       />
       }
-      {/*
+      
       {isPickerDate &&
       <PickerDate
         date={postData.business_time}
@@ -164,7 +164,7 @@ function Borrow(props: BorrowProps) {
         dateText={dateText}
       />}
       {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader}/>}
-      */}
+     
       <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => {

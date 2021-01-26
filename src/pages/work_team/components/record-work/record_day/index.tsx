@@ -1,66 +1,50 @@
-import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
+import Taro, { useState } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import WorkTime from '@/pages/person_borrowing/components/work_time/index'
-import PickerDate from '@/components/picker_date/index'
-import PickerLeader from '@/components/picker_leader/index'
 import PickerMark from '@/components/picker_mark/index'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import { AddressBookConfirmEvent } from '@/config/events'
 import msg, { showBackModal } from '@/utils/msg'
-import { getTodayDate } from '@/utils/index'
-import classifyItem from '@/store/classify/inter.d'
-import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import RecordDayPostData, { PropsData } from './inter.d'
 import { worktime, overtime } from './config'
 import userAddRecordAction from '../api'
 import './index.scss'
 
-function RecordDay({ workerId,type}:PropsData) {
-  // 时间年月日
-  const [dateText, setDateText] = useState<string>('')
-  // 是否日期组件
-  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
-  // 是否显示班组长组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
+function RecordDay({ workerId, type, businessTime }:PropsData) {
+  // 从mobx获取记工本数据
+  const localStore = useLocalStore(() => AccountBookInfo);
+  // 当前账本数据
+  const { accountBookInfo } = localStore
   // 是否显示加班组件
   const [isPickerOverTime, setIsPickerOverTime] = useState<boolean>(false)
+  // /** 是否上传照片 */
+  // const [isImageUpload, setIsImageUpload] = useState<boolean>(false)
+  // /** 是否显示图片上传icon */
+  // const [showIcon, setShowIcon] = useState<boolean>(true) 
   // 记工天提交数据
   const [postData, setPostData] = useState<RecordDayPostData>({
+    /** 记工类型 1 记工天 2记工量 3 记工钱 */ 
     business_type: type,
-    business_time: getTodayDate(),
-    group_leader: '',
+    /** 记工时间 */
+    business_time: businessTime,
+    /** 备注 */ 
     note: '',
-    identity: 2,
+    /** 账本类型 1 班组 2 个人*/ 
+    identity: Number(accountBookInfo.identity),
+    /** 上班记工数 */ 
     work_time: '1',
+    /** 上班小时数 */
     work_time_hour: '0',
+    /** 加班时长 */ 
     overtime: '',
-    worker_id: workerId
+    /** 记工工友id字符串 */ 
+    worker_id: workerId,
+    /** 上传图片url */ 
+    img_url:'',
+    /** 账本id */ 
+    work_note: accountBookInfo.id
   })
-  // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>({
-    id: '',
-    name: ''
-  })
-  // 日期文本显示年月日
-  useEffect(() => {
-    let date = postData.business_time
-    let dateArr: string[] = date.split('-')
-    let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
-    setDateText(dataStr)
-  }, [postData.business_time])
-  // 注册事件 监听班组长的选择
-  useEffect(() => {
-    // 监听到了 班组长的回调 然后设置班组长的信息
-    eventCenter.on(AddressBookConfirmEvent, (data) => {
-      setGroupLeader({ id: data.id, name: data.name })
-      setIsPickerLeader(true)
-    })
-    return () => eventCenter.off(AddressBookConfirmEvent)
-  }, [])
-  // 获取记工本数据
-  const localStore = useLocalStore(() => AccountBookInfo);
-  const { accountBookInfo } = localStore
+
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string,value?:string,typeString?:string) => {
     let postdata: any = { ...postData }
@@ -68,14 +52,7 @@ function RecordDay({ workerId,type}:PropsData) {
     typeString && (postdata[typeString] = value);
     setPostData(postdata)
   }
-  // 用户点击 班组长 圆角按钮 选择
-  const userTapGroupLeaderBtn = () => {
-    if (groupLeader.id) {
-      setIsPickerLeader(true)
-    } else {
-      Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE })
-    }
-  }
+ 
   // 提交借支数据
   const userPostAcion = () => {
     let params: RecordDayPostData = {
@@ -85,11 +62,9 @@ function RecordDay({ workerId,type}:PropsData) {
       work_time_hour: postData.work_time_hour,
       overtime: isPickerOverTime ? postData.overtime:'',
       business_time: postData.business_time,
-      group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
       work_note: accountBookInfo.id,
       worker_id: workerId
-      
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
@@ -116,9 +91,13 @@ function RecordDay({ workerId,type}:PropsData) {
       userUpdatePostData(item, 'overtime')
     }
   }
+
   return (<View>
     <View className='person-record-time'>
+      {/* 上班时长组件 */}
       <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} worktime={worktime} />
+      
+      {/* 加班时长 */}
       {isPickerOverTime && <WorkTime 
         close={() => setIsPickerOverTime(false)} 
         setTime={(value) => setMoreTime(value, false)} 
@@ -128,17 +107,10 @@ function RecordDay({ workerId,type}:PropsData) {
       />
       }
     </View>
-    {isPickerDate && <PickerDate
-      date={postData.business_time}
-      DeletePickerDate={() => setIsPickerDate(false)}
-      change={(val) => userUpdatePostData(val, 'business_time')}
-      dateText={dateText}
-    />}
-    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => setIsPickerLeader(false)} />}
-    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
+    {/* 备注组件 */}
+    <PickerMark text={postData.note as string} set={(val) => userUpdatePostData(val, 'note')} />
     <View className='person-record-component'>
-      {!isPickerDate && <View className='person-record-component-item' onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-      {!isPickerLeader && <View className='person-record-component-item' onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
+      {/*  加班时长  */}
       {!isPickerOverTime && <View className='person-record-component-item' onClick={() => setIsPickerOverTime(true)}>加班时长</View>}
     </View>
     <View className='person-record-btn'>

@@ -79,7 +79,7 @@ function AccountBook() {
         url = '/pages/person_borrowing/index'
       }
     }else{ // 记工记工本
-      url = `/pages/remember/index`
+      url = `/pages/index/index`
     }
     Taro.navigateTo({ url })
   }

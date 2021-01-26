@@ -10,6 +10,7 @@ import { isPhone } from '@/utils/v'
 import { UserInfo } from '@/config/store'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import User from '@/store/user';
+import AccountBookInfo from "@/store/account";
 import { UserGetCodeLoginParams, LoginProps } from './inter.d'
 import './index.scss'
 import getWorkNotes from '../../pages/account_book_list/api'
@@ -18,12 +19,10 @@ function Login({
   show = false,
   setShow
 }: LoginProps) {
-
-  const localStore = useLocalStore(() => User);
-  const { setUserInfo } = localStore
-
-  /** 获取所有记工列表 */
-  const { data, setLoading } = useInit(getWorkNotes, {}, [])
+  const _userInfo = useLocalStore(() => User)
+  const _accountBookInfo = useLocalStore(() => AccountBookInfo)
+  const { setUserInfo } = _userInfo
+  const { setAccountBoookInfo } = _accountBookInfo
   /** 当前高亮key */
   const [id, setId] = useState<string>(loginConfig[0].id)
   /** 是否显示密码 */
@@ -84,20 +83,32 @@ function Login({
           userId: res.data.yupao_id,
           login: true,
         }
-        // 缓存本地
+        // 将用户信息缓存本地
         Taro.setStorageSync(UserInfo, userInfo)
         // 储存mobx
         setUserInfo(userInfo)
-        setLoading(true)
-        if(data.length < 1){
-          Taro.redirectTo({
-            url: '/pages/identity_selection/index'
-          })
-        }
-        //关闭弹窗
-        setShow && setShow(false);
+        getUserNotesList()
       } else {
         msg(res.message)
+      }
+    })
+  }
+
+  // 获取用户记工本列表
+  const getUserNotesList = () => {
+    getWorkNotes().then(res => {
+      if(res.code === 0){
+        let mydata = res.data
+        if(mydata.length){
+          // 储存mobx
+          setAccountBoookInfo(mydata[0])
+          //关闭弹窗
+          setShow && setShow(false);
+        }else{
+          Taro.redirectTo({
+            url: '/pages/identity_selection/index?type=1'
+          })
+        }
       }
     })
   }

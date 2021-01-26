@@ -11,7 +11,7 @@
 export interface IDENTITY_CONFIG { 
   /** 记工本新名称 */
   name: string,
-  /** 记工本-身份-1个人，2是班组 */ 
+  /** 记工本-身份-2个人，1是班组 */ 
   identity: number
 }
 
@@ -31,4 +31,15 @@ export interface CreateConfigList {
 export interface CreateResultType {
   /** 新建的账本id */ 
   work_note_id: number
+}
+
+export interface Remember_Config {
+  /** 记工本新名称 */
+  name: string,
+  /** 记工本-身份-2个人，1是班组 */
+  identity: number
+  /** id记工 */
+  id: number,
+  /** 是否归档 */
+  status: number
 }

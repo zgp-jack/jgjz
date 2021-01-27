@@ -7,7 +7,7 @@ import RememberStore from '@/store/business/index'
 import PickerStore from '@/store/picker/index'
 import User from '@/store/user'
 import AccountBookAction from '@/store/account'
-import Remember from "@/pages/remember";
+import Index from "@/pages/index";
 import './app.scss'
 import './styles/common.scss'
 // 如果需要在 h5 环境中开启 React Devtools
@@ -50,16 +50,15 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/remember/index',
+      'pages/index/index', // 个人/班组记工本首页 
       'pages/account_book_list/index',  //记工账本列表
       'pages/business/money/index',
       'pages/business/expenditure/index',
       'pages/business/borrow/index',
       'pages/business/amount/index',
       'pages/business/workday/index',
-      // 'pages/work_team/record_work/index',
       'pages/work_team/team_record/index',
-      'pages/index/index', // 首页
+      'pages/_index/index', // 测试版首页
       'pages/person_record/index', //个人记工
       'pages/person_borrowing/index', // 个人借支/支出
       'pages/feedback/index',   //意见反馈
@@ -82,7 +81,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Remember />
+        <Index />
       </Provider>
     )
   }

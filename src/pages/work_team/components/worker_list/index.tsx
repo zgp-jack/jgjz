@@ -302,17 +302,16 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
             <Text className='record-work-person-text'>{obj.name}</Text>
           </View>)
         )}
-        {/* 添加工友 */}
-        <View className='record-work-person-add'>
-          <View className='record-work-person-box' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?id=874&type=${ADDRESSBOOKTYPE_GROUP_ADD}` })}><Image 
+        <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?type=groupAdd' })}>
+          <View className='record-work-person-box'><Image 
             src={`${IMGCDNURL}yc/add.png`}
             mode='widthFix'
           /></View>
           <Text className='record-work-person-text'>添加</Text>
         </View>
         {/* 删除工友 */}
-        <View className='record-work-person-del'>
-          <View className='record-work-person-box' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?id=874&type=${ADDRESSBOOKTYPE_GROUP_DEL}` })}><Image
+        <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?type=groupDel' })}>
+          <View className='record-work-person-box'><Image
             src={`${IMGCDNURL}yc/del.png`}
             mode='widthFix'
           /></View>

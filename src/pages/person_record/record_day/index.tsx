@@ -32,7 +32,7 @@ function RecordDay() {
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 记工天提交数据
   const [postData, setPostData] = useState<RecordDayPostData>({
-    business_type: 1,
+    business_type: 2,
     business_time: getTodayDate(),
     group_leader: '',
     note: '',
@@ -46,6 +46,7 @@ function RecordDay() {
     id: '',
     name: ''
   })
+
   // 日期文本显示年月日
   useEffect(() => {
     let date = postData.business_time
@@ -53,18 +54,22 @@ function RecordDay() {
     let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
     setDateText(dataStr)
   }, [postData.business_time])
+
   // 注册事件 监听班组长的选择
   useEffect(() => {
     // 监听到了 班组长的回调 然后设置班组长的信息
     eventCenter.on(AddressBookConfirmEvent, (data) => {
+      console.log(data)
       setGroupLeader({ id: data.id, name: data.name })
       setIsPickerLeader(true)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
+
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const { accountBookInfo } = localStore
+
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }

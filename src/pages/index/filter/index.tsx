@@ -2,12 +2,11 @@ import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
 import {View, Image, Picker} from '@tarojs/components'
 import React from 'react'
 import './index.scss'
-import arrowRight from "@/images/arrow-right.png";
 import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
-import {AddressBookParams, GetCountParams} from "@/pages/remember/inter";
+import {AddressBookParams, GetCountParams} from "@/pages/index/inter";
 import {getTodayDate} from "@/utils/index";
-import {ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_GROUP} from "@/config/index";
+import {ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_GROUP, IMGCDNURL} from "@/config/index";
 import {AddressBookConfirmEvent} from "@/config/events";
 
 interface FilterProps<T> {
@@ -132,7 +131,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
                           value={filterData.start_business_time}>
                     <View className='filter-picker-value'>
                       <View>{props.handleSplitDate(filterData.start_business_time)}</View>
-                      <Image src={arrowRight} className="filter-arrow"/>
+                      <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-arrow"/>
                     </View>
                   </Picker>
                 </View>
@@ -145,7 +144,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
                           value={filterData.end_business_time}>
                     <View className='filter-picker-value'>
                       <View>{props.handleSplitDate(filterData.end_business_time)}</View>
-                      <Image src={arrowRight} className="filter-arrow"/>
+                      <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-arrow"/>
                     </View>
                   </Picker>
                 </View>
@@ -174,7 +173,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
                 <View className="filter-block-row-title">选择工友</View>
                 <View className="filter-picker-value">
                   <View>{handleWorkerIdLength() ? '共' + handleWorkerIdLength() + '人' : '全部工友'}</View>
-                  <Image src={arrowRight} className="filter-arrow"/>
+                  <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-arrow"/>
                 </View>
               </View>
             </View>}
@@ -185,7 +184,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
                 <View className="filter-block-row-title">选择班组长</View>
                 <View className="filter-picker-value">
                   <View>{handleGroupLeaderLength() ? '共' + handleGroupLeaderLength() + '人' : '全部班组长'}</View>
-                  <Image src={arrowRight} className="filter-arrow"/>
+                  <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-arrow"/>
                 </View>
               </View>
             </View>}

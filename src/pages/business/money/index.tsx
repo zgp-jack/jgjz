@@ -1,4 +1,4 @@
-import Taro, { useState, useRouter, useEffect, eventCenter } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerType from '@/components/picker_type'
@@ -138,3 +138,9 @@ export default function BusinessMoney() {
     </View>
   </View>)
 }
+BusinessMoney.config = {
+  navigationBarTitleText: '修改支出',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
+} as Config

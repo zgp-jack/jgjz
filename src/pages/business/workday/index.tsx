@@ -84,6 +84,8 @@ export default function ModifyWorkDay(){
         } else if (mydata.work_time_hour){
           setWorkTime({ value: mydata.work_time_hour, text: `${mydata.work_time_hour}小时` })
           setIsWork(false)
+        }else{
+          setWorkTime({ value: '0', text: '休息' })
         }
         if(mydata.overtime){
           setOverTime({ value: mydata.overtime, text: `${mydata.overtime}小时`})
@@ -181,5 +183,8 @@ export default function ModifyWorkDay(){
   </View>)
 }
 ModifyWorkDay.config = {
-  navigationBarTitleText: '修改工天'
+  navigationBarTitleText: '修改工天',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
 } as Config

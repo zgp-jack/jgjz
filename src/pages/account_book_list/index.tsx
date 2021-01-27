@@ -3,10 +3,11 @@ import {View, Text, Image, Button} from '@tarojs/components'
 import {IMGCDNURL} from '@/config/index'
 import getWorkNotes, {editWorkNote} from './api'
 import {InputValue} from '@/components/popup/index.d'
-import {Edit_AddressBook_Info, ADD_RECORD_WORK_PARAMS, RECORD_WORK_DATA} from './index.d'
+import {Edit_AddressBook_Info, ADD_RECORD_WORK_PARAMS} from './index.d'
 import useInit from '@/hooks/init'
 import InitProvider from '@/components/init_provider'
 import PromptBox from '@/components/popup/index'
+import { enterTheRecordBook } from '@/utils/index' 
 import msg from '@/utils/msg'
 import {useLocalStore, observer} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account';
@@ -59,32 +60,6 @@ function AccountBook() {
     })
   }
 
-  /** 进入记工账本 页面跳转之前 设置mobx信息 */
-  const enterTheRecordBook = (data: RECORD_WORK_DATA, type: string) => {
-    console.log(type, data.identity)
-    // 储存mobx
-    setAccountBoookInfo(data)
-    let url: string = ''
-    // 判断是 record:记工 borrow:记账 还是 account:进入记工本
-    if(type == 'record'){
-      if (data.identity == 1) { // 班组记工
-        url = '/pages/work_team/team_record/index?type=2'
-      } else { // 个人记工
-        url = '/pages/person_record/index'
-      }
-    }else if(type == 'borrow'){
-      if (data.identity == 1) { // 班组记账
-        url = '/pages/work_team/team_record/index?type=1 '
-      } else { // 个人记账
-        url = '/pages/person_borrowing/index'
-      }
-    }else{ // 记工记工本
-      url = `/pages/remember/index`
-      Taro.reLaunch({ url })
-      return
-    }
-    Taro.navigateTo({ url })
-  }
   return (
     <View className='account-book-box'>
       <View className="account-book-top">
@@ -112,16 +87,16 @@ function AccountBook() {
               </View>
               <View className="account-book-flex">
                 <View className="account-book-align"
-                      onClick={() => enterTheRecordBook(item, 'record')}>
+                  onClick={() => { enterTheRecordBook(item, 'record'); setAccountBoookInfo(item)}}>
                   <Image className="account-gong-icon" src={`${IMGCDNURL}gl/Bookkeeping-icon.png`}></Image> 记工
                 </View>
                 <View className="account-book-align"
-                      onClick={() => enterTheRecordBook(item, 'borrow')}>
+                  onClick={() => { enterTheRecordBook(item, 'borrow'); setAccountBoookInfo(item)}}>
                   <Image className="account-zhang-icon" src={`${IMGCDNURL}gl/record-work-icon.png`}></Image>记账
                 </View>
               </View>
               <Button className="account-book-btn"
-                      onClick={() => enterTheRecordBook(item, 'account')}>进入记工账本</Button>
+                onClick={() => { enterTheRecordBook(item, 'account'); setAccountBoookInfo(item)}}>进入记工账本</Button>
             </View>
           </View>
         ))}

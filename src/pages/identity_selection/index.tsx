@@ -1,6 +1,7 @@
 import Taro, { useState, useRouter } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
+import { INDEXPAGE } from '@/config/pages'
 import PromptBox from '@/components/popup/index'
 import { InputValue } from '@/components/popup/index.d'
 import userAddWorkNotesAction from './api'
@@ -73,8 +74,13 @@ function IdentitySelection() {
         }
         // 储存mobx
         setAccountBoookInfo(_params)
+<<<<<<< HEAD
+        Taro.redirectTo({
+          url: INDEXPAGE
+=======
         Taro.reLaunch({
           url: '/pages/remember/index'
+>>>>>>> lcmxkg
         })
       }
     })

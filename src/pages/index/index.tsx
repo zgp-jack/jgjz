@@ -1,45 +1,55 @@
-import Taro, { useEffect, useState, useDidShow } from '@tarojs/taro'
-import { Block, Image, Picker, Text, View } from '@tarojs/components'
-import React from 'react'
-import './index.scss'
+import Taro, { useDidShow, useEffect, useState, useReachBottom } from '@tarojs/taro'
+import {Block, Image, Picker, Text, View} from '@tarojs/components'
+import filter from '@/images/ic_sx.png'
+import remember from '@/images/ic_gt.png'
+import debt from '@/images/ic_jz.png'
+import expenditure from '@/images/ic_zc.png'
+import feedback from '@/images/ic_yjfk.png'
+import arrowRight from '@/images/arrow-right.png'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-import Filter from "./filter/index";
-import { get } from "@/utils/request";
-import { getBusiness } from './api'
-import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/index/inter";
+import filterActive from '@/images/ic_sx_blue.png'
+import wage from '@/images/ic_gq.png'
+import meter from '@/images/ic_gl.png'
 import { getCountUrl } from "@/utils/api";
+import LoadFooter from '@/components/load_footer/index'
+import EmptyDate from '@/components/empty_data/index'
+
+import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/remember/inter";
 import { observer, useLocalStore } from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
-import useList from '@/hooks/list'
-import ListProvider from '@/components/list_provider'
-import User from '@/store/user'
-import { IMGCDNURL } from "@/config/index";
-import { enterTheRecordBook } from '@/utils/index'
+import User from "@/store/user";
+import { get } from "@/utils/request";
+import { GetWorkFlowResult } from '@/pages/work_team/team_record/index.d'
+import Filter from "./filter/index";
+import {getBusiness} from './api'
+import './index.scss'
 
-const Index = () => {
+
+
+const Remember = () => {
   /*记工类型数据*/
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const _user = useLocalStore(() => User)
-  const { businessType } = rememberStore
-  const { accountBookInfo } = _accountBookInfo
+  const {businessType} = rememberStore
   const { user } = _user
-  Taro.setNavigationBarTitle({ title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本' })
-  Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
+  const {accountBookInfo} = _accountBookInfo
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
     work_time: "0",
     work_time_hour: "0",
     overtime: "0",
-    count_unit: [{ unit: null, count: 0 }],
+    count_unit: [{unit: null, count: 0}],
     work_money: "",
     borrow_count: "0.00",
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == 2)
+  const [personOrGroup] = useState(accountBookInfo.identity == 1)
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -61,6 +71,10 @@ const Index = () => {
   })
   /*获取统计数据，请求参数*/
   const [filterData, setFilterData] = useState<GetCountParams>(defaultFilterData)
+  /** 是否显示数据为空 */
+  const [ showEmpty, setShowEmpty ] = useState<boolean>(false);
+  /** 是否显示底部没有更多数据 */ 
+  const [showFooter, setShowFooter] = useState<boolean>(false)
   /*数组转字符串*/
   const handleArrayToString = (data: string[] | string): string => {
     if (typeof data === 'string') return data;
@@ -83,7 +97,7 @@ const Index = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  const { loading, increasing, list, errMsg, hasmore, setParams, setLoading } = useList(getBusiness, actionParams())
+  // const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -92,19 +106,9 @@ const Index = () => {
   const [filterMonth, setFilterMonth] = useState(month)
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
-  /*是否重新请求流水列表*/
-  const [reloadList, setReloadList] = useState(false)
+  const [showLogin, setShowLogin] = useState(false)
+  const [list, setList] = useState <GetWorkFlowResult[]>([])
 
-  useDidShow(() => {
-    setReloadList(true)
-    if (reloadList) {
-      if (!user.login) return
-      setLoading(true)
-      const params = actionParams()
-      initData(params)
-      setParams({ ...params }, true)
-    }
-  })
 
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
@@ -112,25 +116,63 @@ const Index = () => {
   useEffect(() => {
     if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
     const params = actionParams()
+    initFlowList(params)
     initData(params)
-    setParams({ ...params }, true)
   }, [filterData])
 
   /*根据筛选日期初始化请求参数*/
   useEffect(() => {
     initParams()
   }, [filterMonth, filterYear])
+
+  // 滑动触底事件
+  useReachBottom(()=>{
+    let paramsData = { ...filterData }
+    paramsData.page = paramsData.page + 1;
+    if(showFooter || showEmpty) return
+    setFilterData(paramsData)
+  })
+  const handIsLogin = () => {/*是否登录*/
+    if (!user.login) {
+      setShowLogin(true)
+      return false
+    }
+    return true
+  }
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
-    let data = { ...defaultFilterData, start_business_time, end_business_time }
+    let data = {...defaultFilterData, start_business_time, end_business_time}
     setDefaultFilterData(data)
     setFilterData(data)
   }
+  const initFlowList = (params: GetCountParams) => {
+    /** 请求页面 */ 
+    let page = filterData.page;
+    getBusiness(params).then(res=>{
+      if (res.code === 0) {
+        let lists = list;
+        /** 返回数据长度 */ 
+        let len = res.data.length
+        if (page == 1 && len == 0){
+          setShowEmpty(true)
+        }else{
+          if(len == 0){　
+            setShowFooter(true)
+          }
+        }
+        setList(lists.concat(res.data))
+      }
+    }).catch(e => {
+
+    })
+  }
   /*获取统计数据*/
   const initData = (params: GetCountParams) => {
+    let page = filterData.page;
+    if (page > 1) return
     get<GetCountParams, GetCountResult>(getCountUrl, params).then(res => {
       if (res.code === 0) {
         setCounts(res.data.count)
@@ -151,6 +193,10 @@ const Index = () => {
   }
   /*上一个月份日期*/
   const prevMonth = () => {
+    if(!handIsLogin()){
+      handIsLogin()
+      return 
+    }
     if (filterMonth == 1) {
       setFilterYear(filterYear - 1)
       setFilterMonth(12)
@@ -160,6 +206,10 @@ const Index = () => {
   }
   /*下一个月份日期*/
   const nextMonth = () => {
+    if (!handIsLogin()) {
+      handIsLogin()
+      return
+    }
     if (filterMonth == 12) {
       setFilterYear(filterYear + 1)
       setFilterMonth(1)
@@ -169,6 +219,10 @@ const Index = () => {
   }
   /*日期选择器选择*/
   const onFilterDateChange = (e) => {
+    if (!handIsLogin()) {
+      handIsLogin()
+      return
+    }
     const date = e.detail.value
     setCurrentYearMonth(date)
     const yearAndMonth = date.split('-')
@@ -222,18 +276,22 @@ const Index = () => {
 
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
-    let url = `/pages/work_team/team_record/index?type=${type}`;
-    Taro.navigateTo({
-      url: url
-    })
+    let url = `/pages/work_team/record_work/index?type=${type}`;
+    handIsLogin() && Taro.navigateTo({ url: url })
   }
+
+  const handNavigateTo = (url: string) => {
+    handIsLogin() && Taro.navigateTo({ url })
+  }
+
+
   /*1转为01*/
   const handleMonthShow = (month = filterMonth) => {
     return Number(month) < 10 ? `0${month}` : month
   }
   /*是否显示筛选了哪些内容*/
   const handleShowFilterResult = () => {
-    let { is_note, business_type, group_leader, worker_id } = filterData
+    let {is_note, business_type, group_leader, worker_id} = filterData
     return (is_note == '1' || business_type.length || (group_leader as AddressBookParams[]).length || (worker_id as AddressBookParams[]).length)
   }
   return (
@@ -243,21 +301,21 @@ const Index = () => {
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
           <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
-          <View className="header-line" />
+          <View className="header-line"/>
           <View className="header-switch"
-            onClick={() => Taro.navigateTo({ url: '/pages/account_book_list/index' })}>切换记工本</View>
+            onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
             <View className="feat">
               {!isFilter ? <View className="date">
-                <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon" /></View>
-                <Picker fields="month" mode='date' onChange={onFilterDateChange} value={currentYearMonth}>
-                  <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
-                </Picker>
-                {!handleHideRightArrow() &&
-                  <View className="date-icon-bor" onClick={nextMonth}><View className="icon-right date-icon" /></View>}
-              </View>
+                  <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon"/></View>
+                  <Picker fields="month" mode='date' onChange={onFilterDateChange} value={currentYearMonth}>
+                    <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
+                  </Picker>
+                  {!handleHideRightArrow() &&
+                  <View className="date-icon-bor" onClick={nextMonth}><View className="icon-right date-icon"/></View>}
+                </View>
                 :
                 <View className="filter-start-end-date">
                   <View
@@ -265,65 +323,65 @@ const Index = () => {
                   <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                onClick={() => setShowFilter(true)}>
-                <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
-                  className="filter-icon" />筛选
+                onClick={() => {!handIsLogin() ? handIsLogin() : setShowFilter(true)}}>
+                <Image src={isFilter ? filterActive : filter} className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
-              <View className="filter-info" onClick={() => setShowFilter(true)}>
-                <View className="filter-info-box overwords">
-                  {
-                    ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
-                    <Text>
-                      共<Text
-                        className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
+              <View className="filter-info" onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
+              <View className="filter-info-box overwords">
+                {
+                  ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
+                  <Text>
+                    共<Text
+                    className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
                   </Text>
-                  }
-                  {
-                    (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
-                      && (filterData.business_type as string[]).length > 0)
-                    &&
-                    <Text className="filter-info-line">|</Text>}
-                  {
-                    (filterData.business_type as string[]).length > 0 && <Text>
-                      {
-                        (filterData.business_type as string[]).map((item, i) => (
-                          <Text key={item}
-                            className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
-                        ))
-                      }
-                    </Text>
-                  }
-                  {
-                    (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
-                    <Text className="filter-info-line">|</Text>
-                  }
-                  {
-                    filterData.is_note == '1' && <Text>
-                      <Text>有备注</Text>
-                    </Text>
-                  }
-                </View>
-                <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow" />
-              </View>}
+                }
+                {
+                  (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
+                    && (filterData.business_type as string[]).length > 0)
+                  &&
+                  <Text className="filter-info-line">|</Text>}
+                {
+                  (filterData.business_type as string[]).length > 0 && <Text>
+                    {
+                      (filterData.business_type as string[]).map((item, i) => (
+                        <Text key={item}
+                              className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
+                      ))
+                    }
+                  </Text>
+                }
+                {
+                  (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
+                  <Text className="filter-info-line">|</Text>
+                }
+                {
+                  filterData.is_note == '1' && <Text>
+                    <Text>有备注</Text>
+                  </Text>
+                }
+                {/*<Text className="overwords">生活费哈哈哈哈</Text>*/}
+              </View>
+              <Image src={arrowRight} className="filter-info-arrow"/>
+            </View>}
             {/*记工统计*/}
             <View className="statistics">
               {!isFilter && <View className="statistics-title">{handleMonthShow()}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
-                    <Image src={IMGCDNURL + 'lxy/ic_gt.png'} className="statistics-icon" />
+                    <Image src={remember} className="statistics-icon"/>
                     <View className="remember-values">
                       <View className="remember-value">
                         <Text className="remember-value-text">上班</Text>
                         <Text className="remember-value-text">{counts.work_time}个工</Text>
                         {counts.work_time_hour != '0' &&
-                          <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
+                        <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
                       </View>
                       {counts.overtime != '0' &&
-                        <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
-                          className="remember-value-text">{counts.overtime}小时</Text></View>}
+                      <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
+                        className="remember-value-text">{counts.overtime}小时</Text></View>}
                     </View>
                   </View>
                 </View>
@@ -333,37 +391,37 @@ const Index = () => {
             {/*临时工资，平方米，筛选后才展示*/}
 
             {(counts.work_money || (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0)) &&
-              <View className="statistics">
-                <View className="statistics-bookkeeping statistics-bookkeeping-unit">
-                  {counts.work_money && <View className="bookkeeping-row wage-meter">
-                    <View className="bookkeeping-content">
-                      <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon" />
-                      <View className="bookkeeping-values">
-                        <View className="bookkeeping-label">
-                          临时工资
+            <View className="statistics">
+              <View className="statistics-bookkeeping statistics-bookkeeping-unit">
+                {counts.work_money && <View className="bookkeeping-row wage-meter">
+                  <View className="bookkeeping-content">
+                    <Image src={wage} className="statistics-icon"/>
+                    <View className="bookkeeping-values">
+                      <View className="bookkeeping-label">
+                        临时工资
                       </View>
-                        <View className="bookkeeping-value">￥{counts.work_money}</View>
-                      </View>
+                      <View className="bookkeeping-value">￥{counts.work_money}</View>
                     </View>
-                  </View>}
-                  {
-                    (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0) &&
-                    counts.count_unit.map((item, i) => (
-                      <View className="bookkeeping-row wage-meter" key={i}>
-                        <View className="bookkeeping-content">
-                          <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon" />
-                          <View className="bookkeeping-values">
-                            <View className="bookkeeping-label">
-                              {item.unit}
-                            </View>
-                            <View className="bookkeeping-value">{item.count}</View>
+                  </View>
+                </View>}
+                {
+                  (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0) &&
+                  counts.count_unit.map((item, i) => (
+                    <View className="bookkeeping-row wage-meter" key={i}>
+                      <View className="bookkeeping-content">
+                        <Image src={meter} className="statistics-icon"/>
+                        <View className="bookkeeping-values">
+                          <View className="bookkeeping-label">
+                            {item.unit}
                           </View>
+                          <View className="bookkeeping-value">{item.count}</View>
                         </View>
                       </View>
-                    ))
-                  }
-                </View>
-              </View>}
+                    </View>
+                  ))
+                }
+              </View>
+            </View>}
 
             {/*记账统计*/}
             <View className="statistics">
@@ -371,7 +429,7 @@ const Index = () => {
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
-                    <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon" />
+                    <Image src={debt} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         借支
@@ -383,7 +441,7 @@ const Index = () => {
 
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
-                    <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon" />
+                    <Image src={expenditure} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         支出
@@ -396,15 +454,9 @@ const Index = () => {
             </View>
 
             <View className="statistics-flow">
-              <ListProvider
-                increasing={increasing}
-                loading={loading}
-                errMsg={errMsg}
-                hasmore={false}
-                length={list.length}
-              >
                 <View className="bokkeeping-list">
-                  {list.map(item => (
+                {showEmpty ? <EmptyDate /> : 
+                  list.map(item => (
                     <Block key={item.date}>
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
@@ -420,25 +472,26 @@ const Index = () => {
                         ))}
                       </View>
                     </Block>
-                  ))}
+                  ))
+                }
+                { !showEmpty && showFooter && <LoadFooter text='没有更多数据了~' />}
                 </View>
-              </ListProvider>
             </View>
           </View>
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="feedback" onClick={() => Taro.navigateTo({ url: '/pages/feedback/index' })}>
-              <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon" />
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
+              <Image src={feedback} className="feedback-icon"/>
               意见反馈
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
-                <View className="footer-button footer-button-bookkeeping" data-type={1}
-                  onClick={() => enterTheRecordBook(accountBookInfo, "borrow")}>记账</View>
-                <View className="footer-button footer-button-remember" data-type={2}
-                  onClick={() => enterTheRecordBook(accountBookInfo, "record")}>记工</View>
-              </View>
+                  <View className="footer-button footer-button-bookkeeping" data-type={1}
+                        onClick={(e) => goRecord(e)}>记账</View>
+                  <View className="footer-button footer-button-remember" data-type={2}
+                        onClick={(e) => goRecord(e)}>记工</View>
+                </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>
               }
@@ -448,15 +501,17 @@ const Index = () => {
       </View>
       {
         showFilter &&
-        <View className="mask" onClick={() => setShowFilter(false)} />
+        <View className="mask" onClick={() => setShowFilter(false)}/>
       }
       <Filter data={filterData} personOrGroup={personOrGroup} confirmFilter={data => handleConfirmFilter(data)}
-        show={showFilter}
-        close={() => setShowFilter(false)}
-        handleSplitDate={(date) => handleSplitDate(date)}
-        resetFilter={handleResetFilter}
+              show={showFilter}
+              close={() => setShowFilter(false)}
+              handleSplitDate={(date) => handleSplitDate(date)}
+              resetFilter={handleResetFilter}
       />
+
+      <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>
     </View>
   )
 }
-export default observer(Index)
+export default observer(Remember)

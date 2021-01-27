@@ -86,7 +86,8 @@ const Remember = () => {
       ...filterData,
       business_type: handleArrayToString(filterData.business_type),
       group_leader: handleAddressBookParams(filterData.group_leader),
-      worker_id: handleAddressBookParams(filterData.worker_id)
+      worker_id: handleAddressBookParams(filterData.worker_id),
+      page: 1
     }
   }
   // const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
@@ -100,17 +101,17 @@ const Remember = () => {
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
   const [showLogin, setShowLogin] = useState(false)
   const [list, setList] = useState<GetWorkFlowResult[]>([])
-
-
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
+  /*是否重新请求流水列表*/
+  const [reloadList, setReloadList] = useState(false)
   /*获取统计数据*/
   useEffect(() => {
     if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
     const params = actionParams()
     initFlowList(params)
     initData(params)
-  }, [filterData])
+  }, [filterData,user])
 
   /*根据筛选日期初始化请求参数*/
   useEffect(() => {
@@ -124,6 +125,7 @@ const Remember = () => {
     if (showFooter || showEmpty) return
     setFilterData(paramsData)
   })
+
   const handIsLogin = () => {/*是否登录*/
     if (!user.login) {
       setShowLogin(true)
@@ -131,6 +133,16 @@ const Remember = () => {
     }
     return true
   }
+  useDidShow(() => {
+    setReloadList(true)
+    if (reloadList) {
+      if (!user.login) return
+      const params = actionParams()
+      setList([])
+      initData(params)
+      initFlowList(params)
+    }
+  })
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()

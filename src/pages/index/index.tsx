@@ -12,12 +12,12 @@ import { IMGCDNURL } from "@/config/index";
 import { enterTheRecordBook } from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
+import { GetWorkFlowResult } from '@/pages/work_team/team_record/index.d'
 import { get } from "@/utils/request";
 import Login from '@/components/login/index'
 import './index.scss'
 import Filter from "./filter/index";
 import { getBusiness } from './api'
-import { GetWorkFlowResult } from '@/pages/work_team/team_record/index.d'
 
 
 const Remember = () => {
@@ -89,7 +89,7 @@ const Remember = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-  // const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
+  
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -286,6 +286,17 @@ const Remember = () => {
     let {is_note, business_type, group_leader, worker_id} = filterData
     return (is_note == '1' || business_type.length || (group_leader as AddressBookParams[]).length || (worker_id as AddressBookParams[]).length)
   }
+
+  // 用户点击 记工记账 按钮
+  const userTapRecordBtn = (type: 'borrow' | 'record') => {
+    if(!user.login){
+      setShowLogin(true)
+      return
+    }
+    enterTheRecordBook(accountBookInfo, type)
+  }
+
+
   return (
     <View className={"remember" + (showFilter ? ' stop-move' : '')}>
       <View className="container">
@@ -295,7 +306,7 @@ const Remember = () => {
           <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
           <View className="header-line" />
           <View className="header-switch"
-            onClick={() => Taro.navigateTo({ url: '/pages/account_book_list/index' })}>切换记工本</View>
+            onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
@@ -315,13 +326,13 @@ const Remember = () => {
                   <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                onClick={() => setShowFilter(true)}>
+                onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
                 <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
                   className="filter-icon" />筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
-              <View className="filter-info" onClick={() => setShowFilter(true)}>
+              <View className="filter-info" onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
                 <View className="filter-info-box overwords">
                   {
                     ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
@@ -473,16 +484,16 @@ const Remember = () => {
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="feedback" onClick={() => Taro.navigateTo({ url: '/pages/feedback/index' })}>
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
               <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon" />
               意见反馈
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
                 <View className="footer-button footer-button-bookkeeping" data-type={1}
-                  onClick={() => enterTheRecordBook(accountBookInfo, "borrow")}>记账</View>
+                  onClick={() => userTapRecordBtn("borrow")}>记账</View>
                 <View className="footer-button footer-button-remember" data-type={2}
-                  onClick={() => enterTheRecordBook(accountBookInfo, "record")}>记工</View>
+                  onClick={() => userTapRecordBtn("record")}>记工</View>
               </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>

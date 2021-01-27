@@ -9,7 +9,7 @@ import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
 import {IMGCDNURL} from "@/config/index";
-import {enterTheRecordBook} from '@/utils/index'
+import {enterTheRecordBook, getTodayDate} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team/team_record/index.d'
@@ -28,7 +28,6 @@ const Remember = () => {
   const {businessType} = rememberStore
   const {user} = _user
   const {accountBookInfo} = _accountBookInfo
-  console.log(accountBookInfo)
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
@@ -313,7 +312,8 @@ const Remember = () => {
             <View className="feat">
               {!isFilter ? <View className="date">
                   <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon"/></View>
-                  <Picker fields="month" mode='date' onChange={onFilterDateChange} value={currentYearMonth}>
+                  <Picker fields="month" mode='date' end={getTodayDate()} onChange={onFilterDateChange}
+                          value={currentYearMonth}>
                     <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
                   </Picker>
                   {!handleHideRightArrow() &&

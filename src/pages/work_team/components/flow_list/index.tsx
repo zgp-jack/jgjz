@@ -25,7 +25,7 @@ export default function FlowList({currentIndex=0, params='', types=[{id:'1',name
   const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getFlowlists, { ...defaultParams})
   useEffect(()=>{
     setParams({ end_business_time: params, start_business_time: params},true)
-  },[params, setParams])
+  },[params])
 
   return (
       <ListProvider

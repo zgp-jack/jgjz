@@ -35,12 +35,6 @@ export default function RecordWork() {
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 当前选择的类型 1 记工 2记账
   const [typeItem, SetTypeItem] = useState<number>(1);
-  // 上班时长模态框
-  const [showWorkTime, setShowWorkTime] = useState<boolean>(false) 
-  // 加班时长模态框
-  const [showOverTime, setShowOverTime] = useState<boolean>(false)
-  // 分类、分项模态框
-  const [classProject, setClassProject] = useState<boolean>(false)
 
 
   /**

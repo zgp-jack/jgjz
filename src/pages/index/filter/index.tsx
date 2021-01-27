@@ -7,7 +7,7 @@ import RememberStore from "@/store/business";
 import {AddressBookParams, GetCountParams} from "@/pages/index/inter";
 import {getTodayDate} from "@/utils/index";
 import {
-  ADDRESSBOOKTYPE_ALONE,
+  ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_ALONE_DEL,
   ADDRESSBOOKTYPE_GROUP,
   ADDRESSBOOKTYPE_GROUP_DEL,
   ADDRESSBOOKTYPE_GROUP_LEAVE,
@@ -100,16 +100,21 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   const handleReset = () => {
     props.resetFilter()
   }
+
   const handleGoToAddressBook = (type) => {
     let _data: AddressBookParams[] = []
+    let _type: string = ''
     if (type === ADDRESSBOOKTYPE_ALONE) {
       _data = (filterData.worker_id as AddressBookParams[])
+      _type = ADDRESSBOOKTYPE_ALONE_DEL
     }
     if (type === ADDRESSBOOKTYPE_GROUP) {
       _data = (filterData.group_leader as AddressBookParams[])
+      _type = ADDRESSBOOKTYPE_GROUP_LEAVE
     }
-    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP_LEAVE}&data=${JSON.stringify(_data)}`})
+    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${_type}&data=${JSON.stringify(_data)}`})
   }
+
   const handleGroupLeaderLength = () => {
     return (filterData.group_leader as AddressBookParams[]).length
   }

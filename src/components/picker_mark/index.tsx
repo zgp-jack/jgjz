@@ -17,6 +17,7 @@ export default function PickerMark({
             {hideImg && <Image className="person-record-date-img" src={img} />}
             <View className="person-record-modify-title person-record-date-title">{title}</View>
             <Textarea 
+              maxlength={200}
               autoHeight={true}
               className="person-record-date-textarea" 
               value={text} 

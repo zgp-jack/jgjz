@@ -10,7 +10,7 @@ import {
   ADDRESSBOOKTYPE_ALONE,
   ADDRESSBOOKTYPE_GROUP,
   ADDRESSBOOKTYPE_GROUP_DEL,
-  ADDRESSBOOKTYPE_GROUP_LEAVE_DEL,
+  ADDRESSBOOKTYPE_GROUP_LEAVE,
   IMGCDNURL
 } from "@/config/index";
 import {AddressBookConfirmEvent} from "@/config/events";
@@ -108,7 +108,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
     if (type === ADDRESSBOOKTYPE_GROUP) {
       _data = (filterData.group_leader as AddressBookParams[])
     }
-    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP_LEAVE_DEL}&data=${JSON.stringify(_data)}`})
+    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP_LEAVE}&data=${JSON.stringify(_data)}`})
   }
   const handleGroupLeaderLength = () => {
     return (filterData.group_leader as AddressBookParams[]).length

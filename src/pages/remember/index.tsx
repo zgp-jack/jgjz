@@ -114,7 +114,6 @@ const Remember = () => {
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*获取统计数据*/
   useEffect(() => {
-    let page = filterData.page;
     if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
     const params = actionParams()
     initFlowList(params)

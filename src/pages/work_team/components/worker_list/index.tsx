@@ -1,32 +1,33 @@
-import Taro, {useDidShow, useEffect, useState} from '@tarojs/taro'
+import Taro, { useDidShow, useEffect, useState, eventCenter} from '@tarojs/taro'
 import {View, Text, Image} from '@tarojs/components'
 import useInit from '@/hooks/init'
 import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_GROUP_DEL } from '@/config/index'
 import PromptBox from '@/components/popup/index'
 import { editWordkerInfo } from '@/pages/address_book/api'
 import msg from '@/utils/msg'
+import { AddressBookConfirmEvent } from '@/config/events'
 import { InputValue } from '@/components/popup/index.d'
-import { WorkerData } from './index.d'
+import { WorkerData, RecordWorkerProps } from './index.d'
 import getWorkerList, { removePerson} from './api'
 import './index.scss'
 
-interface RecordWorkProps {
-  workerId: number[]
-  setWorkerId: (data: number[]) => void
-  workNote: number
-  startDate: string
-  type: number
-}
 
-function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWorkProps) {
+
+function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: RecordWorkerProps) {
   const { data, setLoading} = useInit(getWorkerList, {
+    /** 查询时间 */ 
     business_time: startDate,
+    /** 记工记账类型 1 记工天 2 记工量 3 记工钱 4 借支 5 支出 */ 
     action: type,
+    /** 账本id */ 
     workNote: workNote
   }, {business_worker_id: [], note_worker: []})
+
+  /** 班组账本工友数据 */ 
   const [worker, setWorker] = useState<WorkerData[]>([])
+  /** ui补充空数据 */ 
   const [emptyArray, setEmptyCount] = useState<WorkerData[]>([])
-  // 是否全选标记
+  /** 是否全选标记 */
   const [allChoose, setAllchoose] = useState<boolean>(false);
   /**是否显示编辑工友弹窗*/
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
@@ -36,26 +37,45 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
   });
   /** 是否第一次显示 */
   const [firstShow, setFirstShow] = useState<boolean>(false)
-
+  /** 点击添加工友选择的工友数据 */ 
+  const [changeWorker, setChangeWorker] = useState<WorkerData[]>([])
   /**定时器*/
   let timeOutEvent = 0
 
+  // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent, (data) => {
+      setGroupLeader({ id: data.id, name: data.name })
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  }, [])
+
+
+  /** 如果更换了时间重新请求 */ 
+  useEffect(() => {
+    /** 重新请求账本工友数据 */ 
     setLoading(true)
   }, [startDate])
 
+  /** 处理账本工友数据 */ 
   useEffect(() => {
+    /** 如果没有登录不处理 */ 
     if (!data || !data.business_worker_id) return
+    /** 已记录工友数据 */ 
     let businessWorker = JSON.parse(JSON.stringify(data.business_worker_id));
+    /** 版本下所有工友数据 */ 
     let workerData = JSON.parse(JSON.stringify(data.note_worker));
+    
     workerData.forEach((item: any) => {
-      businessWorker.forEach((obj: any) => {
-        if (type == 1 || type == 2 || type == 3){
+      /** 如果是版主记账不处理是否已经记录状态 */ 
+      if (type == 1 || type == 2 || type == 3) {
+        /** 遍历处理已经记录数据并处理状态 */
+        businessWorker.forEach((obj: any) => {
           if (obj == item.id) {
-            item.recorded = true
+             item.recorded = true
           }
-        }
-      })
+        })
+      }
       /**处理工友数据是自己*/ 
       if (item.is_self) {
         item.name = item.name + "自己"
@@ -73,7 +93,10 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
     setEmptyCount(emptCount)
   },[data])
   
+
+  /** 是否第一加载工友数据，如果是添加删除工友数据返回重新获取新数据 */ 
   useDidShow(()=>{
+    /** 是否第一次请求加载 */ 
     if(firstShow){
       setLoading(true)
     }
@@ -107,12 +130,15 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
       /**添加数据到选中工友id数组中*/ 
       if (i == -1) workerIdArray.push(workerItem.id);
     }
+    /** 找到所有没有记录工友数据 */ 
     let noRecordData = workerData.filter((item:any)=>{
       return !item.recorded;
     })
+    /** 所有未记录工友是否全部选中 */ 
     let allStatus = noRecordData.every((item:any)=>{
       return item.check == true;
     })
+    /** 更新全部选中状态 */ 
     setAllchoose(allStatus)
     // 保存选择后数据
     setWorker(workerData)
@@ -302,7 +328,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
             <Text className='record-work-person-text'>{obj.name}</Text>
           </View>)
         )}
-        <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?type=groupAdd' })}>
+        <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?type=${ADDRESSBOOKTYPE_GROUP_ADD}`})}>
           <View className='record-work-person-box'><Image 
             src={`${IMGCDNURL}yc/add.png`}
             mode='widthFix'
@@ -310,7 +336,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
           <Text className='record-work-person-text'>添加</Text>
         </View>
         {/* 删除工友 */}
-        <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?type=groupDel' })}>
+        <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?type=${ADDRESSBOOKTYPE_GROUP_DEL}` })}>
           <View className='record-work-person-box'><Image
             src={`${IMGCDNURL}yc/del.png`}
             mode='widthFix'
@@ -338,4 +364,4 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
   )
 }
 
-export default RecordWork
+export default RecordWorker

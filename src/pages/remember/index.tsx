@@ -1,5 +1,11 @@
+<<<<<<< Updated upstream
 import Taro, { useDidShow, useEffect, useState, useReachBottom } from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
+=======
+import Taro, {useDidShow, useEffect, useState} from '@tarojs/taro'
+import {Block, Image, Picker, Text, View} from '@tarojs/components'
+import React from 'react'
+>>>>>>> Stashed changes
 import filter from '@/images/ic_sx.png'
 import remember from '@/images/ic_gt.png'
 import debt from '@/images/ic_jz.png'
@@ -12,14 +18,22 @@ import filterActive from '@/images/ic_sx_blue.png'
 import wage from '@/images/ic_gq.png'
 import meter from '@/images/ic_gl.png'
 import { getCountUrl } from "@/utils/api";
+<<<<<<< Updated upstream
 import LoadFooter from '@/components/load_footer/index'
 import EmptyDate from '@/components/empty_data/index'
 
+=======
+>>>>>>> Stashed changes
 import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/remember/inter";
 import { observer, useLocalStore } from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
+<<<<<<< Updated upstream
 import User from "@/store/user";
+=======
+import useList from '@/hooks/list'
+import ListProvider from '@/components/list_provider'
+>>>>>>> Stashed changes
 import { get } from "@/utils/request";
 import { GetWorkFlowResult } from '@/pages/work_team/team_record/index.d'
 import Filter from "./filter/index";
@@ -106,9 +120,13 @@ const Remember = () => {
   const [filterMonth, setFilterMonth] = useState(month)
   const [showFilter, setShowFilter] = useState(false)//筛选弹窗开关
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
+<<<<<<< Updated upstream
   const [showLogin, setShowLogin] = useState(false)
   const [list, setList] = useState <GetWorkFlowResult[]>([])
 
+=======
+  const [list, setList] = useState <GetWorkFlowResult[]>([])
+>>>>>>> Stashed changes
 
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
@@ -118,6 +136,10 @@ const Remember = () => {
     const params = actionParams()
     initFlowList(params)
     initData(params)
+<<<<<<< Updated upstream
+=======
+    initFlowList(params)
+>>>>>>> Stashed changes
   }, [filterData])
 
   /*根据筛选日期初始化请求参数*/
@@ -149,6 +171,7 @@ const Remember = () => {
     setFilterData(data)
   }
   const initFlowList = (params: GetCountParams) => {
+<<<<<<< Updated upstream
     /** 请求页面 */ 
     let page = filterData.page;
     getBusiness(params).then(res=>{
@@ -167,6 +190,10 @@ const Remember = () => {
       }
     }).catch(e => {
 
+=======
+    getBusiness(params).then(res=>{
+      console.log(res)
+>>>>>>> Stashed changes
     })
   }
   /*获取统计数据*/

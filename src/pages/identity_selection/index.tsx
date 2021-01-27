@@ -84,9 +84,8 @@ function IdentitySelection() {
     <View className='identity-selection-box'>
       {/* <Image className="identity-back-icon" src={`${IMGCDNURL}common/left-arrow.png`}></Image> */}
       <View className="identity-book-item">
-        <View className="identity-selection-title">{!type ? '欢迎使用鱼泡记工账本' : '新增记工账本'} </View>
-        <View className="identity-selection-deail">{!type ? '首次进入请选择您常用的记工方式' : '请选择您的记工方式'}</View>
-
+        <View className="identity-selection-title">{!type ? '新增记工账本' : '欢迎使用鱼泡记工账本'} </View>
+        <View className="identity-selection-deail">{!type ? '请选择您的记工方式' : '首次进入请选择您常用的记工方式'}</View>
         <View className="identity-flex">
           {createConfig.map(item => (
             <View className="identity-selection-type" key={item.id} onClick={() => createAccountBook(item)}>

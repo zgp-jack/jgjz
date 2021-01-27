@@ -71,6 +71,11 @@ page{
         }
       }
     }
+    .leave,
+    .del {
+      font-size: 24rpx;
+      color: #c82928;
+    }
 
     .setting {
       .setting_img {
@@ -104,7 +109,7 @@ page{
   .right-nav-text {
     font-size: 24px;
     color: #999;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 
     &:last-child {
       margin: 0;

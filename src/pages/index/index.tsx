@@ -86,8 +86,7 @@ const Remember = () => {
       ...filterData,
       business_type: handleArrayToString(filterData.business_type),
       group_leader: handleAddressBookParams(filterData.group_leader),
-      worker_id: handleAddressBookParams(filterData.worker_id),
-      page: 1
+      worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
   // const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
@@ -134,13 +133,13 @@ const Remember = () => {
     return true
   }
   useDidShow(() => {
+    let params = { ...filterData }
+    params.page = 1;
     setReloadList(true)
     if (reloadList) {
       if (!user.login) return
-      const params = actionParams()
       setList([])
-      initData(params)
-      initFlowList(params)
+      setFilterData(params)
     }
   })
   const initParams = () => {

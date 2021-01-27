@@ -9,3 +9,5 @@
 
 // 通讯录确定事件
 export const AddressBookConfirmEvent:  string =  'addressBookConfimEvent'
+
+

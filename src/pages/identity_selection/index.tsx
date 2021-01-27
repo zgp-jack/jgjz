@@ -74,7 +74,7 @@ function IdentitySelection() {
         }
         // 储存mobx
         setAccountBoookInfo(_params)
-        Taro.reLaunch({
+        Taro.redirectTo({
           url: INDEXPAGE
         })
       }

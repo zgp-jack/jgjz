@@ -2,12 +2,13 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-26 19:55:50
+ * @LastEditTime: 2021-01-27 09:24:26
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'
 import {showModal} from '@/utils/msg';
 import { RECORD_WORK_DATA } from '@/pages/account_book_list/index.d'
+import { INDEXPAGE } from '@/config/pages'
 
 /**
  * @name: objDeepCopy for jsxin
@@ -92,7 +93,9 @@ export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "bo
       url = '/pages/person_borrowing/index'
     }
   } else { // 记工记工本
-    url = `/pages/index/index`
+    url = INDEXPAGE
+    Taro.reLaunch({ url })
+    return
   }
   Taro.navigateTo({ url })
 }

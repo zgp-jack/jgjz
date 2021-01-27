@@ -12,7 +12,6 @@ import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
 import { useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
-import PromptBox from '@/components/popup/index'
 import { TypeAction } from '@/pages/work_team/team_record/index.d'
 import './index.scss'
 
@@ -62,6 +61,8 @@ export default function RecordWork() {
   const [startDate, setStartDate] = useState<string>(nowTime)//筛选开始日期
 
   const [workerId, setWorkerId] = useState<number[]>([])
+
+  const [touchBottom, setTouchBottom] = useState<boolean>(false)
 
   useEffect(() => {
     console.log('workerId父级', workerId)
@@ -132,9 +133,8 @@ export default function RecordWork() {
     /**保存type值*/
     SetTypeItem(typeNum)
   }
-  const listRef = useRef(null)
   const onReatchEvent = function () {
-    console.log("listRef", listRef)
+    setTouchBottom(!touchBottom)
   }
   
   return (
@@ -157,7 +157,7 @@ export default function RecordWork() {
             <ScrollView className='record-work-scroll' scrollY enableFlex onScrollToLower={()=>onReatchEvent()}>
               <View className='record-worker-list'>
                 {currentIndex == index &&
-                  <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} ref={listRef} />}
+                  <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} />}
               </View>
               <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
                 <View className='record-work-table-head'>
@@ -166,7 +166,7 @@ export default function RecordWork() {
                 </View>
                 {typeItem == 2 && (currentIndex == index) && (
                   <View className='record-work-flow'>
-                    <FlowList currentIndex={currentIndex} params={startDate} types={types}></FlowList>
+                    <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentIndex={currentIndex} params={startDate} types={types}></FlowList>
                   </View>
                 )}
                 {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) &&

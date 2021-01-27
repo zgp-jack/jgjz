@@ -108,6 +108,8 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
     }
     setFirstShow(true)
   })
+
+
   /**
   * @name: chooseWorker
   * @params index 选中工友列表对应下标

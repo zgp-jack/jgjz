@@ -7,9 +7,7 @@ import RememberStore from "@/store/business";
 import {AddressBookParams, GetCountParams} from "@/pages/index/inter";
 import {getTodayDate} from "@/utils/index";
 import {
-  ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_ALONE_DEL,
-  ADDRESSBOOKTYPE_GROUP,
-  ADDRESSBOOKTYPE_GROUP_DEL,
+  ADDRESSBOOKTYPE_ALONE_DEL,
   ADDRESSBOOKTYPE_GROUP_LEAVE,
   IMGCDNURL
 } from "@/config/index";

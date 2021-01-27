@@ -6,7 +6,13 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import {AddressBookParams, GetCountParams} from "@/pages/index/inter";
 import {getTodayDate} from "@/utils/index";
-import {ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_GROUP, IMGCDNURL} from "@/config/index";
+import {
+  ADDRESSBOOKTYPE_ALONE,
+  ADDRESSBOOKTYPE_GROUP,
+  ADDRESSBOOKTYPE_GROUP_DEL,
+  ADDRESSBOOKTYPE_GROUP_LEAVE_DEL,
+  IMGCDNURL
+} from "@/config/index";
 import {AddressBookConfirmEvent} from "@/config/events";
 
 interface FilterProps<T> {
@@ -102,7 +108,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
     if (type === ADDRESSBOOKTYPE_GROUP) {
       _data = (filterData.group_leader as AddressBookParams[])
     }
-    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP}&data=${JSON.stringify(_data)}`})
+    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${ADDRESSBOOKTYPE_GROUP_LEAVE_DEL}&data=${JSON.stringify(_data)}`})
   }
   const handleGroupLeaderLength = () => {
     return (filterData.group_leader as AddressBookParams[]).length

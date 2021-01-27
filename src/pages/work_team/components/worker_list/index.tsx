@@ -45,7 +45,7 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      setGroupLeader({ id: data.id, name: data.name })
+      setChangeWorker({ id: data.id, name: data.name })
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])

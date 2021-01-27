@@ -74,13 +74,8 @@ function IdentitySelection() {
         }
         // 储存mobx
         setAccountBoookInfo(_params)
-<<<<<<< HEAD
         Taro.redirectTo({
           url: INDEXPAGE
-=======
-        Taro.reLaunch({
-          url: '/pages/remember/index'
->>>>>>> lcmxkg
         })
       }
     })

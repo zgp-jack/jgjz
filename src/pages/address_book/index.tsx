@@ -575,13 +575,14 @@ function AddressBook() {
         if (res.code != 0) {
           return
         }
+        console.log("1111")
         Taro.navigateBack()
       })
     } else if (type == ADDRESSBOOKTYPE_GROUP_DEL) {
       leave()
     }
     eventCenter.trigger(AddressBookConfirmEvent, selectd)
-    Taro.navigateBack()
+    // Taro.navigateBack()
   }
 
   return (

@@ -110,7 +110,7 @@ const Remember = () => {
     const params = actionParams()
     initFlowList(params)
     initData(params)
-  }, [filterData,user])
+  }, [filterData, user, accountBookInfo])
 
   /*根据筛选日期初始化请求参数*/
   useEffect(() => {

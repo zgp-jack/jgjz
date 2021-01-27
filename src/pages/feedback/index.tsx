@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, Config } from '@tarojs/taro'
 import { View, Text, Textarea, Button } from '@tarojs/components'
 import FeedbackData from './inter.d'
 import Star from  './components/star'
@@ -7,9 +7,10 @@ import starConfig from './components/star/config'
 import msg, { showBackModal } from '@/utils/msg'
 import userGetFeedbackAction from './api'
 import { copyWechat, callPhone } from '@/utils/index'
+import { observer } from '@tarojs/mobx'
 import './index.scss'
 
-export default function Feedback() {
+function Feedback() {
   // 微信号
   const [wechat, setWechat] = useState<string>('1535434634')
   // 提交表单数据
@@ -82,3 +83,8 @@ export default function Feedback() {
       </View>
   )
 }
+Feedback.config = {
+  navigationBarTitleText: '意见反馈'
+} as Config
+
+export default observer(Feedback)

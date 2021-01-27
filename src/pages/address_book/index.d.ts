@@ -55,7 +55,8 @@ interface PERSON_DATA {
 //获取所有工友的接口 传给后台的参数
 export interface GET_WORKERS_ALL_PARAMS {
   //记账本id
-  work_note:number
+  work_note?:number
+  action?:string
 }
 
 //获取所有工友的接口 后台返回值
@@ -85,7 +86,9 @@ export interface SEARCH_PROPS {
   /** 用户搜索行为 */
   value?: string,
   /** 单选还是多选 */ 
-  type: string
+  type: string,
+  /** 工友数量 */ 
+  workerLen:number
 }
 
 // 添加工友弹窗确定 的值

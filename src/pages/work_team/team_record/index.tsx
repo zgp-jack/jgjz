@@ -64,7 +64,7 @@ export default function RecordWork() {
   const [workerId, setWorkerId] = useState<number[]>([])
 
   useEffect(() => {
-    console.log('workerId', workerId)
+    console.log('workerId父级', workerId)
   }, [workerId])
 
   useEffect(() => {

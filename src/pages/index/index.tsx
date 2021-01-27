@@ -304,7 +304,7 @@ const Remember = () => {
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
           <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
-          <View className="header-line" />
+          <View className="header-line"/>
           <View className="header-switch"
             onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
@@ -312,13 +312,13 @@ const Remember = () => {
           <View className="body-container">
             <View className="feat">
               {!isFilter ? <View className="date">
-                <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon" /></View>
-                <Picker fields="month" mode='date' onChange={onFilterDateChange} value={currentYearMonth}>
-                  <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
-                </Picker>
-                {!handleHideRightArrow() &&
-                  <View className="date-icon-bor" onClick={nextMonth}><View className="icon-right date-icon" /></View>}
-              </View>
+                  <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon"/></View>
+                  <Picker fields="month" mode='date' onChange={onFilterDateChange} value={currentYearMonth}>
+                    <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
+                  </Picker>
+                  {!handleHideRightArrow() &&
+                  <View className="date-icon-bor" onClick={nextMonth}><View className="icon-right date-icon"/></View>}
+                </View>
                 :
                 <View className="filter-start-end-date">
                   <View
@@ -328,7 +328,7 @@ const Remember = () => {
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
                 onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
                 <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
-                  className="filter-icon" />筛选
+                       className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
@@ -340,51 +340,51 @@ const Remember = () => {
                       共<Text
                         className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
                   </Text>
-                  }
-                  {
-                    (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
-                      && (filterData.business_type as string[]).length > 0)
-                    &&
-                    <Text className="filter-info-line">|</Text>}
-                  {
-                    (filterData.business_type as string[]).length > 0 && <Text>
-                      {
-                        (filterData.business_type as string[]).map((item, i) => (
-                          <Text key={item}
-                            className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
-                        ))
-                      }
-                    </Text>
-                  }
-                  {
-                    (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
-                    <Text className="filter-info-line">|</Text>
-                  }
-                  {
-                    filterData.is_note == '1' && <Text>
-                      <Text>有备注</Text>
-                    </Text>
-                  }
-                </View>
-                <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow" />
-              </View>}
+                }
+                {
+                  (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
+                    && (filterData.business_type as string[]).length > 0)
+                  &&
+                  <Text className="filter-info-line">|</Text>}
+                {
+                  (filterData.business_type as string[]).length > 0 && <Text>
+                    {
+                      (filterData.business_type as string[]).map((item, i) => (
+                        <Text key={item}
+                              className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
+                      ))
+                    }
+                  </Text>
+                }
+                {
+                  (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
+                  <Text className="filter-info-line">|</Text>
+                }
+                {
+                  filterData.is_note == '1' && <Text>
+                    <Text>有备注</Text>
+                  </Text>
+                }
+              </View>
+              <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
+            </View>}
             {/*记工统计*/}
             <View className="statistics">
               {!isFilter && <View className="statistics-title">{handleMonthShow()}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
-                    <Image src={IMGCDNURL + 'lxy/ic_gt.png'} className="statistics-icon" />
+                    <Image src={IMGCDNURL + 'lxy/ic_gt.png'} className="statistics-icon"/>
                     <View className="remember-values">
                       <View className="remember-value">
                         <Text className="remember-value-text">上班</Text>
                         <Text className="remember-value-text">{counts.work_time}个工</Text>
                         {counts.work_time_hour != '0' &&
-                          <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
+                        <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
                       </View>
                       {counts.overtime != '0' &&
-                        <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
-                          className="remember-value-text">{counts.overtime}小时</Text></View>}
+                      <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
+                        className="remember-value-text">{counts.overtime}小时</Text></View>}
                     </View>
                   </View>
                 </View>
@@ -394,37 +394,37 @@ const Remember = () => {
             {/*临时工资，平方米，筛选后才展示*/}
 
             {(counts.work_money || (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0)) &&
-              <View className="statistics">
-                <View className="statistics-bookkeeping statistics-bookkeeping-unit">
-                  {counts.work_money && <View className="bookkeeping-row wage-meter">
-                    <View className="bookkeeping-content">
-                      <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon" />
-                      <View className="bookkeeping-values">
-                        <View className="bookkeeping-label">
-                          临时工资
+            <View className="statistics">
+              <View className="statistics-bookkeeping statistics-bookkeeping-unit">
+                {counts.work_money && <View className="bookkeeping-row wage-meter">
+                  <View className="bookkeeping-content">
+                    <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon"/>
+                    <View className="bookkeeping-values">
+                      <View className="bookkeeping-label">
+                        临时工资
                       </View>
-                        <View className="bookkeeping-value">￥{counts.work_money}</View>
-                      </View>
+                      <View className="bookkeeping-value">￥{counts.work_money}</View>
                     </View>
-                  </View>}
-                  {
-                    (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0) &&
-                    counts.count_unit.map((item, i) => (
-                      <View className="bookkeeping-row wage-meter" key={i}>
-                        <View className="bookkeeping-content">
-                          <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon" />
-                          <View className="bookkeeping-values">
-                            <View className="bookkeeping-label">
-                              {item.unit}
-                            </View>
-                            <View className="bookkeeping-value">{item.count}</View>
+                  </View>
+                </View>}
+                {
+                  (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0) &&
+                  counts.count_unit.map((item, i) => (
+                    <View className="bookkeeping-row wage-meter" key={i}>
+                      <View className="bookkeeping-content">
+                        <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon"/>
+                        <View className="bookkeeping-values">
+                          <View className="bookkeeping-label">
+                            {item.unit}
                           </View>
+                          <View className="bookkeeping-value">{item.count}</View>
                         </View>
                       </View>
-                    ))
-                  }
-                </View>
-              </View>}
+                    </View>
+                  ))
+                }
+              </View>
+            </View>}
 
             {/*记账统计*/}
             <View className="statistics">
@@ -432,7 +432,7 @@ const Remember = () => {
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
-                    <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon" />
+                    <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         借支
@@ -444,7 +444,7 @@ const Remember = () => {
 
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
-                    <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon" />
+                    <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
                         支出
@@ -490,11 +490,11 @@ const Remember = () => {
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
-                <View className="footer-button footer-button-bookkeeping" data-type={1}
-                  onClick={() => enterTheRecordBook(accountBookInfo, "borrow")}>记账</View>
-                <View className="footer-button footer-button-remember" data-type={2}
-                  onClick={() => enterTheRecordBook(accountBookInfo, "record")}>记工</View>
-              </View>
+                  <View className="footer-button footer-button-bookkeeping" data-type={1}
+                        onClick={() => enterTheRecordBook(accountBookInfo, "borrow")}>记账</View>
+                  <View className="footer-button footer-button-remember" data-type={2}
+                        onClick={() => enterTheRecordBook(accountBookInfo, "record")}>记工</View>
+                </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>
               }
@@ -504,13 +504,13 @@ const Remember = () => {
       </View>
       {
         showFilter &&
-        <View className="mask" onClick={() => setShowFilter(false)} />
+        <View className="mask" onClick={() => setShowFilter(false)}/>
       }
       <Filter data={filterData} personOrGroup={personOrGroup} confirmFilter={data => handleConfirmFilter(data)}
-        show={showFilter}
-        close={() => setShowFilter(false)}
-        handleSplitDate={(date) => handleSplitDate(date)}
-        resetFilter={handleResetFilter}
+              show={showFilter}
+              close={() => setShowFilter(false)}
+              handleSplitDate={(date) => handleSplitDate(date)}
+              resetFilter={handleResetFilter}
       />
       <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>
     </View>

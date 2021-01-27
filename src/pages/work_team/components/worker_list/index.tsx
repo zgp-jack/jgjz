@@ -1,7 +1,7 @@
 import Taro, { useDidShow, useEffect, useState, eventCenter} from '@tarojs/taro'
 import {View, Text, Image} from '@tarojs/components'
 import useInit from '@/hooks/init'
-import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_GROUP_DEL } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_LEAVE } from '@/config/index'
 import PromptBox from '@/components/popup/index'
 import { editWordkerInfo } from '@/pages/address_book/api'
 import msg from '@/utils/msg'
@@ -37,31 +37,31 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
   });
   /** 是否第一次显示 */
   const [firstShow, setFirstShow] = useState<boolean>(false)
-  /** 点击添加工友选择的工友数据 */ 
-  const [changeWorker, setChangeWorker] = useState<WorkerData[]>([])
+  /** 点击添加工友选择的工友数据id */ 
+  const [addWorker, setAddWorker] = useState<number[]>([])
   /**定时器*/
   let timeOutEvent = 0
 
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
-    eventCenter.on(AddressBookConfirmEvent, () => {
-      // setChangeWorker({ id: data.id, name: data.name })
-      console.log("data", worker)
+    eventCenter.on(AddressBookConfirmEvent, (workerdata) => {
+      setAddWorker(workerdata)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
-
 
   /** 如果更换了时间重新请求 */ 
   useEffect(() => {
     /** 重新请求账本工友数据 */ 
     setLoading(true)
   }, [startDate])
-
+  
   /** 处理账本工友数据 */ 
   useEffect(() => {
     /** 如果没有登录不处理 */ 
     if (!data || !data.business_worker_id) return
+    /** 从工友录添加工友和点击添加前选择的工友 */
+    let allWorkerData = [...workerId, ...addWorker];
     /** 已记录工友数据 */ 
     let businessWorker = JSON.parse(JSON.stringify(data.business_worker_id));
     /** 版本下所有工友数据 */ 
@@ -77,6 +77,10 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
           }
         })
       }
+      /** 从已经选择的工友中查找是否存在 */ 
+      let findIndex = allWorkerData.findIndex((obj: any) => item.id == obj )
+      /** 如果存在，将工友标记为选中 */ 
+      if(findIndex !== -1) item.check = true;
       /**处理工友数据是自己*/ 
       if (item.is_self) {
         item.name = item.name + "自己"
@@ -90,9 +94,10 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
     }
+    setWorkerId(allWorkerData)
     setWorker(workerData);
     setEmptyCount(emptCount)
-  },[data])
+  }, [data])
   
 
   /** 是否第一加载工友数据，如果是添加删除工友数据返回重新获取新数据 */ 
@@ -227,7 +232,7 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
     /**定时器*/ 
     let timeOver = setTimeout(function(){
       longPress(index)
-    }, 1000);
+    }, 800);
     /**保存定时器*/ 
     timeOutEvent = Number(timeOver)
   }
@@ -337,7 +342,7 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
           <Text className='record-work-person-text'>添加</Text>
         </View>
         {/* 删除工友 */}
-        <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?type=${ADDRESSBOOKTYPE_GROUP_DEL}` })}>
+        <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?type=${ADDRESSBOOKTYPE_LEAVE}` })}>
           <View className='record-work-person-box'><Image
             src={`${IMGCDNURL}yc/del.png`}
             mode='widthFix'

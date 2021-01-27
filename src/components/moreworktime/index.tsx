@@ -31,7 +31,7 @@ export default function MoreWorkTime({
               <Text className="moreworktime-cancle">{'　　'}</Text>
               <Text className={classnames({
                 "moreworktime-title": true,
-                "ismorework": hasOverBtn
+                "ismorework": false
               })}>{`选择${title}`}</Text>
               <View className="person-record-overtime" onClick={WorktimeCancle} >
                 <Text className="overtime-icon"></Text>

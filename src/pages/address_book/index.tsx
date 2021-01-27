@@ -4,7 +4,7 @@ import AccountBookInfo from '@/store/account/index'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
-import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP, ADDRESSBOOKTYPE_GROUP_ADD } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_GROUP_LEAVE_DEL } from '@/config/index'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS, ADD_NOTE_WORKERS_PARAMS, GET_NOTE_WORKERS_PARAMS } from './index.d'
 import { InputValue } from '@/components/popup/index.d'
@@ -22,15 +22,15 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   const { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
-  if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD){
+  if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
     Taro.setNavigationBarTitle({
       title: '请选择需要添加的工友'
     })
-  } else if (type == ADDRESSBOOKTYPE_LEAVE){
+  } else if (type == ADDRESSBOOKTYPE_LEAVE) {
     Taro.setNavigationBarTitle({
       title: '请选择需要离场的工友'
     })
-  } else if (type == ADDRESSBOOKTYPE_ALONE){
+  } else if (type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_GROUP_LEAVE_DEL) {
     Taro.setNavigationBarTitle({
       title: '请选择班组长'
     })
@@ -40,24 +40,35 @@ function AddressBook() {
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
   useEffect(() => {
-    console.log("mobx中的账本ID", accountBookInfo.id)
-    console.log("上个页面传过来的type", type)
     if (!accountBookInfo.id) return
-    if (type != ADDRESSBOOKTYPE_LEAVE) {
+    if (type == ADDRESSBOOKTYPE_GROUP_ADD || type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_ALONE) {
       /** 获取所有通讯录列表 */
       getWorkers({ work_note: accountBookInfo.id }).then((res) => {
+        setList(res.data)
+      })
+    } else if (type == ADDRESSBOOKTYPE_LEAVE || type == ADDRESSBOOKTYPE_GROUP_LEAVE_DEL) {
+      //获取已在当前账本中的工人
+      let params: GET_NOTE_WORKERS_PARAMS = {
+        business_time: '',
+        action: "select",
+        workNote: accountBookInfo.id
+      }
+      getNoteWorkers(params).then(res => {
+        if (res.code != 0) {
+          msg(res.message)
+          Taro.navigateBack()
+          return
+        }
         //如果上一个 页面有 传数据 过来
         if (data) {
           let newData: PERSON_DATA[] = JSON.parse(data)
           //上一个页面传过来的数据 默认选中
-          let newListData = res.data
+          let newListData = res.data.note_worker
           newListData.map((Pitem, Pindex) => {
-            Pitem.data.map((Citem, Cindex) => {
-              newData.map((dataItem) => {
-                if (Citem.id == dataItem.id) {
-                  newListData[Pindex].data[Cindex].is_check = true
-                }
-              })
+            newData.map((dataItem) => {
+              if (Pitem.id == dataItem.id) {
+                newListData[Pindex].is_check = true
+              }
             })
           })
           //上一个页面传过来的数据 默认选中
@@ -66,33 +77,22 @@ function AddressBook() {
             newSelectd.push(dataItem)
           })
           setSelectd(newSelectd)
-          setList(newListData)
+          let note_worker: ADDRESS_BOOK_LIST = {
+            name_py: "no",
+            data: newListData
+          }
+          setList([note_worker])
         } else {
-          setList(res.data)
+          //过滤掉已离场的工人
+          let filterDeletedData = res.data.note_worker.filter(item => {
+            return item.is_deleted != 1
+          })
+          let note_worker: ADDRESS_BOOK_LIST = {
+            name_py: "no",
+            data: filterDeletedData
+          }
+          setList([note_worker])
         }
-      })
-    } else if (type == ADDRESSBOOKTYPE_LEAVE) {
-      let params: GET_NOTE_WORKERS_PARAMS = {
-        business_time: '',
-        action: "select",
-        workNote: accountBookInfo.id
-      }
-      //获取已在当前账本中的工人
-      getNoteWorkers(params).then(res => {
-        if (res.code != 0) {
-          msg(res.message)
-          Taro.navigateBack()
-          return
-        }
-        //过滤掉已离场的工人
-        let filterDeletedData = res.data.note_worker.filter(item=>{
-          return item.is_deleted != 1
-        })
-        let note_worker: ADDRESS_BOOK_LIST = {
-          name_py: "no",
-          data: filterDeletedData
-        }
-        setList([note_worker])
       })
     }
 
@@ -543,24 +543,24 @@ function AddressBook() {
         return
       }
       //判断是单个离场还是批量离场
-      if(id){
+      if (id) {
         let newList = JSON.parse(JSON.stringify(list))
         let newSelectd = JSON.parse(JSON.stringify(selectd))
-        newList[0].data.map((item,index)=>{
-          if(item.id == id){
-            newList[0].data.splice(index,1)
+        newList[0].data.map((item, index) => {
+          if (item.id == id) {
+            newList[0].data.splice(index, 1)
           }
         })
-        newSelectd.map((selectdItem,selectdIndex)=>{
-          if (selectdItem.id == id){
-            selectdItem.splice(selectdIndex,1)
+        newSelectd.map((selectdItem, selectdIndex) => {
+          if (selectdItem.id == id) {
+            selectdItem.splice(selectdIndex, 1)
           }
         })
         //关闭修改弹窗
         setIsShowEdit(false)
         setList(newList)
         setSelectd(newSelectd)
-      }else{
+      } else {
         //批量离场成功-返回上一页
         Taro.navigateBack()
       }
@@ -592,6 +592,7 @@ function AddressBook() {
         if (res.code != 0) {
           return
         }
+        eventCenter.trigger(AddressBookConfirmEvent, selectd)
         Taro.navigateBack()
       })
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {
@@ -720,7 +721,7 @@ function AddressBook() {
         ]}
         confirm={(data) => editWorkerConfirm(data)}
         cancel={() => setIsShowEdit(false)}
-        delet={() => type == ADDRESSBOOKTYPE_LEAVE ? leave(editItemData.id): deletPerson()}
+        delet={() => type == ADDRESSBOOKTYPE_LEAVE ? leave(editItemData.id) : deletPerson()}
       ></PromptBox>}
     </View>
   )

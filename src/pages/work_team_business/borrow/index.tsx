@@ -52,9 +52,6 @@ export default function BusinessBorrow() {
     worker_name: ''
   })
   useEffect(() => {
-    console.log('123', data)
-  }, [data])
-  useEffect(() => {
     if (id) {
       Taro.setNavigationBarTitle({title: '修改借支'})
       userGetBusinessInfo()

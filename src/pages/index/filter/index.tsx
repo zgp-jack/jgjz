@@ -121,7 +121,9 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
     <View className={"filter " + (props.show ? "show-filter" : '')}>
       <View className="filter-container">
         <View className="filter-header">
-          <View className="arrow" onClick={props.close}/>
+          <View className="arrow-bor" onClick={props.close}>
+            <View className="arrow"/>
+          </View>
           筛选条件
         </View>
         <View className="filter-body">

@@ -458,7 +458,6 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-
             <View className="statistics-flow">
               <View className="bokkeeping-list">
                 {showEmpty ? <EmptyDate/> :

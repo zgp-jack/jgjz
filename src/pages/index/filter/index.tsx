@@ -103,16 +103,13 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
 
   const handleGoToAddressBook = (type) => {
     let _data: AddressBookParams[] = []
-    let _type: string = ''
-    if (type === ADDRESSBOOKTYPE_ALONE) {
+    if (type === ADDRESSBOOKTYPE_ALONE_DEL) {
       _data = (filterData.worker_id as AddressBookParams[])
-      _type = ADDRESSBOOKTYPE_ALONE_DEL
     }
-    if (type === ADDRESSBOOKTYPE_GROUP) {
+    if (type === ADDRESSBOOKTYPE_GROUP_LEAVE) {
       _data = (filterData.group_leader as AddressBookParams[])
-      _type = ADDRESSBOOKTYPE_GROUP_LEAVE
     }
-    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${_type}&data=${JSON.stringify(_data)}`})
+    Taro.navigateTo({url: `/pages/address_book/index?id=${filterData.work_note}&type=${type}&data=${JSON.stringify(_data)}`})
   }
 
   const handleGroupLeaderLength = () => {
@@ -179,7 +176,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
             </View>
             {/*班组账本选择工友*/}
             {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
-                                          onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_ALONE)}>
+                                          onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_ALONE_DEL)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择工友</View>
                 <View className="filter-picker-value">
@@ -190,7 +187,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
             </View>}
             {/*个人账本筛选选择班组长*/}
             {!props.personOrGroup && <View className="filter-block-row filter-block-row-small"
-                                           onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_GROUP)}>
+                                           onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_GROUP_LEAVE)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择班组长</View>
                 <View className="filter-picker-value">

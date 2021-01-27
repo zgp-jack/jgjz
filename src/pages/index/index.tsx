@@ -1,6 +1,5 @@
 import Taro, { useEffect, useState, useDidShow } from '@tarojs/taro'
 import { Block, Image, Picker, Text, View } from '@tarojs/components'
-import React from 'react'
 import './index.scss'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'

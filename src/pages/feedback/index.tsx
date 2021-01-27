@@ -70,7 +70,7 @@ function Feedback() {
 
           <View className="feedback-item">
             <View className="feedback-item-title">请留下你的意见或建议</View>
-            <Textarea className="feedback-content-textarea" placeholder="如果反馈意见被采纳，平台将赠送您2~10个鱼泡网积分" value={postData.note} onInput={e => handleTextarea(e)} />
+            <Textarea className="feedback-content-textarea" maxlength={400} placeholder="如果反馈意见被采纳，平台将赠送您2~10个鱼泡网积分" value={postData.note} onInput={e => handleTextarea(e)} />
             <View className="feedback-item-title">上传图片</View>
             <View className="feedback-upimages-box">
               <UploadImg onUpload={userChangeImgs} />

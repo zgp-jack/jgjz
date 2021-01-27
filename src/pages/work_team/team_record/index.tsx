@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter, Config} from '@tarojs/taro'
+import Taro, { useEffect, useState, useRouter, Config, useRef} from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team/components/flow_list/index'
 import RecordDay from '@/pages/work_team/components/record-work/record_day/index'
@@ -132,7 +132,11 @@ export default function RecordWork() {
     /**保存type值*/
     SetTypeItem(typeNum)
   }
-
+  const listRef = useRef(null)
+  const onReatchEvent = function () {
+    console.log("listRef", listRef)
+  }
+  
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
@@ -150,10 +154,10 @@ export default function RecordWork() {
                 <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
               </View>
             </View>
-            <ScrollView className='record-work-scroll' scrollY enableFlex>
+            <ScrollView className='record-work-scroll' scrollY enableFlex onScrollToLower={()=>onReatchEvent()}>
               <View className='record-worker-list'>
                 {currentIndex == index &&
-                  <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} />}
+                  <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} ref={listRef} />}
               </View>
               <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
                 <View className='record-work-table-head'>

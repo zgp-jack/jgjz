@@ -102,10 +102,6 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
       setIsPickSubitem(false)
     }
   }
-  // 用户关闭 分类组件
-  const ColsePickerType = () => {
-    setIsPickSubitem(false)
-  }
 
   // 用户关闭班组 组件
   const DeletePickerLeader = () => {

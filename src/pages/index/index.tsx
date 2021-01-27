@@ -1,4 +1,4 @@
-import Taro, { useEffect, useState, useDidShow, useReachBottom } from '@tarojs/taro'
+import Taro, { useEffect, useState, useDidShow, useReachBottom, useDidHide } from '@tarojs/taro'
 import { Block, Image, Picker, Text, View } from '@tarojs/components'
 import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/index/inter";
 import { getCountUrl } from "@/utils/api";
@@ -107,6 +107,7 @@ const Remember = () => {
   /*获取统计数据*/
   useEffect(() => {
     if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
+    console.log("1111111111111111111")
     const params = actionParams()
     initFlowList(params)
     initData(params)
@@ -120,8 +121,8 @@ const Remember = () => {
   // 滑动触底事件
   useReachBottom(() => {
     let paramsData = { ...filterData }
+    if (showFooter || showEmpty || !list.length) return
     paramsData.page = paramsData.page + 1;
-    if (showFooter || showEmpty) return
     setFilterData(paramsData)
   })
 
@@ -138,9 +139,13 @@ const Remember = () => {
     setReloadList(true)
     if (reloadList) {
       if (!user.login) return
-      setList([])
       setFilterData(params)
     }
+  })
+  useDidHide(()=>{
+    setShowFooter(false)
+    setShowEmpty(false)
+    setList([])
   })
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth

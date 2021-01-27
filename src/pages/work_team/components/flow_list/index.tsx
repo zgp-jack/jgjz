@@ -1,10 +1,10 @@
-import Taro, { useEffect } from '@tarojs/taro'
+import Taro, { useEffect, useReachBottom } from '@tarojs/taro'
 import ListProvider from '@/components/list_provider'
 import useList from '@/hooks/list'
 import getFlowlists from '@/pages/work_team/team_record/api'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-import { GetWorkFlowParams } from '@/pages/work_team/record_work/index.d'
+import { GetWorkFlowParams } from '@/pages/work_team/team_record/index.d'
 import './index.scss'
 
 export default function FlowList({currentIndex=0, params='', types=[{id:'1',name:'记工天'}]}) {
@@ -22,11 +22,11 @@ export default function FlowList({currentIndex=0, params='', types=[{id:'1',name
     page: 1
   }
 
-  const { loading, increasing, list, errMsg, hasmore, setParams } = useList(getFlowlists, { ...defaultParams})
+  const { loading, increasing, list, errMsg, hasmore, setParams, setIncreasing } = useList(getFlowlists, { ...defaultParams})
   useEffect(()=>{
     setParams({ end_business_time: params, start_business_time: params},true)
   },[params])
-
+  
   return (
       <ListProvider
         increasing={increasing}
@@ -36,10 +36,10 @@ export default function FlowList({currentIndex=0, params='', types=[{id:'1',name
         length={list.length}
       >
         {(types[currentIndex].id == "1" || types[currentIndex].id == "2") &&
-          <WorkCountDay list={list.length ? list[0].list : []} type={types[currentIndex].id}></WorkCountDay>}
+          <WorkCountDay list={list.length ? list[0].list : []} type={Number(types[currentIndex].id)}></WorkCountDay>}
         {(types[currentIndex].id == "3" || types[currentIndex].id == "4" || types[currentIndex].id == "5") &&
           <WorkMoneyBorrowing list={list.length ? list[0].list : []}
-            type={types[currentIndex].id}
+            type={Number(types[currentIndex].id)}
           ></WorkMoneyBorrowing>}
       </ListProvider>
   )

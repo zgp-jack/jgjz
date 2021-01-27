@@ -12,6 +12,7 @@ import { IMGCDNURL } from "@/config/index";
 import { enterTheRecordBook } from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
+import { GetWorkFlowResult } from '@/pages/work_team/team_record/index.d'
 import { get } from "@/utils/request";
 import Login from '@/components/login/index'
 import './index.scss'
@@ -294,7 +295,7 @@ const Remember = () => {
           <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
           <View className="header-line" />
           <View className="header-switch"
-            onClick={() => Taro.navigateTo({ url: '/pages/account_book_list/index' })}>切换记工本</View>
+            onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
@@ -314,13 +315,13 @@ const Remember = () => {
                   <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                onClick={() => setShowFilter(true)}>
+                onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
                 <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
                   className="filter-icon" />筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
-              <View className="filter-info" onClick={() => setShowFilter(true)}>
+              <View className="filter-info" onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
                 <View className="filter-info-box overwords">
                   {
                     ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
@@ -472,7 +473,7 @@ const Remember = () => {
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="feedback" onClick={() => Taro.navigateTo({ url: '/pages/feedback/index' })}>
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
               <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon" />
               意见反馈
             </View>

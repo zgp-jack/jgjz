@@ -2,6 +2,8 @@ import Taro, { useEffect, useState, useDidShow, useReachBottom } from '@tarojs/t
 import { Block, Image, Picker, Text, View } from '@tarojs/components'
 import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/index/inter";
 import { getCountUrl } from "@/utils/api";
+import LoadFooter from '@/components/load_footer/index'
+import EmptyDate from '@/components/empty_data/index'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
@@ -10,15 +12,14 @@ import { IMGCDNURL } from "@/config/index";
 import { enterTheRecordBook } from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-import LoadFooter from '@/components/load_footer/index'
-import EmptyDate from '@/components/empty_data/index'
 import { get } from "@/utils/request";
+import Login from '@/components/login/index'
 import './index.scss'
 import Filter from "./filter/index";
 import { getBusiness } from './api'
 
 
-const Index = () => {
+const Remember = () => {
   /*记工类型数据*/
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
@@ -33,7 +34,7 @@ const Index = () => {
     work_time: "0",
     work_time_hour: "0",
     overtime: "0",
-    count_unit: [{ unit: null, count: 0 }],
+    count_unit: [{unit: null, count: 0}],
     work_money: "",
     borrow_count: "0.00",
     expend_count: "0.00"
@@ -134,7 +135,7 @@ const Index = () => {
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
-    let data = { ...defaultFilterData, start_business_time, end_business_time }
+    let data = {...defaultFilterData, start_business_time, end_business_time}
     setDefaultFilterData(data)
     setFilterData(data)
   }
@@ -281,7 +282,7 @@ const Index = () => {
   }
   /*是否显示筛选了哪些内容*/
   const handleShowFilterResult = () => {
-    let { is_note, business_type, group_leader, worker_id } = filterData
+    let {is_note, business_type, group_leader, worker_id} = filterData
     return (is_note == '1' || business_type.length || (group_leader as AddressBookParams[]).length || (worker_id as AddressBookParams[]).length)
   }
   return (
@@ -445,8 +446,8 @@ const Index = () => {
 
             <View className="statistics-flow">
                 <View className="bokkeeping-list">
-                {showEmpty ? <EmptyDate /> : 
-                  list.map(item => (
+                {showEmpty ? <EmptyDate /> :
+                    list.map(item => (
                       <Block key={item.date}>
                         <View className="bokkeeping-list-head">{item.date}</View>
                         <View className="bokkeeping-list-content">
@@ -464,7 +465,7 @@ const Index = () => {
                       </Block>
                     ))
                   }
-                  {!showEmpty && showFooter && <LoadFooter text='没有更多数据了~' />}
+                {!showEmpty && showFooter && <LoadFooter text='没有更多数据了~' />}
                 </View>
             </View>
           </View>
@@ -499,7 +500,8 @@ const Index = () => {
         handleSplitDate={(date) => handleSplitDate(date)}
         resetFilter={handleResetFilter}
       />
+      <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>
     </View>
   )
 }
-export default observer(Index)
+export default observer(Remember)

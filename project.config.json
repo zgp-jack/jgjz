@@ -4,7 +4,7 @@
   "description": "this is yupao bookkeeping",
   "appid": "wx2e0c4fafe2aa2e36",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "postcss": false,

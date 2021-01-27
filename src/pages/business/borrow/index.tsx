@@ -21,11 +21,6 @@ export default function BusinessBorrow() {
   const [show, setShow] = useState<boolean>(false)
   // 工友数据
   const [coworkersData, setCoworkersData] = useState<ClassifyItem>({id: '', name: ''})
-  // 分类数据
-  const [typeData, setTypeData] = useState<ClassifyItem>({
-    id: '',
-    name: ''
-  })
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
     id: '',
@@ -74,13 +69,12 @@ export default function BusinessBorrow() {
         let mydata = res.data
         setData(mydata)
         setGroupLeader({ id: mydata.group_leader || '', name: mydata.group_leader_name || '' })
-        setTypeData({id: mydata.expend_type, name: mydata.expend_type_name})
         setPostData({
           ...postData,
           expend_type: mydata.expend_type || '',
           note: mydata.note || "",
           money: mydata.money || '',
-          worker_id: mydata.worker_id
+          worker_id: mydata.worker_id || ''
         })
       } else {
         msg(res.message)
@@ -96,9 +90,9 @@ export default function BusinessBorrow() {
   }
 
   // 用户修改分类信息
-  const userChangePickerType = (data: ClassifyItem) => {
-    setTypeData(data)
-    setPostData({...postData, expend_type: data.id})
+  const userChangePickerType = (classify: ClassifyItem) => {
+    setData({ ...data, expend_type_name: classify.name, expend_type: classify.id })
+    setPostData({ ...postData, expend_type: classify.id})
   }
 
   // 用户删除流水
@@ -143,17 +137,22 @@ export default function BusinessBorrow() {
   const userClearGroupCoworkers = () => {
     setCoworkersData({id: '', name: ''})
   }
+  // 用户删除分类
+  const userClearPickerType = () => {
+    setData({ ...data, expend_type_name: '', expend_type: '' })
+    setPostData({ ...postData, expend_type: '' })
+  }
 
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
     <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => userClearLeader()} />
     <PickerType
-      value={typeData.name}
+      value={data.expend_type_name}
       show={show}
       setShow={() => {
         setShow(!show)
       }}
-      rightClose={false}
+      close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
     

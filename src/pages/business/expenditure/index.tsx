@@ -46,7 +46,6 @@ export default function BusinessExpenditure() {
     expend_type_name: '',
     expend_type: '',
     group_leader_name: '',
-    worker_id: ''
   })
 
   useEffect(() => {
@@ -76,7 +75,7 @@ export default function BusinessExpenditure() {
           note: mydata.note || "",
           money: mydata.money || '',
           group_leader: mydata.group_leader || '',
-          worker_id: mydata.worker_id
+          worker_id: mydata.worker_id || ''
         })
       } else {
         msg(res.message)

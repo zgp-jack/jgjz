@@ -57,8 +57,8 @@ export default function BusinessBorrow() {
   }, [id])
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
-    eventCenter.on(AddressBookConfirmEvent, (data) => {
-      setGroupLeader({ id: data.id, name: data.name })
+    eventCenter.on(AddressBookConfirmEvent, (leader) => {
+      setGroupLeader({ id: leader.id || '', name: leader.name || '' })
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
@@ -132,10 +132,6 @@ export default function BusinessBorrow() {
   // 用户清空班组长
   const userClearLeader = () => {
     setGroupLeader({ id: '', name: '' })
-  }
-  // 用户删除班组长
-  const userClearGroupCoworkers = () => {
-    setCoworkersData({id: '', name: ''})
   }
   // 用户删除分类
   const userClearPickerType = () => {

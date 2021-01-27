@@ -19,5 +19,9 @@ export interface WorkDayComponentProps {
   /** 数据被改变 */ 
   change: (data: WorkTimeType, type: string ) => void,
   /** 是否是选择按钮里面的值 */
-  isSelect?: boolean
+  isSelect?: boolean,
+  /** 是否有Close */
+  isClose?: boolean
+  /** 关闭加班组件 */
+  close?: () => void
 }

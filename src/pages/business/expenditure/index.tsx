@@ -57,7 +57,7 @@ export default function BusinessExpenditure() {
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
     eventCenter.on(AddressBookConfirmEvent, (leader) => {
-      setGroupLeader({ id: leader.group_leader|| '', name: leader.group_leader_name||'' })
+      setGroupLeader({ id: leader.id || '', name: leader.name ||'' })
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
@@ -68,7 +68,7 @@ export default function BusinessExpenditure() {
       if (res.code === 0) {
         let mydata = res.data
         setData({...mydata})
-        setGroupLeader({ id: mydata.group_leader, name: mydata.group_leader_name })
+        setGroupLeader({ id: mydata.group_leader || '', name: mydata.group_leader_name || '' })
         setPostData({
           ...postData,
           expend_type: mydata.expend_type || '',
@@ -128,11 +128,6 @@ export default function BusinessExpenditure() {
         msg(res.message)
       }
     })
-  }
-
-  // 用户删除班组长
-  const userClearGroupCoworkers = () => {
-    setGroupLeader({id: '', name: ''})
   }
 
   // 用户删除分类

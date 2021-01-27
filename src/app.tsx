@@ -50,7 +50,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
-      'pages/index/index', // 个人/班组记工本首页 
+      'pages/index/index', // 个人/班组记工本首页
       'pages/account_book_list/index',  //记工账本列表
       'pages/business/money/index',
       'pages/business/expenditure/index',
@@ -81,10 +81,10 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Index />
+        <Index/>
       </Provider>
     )
   }
 }
 
-Taro.render(<App />, document.getElementById('app'))
+Taro.render(<App/>, document.getElementById('app'))

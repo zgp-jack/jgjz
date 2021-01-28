@@ -2,7 +2,7 @@
  * @Author: jack_zgp
  * @Date: 2021-01-20 15:05:10
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-26 15:09:35
+ * @LastEditTime: 2021-01-27 19:02:15
  * @Description: interface for record_day
  */
 
@@ -22,8 +22,8 @@ export default interface RecordDayPostData {
   img_url?: string
   /** 上班事件 */
   work_time: string
-  /** 上班时长 */
-  work_time_hour?: string
+  /** ??? */
+  work_time_hour: string
   /** 加班时间 */
   overtime?: string
   /**班组工人id*/
@@ -42,3 +42,11 @@ export interface PropsData {
   type: number
   businessTime: string
 }
+
+export interface WorkTimeType {
+  /** 后台提交数据 */
+  value: string,
+  /** 前台展示文本 */
+  text: string
+}
+

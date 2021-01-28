@@ -36,11 +36,11 @@ export const addNoteWorkers = (params: ADD_NOTE_WORKERS_PARAMS) =>{
   return post<ADD_NOTE_WORKERS_PARAMS, []>(addNoteWorkersUrl,params)
 }
 
-/** 删除技工班中的工人-离场 */
+/** 删除记工本中的工人-离场 */
 export const deleteNoteWorkers = (params: ADD_NOTE_WORKERS_PARAMS) =>{
   return del<ADD_NOTE_WORKERS_PARAMS, []>(`${deleteNoteWorkersUrl}/${params.worker_ids}/${params.work_note}`, params)
 }
-/** 请求当前记工本 已选中的工友数据 */
+/** 请求当前记工本中的工友数据 */
 export const getNoteWorkers = (params: GET_NOTE_WORKERS_PARAMS)=>{
   return get<GET_NOTE_WORKERS_PARAMS, GET_NOTE_WORKERS_data>(`${getNoteWorkersUrl}${params.workNote}`, params)
 }

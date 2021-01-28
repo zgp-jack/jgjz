@@ -1,15 +1,15 @@
-import Taro, { useState, useRouter, useEffect, eventCenter } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
-import PickerType from '@/components/picker_type'
 import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
-import getBusinessMoneyInfo , { delBusinessMoney, editBusinessMoney} from './api'
-import PickerDetail from '@/components/picker_detail'
-import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
 import msg, { showBackModal, showActionModal } from '@/utils/msg'
 import ClassifyItem from '@/store/classify/inter.d'
 import { AddressBookConfirmEvent } from '@/config/events'
+import PickerDetail from '@/components/picker_detail'
+import getBusinessMoneyInfo , { delBusinessMoney, editBusinessMoney} from './api'
+import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
+
 import './index.scss'
 
 export default function BusinessMoney() {
@@ -61,10 +61,6 @@ export default function BusinessMoney() {
     return () => eventCenter.off(AddressBookConfirmEvent)
   },[])
 
-  // 用户清空班组长
-  const userClearLeader = () => {
-    setGroupLeader({ id: '', name: '' })
-  }
 
   // 初始化流水数据
   const userGetBusinessInfo = () => {
@@ -129,7 +125,6 @@ export default function BusinessMoney() {
 
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
-    <PickerLeader leader={groupLeader.name}  DeletePickerLeader={() => userClearLeader()}  />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">
@@ -138,3 +133,9 @@ export default function BusinessMoney() {
     </View>
   </View>)
 }
+BusinessMoney.config = {
+  navigationBarTitleText: '修改支出',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
+} as Config

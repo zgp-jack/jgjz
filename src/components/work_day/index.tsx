@@ -12,7 +12,9 @@ export default function WorkDayComponent({
   value = {value: '', text: ''},
   data = [],
   change,
-  isSelect = false
+  isSelect = false,
+  isClose = false,
+  close
 }: WorkDayComponentProps){
 
   // 是否显示picker
@@ -21,7 +23,7 @@ export default function WorkDayComponent({
   return (
     <View className={classnames({
       "person-record-worktime person-record-overtime": true,
-      "overtime-text": false
+      "overtime-text": isClose
     })}>
       <Text className="worktime-text">{title}</Text>
       {/* 前面正常显示数据 */}
@@ -34,7 +36,7 @@ export default function WorkDayComponent({
           "worktime-active": !isSelect&&(item.value == value.value)
         })} >{item.text}</View>
       ))}
-      {/* 如果没有tyep 那就使用数据源 */}
+      {/* 如果没有type 那就使用数据源 */}
       {!type&&data&&data.map(item => (
         <View
           onClick={() => change(item, 'first')}
@@ -55,10 +57,10 @@ export default function WorkDayComponent({
       >
         <Text className="worktime-select-time">{isSelect ? value.text : '0小时'}</Text>
       </View>
-
+      {isClose && <View className="overtime-icon" onClick={close}></View>}
       {show && 
       <MoreWorkTime
-        set={(data) => change(data,'end') }
+        set={(data,type) => change(data,type) }
         data={type ? workTimePickerData : data}
         value={value.value}
         hasOverBtn={(type == 'over')}

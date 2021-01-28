@@ -162,7 +162,7 @@ export default function ModifyWorkDay(){
         type='work'
       />
       <WorkDayComponent
-        title={'加班时间'}
+        title={'加班时长'}
         change={(data, type) => useChangeWorkTime(data, type, 'over')}
         value={overTime}
         isSelect={!isOver}

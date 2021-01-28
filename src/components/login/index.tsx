@@ -149,15 +149,15 @@ function Login({
             {id === passWay &&
               <View className="login-form-item">
                 <Image className="login-passlock" src={`${IMGCDNURL}gl/pass-lock.png`} ></Image>
-                <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
+                <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={!showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
                 <Text className={classnames({
-                  'login-eyes-clone': true,
-                  'login-eyes-open': !showPass
+                  'login-eyes-clone': !showPass,
+                  'login-eyes-open': showPass
                 })}
                   onClick={() => setSHowPass(!showPass)}></Text>
               </View>}
           </View>
-
+          <View className="login-tips">未注册手机验证后自动注册</View>
           <Button className="login-push-btn" onClick={() => userLoginAction()}>登录/注册</Button>
         </View>}
     </Block>

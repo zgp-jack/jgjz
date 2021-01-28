@@ -41,7 +41,12 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == 2)
+  const [personOrGroup, setPersonOrGroup] = useState(accountBookInfo.identity == 2)
+  // 监听登录情况
+  useEffect(() => {
+    setPersonOrGroup(accountBookInfo.identity == 2)
+  },[accountBookInfo.identity])
+  
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/

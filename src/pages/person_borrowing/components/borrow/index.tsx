@@ -8,6 +8,7 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
+import { PersonlHistoryGroupLeader } from '@/config/store'
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
@@ -21,6 +22,8 @@ function Borrow() {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
+  // 获取历史班组长数据
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分类组件
@@ -30,11 +33,11 @@ function Borrow() {
   // 是否显示日期组件
   const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
   // 分类数据
   const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
   // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>({
+  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {
     id: '',
     name: ''
   })
@@ -62,8 +65,10 @@ function Borrow() {
   useEffect(() => {
     // 监听到了 班组长的回调 然后设置班组长的信息
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      setGroupLeader({id: data.id, name: data.name})
+      let leader: classifyItem = { id: data.id, name: data.name }
+      setGroupLeader(leader)
       setIsPickerLeader(true)
+      Taro.setStorageSync(PersonlHistoryGroupLeader, leader)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])

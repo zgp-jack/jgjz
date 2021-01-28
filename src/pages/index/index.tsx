@@ -13,7 +13,7 @@ import { enterTheRecordBook, getTodayDate } from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team/team_record/index.d'
-import {get} from "@/utils/request";
+import { get } from "@/utils/request";
 import Login from '@/components/login/index'
 import './index.scss'
 import Filter from "./filter/index";

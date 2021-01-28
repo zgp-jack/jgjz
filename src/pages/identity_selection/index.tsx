@@ -1,4 +1,4 @@
-import Taro, { useState, useRouter } from '@tarojs/taro'
+import Taro, { useState, useRouter, Config } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
 import { INDEXPAGE } from '@/config/pages'
@@ -113,4 +113,8 @@ function IdentitySelection() {
     </View>
   )
 }
+IdentitySelection.config = {
+  navigationBarTitleText: ' '
+} as Config
+
 export default observer(IdentitySelection)

@@ -12,8 +12,10 @@ import { observer, useLocalStore } from '@tarojs/mobx'
 import User from '@/store/user';
 import AccountBookInfo from "@/store/account";
 import { UserGetCodeLoginParams, LoginProps } from './inter.d'
-import './index.scss'
 import getWorkNotes from '../../pages/account_book_list/api'
+import Versionlimit from '@/components/version_limit/index'
+import './index.scss'
+
 function Login({
   show = false,
   setShow
@@ -49,7 +51,8 @@ function Login({
     pass: '',
     type: ''
   })
-
+  /**是否是老版用户*/ 
+  const [showLogin, setShowLogin] = useState(false)
   /** 用户登录 */
   const userLoginAction = () => {
     if (!isPhone(paramsData.tel)) {
@@ -74,7 +77,6 @@ function Login({
       params.pass = paramsData.pass
     }
     userGetCodeLoginAction(params).then(res => {
-      msg(res.message)
       if (res.code == 0) {
         // 设置用户信息
         let userInfo = {
@@ -87,6 +89,9 @@ function Login({
         // 储存mobx
         setUserInfo(userInfo)
         getUserNotesList()
+        msg(res.message)
+      } else if (res.code == 203) {/**老用户跳旧版*/
+        setShowLogin(true)
       } else {
         msg(res.message)
       }
@@ -149,17 +154,20 @@ function Login({
             {id === passWay &&
               <View className="login-form-item">
                 <Image className="login-passlock" src={`${IMGCDNURL}gl/pass-lock.png`} ></Image>
-                <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
+                <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={!showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
                 <Text className={classnames({
-                  'login-eyes-clone': true,
-                  'login-eyes-open': !showPass
+                  'login-eyes-clone': !showPass,
+                  'login-eyes-open': showPass
                 })}
                   onClick={() => setSHowPass(!showPass)}></Text>
               </View>}
           </View>
-
+          <View className="login-tips">未注册手机验证后自动注册</View>
           <Button className="login-push-btn" onClick={() => userLoginAction()}>登录/注册</Button>
         </View>}
+
+        <Versionlimit show={showLogin} ></Versionlimit>
+
     </Block>
   )
 }

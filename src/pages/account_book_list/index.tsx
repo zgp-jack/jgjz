@@ -107,7 +107,7 @@ function AccountBook() {
             showTitleButton={false}
             confirmText="确认修改"
             inputGroup={[
-              {name: 'name', title: "项目名称", placeholder: '请输入项目名称', value: editData.name},
+              {name: 'name', title: "项目名称", placeholder: '请输入项目名称', value: editData.name, maxlength:20},
             ]}
             confirm={(data) => addConfirm(data)}
             cancel={addCancel}

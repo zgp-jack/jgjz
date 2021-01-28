@@ -26,13 +26,13 @@ const PromptBox = ({
   /**默认右下角按钮颜色*/ 
   confirmColor = '#0099FF',
   /**默认弹窗中输入框内容*/ 
-  inputGroup = [{name:'input',title:'标题1',placeholder:'请输入你的标题', value: ''}],
+  inputGroup = [{ name: 'input', title: '标题1', placeholder: '请输入你的标题', value: '', maxlength:20}],
   /**左下角按钮事件*/ 
   cancel,
   /**右上角按钮事件*/
   delet,
   /**右下角按钮事件*/
-  confirm,
+  confirm
 }: PromptBoxProps) => {
 
   // 初始化组件数据默认返回值
@@ -69,9 +69,9 @@ const PromptBox = ({
         {/* 弹窗中输入框内容 */}
         <View className='prompt-content'>     
           {inputGroup.map((item)=>(
-            item.title ? (<View className='input-container' key={item.name}><View className='input-title' >{item.title}</View><Input type='text' placeholder={item.placeholder} data-name={item.name} value={item.value} onInput={(e)=>enterInput(e)}></Input></View>) 
+            item.title ? (<View className='input-container' key={item.name}><View className='input-title' >{item.title}</View><Input type='text' placeholder={item.placeholder} data-name={item.name} maxLength={item.maxlength} value={item.value} onInput={(e)=>enterInput(e)}></Input></View>) 
             : 
-            <Input key={item.name} type='text' placeholder={item.placeholder} data-name={item.name} value={item.value} onInput={(e)=>enterInput(e)}></Input>
+              <Input key={item.name} type='text' placeholder={item.placeholder} maxLength={item.maxlength} data-name={item.name} value={item.value} onInput={(e)=>enterInput(e)}></Input>
           ))}
         </View>
 

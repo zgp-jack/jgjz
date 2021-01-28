@@ -89,7 +89,7 @@ function RecordWorker({ workerId, setWorkerId, workNote, startDate, type }: Reco
       item.alias = item.name.substring(item.name.length - 2)
     })
     /**为了ui显示增加空工友数据*/ 
-    let emptyObjCount = 6 - (workerData.length + 2) % 6;
+    let emptyObjCount = (workerData.length + 2) % 6 ? (6 - (workerData.length + 2) % 6) : 0;
     let emptCount: WorkerData[] = []
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})

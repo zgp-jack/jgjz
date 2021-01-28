@@ -22,9 +22,12 @@ page{
     height: 100vh;
     .record-work-item{
       top: 0;
-      padding-top: 100px;
-      height: calc(100vh - 100px) !important;
+      padding-top: 200px;
+      height: calc(100vh - 200px) !important;
       .record-work-head-date{
+        position: fixed;
+        top: 100px;
+        width: 100vw;
         height: 100px;
         display: flex;
         flex-direction: row;

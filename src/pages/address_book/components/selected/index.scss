@@ -4,6 +4,7 @@
   .selectd_left {
     flex: 1;
     overflow-x: auto;
+    overflow-y: hidden;
     display: flex;
     align-items: center;
     .selected_left_box {

@@ -11,6 +11,7 @@ import RecordAmountPostData from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
+import { PersonlHistoryGroupLeader, PersonlHistoryClassitifySubitem } from '@/config/store'
 import { getTodayDate } from '@/utils/index'
 import msg, { showBackModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
@@ -20,15 +21,19 @@ import './index.scss'
 
 
 function RecordAmoumt() {
+  // 获取历史班组长数据
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
+  // 获取历史分类数据
+  let classifySubiteminfo: classifyItem = Taro.getStorageSync(PersonlHistoryClassitifySubitem);
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
-  const [isPickerSubitem, setIsPickSubitem] = useState<boolean>(false)
+  const [isPickerSubitem, setIsPickSubitem] = useState<boolean>(!!classifySubiteminfo)
   // 是否显示日期组件
   const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
-  // 是否显示选择分类
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
+  // 是否显示选择分项
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 记工量提交数据
   const [postData, setPostData] = useState<RecordAmountPostData>({
@@ -42,12 +47,12 @@ function RecordAmoumt() {
     identity: 2,
   })
   // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>({
+  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {
     id: '',
     name: ''
   })
   // 分项数据
-  const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: '' })
+  const [typeData, setTypeData] = useState<classifyItem>(classifySubiteminfo ? classifySubiteminfo : { id: '', name: '' })
   // 日期文本显示年月日
   useEffect(() => {
     let date = postData.business_time
@@ -94,6 +99,8 @@ function RecordAmoumt() {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
+        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
+        Taro.setStorageSync(PersonlHistoryClassitifySubitem, typeData)
         showBackModal(res.message)
       } else {
         msg(res.message)
@@ -115,7 +122,7 @@ function RecordAmoumt() {
       // 关闭options弹窗
       setShowTypePicker(false)
       // 关闭 分类 选项
-      setIsPickSubitem(false)
+      typeData.id == '0' ? setIsPickSubitem(true) : setIsPickSubitem(false);
     }
   }
   // 用户关闭 日期组件
@@ -134,9 +141,10 @@ function RecordAmoumt() {
         value={typeData.name}
         close={() => setIsPickSubitem(false)}
         onOptionClose={() => userTapRightTopCloseBtn()}
-        set={(data) => { setTypeData(data);userUpdatePostData(data.id, 'unit_work_type') }}
+        set={(data) => { setTypeData(data); userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
+        isRecord = {true}
       />
     }
     {isPickerDate && <PickerDate

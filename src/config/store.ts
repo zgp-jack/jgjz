@@ -13,6 +13,10 @@ export const UserInfo: string = 'userInfo'
 export const LastJoinAccountBookInfo: string = 'lastJoinAccountBookInfo'
 // 个人历史班组长信息
 export const PersonlHistoryGroupLeader: string = 'personlHistoryGroupLeader'
+// 个人历史分项信息
+export const PersonlHistoryClassitifySubitem: string = 'personlHistoryClassitifySubitem'
+// 个人历史分类信息
+export const PersonHistoryClassitify: string = 'personHistoryClassitify'
 // 历史分类信息
 export const HistoryClassifyType: string = 'historyClassifyType'
 // 历史分项信息

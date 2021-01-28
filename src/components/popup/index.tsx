@@ -35,6 +35,9 @@ const PromptBox = ({
   confirm
 }: PromptBoxProps) => {
 
+  // 输入框最大输入长度
+  const inputMaxLength: number = 20
+
   // 初始化组件数据默认返回值
   let normal_data: InputValue = {}
   inputGroup.forEach((d) => {
@@ -69,9 +72,9 @@ const PromptBox = ({
         {/* 弹窗中输入框内容 */}
         <View className='prompt-content'>     
           {inputGroup.map((item)=>(
-            item.title ? (<View className='input-container' key={item.name}><View className='input-title' >{item.title}</View><Input type='text' placeholder={item.placeholder} data-name={item.name} maxLength={item.maxlength} value={item.value} onInput={(e)=>enterInput(e)}></Input></View>) 
+            item.title ? (<View className='input-container' key={item.name}><View className='input-title' >{item.title}</View><Input type='text' placeholder={item.placeholder} data-name={item.name} maxLength={item.maxlength || inputMaxLength} value={item.value} onInput={(e)=>enterInput(e)}></Input></View>) 
             : 
-              <Input key={item.name} type='text' placeholder={item.placeholder} maxLength={item.maxlength} data-name={item.name} value={item.value} onInput={(e)=>enterInput(e)}></Input>
+              <Input key={item.name} type='text' placeholder={item.placeholder} maxLength={item.maxlength || inputMaxLength} data-name={item.name} value={item.value} onInput={(e)=>enterInput(e)}></Input>
           ))}
         </View>
 

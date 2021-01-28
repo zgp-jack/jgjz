@@ -22,7 +22,7 @@ export default function WorkDayComponent({
 
   return (
     <View className={classnames({
-      "person-record-worktime person-record-overtime": true,
+      "person-record-worktime person-record-overtime clearfix": true,
       "overtime-text": isClose
     })}>
       <Text className="worktime-text">{title}</Text>
@@ -54,8 +54,8 @@ export default function WorkDayComponent({
         "worktime-active": isSelect
       })} 
       onClick={() => setShow(true)}
-      >
-        <Text className="worktime-select-time">{isSelect ? value.text : '0小时'}</Text>
+      >{isSelect ? value.text : '0小时'}
+        <Text className="worktime-select-time"></Text>
       </View>
       {isClose && <View className="overtime-icon" onClick={close}></View>}
       {show && 

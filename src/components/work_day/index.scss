@@ -1,46 +1,53 @@
+@import '@/styles/common.scss';
+
 .person-record-worktime{
-    display: flex;
-    align-items: center;
+    position: relative;
     margin-top: 40px; 
     .worktime-text{
-        font-weight: 600;
-        font-size: 30px;
-        color: #666666;
-        margin-right: 26px;
+      position: relative;
+      float: left;
+      font-weight: 600;
+      font-size: 30px;
+      color: #666666;
+      margin-right: 26px;
+      line-height: 60px;
     }
     .worktime{
-        width: 120px;
-        margin-right: 18px;
-        color: #808080;
-        font-size: 26px;
-        line-height: 60px;
-        text-align: center;
-        background-color: #EDEDED;
-        border-radius: 6px;
+      position: relative;
+      float: left;
+      width: 130px;
+      margin-right: 10px;
+      color: #808080;
+      font-size: 26px;
+      line-height: 60px;
+      text-align: center;
+      background-color: #EDEDED;
+      border-radius: 6px;
     }
     .worktime-active{
         color: #FFFFFF;
         background-color: #0099FF;
     }
     .worktime-select{
+      position: relative;
       min-width: 120px;
       width: auto;
       max-width: 140px;
     }
     .worktime-select-time{
-        margin-right: 20px;
         position: relative;
+        padding-right: 16px;
     }
     .worktime-select-time::before{
-        content: '';
-        width: 0;
-        height: 0;
-        border: 8px solid transparent;
-        border-bottom: 8px solid #666666;
-        position: absolute;
-        bottom: 50%;
-        right: -20px;
-        margin-top: 4px;
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+      border-bottom: 8px solid #666666;
+      bottom: 50%;
+      right: 0;
+      margin-top: 4px;
     }
     .worktime-select-time::after{
         content: '';
@@ -51,7 +58,7 @@
         border-top: 8px solid #666666;
         position: absolute;
         top: 50%;
-        right: -20px;
+        right: 0;
     }
     .worktime-active .worktime-select-time::before{
         border-bottom-color: #fff;

@@ -135,7 +135,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
               <View className="filter-date">
                 <View className="filter-date-label">开始时间</View>
                 <View>
-                  <Picker mode='date' onChange={onStartDate} end={getTodayDate()}
+                  <Picker mode='date' onChange={onStartDate} end={filterData.end_business_time}
                           value={filterData.start_business_time}>
                     <View className='filter-picker-value'>
                       <View>{props.handleSplitDate(filterData.start_business_time)}</View>

@@ -1,7 +1,8 @@
-import Taro, {useDidShow, useEffect, useState} from '@tarojs/taro'
+import Taro, {useDidShow, useEffect, useState, eventCenter} from '@tarojs/taro'
 import {View, Text, Image} from '@tarojs/components'
 import useInit from '@/hooks/init'
-import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_GROUP_DEL } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_LEAVE } from '@/config/index'
+import { AddressBookConfirmEvent } from '@/config/events'
 import PromptBox from '@/components/popup/index'
 import { editWordkerInfo } from '@/pages/address_book/api'
 import msg from '@/utils/msg'
@@ -36,16 +37,30 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
   });
   /** 是否第一次显示 */
   const [firstShow, setFirstShow] = useState<boolean>(false)
-
+  /** 点击添加工友选择的工友数据id */ 
+  const [addWorker, setAddWorker] = useState<number[]>([])
   /**定时器*/
   let timeOutEvent = 0
 
+  // 注册全局事件 监听是否切换班组长信息
+  useEffect(() => {
+    eventCenter.on(AddressBookConfirmEvent, (workerdata) => {
+      setAddWorker(workerdata)
+    })
+    return () => eventCenter.off(AddressBookConfirmEvent)
+  }, [])
+
+  /** 如果更换了时间重新请求 */ 
   useEffect(() => {
     setLoading(true)
   }, [startDate])
-
+  
+  /** 处理账本工友数据 */ 
   useEffect(() => {
     if (!data || !data.business_worker_id) return
+    /** 从工友录添加工友和点击添加前选择的工友 */
+    let allWorkerData = [...workerId, ...addWorker];
+    /** 已记录工友数据 */ 
     let businessWorker = JSON.parse(JSON.stringify(data.business_worker_id));
     let workerData = JSON.parse(JSON.stringify(data.note_worker));
     workerData.forEach((item: any) => {
@@ -56,22 +71,28 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
           }
         }
       })
-      /**处理工友数据是自己*/
+      /** 从已经选择的工友中查找是否存在 */ 
+      let findIndex = allWorkerData.findIndex((obj: any) => item.id == obj )
+      /** 如果存在，将工友标记为选中 */ 
+      if(findIndex !== -1) item.check = true;
+      /**处理工友数据是自己*/ 
       if (item.is_self) {
         item.name = item.name + "自己"
       }
       /**截取工友名字后两个字*/
       item.alias = item.name.substring(item.name.length - 2)
     })
-    /**为了ui显示增加空工友数据*/
-    let emptyObjCount = 6 - (workerData.length + 2) % 6;
+    /**为了ui显示增加空工友数据*/ 
+    let emptyObjCount = (workerData.length + 2) % 6 ? (6 - (workerData.length + 2) % 6) : 0;
     let emptCount: WorkerData[] = []
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
     }
+    setWorkerId(allWorkerData)
     setWorker(workerData);
     setEmptyCount(emptCount)
-  },[data])
+  }, [data])
+  
 
   useDidShow(()=>{
     if(firstShow){
@@ -79,6 +100,8 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
     }
     setFirstShow(true)
   })
+
+
   /**
   * @name: chooseWorker
   * @params index 选中工友列表对应下标
@@ -200,8 +223,8 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
     /**定时器*/
     let timeOver = setTimeout(function(){
       longPress(index)
-    }, 1000);
-    /**保存定时器*/
+    }, 800);
+    /**保存定时器*/ 
     timeOutEvent = Number(timeOver)
   }
 
@@ -310,7 +333,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
           <Text className='record-work-person-text'>添加</Text>
         </View>
         {/* 删除工友 */}
-        <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?type=leave' })}>
+        <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?type=${ADDRESSBOOKTYPE_LEAVE}` })}>
           <View className='record-work-person-box'><Image
             src={`${IMGCDNURL}yc/del.png`}
             mode='widthFix'

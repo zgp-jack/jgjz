@@ -1,13 +1,12 @@
 import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerDetail from '@/components/picker_detail'
-import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem, WorkTimeType } from './inter.d'
 import msg, { showActionModal, showBackModal } from '@/utils/msg'
 import { AddressBookConfirmEvent } from '@/config/events'
 import WorkDayComponent from '@/components/work_day'
 import getBorrowInfo, { delBorrowBusiness, editBorrowBusiness } from './api'
+import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem, WorkTimeType } from './inter.d'
 import './index.scss'
 
 export default function ModifyWorkDay(){
@@ -84,6 +83,8 @@ export default function ModifyWorkDay(){
         } else if (mydata.work_time_hour){
           setWorkTime({ value: mydata.work_time_hour, text: `${mydata.work_time_hour}小时` })
           setIsWork(false)
+        }else{
+          setWorkTime({ value: '0', text: '休息' })
         }
         if(mydata.overtime){
           setOverTime({ value: mydata.overtime, text: `${mydata.overtime}小时`})
@@ -136,11 +137,6 @@ export default function ModifyWorkDay(){
     postdata[type] = val
     setPostData(postdata)
   }
-
-  // 用户清空班组长
-  const userClearLeader =() => {
-    setGroupLeader({id: '', name: ''})
-  }
   // 改变加班/上班 值
   const useChangeWorkTime = (data, type: string, typeValue?: string) => {
     if (typeValue == 'work') {
@@ -160,14 +156,13 @@ export default function ModifyWorkDay(){
         type='work'
       />
       <WorkDayComponent
-        title={'加班时间'}
+        title={'加班时长'}
         change={(data, type) => useChangeWorkTime(data, type, 'over')}
         value={overTime}
         isSelect={!isOver}
         type='over'
       />
     </View>
-    <PickerLeader leader={groupLeader.name}  DeletePickerLeader={()=>userClearLeader()} />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <PickerDetail
       dateValue={data.busienss_time_string}
@@ -181,5 +176,8 @@ export default function ModifyWorkDay(){
   </View>)
 }
 ModifyWorkDay.config = {
-  navigationBarTitleText: '修改工天'
+  navigationBarTitleText: '修改工天',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
 } as Config

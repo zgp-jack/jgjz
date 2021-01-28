@@ -1,66 +1,75 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import WorkTime from '@/components/work_day'
 import PickerMark from '@/components/picker_mark/index'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
+import { AddressBookConfirmEvent } from '@/config/events'
 import msg, { showBackModal } from '@/utils/msg'
-import RecordDayPostData, { PropsData } from './inter.d'
-import { worktime, overtime } from './config'
+import { getTodayDate } from '@/utils/index'
+import classifyItem from '@/store/classify/inter.d'
+import WorkDayComponent from '@/components/work_day'
 import userAddRecordAction from '../api'
+import RecordDayPostData, { WorkTimeType, PropsData } from './inter.d'
+
 import './index.scss'
 
-function RecordDay({ workerId, type, businessTime }:PropsData) {
-  // 从mobx获取记工本数据
+function RecordDay({ workerId, type, businessTime }: PropsData) {
+  // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
-  // 当前账本数据
   const { accountBookInfo } = localStore
-  // 是否显示加班组件
-  const [isPickerOverTime, setIsPickerOverTime] = useState<boolean>(false)
-  // /** 是否上传照片 */
-  // const [isImageUpload, setIsImageUpload] = useState<boolean>(false)
-  // /** 是否显示图片上传icon */
-  // const [showIcon, setShowIcon] = useState<boolean>(true) 
+  // 记工天 是否选中上班更多
+  const [isWrok, setIsWork] = useState<boolean>(true)
+  // 是否选中加班更多
+  const [isOver, setIsOver] = useState<boolean>(true)
+  // 上班时长的数据
+  const [workTime, setWorkTime] = useState<WorkTimeType>({value: '1', text: '一个工'})
+  // 加班时长的数据
+  const [overTime, setOverTime] = useState<WorkTimeType>({ value: '0', text: '无加班' })
+  // 是否显示加班时间
+  const [isOverTime, setIsOverTime] = useState<boolean>(false);
+  // 时间年月日
+  const [dateText, setDateText] = useState<string>('')
+  // 是否日期组件
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
+  // 是否显示班组长组件
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 记工天提交数据
   const [postData, setPostData] = useState<RecordDayPostData>({
-    /** 记工类型 1 记工天 2记工量 3 记工钱 */ 
     business_type: type,
-    /** 记工时间 */
     business_time: businessTime,
-    /** 备注 */ 
     note: '',
-    /** 账本类型 1 班组 2 个人*/ 
-    identity: Number(accountBookInfo.identity),
-    /** 上班记工数 */ 
+    identity: accountBookInfo.identity,
     work_time: '1',
-    /** 上班小时数 */
     work_time_hour: '0',
-    /** 加班时长 */ 
     overtime: '',
-    /** 记工工友id字符串 */ 
     worker_id: workerId,
-    /** 上传图片url */ 
-    img_url:'',
-    /** 账本id */ 
     work_note: accountBookInfo.id
   })
 
+  // 日期文本显示年月日
+  useEffect(() => {
+    let date = postData.business_time
+    let dateArr: string[] = date.split('-')
+    let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
+    setDateText(dataStr)
+  }, [postData.business_time])
+
+
   // 用户更新数据
-  const userUpdatePostData = (val: string, type: string,value?:string,typeString?:string) => {
+  const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }
     postdata[type] = val
-    typeString && (postdata[typeString] = value);
     setPostData(postdata)
   }
  
   // 提交借支数据
   const userPostAcion = () => {
     let params: RecordDayPostData = {
-      business_type: type || 1,
-      identity: Number(accountBookInfo.identity),
-      work_time: postData.work_time,
-      work_time_hour: postData.work_time_hour,
-      overtime: isPickerOverTime ? postData.overtime:'',
+      business_type: type,
+      identity: accountBookInfo.identity,
+      work_time: isWrok ? workTime.value : '',
+      work_time_hour: !isWrok ? workTime.value : '',
+      overtime: (!isOver && isOverTime) ? overTime.value : '',
       business_time: postData.business_time,
       note: postData.note,
       work_note: accountBookInfo.id,
@@ -74,47 +83,41 @@ function RecordDay({ workerId, type, businessTime }:PropsData) {
       }
     })
   }
-  // 设置获取值 加班/上班
-  const setTime = (item:number,isClose:boolean) => {
-    if (isClose) {
-      let arr = ['1','0.5','0']
-      userUpdatePostData(arr[item], 'work_time', '0', 'work_time_hour')
-    } else {
-      userUpdatePostData('0', 'overtime')
+  // 改变加班/上班 值
+  const useChangeWorkTime = (data,type:string,typeValue?:string) => {
+    if (typeValue == 'work'){
+      setWorkTime(data)
+      setIsWork(type === 'first' ? true : false)
+    }else{
+      setOverTime(data)
+      setIsOver(type === 'first' ? true : false)
     }
   }
-  // 设置更多值 加班/上班
-  const setMoreTime = (item:string,isClose:boolean) => {
-    if (isClose) {
-      userUpdatePostData(item, 'work_time_hour', '0', 'work_time');
-    } else {
-      userUpdatePostData(item, 'overtime')
-    }
-  }
-
   return (<View>
-    <View className='person-record-time'>
-      {/* 上班时长组件 */}
-      <WorkTime set={(id) => setTime(id, true)} setTime={(value) => setMoreTime(value,true)} worktime={worktime} />
-      
-      {/* 加班时长 */}
-      {isPickerOverTime && <WorkTime 
-        close={() => setIsPickerOverTime(false)} 
-        setTime={(value) => setMoreTime(value, false)} 
-        set={(value) => setTime(value,false)} 
-        worktime={overtime} 
-        isClose={false}
+    <View className="person-record-time">
+      <WorkDayComponent 
+        change={(data,type) => useChangeWorkTime(data,type,'work')}
+        value={workTime}
+        isSelect={!isWrok}
+        type='work'
       />
-      }
+      {isOverTime && <WorkDayComponent
+        title = {'加班时间'}
+        change={(data, type) => useChangeWorkTime(data, type,'over')}
+        value={overTime}
+        isSelect={!isOver}
+        type='over'
+        isClose = {true}
+        close={() => setIsOverTime(false)}
+      />}
     </View>
-    {/* 备注组件 */}
-    <PickerMark text={postData.note as string} set={(val) => userUpdatePostData(val, 'note')} />
-    <View className='person-record-component'>
-      {/*  加班时长  */}
-      {!isPickerOverTime && <View className='person-record-component-item' onClick={() => setIsPickerOverTime(true)}>加班时长</View>}
+    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
+    <View className="person-record-component">
+      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+      {!isOverTime && <View className="person-record-component-item" onClick={() => setIsOverTime(true)}>加班时长</View>}
     </View>
-    <View className='person-record-btn'>
-      <Button className='person-record-save' onClick={userPostAcion} >确认记工</Button>
+    <View className="person-record-btn">
+      <Button className="person-record-save" onClick={userPostAcion} >确认记工</Button>
     </View>
   </View>)
 }

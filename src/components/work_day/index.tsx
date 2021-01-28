@@ -60,7 +60,7 @@ export default function WorkDayComponent({
       {isClose && <View className="overtime-icon" onClick={close}></View>}
       {show && 
       <MoreWorkTime
-        set={(data) => change(data,'end') }
+        set={(data,type) => change(data,type) }
         data={type ? workTimePickerData : data}
         value={value.value}
         hasOverBtn={(type == 'over')}

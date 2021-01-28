@@ -26,11 +26,6 @@ export default function BusinessAmount() {
   const [selectedUnit, setSelectedUnit] = useState<number>(0)
   // 是否显示分项数据
   const [show, setShow] = useState<boolean>(false)
-  // 分项数据
-  const [typeData, setTypeData] = useState<ClassifyItem>({
-    id: '',
-    name: ''
-  })
   // 提交工量数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -78,12 +73,11 @@ export default function BusinessAmount() {
     getBorrowInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
-        setSelectedUnit(Number(mydata.unit))
+        setSelectedUnit(Number(mydata.unit)-1)
         setData({
           ...mydata,
           unit_num: mydata.unit_num || ''
         })
-        setTypeData({ id: mydata.unit_work_type, name: mydata.unit_work_type_name })
         setGroupLeader({ id: mydata.group_leader || '', name: mydata.group_leader_name || ''})
         setPostData({
           ...postData,
@@ -99,15 +93,9 @@ export default function BusinessAmount() {
     })
   }
   // 用户修改分类信息
-  const userChangePickerType = (data: ClassifyItem) => {
-    setTypeData(data)
-    setPostData({ ...postData, unit_work_type: data.id })
-  }
-
-  // 用户清除 分项信息
-  const userClearSubitemType = () => {
-    setTypeData({id: '', name: ''})
-    setPostData({ ...postData, unit_work_type: ''})
+  const userChangePickerType = (classify: ClassifyItem) => {
+    setData({ ...data, unit_work_type: classify.id, unit_work_type_name: classify.name })
+    setPostData({ ...postData, unit_work_type: classify.id })
   }
 
   // 用户删除流水
@@ -147,17 +135,21 @@ export default function BusinessAmount() {
   const DeletePickerLeader = () => {
     setGroupLeader({id: '', name: ''})
   }
+  // 用户删除分类
+  const userClearPickerType = () => {
+    setData({ ...data, unit_work_type: '', unit_work_type_name: '' })
+    setPostData({ ...postData, unit_work_type: '' })
+  }
   return (<View>
     <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
     <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
-      value={typeData.name}
+      value={data.unit_work_type_name}
       show={show}
       setShow={() => { setShow(!show) }}
       set={(data) => userChangePickerType(data)}
-      rightClose={false}
+      close={() => userClearPickerType()}
     />
-    <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => DeletePickerLeader()} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">
@@ -168,5 +160,8 @@ export default function BusinessAmount() {
 }
 
 BusinessAmount.config = {
-  navigationBarTitleText: '修改工量'
+  navigationBarTitleText: '修改工量',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
 } as Config

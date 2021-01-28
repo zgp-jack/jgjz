@@ -1,6 +1,6 @@
 @import '@/styles/common.scss';
 
-page{
+page {
   background-color: #F6F6F6;
 }
 
@@ -58,11 +58,17 @@ page{
         display: flex;
         flex-direction: column;
         margin-left: 23px;
+        width: 450rpx;
 
         .name {
           font-size: 28px;
           color: #000;
           font-weight: 500;
+          text-overflow: ellipsis;
+          will-change: auto;
+          white-space: nowrap;
+          width: 100%;
+          overflow: hidden;
         }
 
         .tel {
@@ -71,6 +77,7 @@ page{
         }
       }
     }
+
     .leave,
     .del {
       font-size: 24rpx;
@@ -78,6 +85,7 @@ page{
     }
 
     .setting {
+      width: 50rpx;
       .setting_img {
         width: 26px;
         height: 26px;
@@ -85,11 +93,13 @@ page{
     }
   }
 }
-.list_content-alone{
+
+.list_content-alone {
   bottom: 0px;
   top: 190px;
 }
-.list_content_filter{
+
+.list_content_filter {
   z-index: 50;
   background-color: #F6F6F6;
 }
@@ -131,20 +141,24 @@ page{
   bottom: 0;
   left: 0;
   @include shadow();
+
   .bottom_all_box {
     flex: 1;
     display: flex;
     align-items: center;
+
     .bottom_all_img {
       width: 36px;
       height: 36px;
       margin-right: 20px;
     }
-    .bottom_all_text{
+
+    .bottom_all_text {
       font-size: 30px;
       color: #3b3b3b;
     }
   }
+
   .button {
     width: 556px;
     height: 86px;

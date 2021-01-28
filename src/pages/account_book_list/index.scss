@@ -4,8 +4,9 @@ page {
   background-color: #f7f6f9;
 }
 .account-right-icon {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
+  margin-left: 10px;
 }
 .account-gong-icon {
   width: 50px;
@@ -105,10 +106,12 @@ page {
           display: block;
           white-space: nowrap;
           word-break: break-all; 
+          font-weight: 500;
         }
         .account-book-edit {
           color: #a7a7a7;
-          font-size: 28px;
+          font-size: 30px;
+          @include flex();
         }
       }
     }

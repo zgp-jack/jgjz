@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, Config } from '@tarojs/taro'
 import { View, Text, Textarea, Button } from '@tarojs/components'
 import FeedbackData from './inter.d'
 import Star from  './components/star'
@@ -7,9 +7,10 @@ import starConfig from './components/star/config'
 import msg, { showBackModal } from '@/utils/msg'
 import userGetFeedbackAction from './api'
 import { copyWechat, callPhone } from '@/utils/index'
+import { observer } from '@tarojs/mobx'
 import './index.scss'
 
-export default function Feedback() {
+function Feedback() {
   // 微信号
   const [wechat, setWechat] = useState<string>('1535434634')
   // 提交表单数据
@@ -69,7 +70,7 @@ export default function Feedback() {
 
           <View className="feedback-item">
             <View className="feedback-item-title">请留下你的意见或建议</View>
-            <Textarea className="feedback-content-textarea" placeholder="如果反馈意见被采纳，平台将赠送您2~10个鱼泡网积分" value={postData.note} onInput={e => handleTextarea(e)} />
+            <Textarea className="feedback-content-textarea" maxlength={400} placeholder="如果反馈意见被采纳，平台将赠送您2~10个鱼泡网积分" value={postData.note} onInput={e => handleTextarea(e)} />
             <View className="feedback-item-title">上传图片</View>
             <View className="feedback-upimages-box">
               <UploadImg onUpload={userChangeImgs} />
@@ -82,3 +83,8 @@ export default function Feedback() {
       </View>
   )
 }
+Feedback.config = {
+  navigationBarTitleText: '意见反馈'
+} as Config
+
+export default observer(Feedback)

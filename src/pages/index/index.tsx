@@ -1,15 +1,15 @@
-import Taro, {useEffect, useState, useDidShow, useReachBottom} from '@tarojs/taro'
-import {Block, Image, Picker, Text, View} from '@tarojs/components'
-import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/index/inter";
-import {getCountUrl} from "@/utils/api";
+import Taro, { useEffect, useState, useDidShow, useReachBottom, useDidHide } from '@tarojs/taro'
+import { Block, Image, Picker, Text, View } from '@tarojs/components'
+import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/index/inter";
+import { getCountUrl } from "@/utils/api";
 import LoadFooter from '@/components/load_footer/index'
 import EmptyDate from '@/components/empty_data/index'
-import {observer, useLocalStore} from '@tarojs/mobx'
+import { observer, useLocalStore } from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
-import {IMGCDNURL} from "@/config/index";
-import {enterTheRecordBook, getTodayDate} from '@/utils/index'
+import { IMGCDNURL } from "@/config/index";
+import { enterTheRecordBook, getTodayDate } from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team/team_record/index.d'
@@ -25,11 +25,11 @@ const Remember = () => {
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const _user = useLocalStore(() => User)
-  const {businessType} = rememberStore
-  const {user} = _user
-  const {accountBookInfo} = _accountBookInfo
-  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
-  Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
+  const { businessType } = rememberStore
+  const { user } = _user
+  const { accountBookInfo } = _accountBookInfo
+  Taro.setNavigationBarTitle({ title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本' })
+  Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
   /*统计数据*/
   const [counts, setCounts] = useState({
     work_time: "0",
@@ -41,7 +41,12 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == 2)
+  const [personOrGroup, setPersonOrGroup] = useState(accountBookInfo.identity == 2)
+  // 监听登录情况
+  useEffect(() => {
+    setPersonOrGroup(accountBookInfo.identity == 2)
+  },[accountBookInfo.identity])
+  
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -89,7 +94,7 @@ const Remember = () => {
       worker_id: handleAddressBookParams(filterData.worker_id)
     }
   }
-
+  // const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
   /*当前年份与月份*/
   const [currentYearMonth, setCurrentYearMonth] = useState('')
   /*筛选年份*/
@@ -100,16 +105,18 @@ const Remember = () => {
   const [isFilter, setIsFilter] = useState(false)//是否筛选了
   const [showLogin, setShowLogin] = useState(false)
   const [list, setList] = useState<GetWorkFlowResult[]>([])
-
   /*当前选中日期的下一个日期*/
   const [nextYearMonth, setNextYearMonth] = useState('')
+  /*是否重新请求流水列表*/
+  const [reloadList, setReloadList] = useState(false)
   /*获取统计数据*/
   useEffect(() => {
     if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
+    console.log("1111111111111111111")
     const params = actionParams()
     initFlowList(params)
     initData(params)
-  }, [filterData])
+  }, [filterData, user, accountBookInfo])
 
   /*根据筛选日期初始化请求参数*/
   useEffect(() => {
@@ -118,11 +125,12 @@ const Remember = () => {
 
   // 滑动触底事件
   useReachBottom(() => {
-    let paramsData = {...filterData}
+    let paramsData = { ...filterData }
+    if (showFooter || showEmpty || !list.length) return
     paramsData.page = paramsData.page + 1;
-    if (showFooter || showEmpty) return
     setFilterData(paramsData)
   })
+
   const handIsLogin = () => {/*是否登录*/
     if (!user.login) {
       setShowLogin(true)
@@ -130,6 +138,20 @@ const Remember = () => {
     }
     return true
   }
+  useDidShow(() => {
+    let params = { ...filterData }
+    params.page = 1;
+    setReloadList(true)
+    if (reloadList) {
+      if (!user.login) return
+      setFilterData(params)
+    }
+  })
+  useDidHide(()=>{
+    setShowFooter(false)
+    setShowEmpty(false)
+    setList([])
+  })
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -305,7 +327,7 @@ const Remember = () => {
           <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
           <View className="header-line"/>
           <View className="header-switch"
-                onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
+            onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
@@ -326,23 +348,19 @@ const Remember = () => {
                   <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                    onClick={() => {
-                      !handIsLogin() ? handIsLogin() : setShowFilter(true)
-                    }}>
+                onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
                 <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
-                       className="filter-icon"/>筛选
+                  className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
-            <View className="filter-info" onClick={() => {
-              !handIsLogin() ? handIsLogin() : setShowFilter(true)
-            }}>
-              <View className="filter-info-box overwords">
-                {
-                  ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
-                  <Text>
-                    共<Text
-                    className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
+              <View className="filter-info" onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
+                <View className="filter-info-box overwords">
+                  {
+                    ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
+                    <Text>
+                      共<Text
+                        className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
                   </Text>
                 }
                 {
@@ -373,8 +391,7 @@ const Remember = () => {
               <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
             </View>}
             {/*记工统计*/}
-            <View className="statistics">
-              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记工统计</View>}
+            <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -432,7 +449,7 @@ const Remember = () => {
 
             {/*记账统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记账统计</View>}
+              {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
@@ -459,30 +476,29 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-
             <View className="statistics-flow">
-              <View className="bokkeeping-list">
-                {showEmpty ? <EmptyDate/> :
-                  list.map(item => (
-                    <Block key={item.date}>
-                      <View className="bokkeeping-list-head">{item.date}</View>
-                      <View className="bokkeeping-list-content">
-                        {item.list.map(p => (
-                          <Block key={p.id}>
-                            {/* 如果是记工天 记工量 */}
-                            {(p.business_type == 1 || p.business_type == 2) &&
-                            <WorkCountDay list={[p]} type={p.business_type}/>}
-                            {/* 如果是 记工钱、 借支、 支出 */}
-                            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                            <WorkMoneyBorrowing list={[p]} type={p.business_type}/>}
-                          </Block>
-                        ))}
-                      </View>
-                    </Block>
-                  ))
-                }
-                {!showEmpty && showFooter && <LoadFooter text='没有更多数据了~'/>}
-              </View>
+                <View className="bokkeeping-list">
+                {showEmpty ? <EmptyDate /> :
+                    list.map(item => (
+                      <Block key={item.date}>
+                        <View className="bokkeeping-list-head">{item.date}</View>
+                        <View className="bokkeeping-list-content">
+                          {item.list.map(p => (
+                            <Block key={p.id}>
+                              {/* 如果是记工天 记工量 */}
+                              {(p.business_type == 1 || p.business_type == 2) &&
+                                <WorkCountDay list={[p]} type={p.business_type} />}
+                              {/* 如果是 记工钱、 借支、 支出 */}
+                              {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                                <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                            </Block>
+                          ))}
+                        </View>
+                      </Block>
+                    ))
+                  }
+                {!showEmpty && showFooter && <LoadFooter text='没有更多数据了~' />}
+                </View>
             </View>
           </View>
         </View>

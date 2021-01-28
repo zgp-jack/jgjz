@@ -1,5 +1,5 @@
 import { View, Input } from '@tarojs/components'
-import Taro, { useEffect, useState } from '@tarojs/taro'
+import Taro, { eventCenter, useEffect, useState } from '@tarojs/taro'
 import {PromptBoxProps, InputValue} from './index.d'
 import './index.scss'
 
@@ -26,13 +26,13 @@ const PromptBox = ({
   /**默认右下角按钮颜色*/ 
   confirmColor = '#0099FF',
   /**默认弹窗中输入框内容*/ 
-  inputGroup = [{name:'input',title:'标题1',placeholder:'请输入你的标题', value: ''}],
+  inputGroup = [{ name: 'input', title: '标题1', placeholder: '请输入你的标题', value: '', maxlength: 20, disabled:false}],
   /**左下角按钮事件*/ 
   cancel,
   /**右上角按钮事件*/
   delet,
   /**右下角按钮事件*/
-  confirm,
+  confirm
 }: PromptBoxProps) => {
 
   // 初始化组件数据默认返回值
@@ -43,7 +43,7 @@ const PromptBox = ({
 
   //输入框输入的数据
   const [data, setData] = useState<InputValue>(normal_data)
-
+  
   /**
    * @name: enterInput
    * @params e: 输入事件对象 
@@ -52,13 +52,22 @@ const PromptBox = ({
   */
   const enterInput = (e: any)=>{
     //获取输入数据，并根据输入框name分别保存
-    data[e.target.dataset.name] = e.detail.value
+    data[e.target.dataset.name] = e.detail.value.replace(/\s+/g, "")
     // 保存到data中
     setData({...data})
   }
+  const [focusStyle, setFocusStyle] = useState<boolean>(false)
+  // 获取焦点时 让弹窗往上移动 避免键盘遮挡输入框
+  const inputFocus =()=>{
+    setFocusStyle(true)
+  }
+  // 失去焦点 弹窗还原位
+  const inputBlur =()=>{
+    setFocusStyle(false)
+  }
 
   return (
-    <View className='prompt-container'>
+    <View className='prompt-container' style={{ paddingBottom: focusStyle ? "400rpx":"0"}}>
       <View className='prompt-box' >
         {/* 弹窗头部标题与按钮事件 */}
 
@@ -69,9 +78,9 @@ const PromptBox = ({
         {/* 弹窗中输入框内容 */}
         <View className='prompt-content'>     
           {inputGroup.map((item)=>(
-            item.title ? (<View className='input-container' key={item.name}><View className='input-title' >{item.title}</View><Input type='text' placeholder={item.placeholder} data-name={item.name} value={item.value} onInput={(e)=>enterInput(e)}></Input></View>) 
+            item.title ? (<View className='input-container' style={{ color: (item.disabled) ? "#a7a7a7" : "" }} key={item.name}><View className='input-title' >{item.title}</View><Input type='text' id={item.name} placeholder={item.placeholder} disabled={item.disabled ? item.disabled : false} data-name={item.name} maxLength={item.maxlength} onFocus={inputFocus} onBlur={inputBlur} focus={item.name == 'name'? true:false} value={item.value} onInput={(e)=>enterInput(e)}></Input></View>) 
             : 
-            <Input key={item.name} type='text' placeholder={item.placeholder} data-name={item.name} value={item.value} onInput={(e)=>enterInput(e)}></Input>
+              <Input key={item.name} type='text' placeholder={item.placeholder} disabled={item.disabled} maxLength={item.maxlength} data-name={item.name} value={item.value} onInput={(e) => enterInput(e)} onFocus={inputFocus} onBlur={inputBlur}></Input>
           ))}
         </View>
 

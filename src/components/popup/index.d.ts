@@ -16,6 +16,10 @@ interface InputItem {
   name: string
   /**输入框默认value值*/
   value: string
+  /**s输入最大*/
+  maxlength?: number,
+  /** 是否禁用输入 */
+  disabled?: boolean
 }
 
 //定义弹窗传递的props

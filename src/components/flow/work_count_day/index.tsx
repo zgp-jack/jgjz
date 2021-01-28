@@ -5,7 +5,7 @@ import { PropsData } from './index.d'
 import './index.scss'
 
 export default function WorkCountDay({list = [], type = 1}: PropsData) {
-
+    
   /**
    * @name: goDetail
    * @params id:流水信息id  action: 当前流水类型 1: 记工天 2: 记工量
@@ -15,9 +15,9 @@ export default function WorkCountDay({list = [], type = 1}: PropsData) {
   const goDetail = (id: number, action: number) => {
     let url: string = ''
     if(action === 1){
-      url = `/pages/business/workday/index?id=${id}`
+      url = `/pages/work_team_business/workday/index?id=${id}`
     }else{
-      url = `/pages/business/amount/index?id=${id}`
+      url = `/pages/work_team_business/amount/index?id=${id}`
     }
     Taro.navigateTo({ url })
   }
@@ -34,7 +34,7 @@ export default function WorkCountDay({list = [], type = 1}: PropsData) {
             </View>
             <View className='bokkeeping-list-right'>
               <View className='bokkeeping-list-count'>
-                {type == 2 ? <View>{item.unit_num + item.unit}</View> : <View>上班：{item.work_time}个工</View>}
+                {type == 2 ? <View>{item.unit_num + item.unit}</View> : <View>上班：{item.work_time || item.work_time_hour}个工</View>}
                 {item.overtime && <View>加班：{item.overtime}小时</View>}
               </View>
               <Image src={`${IMGCDNURL}common/arrow-right.png`}></Image>

@@ -386,8 +386,7 @@ const Remember = () => {
               <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
             </View>}
             {/*记工统计*/}
-            <View className="statistics">
-              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记工统计</View>}
+            <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -445,7 +444,7 @@ const Remember = () => {
 
             {/*记账统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记账统计</View>}
+              {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
@@ -472,7 +471,6 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-
             <View className="statistics-flow">
                 <View className="bokkeeping-list">
                 {showEmpty ? <EmptyDate /> :

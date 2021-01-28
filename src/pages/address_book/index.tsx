@@ -4,7 +4,7 @@ import AccountBookInfo from '@/store/account/index'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import Selectd from './components/selected/index'
 import Search from './components/search/index'
-import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_GROUP_LEAVE_DEL } from '@/config/index'
+import { IMGCDNURL, ADDRESSBOOKTYPE_ALONE, ADDRESSBOOKTYPE_LEAVE, ADDRESSBOOKTYPE_GROUP, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_GROUP_LEAVE, ADDRESSBOOKTYPE_ALONE_DEL } from '@/config/index'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS, ADD_NOTE_WORKERS_PARAMS, GET_NOTE_WORKERS_PARAMS } from './index.d'
 import { InputValue } from '@/components/popup/index.d'
@@ -22,6 +22,7 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   const { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
+  debugger
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
     Taro.setNavigationBarTitle({
       title: '请选择需要添加的工友'
@@ -30,7 +31,7 @@ function AddressBook() {
     Taro.setNavigationBarTitle({
       title: '请选择需要离场的工友'
     })
-  } else if (type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_GROUP_LEAVE_DEL) {
+  } else if (type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_GROUP_LEAVE) {
     Taro.setNavigationBarTitle({
       title: '请选择班组长'
     })
@@ -46,7 +47,7 @@ function AddressBook() {
       getWorkers({ work_note: accountBookInfo.id }).then((res) => {
         setList(res.data)
       })
-    } else if (type == ADDRESSBOOKTYPE_LEAVE || type == ADDRESSBOOKTYPE_GROUP_LEAVE_DEL) {
+    } else if (type == ADDRESSBOOKTYPE_LEAVE || type == ADDRESSBOOKTYPE_GROUP_LEAVE || type == ADDRESSBOOKTYPE_ALONE_DEL) {
       //获取已在当前账本中的工人
       let params: GET_NOTE_WORKERS_PARAMS = {
         business_time: '',

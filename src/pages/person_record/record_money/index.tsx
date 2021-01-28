@@ -10,6 +10,7 @@ import { AddressBookConfirmEvent } from '@/config/events'
 import AccountBookInfo from '@/store/account'
 import { getTodayDate } from '@/utils/index'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
+import { PersonlHistoryGroupLeader } from '@/config/store'
 import msg, { showBackModal } from '@/utils/msg'
 import userAddRecordAction from '../api'
 import { validNumber } from '@/utils/v'
@@ -17,12 +18,14 @@ import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
 
 function RecordMoney() {
+  // 获取历史班组长数据
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示日期组件
   const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
   // 记工钱提交数据
   const [postData, setPostData] = useState<RecordMoneyPostData>({
     business_type: 3,
@@ -33,7 +36,7 @@ function RecordMoney() {
     identity: 2,
   })
   // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>({
+  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {
     id: '',
     name: ''
   })
@@ -82,6 +85,7 @@ function RecordMoney() {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
+        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
         showBackModal(res.message)
       } else {
         msg(res.message)

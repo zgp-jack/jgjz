@@ -9,6 +9,7 @@ import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
+import { PersonlHistoryGroupLeader, PersonHistoryClassitify } from '@/config/store'
 import { validNumber } from '@/utils/v'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
@@ -29,20 +30,24 @@ function Expenditure(){
     identity: 2,
     work_note: 0,
   })
+  // 获取历史班组长数据
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
+  // 获取历史分类数据
+  let classitifyInfo: classifyItem = Taro.getStorageSync(PersonHistoryClassitify)
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 分类数据
-  const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: ''})
+  const [typeData, setTypeData] = useState<classifyItem>(classitifyInfo ? classitifyInfo : { id: '', name: ''})
   // 是否显示分类组件
-  const [isPickerType, setIsPickType] = useState<boolean>(false)
+  const [isPickerType, setIsPickType] = useState<boolean>(!!classitifyInfo)
   // 是否显示日期组件
   const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长 组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
   // 是否显示选择分类
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>({
+  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo:{
     id: '',
     name: ''
   })
@@ -96,6 +101,8 @@ function Expenditure(){
     }
     userAddBorrowAction(params).then((res) => {
       if(res.code === 0){
+        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
+        Taro.setStorageSync(PersonHistoryClassitify, typeData)
         showBackModal(res.message)
       }else{
         msg(res.message)

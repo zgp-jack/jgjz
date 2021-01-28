@@ -22,7 +22,6 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   const { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
-  debugger
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
     Taro.setNavigationBarTitle({
       title: '请选择需要添加的工友'
@@ -593,14 +592,15 @@ function AddressBook() {
         if (res.code != 0) {
           return
         }
-        eventCenter.trigger(AddressBookConfirmEvent, selectd)
+        eventCenter.trigger(AddressBookConfirmEvent, ids)
         Taro.navigateBack()
       })
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {
       leave()
+    } else {
+      eventCenter.trigger(AddressBookConfirmEvent, selectd)
+      Taro.navigateBack()
     }
-    eventCenter.trigger(AddressBookConfirmEvent, selectd)
-    Taro.navigateBack()
   }
 
   return (

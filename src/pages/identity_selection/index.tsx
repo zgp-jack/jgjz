@@ -104,7 +104,7 @@ function IdentitySelection() {
           showTitleButton={false}
           confirmText="创建"
           inputGroup={[
-            { name: 'name', title: "项目名称", placeholder: '请输入项目名称', value: '' },
+            { name: 'name', title: "项目名称", placeholder: '请输入项目名称', value: '', maxlength: 20},
           ]}
           confirm={(data) => addConfirm(data)}
           cancel={addCancel}

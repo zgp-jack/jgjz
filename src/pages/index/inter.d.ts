@@ -4,14 +4,14 @@ export interface getRememberResult {
 }
 
 export interface getRememberParams {
-  work_note: string
+  work_note: number
   business_time: string
 }
 
 export interface GetCountParams {
   business_type: string[] | string
   start_business_time: string
-  work_note: string
+  work_note: number
   end_business_time: string
   is_note?: string
   expend_type?: string

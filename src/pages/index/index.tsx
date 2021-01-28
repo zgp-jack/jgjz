@@ -1,4 +1,4 @@
-import Taro, { useEffect, useState, useDidShow, useReachBottom, useDidHide } from '@tarojs/taro'
+import Taro, { useEffect, useState, useDidShow, useReachBottom, useDidHide,useRef } from '@tarojs/taro'
 import { Block, Image, Picker, Text, View } from '@tarojs/components'
 import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/index/inter";
 import { getCountUrl } from "@/utils/api";
@@ -51,7 +51,7 @@ const Remember = () => {
   const [defaultFilterData, setDefaultFilterData] = useState<GetCountParams>({
     start_business_time: '',
     end_business_time: '',
-    work_note: accountBookInfo.id + '',
+    work_note: accountBookInfo.id,
     worker_id: [],
     business_type: [],
     expend_type: '',
@@ -67,6 +67,9 @@ const Remember = () => {
   const [showEmpty, setShowEmpty] = useState<boolean>(false);
   /** 是否显示底部没有更多数据 */
   const [showFooter, setShowFooter] = useState<boolean>(false)
+  /** 统计筛选结果数量 */
+  const [ countNum, setCountNum ] = useState<number>(0);
+
   /*数组转字符串*/
   const handleArrayToString = (data: string[] | string): string => {
     if (typeof data === 'string') return data;
@@ -86,7 +89,7 @@ const Remember = () => {
       ...filterData,
       business_type: handleArrayToString(filterData.business_type),
       group_leader: handleAddressBookParams(filterData.group_leader),
-      worker_id: handleAddressBookParams(filterData.worker_id)
+      worker_id: handleAddressBookParams(filterData.worker_id),
     }
   }
   // const {loading, increasing, list, errMsg, hasmore, setParams} = useList(getBusiness, actionParams())
@@ -104,20 +107,35 @@ const Remember = () => {
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*是否重新请求流水列表*/
   const [reloadList, setReloadList] = useState(false)
+  const [workId, setWorkId] = useState<number>(0)
+  const [noLogin,setNoLogin] = useState(false)
+
+  useEffect(()=>{
+    if (!user.login) {
+      setNoLogin(true)
+    }
+  })
+  useEffect(()=>{
+    if (accountBookInfo.id && user.login && noLogin) {
+      const data = { ...defaultFilterData, work_note: accountBookInfo.id }
+      setDefaultFilterData(data)
+      setFilterData(data)
+      setNoLogin(false)
+    }
+  },[user,accountBookInfo])
   /*获取统计数据*/
   useEffect(() => {
-    if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
-    console.log("1111111111111111111")
+    if (!user.login || !filterData.start_business_time || !filterData.end_business_time || !filterData.work_note || !defaultFilterData.work_note) return
     const params = actionParams()
     initFlowList(params)
     initData(params)
-  }, [filterData, user, accountBookInfo])
-
+  }, [filterData,user])
   /*根据筛选日期初始化请求参数*/
   useEffect(() => {
     initParams()
   }, [filterMonth, filterYear])
 
+  
   // 滑动触底事件
   useReachBottom(() => {
     let paramsData = { ...filterData }
@@ -142,36 +160,38 @@ const Remember = () => {
       setFilterData(params)
     }
   })
-  useDidHide(()=>{
-    setShowFooter(false)
-    setShowEmpty(false)
-    setList([])
-  })
+  
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
-    let data = {...defaultFilterData, start_business_time, end_business_time}
+    let data = { ...defaultFilterData, start_business_time, end_business_time}
     setDefaultFilterData(data)
     setFilterData(data)
   }
   const initFlowList = (params: GetCountParams) => {
     /** 请求页面 */
     let page = filterData.page;
-    getBusiness(params).then(res => {
+    console.log("账本id:",accountBookInfo.id)
+    getBusiness({ ...params, work_note: accountBookInfo.id}).then(res => {
       if (res.code === 0) {
-        let lists = list;
-        /** 返回数据长度 */
         let len = res.data.length
-        if (page == 1 && len == 0) {
-          setShowEmpty(true)
-        } else {
-          if (len == 0) {
+        if( page == 1) {
+          if (len == 0){
+            setShowEmpty(true)
+          }else{
+            setShowFooter(false)
+            setShowEmpty(false)
+            setList(res.data)
+          }
+        }else{
+          if(len == 0){
             setShowFooter(true)
+          }else{
+            setList(list.concat(res.data))
           }
         }
-        setList(lists.concat(res.data))
       }
     }).catch(e => {
 
@@ -183,7 +203,13 @@ const Remember = () => {
     if (page > 1) return
     get<GetCountParams, GetCountResult>(getCountUrl, params).then(res => {
       if (res.code === 0) {
+        let countOjb = res.data.count_num;
+        let countArray = Object.values(countOjb)
+        let countNumber = countArray.reduce((pre:number,item:number)=>{
+          return pre + item
+        },0)
         setCounts(res.data.count)
+        setCountNum(Number(countNumber))
       }
     }).catch(e => {
 
@@ -247,8 +273,8 @@ const Remember = () => {
   }
   /*确认筛选*/
   const handleConfirmFilter = (data: GetCountParams) => {
-    console.log(data)
     if (JSON.stringify(data) != JSON.stringify(filterData)) {
+      data.page = 1;
       setFilterData(data)
       setIsFilter(true)
     }
@@ -280,12 +306,6 @@ const Remember = () => {
   /*是否是当前年月,是的话不显示右边箭头*/
   const handleHideRightArrow = () => {
     return year == filterYear && month == filterMonth
-  }
-
-  const goRecord = (e) => {
-    let type = e.currentTarget.dataset.type;
-    let url = `/pages/work_team/record_work/index?type=${type}`;
-    handIsLogin() && Taro.navigateTo({url: url})
   }
 
   const handNavigateTo = (url: string) => {
@@ -472,8 +492,9 @@ const Remember = () => {
               </View>
             </View>
             <View className="statistics-flow">
+              {!isFilter ? <View className="statistics-title">{filterMonth}月全部流水</View> : <View className="statistics-title">共找到<Text className="flow-list-filter-title">{countNum}</Text>条满足您条件的流水</View>}
                 <View className="bokkeeping-list">
-                {showEmpty ? <EmptyDate /> :
+                {showEmpty || !user.login ? <EmptyDate text={`${filterMonth}月暂无记工`}/> :
                     list.map(item => (
                       <Block key={item.date}>
                         <View className="bokkeeping-list-head">{item.date}</View>
@@ -492,7 +513,7 @@ const Remember = () => {
                       </Block>
                     ))
                   }
-                {!showEmpty && showFooter && <LoadFooter text='没有更多数据了~' />}
+                {!showEmpty && showFooter && <LoadFooter text='瞅啥瞅，往上看呢~' />}
                 </View>
             </View>
           </View>

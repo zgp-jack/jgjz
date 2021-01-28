@@ -95,25 +95,28 @@
               height: 35px;
               display: flex;
               align-items: center;
-              justify-content: center;
             }
-
+            .date-icon-bor-left{
+              justify-content: flex-start;
+            }
+            .date-icon-bor-right{
+              justify-content: flex-end;
+            }
             .date-value {
               font-size: 32px;
               color: #333333;
-              margin: 0 12px;
+              margin: 0 10px;
             }
 
             .date-icon {
-              border: 13px solid transparent;
+              width: 25px;
+              height: 25px;
             }
 
             .icon-left {
-              border-right: 14px solid black;
             }
 
             .icon-right {
-              border-left: 14px solid black;
             }
           }
 
@@ -228,8 +231,7 @@
 
                 .remember-value {
 
-                  &:first-child {
-                    margin-bottom: 10px;
+                  &:last-child {
                   }
 
                   .remember-value-text {
@@ -269,6 +271,7 @@
                 .bookkeeping-values {
                   display: flex;
                   flex-direction: column;
+                  width: 205rpx;
 
                   .bookkeeping-label {
                     font-size: 26px;
@@ -277,6 +280,7 @@
                   }
 
                   .bookkeeping-value {
+                    width: 100%;
                     font-size: 30px;
                     font-weight: 500;
                     color: #333333;

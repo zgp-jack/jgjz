@@ -50,7 +50,14 @@ function Expenditure(props: BookkeepingProps) {
     id: '',
     name: ''
   })
-
+  /*初始化分类*/
+  useEffect(() => {
+    const teamBorrowType = Taro.getStorageSync('teamExpenditureType')
+    if (!teamBorrowType) return;
+    const _typeData = JSON.parse(teamBorrowType)
+    setTypeData(_typeData)
+    setIsPickType(true)
+  }, [])
   // 日期文本显示年月日
   useEffect(() => {
     let date = postData.business_time
@@ -98,6 +105,7 @@ function Expenditure(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showBackModal(res.message)
+        Taro.setStorageSync('teamExpenditureType', JSON.stringify(typeData))
       } else {
         msg(res.message)
       }

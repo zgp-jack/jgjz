@@ -29,6 +29,8 @@ export default interface PickerTypeProps {
   show: boolean
   /** 控制option-picker显示 */
   setShow: (bool: boolean) => void
+  /** 是否记工 */
+  isRecord?: boolean
 }
 
 // popup弹窗数据格式

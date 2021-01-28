@@ -2,3 +2,11 @@
 .person-record-date-img{
   margin-top: 6px;
 }
+.person-record-note .person-record-date-textarea{
+  min-height: 40px;
+  max-height: 150px;
+  padding-top: 0;
+}
+.person-record-note{
+  align-items: flex-start;
+}

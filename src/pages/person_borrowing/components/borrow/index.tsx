@@ -83,7 +83,7 @@ function Borrow() {
   // 用户选择分类数据
   const userChangePickerType = (data) => {
     setTypeData(data);
-    userUpdatePostData(data.id, 'expend_type')
+    userUpdatePostData(data.id == '0' ? '' : data.id, 'expend_type')
   }
 
   // 提交借支数据
@@ -132,7 +132,7 @@ function Borrow() {
       // 关闭options弹窗
       setShowTypePicker(false)
       // 关闭 分类 选项
-      setIsPickType(false)
+      typeData.id == '0' ? setIsPickType(true) : setIsPickType(false);
     }
   }
 
@@ -157,6 +157,7 @@ function Borrow() {
         }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
+        isRecord = {true}
       />
       }
       

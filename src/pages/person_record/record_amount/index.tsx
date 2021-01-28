@@ -115,7 +115,7 @@ function RecordAmoumt() {
       // 关闭options弹窗
       setShowTypePicker(false)
       // 关闭 分类 选项
-      setIsPickSubitem(false)
+      typeData.id == '0' ? setIsPickSubitem(true) : setIsPickSubitem(false);
     }
   }
   // 用户关闭 日期组件
@@ -134,9 +134,10 @@ function RecordAmoumt() {
         value={typeData.name}
         close={() => setIsPickSubitem(false)}
         onOptionClose={() => userTapRightTopCloseBtn()}
-        set={(data) => { setTypeData(data);userUpdatePostData(data.id, 'unit_work_type') }}
+        set={(data) => { setTypeData(data); userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
+        isRecord = {true}
       />
     }
     {isPickerDate && <PickerDate

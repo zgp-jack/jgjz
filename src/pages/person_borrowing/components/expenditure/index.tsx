@@ -114,7 +114,7 @@ function Expenditure(){
   // 用户选择分类数据
   const userChangePickerType = (data) => {
     setTypeData(data); 
-    userUpdatePostData(data.id, 'expend_type')
+    userUpdatePostData(data.id == '0' ? '' : data.id, 'expend_type')
   }
 
   // 用户关闭 日期组件
@@ -132,7 +132,7 @@ function Expenditure(){
       // 关闭options弹窗
       setShowTypePicker(false)
       // 关闭 分类 选项
-      setIsPickType(false)
+      typeData.id == '0' ? setIsPickType(true) : setIsPickType(false);
     }
   }
 
@@ -147,6 +147,7 @@ function Expenditure(){
           set={(data) => userChangePickerType(data)} 
           show={showTypePicker} 
           setShow={(bool: boolean) => setShowTypePicker(bool) }
+          isRecord={true}
         />
       }
       {isPickerDate && 

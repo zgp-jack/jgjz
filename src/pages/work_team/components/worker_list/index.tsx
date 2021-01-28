@@ -47,8 +47,13 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
     eventCenter.on(AddressBookConfirmEvent, (workerdata) => {
       setAddWorker(workerdata)
     })
-    return () => eventCenter.off(AddressBookConfirmEvent)
+    return () => {
+      eventCenter.off(AddressBookConfirmEvent);
+      clearTimeout(timeOutEvent)
+    }
   }, [])
+
+  
 
   /** 如果更换了时间重新请求 */ 
   useEffect(() => {
@@ -82,8 +87,12 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
       /**截取工友名字后两个字*/
       item.alias = item.name.substring(item.name.length - 2)
     })
+    // 设备宽度
+    let systemWidth = Taro.getSystemInfoSync().windowWidth;
+    let proportion = systemWidth / 750;
+    let maxNumber = Math.floor((systemWidth- 30 * proportion) / (105 * proportion))
     /**为了ui显示增加空工友数据*/ 
-    let emptyObjCount = (workerData.length + 2) % 6 ? (6 - (workerData.length + 2) % 6) : 0;
+    let emptyObjCount = (workerData.length + 2) % maxNumber ? (maxNumber - (workerData.length + 2) % maxNumber) : 0;
     let emptCount: WorkerData[] = []
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
@@ -317,10 +326,8 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
               onTouchEnd={()=> touchActionEnd(index)}
               onTouchMove={()=> touchMove()}
             >{obj.alias}
-              {(obj.recorded && !obj.check) &&
-              <Image src={`${IMGCDNURL}yc/recorded.png`} mode='widthFix' className='recorded-image'></Image>}
-              {obj.check &&
-              <Image src={`${IMGCDNURL}yc/choose-box.png`} mode='widthFix' className='choose-image'></Image>}
+              <Image src={`${IMGCDNURL}yc/recorded.png`} mode='widthFix'  style={(obj.recorded && !obj.check)?'':{display:'none'}} className='recorded-image'></Image>
+              <Image src={`${IMGCDNURL}yc/choose-box.png`} mode='widthFix' style={(obj.check)?'':{display:'none'}} className='choose-image'></Image>
             </View>
             <Text className='record-work-person-text'>{obj.name}</Text>
           </View>)

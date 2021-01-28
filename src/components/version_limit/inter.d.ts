@@ -7,9 +7,12 @@
  */
 
 // 登录组件参数
-export interface VersionLimit {
+export interface VersionLimitParams {
   /** 是否显示老用户限制组件 */
-  show: boolean,
-  /** 跳转老小程序 */
-  setShow?: (bool: boolean) => void
+  show: boolean
+}
+// 是否老版本用户
+export default interface VERSINLIMIT {
+  /** 是否老版本用户 */
+  versinLimitStatus: boolean
 }

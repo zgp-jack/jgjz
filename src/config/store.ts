@@ -17,3 +17,5 @@ export const PersonlHistoryGroupLeader: string = 'personlHistoryGroupLeader'
 export const HistoryClassifyType: string = 'historyClassifyType'
 // 历史分项信息
 export const HistoryClassifySubitem: string = 'historyClassifySubitem'
+// 老用户跳转
+export const OldVersionLimit: string = 'oldVersionLimit'

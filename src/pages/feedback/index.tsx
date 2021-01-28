@@ -12,7 +12,7 @@ import './index.scss'
 
 function Feedback() {
   // 微信号
-  const [wechat, setWechat] = useState<string>('1535434634')
+  const [wechat, setWechat] = useState<string>('xyrz3205')
   // 提交表单数据
   const [postData, setPostData] = useState<FeedbackData>({
     note: '',
@@ -64,7 +64,7 @@ function Feedback() {
   return (
       <View className='feedback-box'>
           <View className="feedback-wechat">
-        <View className="feedback-introduce">为了提高沟通效率，建议您添加平台微信<Text onClick={() => callPhone(wechat)}>{wechat}</Text></View>
+        <View className="feedback-introduce">低版本数据丢失或错误以及其他问题可添加客服微信：<Text onClick={() => callPhone(wechat)}>{wechat}</Text></View>
             <Text className="click-copy" onClick={() => copyWechat(wechat)}>点击复制</Text>
           </View>
 

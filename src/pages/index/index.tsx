@@ -15,9 +15,12 @@ import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team/team_record/index.d'
 import { get } from "@/utils/request";
 import Login from '@/components/login/index'
-import './index.scss'
 import Filter from "./filter/index";
 import {getBusiness} from './api'
+import Versionlimit from '@/components/version_limit/index'
+import { OldVersionLimit } from '@/config/store'
+import VERSINLIMIT from '@/components/version_limit/inter.d'
+import './index.scss'
 
 
 const Remember = () => {
@@ -28,6 +31,7 @@ const Remember = () => {
   const { businessType } = rememberStore
   const { user } = _user
   const { accountBookInfo } = _accountBookInfo
+
   Taro.setNavigationBarTitle({ title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本' })
   Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
   /*统计数据*/
@@ -40,6 +44,10 @@ const Remember = () => {
     borrow_count: "0.00",
     expend_count: "0.00"
   })
+  /**是否是老版用户*/
+  const [showOldVersion, setShowVersion] = useState(false)
+  let oldVersionLimit: VERSINLIMIT = Taro.getStorageSync(OldVersionLimit)
+
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
   const [personOrGroup, setPersonOrGroup] = useState(accountBookInfo.identity == 2)
   // 监听登录情况
@@ -109,6 +117,13 @@ const Remember = () => {
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*是否重新请求流水列表*/
   const [reloadList, setReloadList] = useState(false)
+
+  useEffect(() => {/**监听登录弹窗*/
+    if (oldVersionLimit) {
+      setShowVersion(true)
+    }
+  }, [showLogin])
+
   /*获取统计数据*/
   useEffect(() => {
     if (!user.login || !filterData.start_business_time || !filterData.end_business_time) return
@@ -537,6 +552,7 @@ const Remember = () => {
               resetFilter={handleResetFilter}
       />
       <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>
+      <Versionlimit show={showOldVersion} ></Versionlimit>
     </View>
   )
 }

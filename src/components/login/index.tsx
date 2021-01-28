@@ -158,7 +158,7 @@ function Login({
               </View>}
           </View>
 
-          <Button className="login-push-btn" onClick={() => userLoginAction()}>登录</Button>
+          <Button className="login-push-btn" onClick={() => userLoginAction()}>登录/注册</Button>
         </View>}
     </Block>
   )

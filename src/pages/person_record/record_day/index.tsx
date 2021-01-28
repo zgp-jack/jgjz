@@ -24,6 +24,8 @@ function RecordDay() {
   const [workTime, setWorkTime] = useState<WorkTimeType>({value: '1', text: '一个工'})
   // 加班时长的数据
   const [overTime, setOverTime] = useState<WorkTimeType>({ value: '0', text: '无加班' })
+  // 是否显示加班时间
+  const [isOverTime, setIsOverTime] = useState<boolean>(false);
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否日期组件
@@ -91,7 +93,7 @@ function RecordDay() {
       identity: 2,
       work_time: isWrok ? workTime.value : '',
       work_time_hour: !isWrok ? workTime.value : '',
-      overtime: !isOver ? overTime.value : '',
+      overtime: (!isOver && isOverTime) ? overTime.value : '',
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
@@ -124,13 +126,15 @@ function RecordDay() {
         isSelect={!isWrok}
         type='work'
       />
-      <WorkDayComponent
-        title = {'加班时间'}
+      {isOverTime && <WorkDayComponent
+        title = {'加班时长'}
         change={(data, type) => useChangeWorkTime(data, type,'over')}
         value={overTime}
         isSelect={!isOver}
         type='over'
-      />
+        isClose = {true}
+        close={() => setIsOverTime(false)}
+      />}
     </View>
     {isPickerDate && <PickerDate
       date={postData.business_time}
@@ -143,6 +147,7 @@ function RecordDay() {
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
+      {!isOverTime && <View className="person-record-component-item" onClick={() => setIsOverTime(true)}>加班时长</View>}
     </View>
     <View className="person-record-btn">
       <Button className="person-record-save" onClick={userPostAcion} >确认记工</Button>

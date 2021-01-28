@@ -9,15 +9,15 @@ import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
 import { IMGCDNURL } from "@/config/index";
-import { enterTheRecordBook } from '@/utils/index'
+import { enterTheRecordBook, getTodayDate } from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-import { GetWorkFlowResult } from '@/pages/work_team/team_record/index.d'
-import { get } from "@/utils/request";
+import {GetWorkFlowResult} from '@/pages/work_team/team_record/index.d'
+import {get} from "@/utils/request";
 import Login from '@/components/login/index'
 import './index.scss'
 import Filter from "./filter/index";
-import { getBusiness } from './api'
+import {getBusiness} from './api'
 
 
 const Remember = () => {
@@ -41,7 +41,7 @@ const Remember = () => {
     expend_count: "0.00"
   })
   /*当前是个人账本还是班组账本，true:个人， false:班组*/
-  const [personOrGroup] = useState(accountBookInfo.identity == 1)
+  const [personOrGroup] = useState(accountBookInfo.identity == 2)
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -285,11 +285,11 @@ const Remember = () => {
   const goRecord = (e) => {
     let type = e.currentTarget.dataset.type;
     let url = `/pages/work_team/record_work/index?type=${type}`;
-    handIsLogin() && Taro.navigateTo({ url: url })
+    handIsLogin() && Taro.navigateTo({url: url})
   }
 
   const handNavigateTo = (url: string) => {
-    handIsLogin() && Taro.navigateTo({ url })
+    handIsLogin() && Taro.navigateTo({url})
   }
 
 
@@ -302,6 +302,17 @@ const Remember = () => {
     let {is_note, business_type, group_leader, worker_id} = filterData
     return (is_note == '1' || business_type.length || (group_leader as AddressBookParams[]).length || (worker_id as AddressBookParams[]).length)
   }
+
+  // 用户点击 记工记账 按钮
+  const userTapRecordBtn = (type: 'borrow' | 'record') => {
+    if (!user.login) {
+      setShowLogin(true)
+      return
+    }
+    enterTheRecordBook(accountBookInfo, type)
+  }
+
+
   return (
     <View className={"remember" + (showFilter ? ' stop-move' : '')}>
       <View className="container">
@@ -318,7 +329,8 @@ const Remember = () => {
             <View className="feat">
               {!isFilter ? <View className="date">
                   <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon"/></View>
-                  <Picker fields="month" mode='date' onChange={onFilterDateChange} value={currentYearMonth}>
+                  <Picker fields="month" mode='date' end={getTodayDate()} onChange={onFilterDateChange}
+                          value={currentYearMonth}>
                     <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
                   </Picker>
                   {!handleHideRightArrow() &&
@@ -333,7 +345,7 @@ const Remember = () => {
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
                 onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
                 <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
-                       className="filter-icon"/>筛选
+                  className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
@@ -374,8 +386,7 @@ const Remember = () => {
               <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
             </View>}
             {/*记工统计*/}
-            <View className="statistics">
-              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记工统计</View>}
+            <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -433,7 +444,7 @@ const Remember = () => {
 
             {/*记账统计*/}
             <View className="statistics">
-              {!isFilter && <View className="statistics-title">{handleMonthShow()}月记账统计</View>}
+              {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
               <View className="statistics-bookkeeping">
                 <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
@@ -460,7 +471,6 @@ const Remember = () => {
                 </View>
               </View>
             </View>
-
             <View className="statistics-flow">
                 <View className="bokkeeping-list">
                 {showEmpty ? <EmptyDate /> :
@@ -490,15 +500,15 @@ const Remember = () => {
         <View className="footer">
           <View className="footer-container">
             <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
-              <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon" />
+              <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon"/>
               意见反馈
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">
                   <View className="footer-button footer-button-bookkeeping" data-type={1}
-                        onClick={() => enterTheRecordBook(accountBookInfo, "borrow")}>记账</View>
+                        onClick={() => userTapRecordBtn("borrow")}>记账</View>
                   <View className="footer-button footer-button-remember" data-type={2}
-                        onClick={() => enterTheRecordBook(accountBookInfo, "record")}>记工</View>
+                        onClick={() => userTapRecordBtn("record")}>记工</View>
                 </View>
                 :
                 <View className="footer-button exit-filter" onClick={handleResetFilter}>退出筛选</View>

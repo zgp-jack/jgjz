@@ -2,12 +2,13 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-27 09:24:26
+ * @LastEditTime: 2021-01-27 17:09:41
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'
 import {showModal} from '@/utils/msg';
 import { RECORD_WORK_DATA } from '@/pages/account_book_list/index.d'
+import { INDEXPAGE } from '@/config/pages'
 
 /**
  * @name: objDeepCopy for jsxin
@@ -33,6 +34,7 @@ export function copyWechat(wechat: string): void {
   Taro.setClipboardData({
     data: wechat,
     success: () => {
+      Taro.hideToast()
       showModal(`微信号${wechat}已经成功复制到您的粘贴板，快去打开微信-添加朋友吧~!`)
     }
   })
@@ -92,7 +94,9 @@ export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "bo
       url = '/pages/person_borrowing/index'
     }
   } else { // 记工记工本
-    url = `/pages/index/index`
+    url = INDEXPAGE
+    Taro.reLaunch({ url })
+    return
   }
   Taro.navigateTo({ url })
 }

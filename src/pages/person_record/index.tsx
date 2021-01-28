@@ -16,18 +16,20 @@ export default function PersonRecord(){
     }
     return (
         <View className="person-record">
-            <View className="person-record-top" >
-              {recordConfig.map((item) => 
-                <View className={classnames({
-                  "person-record-top-item": true,
-                  "record-active": item.id === recordnum
-                })} key={item.id} onClick={() => Changetype(item.id,item.name)}>{item.name}
-                </View>
-              )}
-            </View>
+          <View className="person-record-top" >
+            {recordConfig.map((item) => 
+              <View className={classnames({
+                "person-record-top-item": true,
+                "record-active": item.id === recordnum
+              })} key={item.id} onClick={() => Changetype(item.id,item.name)}>{item.name}
+              </View>
+            )}
+          </View>
+          <View className="record-content">
             {recordnum == 1 && <RecordDay /> } 
             {recordnum == 2 && <RecordAmoumt />}
             {recordnum == 3 && <RecordMoney />}
+          </View>
         </View>
     )
 }

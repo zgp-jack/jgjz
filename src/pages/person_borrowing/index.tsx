@@ -28,8 +28,10 @@ export default function PersonTally(){
           >{item.title}</View>
         )}
       </View>
-      {id === 4 && <Borrow /> }
-      {id === 5 && <Expenditure /> }
+      <View className="record-content">
+        {id === 4 && <Borrow /> }
+        {id === 5 && <Expenditure /> }
+      </View>
     </View>
   )
 }

@@ -57,12 +57,13 @@ class App extends Component {
       'pages/business/borrow/index',
       'pages/business/amount/index',
       'pages/business/workday/index',
-      'pages/work_team/team_record/index',
+
       'pages/work_team_business/money/index',
-      'pages/work_team_business/borrow/index',
       'pages/work_team_business/expenditure/index',
-      'pages/work_team_business/workday/index',
+      'pages/work_team_business/borrow/index',
       'pages/work_team_business/amount/index',
+      'pages/work_team_business/workday/index',
+      'pages/work_team/team_record/index',
       'pages/_index/index', // 测试版首页
       'pages/person_record/index', //个人记工
       'pages/person_borrowing/index', // 个人借支/支出

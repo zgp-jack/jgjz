@@ -2,7 +2,7 @@
  * @Author: lcmxkg
  * @Date: 2021-01-18 15:29:16
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-26 15:38:56
+ * @LastEditTime: 2021-01-27 15:28:14
  * @Description: 记工本信息
  */
 import Taro from '@tarojs/taro'
@@ -19,7 +19,7 @@ export class AccountBookInfo {
   accountBookInfo: AccountBookInfoType = accountBook ? accountBook : {
     id: 0,
     name: '',
-    identity: 1,
+    identity: 2,
     status: 0
   }
 

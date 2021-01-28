@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter, Config} from '@tarojs/taro'
+import Taro, { useEffect, useState, useRouter, Config, useRef} from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team/components/flow_list/index'
 import RecordDay from '@/pages/work_team/components/record-work/record_day/index'
@@ -12,7 +12,6 @@ import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
 import { useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
-import PromptBox from '@/components/popup/index'
 import { TypeAction } from '@/pages/work_team/team_record/index.d'
 import './index.scss'
 
@@ -63,8 +62,10 @@ export default function RecordWork() {
 
   const [workerId, setWorkerId] = useState<number[]>([])
 
+  const [touchBottom, setTouchBottom] = useState<boolean>(false)
+
   useEffect(() => {
-    console.log('workerId', workerId)
+    console.log('workerId父级', workerId)
   }, [workerId])
 
   useEffect(() => {
@@ -132,7 +133,10 @@ export default function RecordWork() {
     /**保存type值*/
     SetTypeItem(typeNum)
   }
-
+  const onReatchEvent = function () {
+    setTouchBottom(!touchBottom)
+  }
+  
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
@@ -150,7 +154,7 @@ export default function RecordWork() {
                 <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
               </View>
             </View>
-            <ScrollView className='record-work-scroll' scrollY enableFlex>
+            <ScrollView className='record-work-scroll' scrollY enableFlex onScrollToLower={()=>onReatchEvent()}>
               <View className='record-worker-list'>
                 {currentIndex == index &&
                   <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} />}
@@ -162,7 +166,7 @@ export default function RecordWork() {
                 </View>
                 {typeItem == 2 && (currentIndex == index) && (
                   <View className='record-work-flow'>
-                    <FlowList currentIndex={currentIndex} params={startDate} types={types}></FlowList>
+                    <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentIndex={currentIndex} params={startDate} types={types}></FlowList>
                   </View>
                 )}
                 {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) &&

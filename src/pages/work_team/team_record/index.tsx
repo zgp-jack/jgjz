@@ -1,4 +1,4 @@
-import Taro, { useEffect, useState, useRouter, Config, useRef} from '@tarojs/taro'
+import Taro, { useEffect, useState, useRouter, Config } from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team/components/flow_list/index'
 import RecordDay from '@/pages/work_team/components/record-work/record_day/index'
@@ -13,6 +13,7 @@ import {IMGCDNURL} from '@/config/index'
 import { useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import { TypeAction } from '@/pages/work_team/team_record/index.d'
+import { getTodayDate } from '@/utils/index'
 import './index.scss'
 
 
@@ -54,7 +55,7 @@ export default function RecordWork() {
     return [`${timeArray[0]}年${timeArray[1]}月${timeArray[2]}日`, `${timeArray[0]}-${timeArray[1]}-${timeArray[2]}`, `${timeArray[0]}/${timeArray[1]}/${timeArray[2]}`]
   }
   //定义当前时间
-  const nowTime = initTime(new Date().toLocaleDateString())[1]
+  const nowTime = initTime(getTodayDate())[1]
 
   // 时间选择文本显示
   const [timeText, setTimeText] = useState<string>('');
@@ -70,7 +71,7 @@ export default function RecordWork() {
 
   useEffect(() => {
     /**获取本地格式化日期 eg:2021/01/21*/
-    let timeNow = new Date().toLocaleDateString()
+    let timeNow = getTodayDate()
     /**按照格式初始化时间*/
     let timeStr = initTime(timeNow)[0];
     setTimeText(timeStr)

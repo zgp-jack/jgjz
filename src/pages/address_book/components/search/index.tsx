@@ -10,10 +10,10 @@ export default function TestComponent(props: SEARCH_PROPS) {
   return (
     <View className="search">
       {type == ADDRESSBOOKTYPE_ALONE && <View className="search_alone">
-        <Text className="people_num">工友工{workerLen}人</Text>
+        <Text className="people_num">工友共{workerLen}人</Text>
         <View className="add">
           <View className="add_botton" onClick={() => addClick()}>
-            <Text>添加工友</Text>
+            <Text>新增工友</Text>
           </View>
         </View>
       </View>}
@@ -35,7 +35,7 @@ export default function TestComponent(props: SEARCH_PROPS) {
         {!value && type !== ADDRESSBOOKTYPE_ALONE && type !== ADDRESSBOOKTYPE_LEAVE && 
         <View className="add">
           <View className="add_botton" onClick={()=>addClick()}>
-            <Text>添加工友</Text>
+            <Text>新增工友</Text>
           </View>
         </View>}
       </View>

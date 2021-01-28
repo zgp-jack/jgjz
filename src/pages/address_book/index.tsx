@@ -11,6 +11,7 @@ import { InputValue } from '@/components/popup/index.d'
 import classnames from 'classnames'
 import msg from '@/utils/msg'
 import { getWorkers, postAdd_Person, deletedPerson, editWordkerInfo, addNoteWorkers, deleteNoteWorkers, getNoteWorkers } from './api'
+import { isNumber } from '@/utils/v/index'
 import PromptBox from '@/components/popup/index'
 import './index.scss'
 import { set } from 'mobx'
@@ -206,12 +207,15 @@ function AddressBook() {
   }
   /** 添加工友弹窗确定 */
   const addConfirm = (data: InputValue) => {
-    if (data.name) {
-      setAddPopupShow(false)
-    } else {
+    if (!data.name){
       msg("请填写工人名称")
       return
     }
+    if (!isNumber(data.tel) || data.tel.length > 11){
+      msg("请填写正确的手机号")
+      return
+    }
+    setAddPopupShow(false)
     /**给后台的参数*/
     let params: ADD_PERSON_PARAMS = {
       name: data.name,
@@ -330,6 +334,10 @@ function AddressBook() {
     editWordkerInfo(editItemData.id, { name: data.name, tel: data.tel || '' }).then(res => {
       msg(res.message)
       if (res.code != 0) {
+        return
+      }
+      if (!isNumber(data.tel) || data.tel.length > 11) {
+        msg("请填写正确的手机号")
         return
       }
       setIsShowEdit(false)
@@ -646,10 +654,9 @@ function AddressBook() {
 
                   {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
                   {type !== ADDRESSBOOKTYPE_ALONE && <Image className='item_checkbox' src={cItem.is_in_work_note ? `${disableCheckImg}` : cItem.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
-
                   <View className="avatar" style={{ background: cItem.name_color }}>{cItem.name.substring(0, 2)}</View>
                   <View className="name_tle">
-                    <Text className="name">{cItem.name}</Text>
+                    <Text className="name">{cItem.name}{cItem.is_self == 1 ? '(自己)':''}</Text>
                     {cItem.tel && <Text className="tel">{cItem.tel}</Text>}
                   </View>
                 </View>
@@ -688,7 +695,7 @@ function AddressBook() {
 
                 <View className="avatar" style={{ background: item.name_color }}>{item.name.substring(0, 2)}</View>
                 <View className="name_tle">
-                  <Text className="name">{item.name}</Text>
+                  <Text className="name">{item.name}{item.is_self == 1 ? '(自己)':''}</Text>
                   {item.tel && <Text className="tel">{item.tel}</Text>}
                 </View>
               </View>

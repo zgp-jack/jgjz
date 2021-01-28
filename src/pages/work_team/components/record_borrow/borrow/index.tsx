@@ -16,9 +16,6 @@ import BorrowPostData, {BookkeepingProps} from './inter.d'
 
 
 function Borrow(props: BookkeepingProps) {
-  useEffect(() => {
-    console.log('props123', props)
-  }, [props])
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
@@ -50,6 +47,14 @@ function Borrow(props: BookkeepingProps) {
     identity: accountBookInfo.identity,
     work_note: 0,
   })
+  /*初始化分类*/
+  useEffect(() => {
+    const teamBorrowType = Taro.getStorageSync('teamBorrowType')
+    if (!teamBorrowType) return;
+    const _typeData = JSON.parse(teamBorrowType)
+    setTypeData(_typeData)
+    setIsPickType(true)
+  }, [])
 
   // 日期文本显示年月日
   useEffect(() => {
@@ -104,6 +109,7 @@ function Borrow(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showBackModal(res.message)
+        Taro.setStorageSync('teamBorrowType', JSON.stringify(typeData))
       } else {
         msg(res.message)
       }
@@ -156,16 +162,6 @@ function Borrow(props: BookkeepingProps) {
         setShow={(bool: boolean) => setShowTypePicker(bool)}
       />
       }
-      {/*
-      {isPickerDate &&
-      <PickerDate
-        date={postData.business_time}
-        DeletePickerDate={DeletePickerDate}
-        change={(val) => userUpdatePostData(val, 'business_time')}
-        dateText={dateText}
-      />}
-      {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader}/>}
-      */}
       <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
       <View className='person-record-component'>
         {!isPickerType && <View className='person-record-component-item' onClick={() => {

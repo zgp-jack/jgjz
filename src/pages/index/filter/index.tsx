@@ -40,7 +40,6 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   useEffect(() => {
     if (filterData && filterData.start_business_time.split('-').length !== 3) return
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      console.log('data', data)
       let _data: any = {}
       if (props.personOrGroup) {
         _data = {...filterData, worker_id: data}
@@ -55,12 +54,19 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   const initData = (data = props.data) => {
     let start_business_time = data.start_business_time
     let end_business_time = data.end_business_time
+    const startDates = start_business_time.split('-')
+    const endDates = end_business_time.split('-')
     let _data: GetCountParams = {
       ...data,
-      start_business_time: start_business_time.split('-').length == 3 ? start_business_time : start_business_time + '-01',
-      end_business_time: (end_business_time.split('-').length == 3 ? end_business_time : getTodayDate())
+      start_business_time: startDates.length === 3 ? start_business_time : start_business_time + '-01',
+      end_business_time: endDates.length === 3 ? end_business_time : handleGetEndDay(start_business_time)
     }
     setFilterData(JSON.parse(JSON.stringify(_data)))
+  }
+  const handleGetEndDay = (yearAndMonth) => {
+    const dates = yearAndMonth.split('-')
+    const day = new Date(dates[0], dates[1], 0).getDate()
+    return yearAndMonth + '-' + day
   }
   /*开始时间筛选*/
   const onStartDate = e => {

@@ -302,7 +302,7 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords">{accountBookInfo.name}记工账本</View>
+          <View className="header-title overwords">{accountBookInfo.name}</View>
           <View className="header-line"/>
           <View className="header-switch"
                 onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
@@ -311,13 +311,17 @@ const Remember = () => {
           <View className="body-container">
             <View className="feat">
               {!isFilter ? <View className="date">
-                  <View className="date-icon-bor" onClick={prevMonth}><View className="icon-left date-icon"/></View>
+                  <View className="date-icon-bor date-icon-bor-left" onClick={prevMonth}><Image
+                    src={IMGCDNURL + 'lxy/time_jt_l.png'}
+                    className="icon-left date-icon"/></View>
                   <Picker fields="month" mode='date' end={getTodayDate()} onChange={onFilterDateChange}
                           value={currentYearMonth}>
                     <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
                   </Picker>
                   {!handleHideRightArrow() &&
-                  <View className="date-icon-bor" onClick={nextMonth}><View className="icon-right date-icon"/></View>}
+                  <View className="date-icon-bor date-icon-bor-right" onClick={nextMonth}><Image
+                    src={IMGCDNURL + 'lxy/time_jt_r.png'}
+                    className="icon-right date-icon"/></View>}
                 </View>
                 :
                 <View className="filter-start-end-date">
@@ -404,7 +408,7 @@ const Remember = () => {
                     <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
                       <View className="bookkeeping-label">
-                        临时工资
+                        工钱
                       </View>
                       <View className="bookkeeping-value">￥{counts.work_money}</View>
                     </View>
@@ -433,7 +437,7 @@ const Remember = () => {
             <View className="statistics">
               {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
               <View className="statistics-bookkeeping">
-                <View className="bookkeeping-row">
+                {(!isFilter || (isFilter && Number(counts.borrow_count))) && <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
                     <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
@@ -443,9 +447,9 @@ const Remember = () => {
                       <View className="bookkeeping-value">￥{parseFloat(counts.borrow_count).toFixed(2)}</View>
                     </View>
                   </View>
-                </View>
+                </View>}
 
-                <View className="bookkeeping-row">
+                {(!isFilter || (isFilter && Number(counts.expend_count))) && <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
                     <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
@@ -455,7 +459,7 @@ const Remember = () => {
                       <View className="bookkeeping-value">￥{parseFloat(counts.expend_count).toFixed(2)}</View>
                     </View>
                   </View>
-                </View>
+                </View>}
               </View>
             </View>
             <View className="statistics-flow">

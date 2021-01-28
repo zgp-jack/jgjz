@@ -25,7 +25,8 @@ function PickerType({
   set,
   show,
   setShow,
-  rightClose = true
+  rightClose = true,
+  isRecord = false
 }: PickerTypeProps) {
 
   // input-name
@@ -128,6 +129,9 @@ function PickerType({
           userDelExpendType(id).then(res => {
             msg(res.message)
             if (res.code === 0) {
+              if (types[i].name == value) {
+                isRecord && set && set({ id: '0', name: '无分类' })
+              }
               delClassifyType(i)
             }
           })

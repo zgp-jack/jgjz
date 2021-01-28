@@ -11,7 +11,8 @@
         height: 80px;
         padding-left: 40px;
         background-color: #fff;
-        border-bottom: 1px solid #E5E5E5;
+        // border-bottom: 1px solid #E5E5E5;
+        box-shadow: 0 0 46px 0 rgba(110, 110, 110, 0.09);
         z-index: 10;
         .person-record-top-item{
             position: relative;
@@ -50,7 +51,7 @@
         margin-left: 40px;
         margin-top: 40px; 
         padding-bottom: 25px;
-        border-bottom: 1px solid #E5E5E5;
+        border-bottom: 5px solid #E5E5E5;
         .person-record-worktime{
             display: flex;
             align-items: center;

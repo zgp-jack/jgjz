@@ -165,7 +165,7 @@ export default function BusinessBorrow() {
   </View>)
 }
 BusinessBorrow.config = {
-  navigationBarTitleText: '修改支出',
+  navigationBarTitleText: '修改借支',
   navigationBarBackgroundColor: '#0099ff',
   navigationBarTextStyle: 'white',
   backgroundTextStyle: "dark"

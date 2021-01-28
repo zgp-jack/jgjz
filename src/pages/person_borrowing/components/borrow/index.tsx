@@ -8,7 +8,7 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
-import { PersonlHistoryGroupLeader } from '@/config/store'
+import { PersonlHistoryGroupLeader, PersonHistoryClassitify } from '@/config/store'
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
@@ -24,10 +24,12 @@ function Borrow() {
   const {accountBookInfo} = localStore
   // 获取历史班组长数据
   let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
+  // 获取历史分类数据
+  let classitify: classifyItem = Taro.getStorageSync(PersonHistoryClassitify)
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分类组件
-  const [isPickerType, setIsPickType] = useState<boolean>(false)
+  const [isPickerType, setIsPickType] = useState<boolean>(!!classitify)
   // 是否显示选择分类
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 是否显示日期组件
@@ -35,7 +37,7 @@ function Borrow() {
   // 是否显示班组长 组件
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
   // 分类数据
-  const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
+  const [typeData, setTypeData] = useState<classifyItem>(classitify ? classitify : {id: '', name: ''})
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {
     id: '',
@@ -68,7 +70,6 @@ function Borrow() {
       let leader: classifyItem = { id: data.id, name: data.name }
       setGroupLeader(leader)
       setIsPickerLeader(true)
-      Taro.setStorageSync(PersonlHistoryGroupLeader, leader)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
@@ -83,7 +84,7 @@ function Borrow() {
   // 用户选择分类数据
   const userChangePickerType = (data) => {
     setTypeData(data);
-    userUpdatePostData(data.id, 'expend_type')
+    userUpdatePostData(data.id == '0' ? '' : data.id, 'expend_type')
   }
 
   // 提交借支数据
@@ -109,6 +110,8 @@ function Borrow() {
     }
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
+        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
+        Taro.setStorageSync(PersonHistoryClassitify, typeData)
         showBackModal(res.message)
       } else {
         msg(res.message)
@@ -132,7 +135,7 @@ function Borrow() {
       // 关闭options弹窗
       setShowTypePicker(false)
       // 关闭 分类 选项
-      setIsPickType(false)
+      typeData.id == '0' ? setIsPickType(true) : setIsPickType(false);
     }
   }
 
@@ -157,6 +160,7 @@ function Borrow() {
         }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
+        isRecord = {true}
       />
       }
       

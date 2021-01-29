@@ -18,8 +18,9 @@ import Login from '@/components/login/index'
 import Filter from "./filter/index";
 import {getBusiness} from './api'
 import Versionlimit from '@/components/version_limit/index'
-import {OldVersionLimit} from '@/config/store'
+import { OldVersionLimit} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
+
 import './index.scss'
 
 

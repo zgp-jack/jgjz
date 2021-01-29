@@ -4,14 +4,13 @@ import Borrow from './components/borrow'
 import Expenditure from './components/expenditure'
 import tallyConfig from './config'
 import classnames from 'classnames'
-import { PersonlLastSuccessRecordPage } from '@/config/store'
+import { PersonlLastSuccessAccountPage } from '@/config/store'
 import './index.scss'
 
 export default function PersonTally(){
 
   // 获取 历史记工成功页面
-  let personlLastType: number = Taro.getStorageSync(PersonlLastSuccessRecordPage)
-
+  let personlLastType: number = Taro.getStorageSync(PersonlLastSuccessAccountPage)
   // 当前选中的tab
   const [id, setId] = useState<number>(personlLastType || tallyConfig[0].id)
   // 用户改变tab

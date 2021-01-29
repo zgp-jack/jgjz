@@ -12,14 +12,16 @@ interface InputItem {
   title: string
   /**输入框提示placeholder*/
   placeholder: string
-  /**输入框名称，方便通过name取对应输入框值*/ 
+  /**输入框名称，方便通过name取对应输入框值*/
   name: string
   /**输入框默认value值*/
   value: string
   /**s输入最大*/
   maxlength?: number,
   /** 是否禁用输入 */
-  disabled?: boolean
+  disabled?: boolean,
+  /** 输入框类型 */
+  type?: "text"|"number"
 }
 
 //定义弹窗传递的props
@@ -36,7 +38,7 @@ export interface PromptBoxProps {
   confirmText?: string
   /**弹窗标题文本内容*/
   titleText?: string
-  /**右上角按钮显示文本*/ 
+  /**右上角按钮显示文本*/
   titleButtonText?: string
   /**弹窗左下角按钮显示颜色*/
   cancelColor?: string
@@ -56,5 +58,5 @@ export interface PromptBoxProps {
 
 // 定义输入框输入值数据
 export interface InputValue {
-  [key:string]: string
+  [key: string]: string
 }

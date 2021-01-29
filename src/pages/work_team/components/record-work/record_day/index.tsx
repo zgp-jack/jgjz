@@ -4,7 +4,7 @@ import PickerMark from '@/components/picker_mark/index'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import { AddressBookConfirmEvent } from '@/config/events'
-import msg, { showBackModal } from '@/utils/msg'
+import msg, { showBackModal, showModal } from '@/utils/msg'
 import { getTodayDate } from '@/utils/index'
 import classifyItem from '@/store/classify/inter.d'
 import WorkDayComponent from '@/components/work_day'
@@ -77,7 +77,7 @@ function RecordDay({ workerId, type, businessTime }: PropsData) {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        showBackModal(res.message)
+        showModal(res.message)
       } else {
         msg(res.message)
       }

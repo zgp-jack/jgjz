@@ -4,7 +4,7 @@ import ContentInput from '@/components/picker_input'
 import PickerMark from '@/components/picker_mark'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import msg, { showBackModal } from '@/utils/msg'
+import msg, { showBackModal, showModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
 import RecordMoneyPostData, { PropsData} from './inter.d'
 import userAddRecordAction from '../api'
@@ -51,7 +51,7 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        showBackModal(res.message)
+        showModal(res.message)
       } else {
         msg(res.message)
       }

@@ -528,10 +528,10 @@ const Remember = () => {
                               <Block key={p.id}>
                                 {/* 如果是记工天 记工量 */}
                                 {(p.business_type == 1 || p.business_type == 2) &&
-                                <WorkCountDay list={[p]} type={p.business_type} />}
+                                  <WorkCountDay list={[p]} type={p.business_type} />}
                                 {/* 如果是 记工钱、 借支、 支出 */}
                                 {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                                <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                                  <WorkMoneyBorrowing list={[p]} type={p.business_type}/>}
                               </Block>
                             </View>
                           ))}

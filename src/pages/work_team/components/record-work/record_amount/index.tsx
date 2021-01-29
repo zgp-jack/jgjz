@@ -11,7 +11,7 @@ import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { getTodayDate } from '@/utils/index'
-import msg, { showBackModal } from '@/utils/msg'
+import msg, { showBackModal, showModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
 import classifyItem from '@/store/classify/inter.d'
 import RecordAmountPostData, { UnitTpey, PropsData } from './inter.d'
@@ -86,7 +86,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        showBackModal(res.message)
+        showModal(res.message)
       } else {
         msg(res.message)
       }

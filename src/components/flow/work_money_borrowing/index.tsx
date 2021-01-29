@@ -7,7 +7,7 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import User from "@/store/user";
 
-function WorkMoneyBorrowing({list = [], type = 1}: PropsData) {
+function WorkMoneyBorrowing({ list = [], type = 1}: PropsData) {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {accountBookInfo} = _accountBookInfo
   /**

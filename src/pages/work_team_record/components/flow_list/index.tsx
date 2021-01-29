@@ -1,7 +1,7 @@
 import Taro, { useEffect, useState, useDidShow } from '@tarojs/taro'
 import ListProvider from '@/components/list_provider'
 import useList from '@/hooks/list'
-import getFlowlists from '@/pages/work_team/team_record/api'
+import getFlowlists from '@/pages/work_team_record/team_record/api'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import { GetWorkFlowParams, FlowLists } from './index.d'

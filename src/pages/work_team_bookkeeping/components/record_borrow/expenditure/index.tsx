@@ -10,10 +10,10 @@ import {validNumber} from '@/utils/v'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import msg, { showBackModal, showModal} from '@/utils/msg'
-import userAddBorrowAction from '@/pages/work_team/components/record_borrow/api'
+import userAddBorrowAction from '@/pages/work_team_bookkeeping/components/record_borrow/api'
 import './index.scss'
 import ExpenditurePostData from './inter.d'
-import {BookkeepingProps} from "@/pages/work_team/components/record_borrow/borrow/inter";
+import { BookkeepingProps } from "@/pages/work_team_bookkeeping/components/record_borrow/borrow/inter";
 import createAnimation = Taro.createAnimation;
 import {teamExpenditureType} from "@/config/store";
 

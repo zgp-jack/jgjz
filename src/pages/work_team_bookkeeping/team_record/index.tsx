@@ -1,18 +1,15 @@
 import Taro, {useEffect, useState, useRouter, Config} from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
-import FlowList from '@/pages/work_team/components/flow_list/index'
-import RecordDay from '@/pages/work_team/components/record-work/record_day/index'
-import RecordAmoumt from '@/pages/work_team/components/record-work/record_amount/index'
-import RecordMoney from '@/pages/work_team/components/record-work/record_money/index'
-import Borrow from '@/pages/work_team/components/record_borrow/borrow/index'
-import Expenditure from '@/pages/work_team/components/record_borrow/expenditure/index'
-import WorkTeamTable from '@/pages/work_team/components/work_team_table/index'
-import WorkerList from '@/pages/work_team/components/worker_list/index'
+import FlowList from '@/pages/work_team_bookkeeping/components/flow_list/index'
+import Borrow from '@/pages/work_team_bookkeeping/components/record_borrow/borrow/index'
+import Expenditure from '@/pages/work_team_bookkeeping/components/record_borrow/expenditure/index'
+import WorkTeamTable from '@/pages/work_team_bookkeeping/components/work_team_table/index'
+import WorkerList from '@/pages/work_team_bookkeeping/components/worker_list/index'
 import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
 import {useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
-import {TypeAction} from '@/pages/work_team/team_record/index.d'
+import { TypeAction } from '@/pages/work_team_bookkeeping/team_record/index.d'
 import {getTodayDate} from '@/utils/index'
 import './index.scss'
 
@@ -25,12 +22,8 @@ export default function RecordWork() {
   const localStore = useLocalStore(() => RememberTypeItem);
   // 获取remebertype数据
   const {businessType} = localStore;
-  // 获取当前路由
-  const router: Taro.RouterInfo = useRouter()
-  // 获取路由参数type 1 记账 2 记工
-  let {type} = router.params;
   //定义页面切换类型
-  const types: TypeAction[] = Number(type) == 1 ? businessType.slice(3) : businessType.slice(0, 3);
+  const types: TypeAction[] = businessType.slice(3);
   //定义当前选择的type项
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   // 当前选择的类型 1 记工 2记账
@@ -171,12 +164,6 @@ export default function RecordWork() {
                         params={startDate} types={types}></FlowList>
             </View>
           )}
-          {typeItem == 1 && types[currentIndex].id == '1' &&
-          <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate}/>}
-          {typeItem == 1 && types[currentIndex].id == '2' &&
-          <RecordAmoumt workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate}/>}
-          {typeItem == 1 && types[currentIndex].id == '3' &&
-          <RecordMoney workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate}/>}
           {typeItem == 1 && types[currentIndex].id == '4' &&
           <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
           {typeItem == 1 && types[currentIndex].id == '5' &&

@@ -9,7 +9,7 @@ import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlExpenditureHistoryGroupLeader, PersonlExpenditureHistoryClassifyType } from '@/config/store'
+import { PersonlExpenditureHistoryGroupLeader, PersonlExpenditureHistoryClassifyType, PersonlLastSuccessAccountPage } from '@/config/store'
 import { validNumber } from '@/utils/v'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
@@ -108,6 +108,7 @@ function Expenditure(){
         } else {
           Taro.removeStorageSync(PersonlExpenditureHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
         showBackModal(res.message)
       }else{
         msg(res.message)

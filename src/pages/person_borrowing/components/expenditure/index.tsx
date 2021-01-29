@@ -135,6 +135,7 @@ function Expenditure(){
   }
   // 用户关闭班组 组件
   const DeletePickerLeader = () => {
+    setGroupLeader({ id: '', name: '' })
     setIsPickerLeader(false)
   }
   // 用户点击分类组件  右上角关闭 
@@ -154,7 +155,7 @@ function Expenditure(){
       {isPickerType && 
         <PickerType 
           value={typeData.name} 
-          close={() => setIsPickType(false) } 
+          close={() => { setIsPickType(false); setTypeData({ id: '', name: '' })} } 
           onOptionClose={() => userTapRightTopCloseBtn()}
           set={(data) => userChangePickerType(data)} 
           show={showTypePicker} 

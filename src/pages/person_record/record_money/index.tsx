@@ -110,6 +110,7 @@ function RecordMoney() {
   }
   // 用户关闭 班组组件
   const DeletePickerLeader = () => {
+    setGroupLeader({ id: '', name: '' })
     setIsPickerLeader(false)
   }
   return (<View>

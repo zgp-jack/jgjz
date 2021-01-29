@@ -136,6 +136,7 @@ function RecordAmoumt() {
   }
   // 用户关闭班组 组件
   const DeletePickerLeader = () => {
+    setGroupLeader({ id: '', name: '' })
     setIsPickerLeader(false)
   }
   return (<View>
@@ -144,7 +145,7 @@ function RecordAmoumt() {
     {isPickerSubitem &&
       <PickerSubitem
         value={typeData.name}
-        close={() => setIsPickSubitem(false)}
+        close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' })}}
         onOptionClose={() => userTapRightTopCloseBtn()}
         set={(data) => { setTypeData(data); userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') }}
         show={showTypePicker}

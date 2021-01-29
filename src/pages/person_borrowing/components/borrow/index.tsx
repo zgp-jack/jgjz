@@ -147,6 +147,7 @@ function Borrow() {
   }
   // 用户关闭班组 组件
   const DeletePickerLeader = () => {
+    setGroupLeader({ id: '', name: '' })
     setIsPickerLeader(false)
   }
 

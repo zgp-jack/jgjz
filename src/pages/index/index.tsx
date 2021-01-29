@@ -255,7 +255,7 @@ const Remember = () => {
       setFilterYear(Number(filterYear) - 1)
       setFilterMonth(12)
     } else {
-      setFilterMonth(filterMonth - 1)
+      setFilterMonth(Number(filterMonth) - 1)
     }
   }
   /*下一个月份日期*/
@@ -268,7 +268,7 @@ const Remember = () => {
       setFilterYear(Number(filterYear) + 1)
       setFilterMonth(1)
     } else {
-      setFilterMonth(filterMonth + 1)
+      setFilterMonth(Number(filterMonth) + 1)
     }
   }
   /*日期选择器选择*/

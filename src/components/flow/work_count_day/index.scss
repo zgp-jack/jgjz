@@ -5,10 +5,25 @@
   .bokkeeping-list-item {
     padding: 0 30px;
     display: flex;
-    flex-direction: row;
     min-height: 150px;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    .bokkeeping-list-item-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bokkeeping-list-remarks {
+      width: 100%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      font-size: 28px;
+      font-weight: 400;
+      color: #979797;
+    }
 
     .bokkeeping-list-left {
       display: flex;
@@ -23,17 +38,6 @@
       }
 
       .bokkeeping-list-des {
-        font-size: 28px;
-        font-family: Source Han Sans CN;
-        font-weight: 400;
-        color: #979797;
-      }
-
-      .bokkeeping-list-remarks {
-        max-width: 350px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
         font-size: 28px;
         font-family: Source Han Sans CN;
         font-weight: 400;

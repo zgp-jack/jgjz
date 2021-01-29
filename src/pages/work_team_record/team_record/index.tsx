@@ -12,11 +12,14 @@ import {useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import {TypeAction} from '@/pages/work_team_record/team_record/index.d'
 import {getTodayDate} from '@/utils/index'
-import { GroupLastSuccessRecordPage, GroupLastSuccessAccountPage } from '@/config/store'
+import { GroupLastSuccessRecordPage } from '@/config/store'
 import './index.scss'
 
 
 export default function RecordWork() {
+
+  // 获取 历史记工成功页面
+  let personlLastType: number = Taro.getStorageSync(GroupLastSuccessRecordPage)
   /*获取账本数据*/
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {accountBookInfo} = _accountBookInfo
@@ -27,7 +30,7 @@ export default function RecordWork() {
   //定义页面切换类型
   const types: TypeAction[] = businessType.slice(0, 3);
   //定义当前选择的type项
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
+  const [currentId, setCurrentId] = useState<number>(personlLastType || 1)
   // 当前选择的类型 1 记工 2记账
   const [typeItem, SetTypeItem] = useState<number>(1);
 
@@ -83,24 +86,7 @@ export default function RecordWork() {
     setTimeText(timeStr)
     setStartDate(e.detail.value)
   }
-
-  /**
-   * @name: switchTab
-   * @params e: 事件对象 current为当前滑块idnex
-   * @return void
-   * @description 滑动滑块的时候切换当前的index
-   */
-  const switchTab = (e: any) => {
-    /**当前滑块的index*/
-    let index = e.detail.current;
-    /**保存当前滑块index*/
-    setCurrentIndex(index);
-    /**传递新的参数，刷新页面*/
-    // setParams({business_type: types[index].id}, true)
-    setTimeText(initTime(nowTime)[0])
-    setStartDate(nowTime)
-    SetTypeItem(1)
-  }
+ 
 
   /**
    * @name: changeTable
@@ -110,7 +96,7 @@ export default function RecordWork() {
    */
   const changeTable = (index: number) => {
     /**设置当前选中最新index*/
-    setCurrentIndex(index)
+    setCurrentId(Number(types[index].id))
     /**传递新的参数，刷新页面*/
     setTimeText(initTime(nowTime)[0])
     setStartDate(nowTime)
@@ -136,7 +122,7 @@ export default function RecordWork() {
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
-        <WorkTeamTable types={types} index={currentIndex} onChange={changeTable}/>
+        <WorkTeamTable types={types} currentId={currentId} onChange={changeTable}/>
       </View>
       <View className='record-work-head-date'>
         <View className='record-work-head-title'>选择日期：</View>
@@ -150,28 +136,28 @@ export default function RecordWork() {
 
       <ScrollView className='record-work-scroll' scrollY enableFlex onScrollToLower={() => onReatchEvent()}>
         <View className='record-worker-list'>
-          <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)}
+          <WorkerList workNote={accountBookInfo.id} currentId={currentId}
                       setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate}/>
         </View>
         <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
           <View className='record-work-table-head'>
             <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'}
-                  data-type={1} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>{type == '1' ? '记账' : '记工'}</Text></View>
+                  data-type={1} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>记工</Text></View>
             <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'}
               data-type={2} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>流水</Text></View>
           </View>
           {typeItem == 2 && (
             <View className='record-work-flow'>
-              <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentIndex={currentIndex}
+              <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentId={currentId}
                         params={startDate} types={types}></FlowList>
             </View>
           )}
-          {typeItem == 1 && types[currentIndex].id == '1' &&
-          <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate}/>}
-          {typeItem == 1 && types[currentIndex].id == '2' &&
-          <RecordAmoumt workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate}/>}
-          {typeItem == 1 && types[currentIndex].id == '3' &&
-          <RecordMoney workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate}/>}
+          {typeItem == 1 && currentId == 1 &&
+          <RecordDay workerId={workerId.join(',')} type={currentId} businessTime={startDate}/>}
+          {typeItem == 1 && currentId == 2 &&
+          <RecordAmoumt workerId={workerId.join(',')} type={currentId} businessTime={startDate}/>}
+          {typeItem == 1 && currentId == 3 &&
+          <RecordMoney workerId={workerId.join(',')} type={currentId} businessTime={startDate}/>}
         </View>
       </ScrollView>
     </View>

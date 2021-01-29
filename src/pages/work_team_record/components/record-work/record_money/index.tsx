@@ -6,6 +6,7 @@ import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import msg, { showBackModal, showModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
+import { GroupLastSuccessRecordPage } from '@/config/store'
 import RecordMoneyPostData, { PropsData} from './inter.d'
 import userAddRecordAction from '../api'
 import './index.scss'
@@ -52,6 +53,7 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
+        Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)
       } else {
         msg(res.message)
       }

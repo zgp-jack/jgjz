@@ -3,11 +3,9 @@ import { View, Button } from '@tarojs/components'
 import PickerMark from '@/components/picker_mark/index'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import { AddressBookConfirmEvent } from '@/config/events'
-import msg, { showBackModal, showModal } from '@/utils/msg'
-import { getTodayDate } from '@/utils/index'
-import classifyItem from '@/store/classify/inter.d'
+import msg, { showModal } from '@/utils/msg'
 import WorkDayComponent from '@/components/work_day'
+import { GroupLastSuccessRecordPage } from '@/config/store'
 import userAddRecordAction from '../api'
 import RecordDayPostData, { WorkTimeType, PropsData } from './inter.d'
 
@@ -78,6 +76,7 @@ function RecordDay({ workerId, type, businessTime }: PropsData) {
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
+        Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)
       } else {
         msg(res.message)
       }

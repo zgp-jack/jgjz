@@ -13,7 +13,7 @@ import userAddBorrowAction from '@/pages/work_team_bookkeeping/components/record
 import ContentInput from '@/components/picker_input/index'
 import './index.scss'
 import BorrowPostData, {BookkeepingProps} from './inter.d'
-import {teamBorrowType} from "@/config/store";
+import { teamBorrowType, GroupLastSuccessAccountPage} from "@/config/store";
 
 
 function Borrow(props: BookkeepingProps) {
@@ -113,6 +113,7 @@ function Borrow(props: BookkeepingProps) {
         if (typeData.id) {
           Taro.setStorageSync(teamBorrowType, JSON.stringify(typeData))
         }
+        Taro.setStorageSync(GroupLastSuccessAccountPage, params.business_type)
       } else {
         msg(res.message)
       }

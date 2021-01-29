@@ -15,7 +15,7 @@ import './index.scss'
 import ExpenditurePostData from './inter.d'
 import { BookkeepingProps } from "@/pages/work_team_bookkeeping/components/record_borrow/borrow/inter";
 import createAnimation = Taro.createAnimation;
-import {teamExpenditureType} from "@/config/store";
+import { teamExpenditureType, GroupLastSuccessAccountPage} from "@/config/store";
 
 
 function Expenditure(props: BookkeepingProps) {
@@ -110,6 +110,7 @@ function Expenditure(props: BookkeepingProps) {
         if (typeData.id) {
           Taro.setStorageSync(teamExpenditureType, JSON.stringify(typeData))
         }
+        Taro.setStorageSync(GroupLastSuccessAccountPage, params.business_type)
       } else {
         msg(res.message)
       }

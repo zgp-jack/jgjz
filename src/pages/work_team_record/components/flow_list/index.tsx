@@ -7,11 +7,11 @@ import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import { GetWorkFlowParams, FlowLists } from './index.d'
 import './index.scss'
 
-export default function FlowList({currentIndex=0, params='', types=[{id:'1',name:'记工天'}],touchBottom, workNote}) {
+export default function FlowList({currentId=1, params='', types=[{id:'1',name:'记工天'}],touchBottom, workNote}) {
   // 初始化请求参数
   let defaultParams: GetWorkFlowParams = {
     /**记工类型 1记工天，2记工量，3记工钱，4借支, 5支出*/
-    business_type: types[currentIndex].id,
+    business_type: String(currentId),
     /**开始时间*/
     start_business_time: params,
     /**当前账本，个人账本或者班组账本id*/
@@ -64,11 +64,11 @@ export default function FlowList({currentIndex=0, params='', types=[{id:'1',name
         hasmore={hasmore}
         length={list.length}
       >
-        {(types[currentIndex].id == "1" || types[currentIndex].id == "2") &&
-          <WorkCountDay list={flowList} type={Number(types[currentIndex].id)}></WorkCountDay>}
-        {(types[currentIndex].id == "3" || types[currentIndex].id == "4" || types[currentIndex].id == "5") &&
+        {(currentId == 1 || currentId == 2) &&
+          <WorkCountDay list={flowList} type={Number(currentId)}></WorkCountDay>}
+        {(currentId == 3 || currentId == 4 || currentId == 5) &&
           <WorkMoneyBorrowing list={flowList}
-            type={Number(types[currentIndex].id)}
+            type={Number(currentId)}
           ></WorkMoneyBorrowing>}
       </ListProvider>
   )

@@ -16,13 +16,13 @@ interface RecordWorkProps {
   setWorkerId: (data: number[]) => void
   workNote: number
   startDate: string
-  type: number
+  currentId: number
 }
 
-function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWorkProps) {
+function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: RecordWorkProps) {
   const { data, setLoading} = useInit(getWorkerList, {
     business_time: startDate,
-    action: type,
+    action: currentId,
     workNote: workNote
   }, {business_worker_id: [], note_worker: []})
   const [worker, setWorker] = useState<WorkerData[]>([])
@@ -82,7 +82,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
       /** 如果存在，将工友标记为选中 */
       if (findIndex !== -1) workerData[i].check = true;
       for (let n = 0; n < businessWorker.length; n++){
-        if (type == 1 || type == 2 || type == 3) {
+        if (currentId == 1 || currentId == 2 || currentId == 3) {
           if (workerData[i].id == businessWorker[n]) {
             workerData[i].recorded = true
             recordedData.push(workerData[i])
@@ -93,7 +93,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
         }
       }
     }
-    if (type == 1 || type == 2 || type == 3){
+    if (currentId == 1 || currentId == 2 || currentId == 3){
       workerData = [...workerData, ...recordedData]
     }
     // 设备宽度
@@ -321,9 +321,9 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
         <View className='record-work-person-head'>
           <View className='record-work-person-title'>
             <View className='record-work-person-tip'>选择工友（已选<Text className='record-work-person-text'>{workerId.length}</Text>人）</View>
-            <View className='record-work-person-all' onClick={() => chooseAll()}>{(type == 1 || type == 2 || type == 3) ? (data.business_worker_id.length == data.note_worker.length ? '' : (allChoose ? '取消全选' : '全选未记')) : (allChoose ? '取消全选':'全选')}</View>
+            <View className='record-work-person-all' onClick={() => chooseAll()}>{(currentId == 1 || currentId == 2 || currentId == 3) ? (data.business_worker_id.length == data.note_worker.length ? '' : (allChoose ? '取消全选' : '全选未记')) : (allChoose ? '取消全选':'全选')}</View>
           </View>
-          <View className='record-work-person-disc'>{(type == 1 || type == 2 || type == 3) ? '黄色块代表此工友当日已有记工' : '长按名字可编辑'}</View>
+          <View className='record-work-person-disc'>{(currentId == 1 || currentId == 2 || currentId == 3) ? '黄色块代表此工友当日已有记工' : '长按名字可编辑'}</View>
         </View>
       </View>
       {/* 工友数据列表 */}

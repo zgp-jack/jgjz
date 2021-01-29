@@ -12,6 +12,7 @@ import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { getTodayDate } from '@/utils/index'
 import msg, { showBackModal, showModal } from '@/utils/msg'
+import { GroupLastSuccessRecordPage } from '@/config/store'
 import { validNumber } from '@/utils/v'
 import classifyItem from '@/store/classify/inter.d'
 import RecordAmountPostData, { UnitTpey, PropsData } from './inter.d'
@@ -87,6 +88,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
+        Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)
       } else {
         msg(res.message)
       }

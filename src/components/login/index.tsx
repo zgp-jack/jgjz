@@ -7,13 +7,12 @@ import useCode from '@/hooks/code'
 import msg from '@/utils/msg'
 import userGetCodeLoginAction from './api'
 import { isPhone } from '@/utils/v'
-import { UserInfo } from '@/config/store'
+import { UserInfo, OldVersionLimit } from '@/config/store'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import User from '@/store/user';
 import AccountBookInfo from "@/store/account";
 import { UserGetCodeLoginParams, LoginProps } from './inter.d'
 import getWorkNotes from '../../pages/account_book_list/api'
-import Versionlimit from '@/components/version_limit/index'
 import './index.scss'
 
 function Login({
@@ -51,8 +50,6 @@ function Login({
     pass: '',
     type: ''
   })
-  /**是否是老版用户*/ 
-  const [showLogin, setShowLogin] = useState(false)
   /** 用户登录 */
   const userLoginAction = () => {
     if (!isPhone(paramsData.tel)) {
@@ -91,7 +88,11 @@ function Login({
         getUserNotesList()
         msg(res.message)
       } else if (res.code == 203) {/**老用户跳旧版*/
-        setShowLogin(true)
+        let oldVersionLimit = true
+        // 将老用户缓存本地
+        Taro.setStorageSync(OldVersionLimit, oldVersionLimit)
+        //关闭弹窗
+        setShow && setShow(false);
       } else {
         msg(res.message)
       }
@@ -165,9 +166,6 @@ function Login({
           <View className="login-tips">未注册手机验证后自动注册</View>
           <Button className="login-push-btn" onClick={() => userLoginAction()}>登录/注册</Button>
         </View>}
-
-        <Versionlimit show={showLogin} ></Versionlimit>
-
     </Block>
   )
 }

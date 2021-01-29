@@ -106,7 +106,7 @@ page {
           display: block;
           white-space: nowrap;
           word-break: break-all; 
-          font-weight: 500;
+          font-weight: 700;
         }
         .account-book-edit {
           color: #a7a7a7;
@@ -119,9 +119,9 @@ page {
   .account-book-btn {
     color: #fff;
     background: $color;
-    border-radius: 10px;
     font-size: 30px;
     line-height: 90px;
     border-radius: 5px;
+    border: none;
   }
 }

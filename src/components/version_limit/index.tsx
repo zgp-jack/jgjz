@@ -2,11 +2,11 @@ import Taro from '@tarojs/taro'
 import { View, Image, Block } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
 import { observer } from '@tarojs/mobx'
-import { VersionLimit } from './index.d'
+import { VersionLimitParams } from './inter.d'
 import './index.scss'
 function Versionlimit({
   show = false,
-}: VersionLimit) {
+}: VersionLimitParams) {
   /** 用户登录 */
   const userToOldVersion = () => {
     Taro.navigateToMiniProgram({
@@ -16,8 +16,6 @@ function Versionlimit({
       envVersion: "release",
       /*低下回调在工具里面报错*/
       success: function (res) {
-        // 打开成功
-        // this.saveTask(i.id);
         console.log(res);
       },
       fail: function (err) {

@@ -18,7 +18,7 @@ export default function PickerMark({
             <View className="person-record-modify-title person-record-date-title">{title}</View>
             <Textarea 
               maxlength={200}
-              autoHeight={true}
+              autoHeight={false}
               className="person-record-date-textarea" 
               value={text} 
               placeholder="..." 

@@ -152,7 +152,6 @@ function Borrow(props: BookkeepingProps) {
         value={typeData.name}
         close={() => {
           setIsPickType(false)
-          setTypeData({id: '', name: ''})
         }}
         onOptionClose={() => userTapRightTopCloseBtn()}
         set={(data) => {

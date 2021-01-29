@@ -1,4 +1,4 @@
-import Taro, { useEffect, useState, useRouter, Config, useRef} from '@tarojs/taro'
+import Taro, { useEffect, useState, useRouter, Config } from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team/components/flow_list/index'
 import RecordDay from '@/pages/work_team/components/record-work/record_day/index'
@@ -13,6 +13,7 @@ import {IMGCDNURL} from '@/config/index'
 import { useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import { TypeAction } from '@/pages/work_team/team_record/index.d'
+import { getTodayDate } from '@/utils/index'
 import './index.scss'
 
 
@@ -54,7 +55,7 @@ export default function RecordWork() {
     return [`${timeArray[0]}年${timeArray[1]}月${timeArray[2]}日`, `${timeArray[0]}-${timeArray[1]}-${timeArray[2]}`, `${timeArray[0]}/${timeArray[1]}/${timeArray[2]}`]
   }
   //定义当前时间
-  const nowTime = initTime(new Date().toLocaleDateString())[1]
+  const nowTime = initTime(getTodayDate())[1]
 
   // 时间选择文本显示
   const [timeText, setTimeText] = useState<string>('');
@@ -70,7 +71,7 @@ export default function RecordWork() {
 
   useEffect(() => {
     /**获取本地格式化日期 eg:2021/01/21*/
-    let timeNow = new Date().toLocaleDateString()
+    let timeNow = getTodayDate()
     /**按照格式初始化时间*/
     let timeStr = initTime(timeNow)[0];
     setTimeText(timeStr)
@@ -142,48 +143,49 @@ export default function RecordWork() {
       <View className='record-work-head'>
         <WorkTeamTable types={types} index={currentIndex} onChange={changeTable}/>
       </View>
-      <Swiper className='record-work-swiper' current={currentIndex} duration={300} onChange={(e) => switchTab(e)}>
-        {types.map((item, index) => (
-          <SwiperItem key={item.id} className='record-work-item'>
-            <View className='record-work-head-date'>
-              <View className='record-work-head-title'>选择日期：</View>
-              <View className='record-work-head-choose-date'>
-                <Picker mode='date' onChange={changeTime} value={startDate}>
-                  <Input className='record-work-date' type='text' disabled value={timeText}/>
-                </Picker>
-                <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
-              </View>
-            </View>
+      <View className='record-work-head-date'>
+        <View className='record-work-head-title'>选择日期：</View>
+        <View className='record-work-head-choose-date'>
+          <Picker mode='date' onChange={changeTime} value={startDate}>
+            <Input className='record-work-date' type='text' disabled value={timeText}/>
+          </Picker>
+          <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
+        </View>
+      </View>
+      
+      {/* <Swiper className='record-work-swiper' current={currentIndex} duration={300} onChange={(e) => switchTab(e)}> */}
+        {/* {types.map((item, index) => ( */}
+          {/* <SwiperItem key={item.id} className='record-work-item'> */}
+            
             <ScrollView className='record-work-scroll' scrollY enableFlex onScrollToLower={()=>onReatchEvent()}>
               <View className='record-worker-list'>
-                {currentIndex == index &&
-                  <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} />}
+                  <WorkerList workNote={accountBookInfo.id} type={Number(types[currentIndex].id)} setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} />
               </View>
               <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
                 <View className='record-work-table-head'>
                   <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'} data-type={1} onClick={(e) => switchTable(e)}><Text>{type == '1' ? '记账' : '记工'}</Text></View>
                   <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'} data-type={2} onClick={(e) => switchTable(e)}><Text>流水</Text></View>
                 </View>
-                {typeItem == 2 && (currentIndex == index) && (
+                {typeItem == 2 && (
                   <View className='record-work-flow'>
                     <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentIndex={currentIndex} params={startDate} types={types}></FlowList>
                   </View>
                 )}
-                {typeItem == 1 && types[currentIndex].id == '1' && (currentIndex == index) &&
+                {typeItem == 1 && types[currentIndex].id == '1' && 
                   <RecordDay workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate} />}
-                {typeItem == 1 && types[currentIndex].id == '2' && (currentIndex == index) &&
+                {typeItem == 1 && types[currentIndex].id == '2' && 
                   <RecordAmoumt workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate} />}
-                {typeItem == 1 && types[currentIndex].id == '3' && (currentIndex == index) &&
+                {typeItem == 1 && types[currentIndex].id == '3' && 
                   <RecordMoney workerId={workerId.join(',')} type={Number(types[currentIndex].id)} businessTime={startDate} />}
-                {typeItem == 1 && types[currentIndex].id == '4' && (currentIndex == index) &&
+                {typeItem == 1 && types[currentIndex].id == '4' && 
                 <Borrow workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate} />}
-                {typeItem == 1 && types[currentIndex].id == '5' && (currentIndex == index) &&
+                {typeItem == 1 && types[currentIndex].id == '5' &&
                 <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
               </View>
             </ScrollView>
-          </SwiperItem>
-        ))}
-      </Swiper>
+          {/* </SwiperItem> */}
+        {/* // ))} */}
+      {/* // </Swiper> */}
     </View>
   )
 }

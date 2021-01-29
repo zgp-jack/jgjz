@@ -9,8 +9,9 @@ import { AddressBookConfirmEvent } from '@/config/events'
 import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS, ADD_NOTE_WORKERS_PARAMS, GET_NOTE_WORKERS_PARAMS } from './index.d'
 import { InputValue } from '@/components/popup/index.d'
 import classnames from 'classnames'
-import msg from '@/utils/msg'
+import msg, { showActionModal } from '@/utils/msg'
 import { getWorkers, postAdd_Person, deletedPerson, editWordkerInfo, addNoteWorkers, deleteNoteWorkers, getNoteWorkers } from './api'
+import { isNumber, isRequire } from '@/utils/v/index'
 import PromptBox from '@/components/popup/index'
 import './index.scss'
 import { set } from 'mobx'
@@ -22,6 +23,7 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   const { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
+  // 不通的type显示不同的页面标题
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
     Taro.setNavigationBarTitle({
       title: '请选择需要添加的工友'
@@ -30,7 +32,7 @@ function AddressBook() {
     Taro.setNavigationBarTitle({
       title: '请选择需要离场的工友'
     })
-  } else if (type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_GROUP_LEAVE) {
+  } else if (type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_GROUP_LEAVE || type == ADDRESSBOOKTYPE_ALONE_DEL) {
     Taro.setNavigationBarTitle({
       title: '请选择班组长'
     })
@@ -39,14 +41,17 @@ function AddressBook() {
   const [list, setList] = useState<ADDRESS_BOOK_LIST[]>([])
   /** 已选择的工友 */
   const [selectd, setSelectd] = useState<PERSON_DATA[]>([])
+  /** 统计工友数量 */
+  const [workerLen, setWorkerLen] = useState<number>(0)
   useEffect(() => {
     if (!accountBookInfo.id) return
-    if (type == ADDRESSBOOKTYPE_GROUP_ADD || type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_ALONE) {
+    if (type == ADDRESSBOOKTYPE_GROUP_ADD || type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_ALONE_DEL) {
       /** 获取所有通讯录列表 */
-      getWorkers({ work_note: accountBookInfo.id }).then((res) => {
+      getWorkers(type == ADDRESSBOOKTYPE_ALONE_DEL ? { action: "select" } : { work_note: accountBookInfo.id }).then((res) => {
         setList(res.data)
+        statisticsWorkrLen(res.data)
       })
-    } else if (type == ADDRESSBOOKTYPE_LEAVE || type == ADDRESSBOOKTYPE_GROUP_LEAVE || type == ADDRESSBOOKTYPE_ALONE_DEL) {
+    } else if (type == ADDRESSBOOKTYPE_LEAVE || type == ADDRESSBOOKTYPE_GROUP_LEAVE) {
       //获取已在当前账本中的工人
       let params: GET_NOTE_WORKERS_PARAMS = {
         business_time: '',
@@ -130,6 +135,19 @@ function AddressBook() {
   const [viewTo, setViewTo] = useState<string>("")
   /** 是否一全选 全选勾勾控制*/
   const [isAllSelect, setIsAllSelect] = useState<boolean>(false)
+  /** 统计工友数量  */
+  const statisticsWorkrLen = (data?: ADDRESS_BOOK_LIST[]) => {
+    let NewList = data ? data : JSON.parse(JSON.stringify(list))
+    if (type == ADDRESSBOOKTYPE_ALONE) {
+      let workNum: number = 0
+      NewList.map(Pitem => {
+        Pitem.data.map(() => {
+          workNum++
+        })
+      })
+      setWorkerLen(workNum)
+    }
+  }
   /** 点击字母跳转相应位置 */
   const toView = (viewId: string) => {
     setViewTo(viewId == "view#" ? 'view_' : viewId)
@@ -182,19 +200,25 @@ function AddressBook() {
     setList(newListData)
     setIsAllSelect(false)
   }
-  /**随机选择一个颜色*/
+  /** 随机选择一个颜色 */
   const randomColor = (): string => {
     let colors: string[] = ['#58C7FF', '#74E8D5', '#A4BFFF', '#79BAFF', '#4ECBF4']
     return colors[Math.floor(Math.random() * 5)]
   }
   /** 添加工友弹窗确定 */
   const addConfirm = (data: InputValue) => {
-    if (data.name) {
-      setAddPopupShow(false)
-    } else {
+    if (!data.name) {
       msg("请填写工人名称")
       return
     }
+    if (isRequire(data.tel)) {
+      if (!isNumber(data.tel) || data.tel.length > 11) {
+        msg("请填写正确的手机号")
+        return
+      }
+    }
+
+    setAddPopupShow(false)
     /**给后台的参数*/
     let params: ADD_PERSON_PARAMS = {
       name: data.name,
@@ -268,13 +292,14 @@ function AddressBook() {
           }
         })
       }
-
       setList([...newList])
     }
     /** 修改已选中的数据 */
     let newSelectd = [...selectd]
     newSelectd.push(newPerson)
     setSelectd(newSelectd)
+    //统计人数
+    statisticsWorkrLen(newList)
   }
   /** 添加工友弹窗取消 */
   const addCancel = () => {
@@ -309,11 +334,18 @@ function AddressBook() {
   }
   /** 修改工友-接口请求 */
   const editWorkerConfirm = (data: InputValue) => {
+    if (data.tel != null && isRequire(data.tel)) {
+      if (!isNumber(data.tel) || data.tel.length > 11) {
+        msg("请填写正确的手机号")
+        return
+      }
+    }
     editWordkerInfo(editItemData.id, { name: data.name, tel: data.tel || '' }).then(res => {
       msg(res.message)
       if (res.code != 0) {
         return
       }
+
       setIsShowEdit(false)
       /** 所有工友数据 */
       let newList: ADDRESS_BOOK_LIST[] = JSON.parse(JSON.stringify(list))
@@ -432,6 +464,18 @@ function AddressBook() {
         })
         setFilterList(newFilterList)
       }
+      //重新搜索
+      let _lists: PERSON_DATA[] = []
+      newList.forEach(item => {
+        let items: PERSON_DATA[] = item.data
+        for (let i = 0; i < items.length; i++) {
+          let data: PERSON_DATA = items[i]
+          if (data.name.indexOf(value) !== -1) {
+            _lists = [..._lists, data]
+          }
+        }
+      })
+      setFilterList(_lists)
     })
   }
   /** 删除事件 */
@@ -439,31 +483,41 @@ function AddressBook() {
     let workId = {
       id: editItemData.id
     }
-    deletedPerson(workId).then((res) => {
-      msg(res.message)
-      if (res.code == 0) {
-        setIsShowEdit(false)
-        /** 在本地list删除当前数据 */
-        let newList: ADDRESS_BOOK_LIST[] = [...list]
-        let editId: number = editItemData.id
-        newList.map((Pitem, Pindex) => {
-          Pitem.data.map((Citem, Cindex) => {
-            if (Citem.id == editId) {
-              newList[Pindex].data.splice(Cindex, 1)
-              if (newList[Pindex].data.length < 1) {
-                newList.splice(Pindex, 1)
-              }
-              setList(newList)
-            }
-          })
+    showActionModal({
+      msg: "确定要删除此工友吗", showCancel: true, success: ((r) => {
+        if (r.cancel) {
+          return
+        }
+
+        deletedPerson(workId).then((res) => {
+          msg(res.message)
+          if (res.code == 0) {
+            setIsShowEdit(false)
+            /** 在本地list删除当前数据 */
+            let newList: ADDRESS_BOOK_LIST[] = [...list]
+            let editId: number = editItemData.id
+            newList.map((Pitem, Pindex) => {
+              Pitem.data.map((Citem, Cindex) => {
+                if (Citem.id == editId) {
+                  newList[Pindex].data.splice(Cindex, 1)
+                  if (newList[Pindex].data.length < 1) {
+                    newList.splice(Pindex, 1)
+                  }
+                  setList(newList)
+                }
+              })
+            })
+            /** 删除已选中的数据 */
+            let newSelectd: PERSON_DATA[] = [...selectd]
+            newSelectd.map((Sitem, Sindex) => {
+              Sitem.id == editId ? newSelectd.splice(Sindex, 1) : ''
+            })
+            //统计人数
+            statisticsWorkrLen(newList)
+            setSelectd(newSelectd)
+          }
         })
-        /** 删除已选中的数据 */
-        let newSelectd: PERSON_DATA[] = [...selectd]
-        newSelectd.map((Sitem, Sindex) => {
-          Sitem.id == editId ? newSelectd.splice(Sindex, 1) : ''
-        })
-        setSelectd(newSelectd)
-      }
+      })
     })
   }
   /** 显示修弹窗 */
@@ -592,24 +646,31 @@ function AddressBook() {
         if (res.code != 0) {
           return
         }
-        eventCenter.trigger(AddressBookConfirmEvent, ids)
+        eventCenter.trigger(AddressBookConfirmEvent, selectd)
         Taro.navigateBack()
       })
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {
       leave()
-    } else {
+    }else{
       eventCenter.trigger(AddressBookConfirmEvent, selectd)
       Taro.navigateBack()
     }
   }
-
+  /** 单选-点击搜索内容 直接返回上一页-传入选中数据 */
+  const aloneFilterSelect = (data: PERSON_DATA) => {
+    // 判断是单选 则拿到当前数据然后退出
+    if (type === ADDRESSBOOKTYPE_ALONE) {
+      eventCenter.trigger(AddressBookConfirmEvent, data)
+      Taro.navigateBack()
+    }
+  }
   return (
     <View className="AddressBook">
       {/* 已选中工友 */}
       {type !== ADDRESSBOOKTYPE_ALONE && <Selectd selectd={selectd} deletePerson={deletePerson} />}
 
       {/* 搜索组件 */}
-      <Search addClick={showAddPopup} onSearch={(val) => userSearchAction(val)} value={value} type={type} />
+      <Search addClick={showAddPopup} workerLen={workerLen} onSearch={(val) => userSearchAction(val)} value={value} type={type} />
       {/* 通讯录列表 */}
       <ScrollView scrollY scrollIntoView={viewTo} scrollWithAnimation className={classnames({
         "list_content": true,
@@ -627,16 +688,20 @@ function AddressBook() {
 
                   {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
                   {type !== ADDRESSBOOKTYPE_ALONE && <Image className='item_checkbox' src={cItem.is_in_work_note ? `${disableCheckImg}` : cItem.is_check ? `${onCheckdImg}` : `${normalCheckImg}`} />}
-
                   <View className="avatar" style={{ background: cItem.name_color }}>{cItem.name.substring(0, 2)}</View>
                   <View className="name_tle">
-                    <Text className="name">{cItem.name}</Text>
+                    <Text className="name">{cItem.name}{cItem.is_self == 1 ? '(自己)' : ''}</Text>
                     {cItem.tel && <Text className="tel">{cItem.tel}</Text>}
                   </View>
                 </View>
-                <View className="setting">
-                  <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(cItem) }}></Image>
-                </View>
+                {
+                  type != ADDRESSBOOKTYPE_GROUP_LEAVE && type != ADDRESSBOOKTYPE_ALONE_DEL &&
+                  <View className="setting">
+                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(cItem) }}></Image>
+                  </View>
+                }
+                {type == ADDRESSBOOKTYPE_ALONE_DEL && cItem.is_deleted == 1 && <View className="del"><Text>已删除</Text></View>}
+                {type == ADDRESSBOOKTYPE_GROUP_LEAVE && cItem.is_deleted == 1 && <View className="leave"><Text>已离场</Text></View>}
               </View>
             ))
             }
@@ -654,7 +719,7 @@ function AddressBook() {
         })}>
           {filterList.map((item, pIndex) => (
             <View className="item_person" key={item.id}>
-              <View className="left" onClick={() => filterSelect(pIndex, item.id)}>
+              <View className="left" onClick={() => type === ADDRESSBOOKTYPE_ALONE ? aloneFilterSelect(item) : filterSelect(pIndex, item.id)}>
 
                 {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
                 {type !== ADDRESSBOOKTYPE_ALONE &&
@@ -664,13 +729,18 @@ function AddressBook() {
 
                 <View className="avatar" style={{ background: item.name_color }}>{item.name.substring(0, 2)}</View>
                 <View className="name_tle">
-                  <Text className="name">{item.name}</Text>
+                  <Text className="name">{item.name}{item.is_self == 1 ? '(自己)' : ''}</Text>
                   {item.tel && <Text className="tel">{item.tel}</Text>}
                 </View>
               </View>
-              <View className="setting">
-                <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(item) }} ></Image>
-              </View>
+              {
+                type != ADDRESSBOOKTYPE_GROUP_LEAVE && type != ADDRESSBOOKTYPE_ALONE_DEL &&
+                <View className="setting">
+                  <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(item) }} ></Image>
+                </View>
+              }
+              {type == ADDRESSBOOKTYPE_ALONE_DEL && item.is_deleted == 1 && <View className="del"><Text>已删除</Text></View>}
+              {type == ADDRESSBOOKTYPE_GROUP_LEAVE && item.is_deleted == 1 && <View className="leave"><Text>已离场</Text></View>}
             </View>
           ))
           }
@@ -704,8 +774,8 @@ function AddressBook() {
         showTitleButton={false}
         confirmText="确定"
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: '' },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: '' }
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: '', maxlength: 20 },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: '', maxlength: 11 }
         ]}
         confirm={(data) => addConfirm(data)}
         cancel={addCancel}
@@ -715,10 +785,10 @@ function AddressBook() {
       {isShowEdit && <PromptBox
         titleText="修改工友"
         confirmText="确定"
-        titleButtonText={type == ADDRESSBOOKTYPE_LEAVE ? "离场" : "删除"}
+        titleButtonText={type == ADDRESSBOOKTYPE_LEAVE ? "离场" : (editItemData.is_self == 1 ? '' : "删除")}
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel }
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name,maxlength:20 },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel, maxlength: 11, disabled: editItemData.is_self == 1?true:false }
         ]}
         confirm={(data) => editWorkerConfirm(data)}
         cancel={() => setIsShowEdit(false)}

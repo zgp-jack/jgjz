@@ -11,7 +11,7 @@ export default function EmptyDate({
 }: EmptyDateProps) {
   return (
     <View className='empty-container'>
-      {!hideImg && <Image className='empty-image' src={`${IMGCDNURL}${img}`} />}
+      {!hideImg && <Image className='empty-image' src={`${IMGCDNURL}${img}`} mode='aspectFit'/>}
       {!hideText && <View className='empty-text'>{text}</View> }
     </View>
   )

@@ -140,7 +140,7 @@ const Remember = () => {
     initParams()
   }, [filterMonth, filterYear])
 
-  
+
   // 滑动触底事件
   useReachBottom(() => {
     let paramsData = { ...filterData }
@@ -165,7 +165,7 @@ const Remember = () => {
       setFilterData(params)
     }
   })
-  
+
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -509,14 +509,16 @@ const Remember = () => {
                         <View className="bokkeeping-list-head">{item.date}</View>
                         <View className="bokkeeping-list-content">
                           {item.list.map(p => (
-                            <Block key={p.id}>
-                              {/* 如果是记工天 记工量 */}
-                              {(p.business_type == 1 || p.business_type == 2) &&
+                            <View className="bokkeeping-list-content-line">
+                              <Block key={p.id}>
+                                {/* 如果是记工天 记工量 */}
+                                {(p.business_type == 1 || p.business_type == 2) &&
                                 <WorkCountDay list={[p]} type={p.business_type} />}
-                              {/* 如果是 记工钱、 借支、 支出 */}
-                              {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                                {/* 如果是 记工钱、 借支、 支出 */}
+                                {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
                                 <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
-                            </Block>
+                              </Block>
+                            </View>
                           ))}
                         </View>
                       </Block>

@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:00:27
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-29 16:08:27
+ * @LastEditTime: 2021-01-29 16:22:20
  * @Description: 项目缓存文件，所有缓存key存放文件 
  ! @rules: 1.key 为大驼峰 值为小驼峰 2.注释在上方
  */
@@ -40,3 +40,8 @@ export const GroupBorrowHistoryClassitifyType: string = 'groupBorrowHistoryClass
 // 班组记支出-历史分类信息
 export const GroupExpenditureHistoryClassitifyType: string = 'groupExpenditureHistoryClassitifyType'
 
+/*班组借支分类*/
+export const teamBorrowType: string = 'teamBorrowType'
+
+/*班组支出分类*/
+export const teamExpenditureType: string = 'teamExpenditureType'

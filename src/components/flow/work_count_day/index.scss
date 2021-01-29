@@ -1,54 +1,67 @@
-.bokkeeping-list-container{
+.bokkeeping-list-container {
   width: 100%;
   min-height: 150px;
-  border-bottom:1px solid rgba(229, 229, 229, .9);
-  .bokkeeping-list-item{
-  display: flex;
-  flex-direction: row;
-  min-height: 150px;
-  justify-content: space-between;
-  align-items: center;
-  .bokkeeping-list-left{
-    display: flex;
-    flex-direction: column;
-    margin-right: auto;
-    .bokkeeping-list-title{
-      font-size: 30px;
-      font-family: Source Han Sans CN;
-      font-weight: 400;
-      color: #333333;
-    }
-    .bokkeeping-list-des{
-      font-size: 28px;
-      font-family: Source Han Sans CN;
-      font-weight: 400;
-      color: #979797;
-    }
-    .bokkeeping-list-remarks{
-      font-size: 28px;
-      font-family: Source Han Sans CN;
-      font-weight: 400;
-      color: #979797;
-    }
-  }
-  .bokkeeping-list-right{
+
+  .bokkeeping-list-item {
+    padding: 0 30px;
     display: flex;
     flex-direction: row;
+    min-height: 150px;
+    justify-content: space-between;
     align-items: center;
-    .bokkeeping-list-count{
-      margin-right: 15px;
-      text-align: end;
-      View{
-        font-size: 28px;
+
+    .bokkeeping-list-left {
+      display: flex;
+      flex-direction: column;
+      margin-right: auto;
+
+      .bokkeeping-list-title {
+        font-size: 30px;
+        font-family: Source Han Sans CN;
         font-weight: 400;
-        color: #5C5C5C;
+        color: #333333;
+      }
+
+      .bokkeeping-list-des {
+        font-size: 28px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: #979797;
+      }
+
+      .bokkeeping-list-remarks {
+        max-width: 350px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 28px;
+        font-family: Source Han Sans CN;
+        font-weight: 400;
+        color: #979797;
       }
     }
-    Image{
-      width: 25px;
-      height: 25px;
+
+    .bokkeeping-list-right {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .bokkeeping-list-count {
+        margin-right: 15px;
+        text-align: end;
+
+        View {
+          font-size: 28px;
+          font-weight: 400;
+          color: #5C5C5C;
+        }
+      }
+
+      Image {
+        width: 25px;
+        height: 25px;
+      }
+
     }
-    
-  }
   }
 }

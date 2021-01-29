@@ -54,7 +54,7 @@ const Remember = () => {
   useEffect(() => {
     setPersonOrGroup(accountBookInfo.identity == 2)
   },[accountBookInfo.identity])
-  
+
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -155,7 +155,7 @@ const Remember = () => {
     initParams()
   }, [filterMonth, filterYear])
 
-  
+
   // 滑动触底事件
   useReachBottom(() => {
     let paramsData = { ...filterData }
@@ -180,7 +180,7 @@ const Remember = () => {
       setFilterData(params)
     }
   })
-  
+
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -359,7 +359,7 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords">{accountBookInfo.name}</View>
+          <View className="header-title overwords">{user.login ? accountBookInfo.name : '鱼泡默认记工账本'}</View>
           <View className="header-line"/>
           <View className="header-switch"
             onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
@@ -524,14 +524,16 @@ const Remember = () => {
                         <View className="bokkeeping-list-head">{item.date}</View>
                         <View className="bokkeeping-list-content">
                           {item.list.map(p => (
-                            <Block key={p.id}>
-                              {/* 如果是记工天 记工量 */}
-                              {(p.business_type == 1 || p.business_type == 2) &&
+                            <View className="bokkeeping-list-content-line">
+                              <Block key={p.id}>
+                                {/* 如果是记工天 记工量 */}
+                                {(p.business_type == 1 || p.business_type == 2) &&
                                 <WorkCountDay list={[p]} type={p.business_type} />}
-                              {/* 如果是 记工钱、 借支、 支出 */}
-                              {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                                {/* 如果是 记工钱、 借支、 支出 */}
+                                {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
                                 <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
-                            </Block>
+                              </Block>
+                            </View>
                           ))}
                         </View>
                       </Block>

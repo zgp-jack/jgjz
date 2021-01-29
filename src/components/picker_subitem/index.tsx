@@ -1,13 +1,13 @@
-import Taro, { useState, useEffect } from '@tarojs/taro'
-import { View, Image, Text, Input } from '@tarojs/components'
+import Taro, {useState, useEffect} from '@tarojs/taro'
+import {View, Image, Text, Input} from '@tarojs/components'
 import PickerOption from '@/components/picker/picker-option'
-import { IMGCDNURL } from '@/config/index'
-import userGetExpendType, { userEditExpendType, userAddExpendType, userDelExpendType } from './api'
-import PickerTypeProps, { PopupInputGroup }  from './inter.d'
+import {IMGCDNURL} from '@/config/index'
+import userGetExpendType, {userEditExpendType, userAddExpendType, userDelExpendType} from './api'
+import PickerTypeProps, {PopupInputGroup} from './inter.d'
 import ClassifyItem from '@/store/classify/inter'
-import { observer, useLocalStore } from '@tarojs/mobx'
+import {observer, useLocalStore} from '@tarojs/mobx'
 import ClassifySubitem from '@/store/classify/subitem';
-import msg, { showActionModal } from '@/utils/msg'
+import msg, {showActionModal} from '@/utils/msg'
 import Popup from '@/components/popup'
 import './index.scss'
 
@@ -15,27 +15,32 @@ import './index.scss'
 let current = 0
 
 function PickerType({
-  img = `${IMGCDNURL}zgp/subitem_icon.png`,
-  title = '分项',
-  value = '无分项',
-  hideImg = false,
-  close,
-  onOptionClose,
-  set,
-  show,
-  setShow,
-  rightClose = true,
-  isRecord = false
-}: PickerTypeProps) {
+                      img = `${IMGCDNURL}zgp/subitem_icon.png`,
+                      title = '分项',
+                      value = '无分项',
+                      hideImg = false,
+                      close,
+                      onOptionClose,
+                      set,
+                      show,
+                      setShow,
+                      rightClose = true,
+                      isRecord = false
+                    }: PickerTypeProps) {
 
   // input-name
   const inputName: string = 'name'
-  // 是否已经加载过分项数据 
+  // 是否已经加载过分项数据
   const [loading, setLoading] = useState<boolean>(false)
   // 是否显示添加 修改弹窗
   const [showPopup, setShowPopup] = useState<boolean>(false)
   // 添加 修改弹窗 input 内容
-  const [popupData, setPopupData] = useState<PopupInputGroup[]>([{ title: '分项名称:', name: inputName, placeholder: '请输入分项名称', value: '' }])
+  const [popupData, setPopupData] = useState<PopupInputGroup[]>([{
+    title: '分项名称:',
+    name: inputName,
+    placeholder: '请输入分项名称',
+    value: ''
+  }])
   // 修改弹窗的id
   const [id, setId] = useState<string>('')
   // 用户确认选择picker
@@ -48,7 +53,7 @@ function PickerType({
 
   // 获取stroe里面的数据
   const localStore = useLocalStore(() => ClassifySubitem);
-  const { addClassifySubitem, initClassifySubitem, delClassifySubitem, editClassifySubitem, status, types } = localStore
+  const {addClassifySubitem, initClassifySubitem, delClassifySubitem, editClassifySubitem, status, types} = localStore
 
 
   // 初始化分项数据
@@ -71,13 +76,11 @@ function PickerType({
   const userEditData = (data) => {
     let value: string = data[inputName]
     if (value) {
-      console.log(id)
       // 新增数据
       if (!id) {
         userAddAction(value)
       } else {
-        let params = { id, name: value }
-        console.log(params)
+        let params = {id, name: value}
         userEditAction(params)
       }
     }
@@ -110,7 +113,7 @@ function PickerType({
   // 用户添加弹窗或者修改弹窗 1 添加 2 修改
   const userEditItemType = (item?: ClassifyItem) => {
     console.log(current)
-    let obj: PopupInputGroup = { ...popupData[0] }
+    let obj: PopupInputGroup = {...popupData[0]}
     if (item) {
       obj.value = item.name
       setId(item.id)
@@ -132,8 +135,8 @@ function PickerType({
           userDelExpendType(id).then(res => {
             msg(res.message)
             if (res.code === 0) {
-              if(types[i].name == value){
-                isRecord && set && set({ id: '' ,name:'无分项'})
+              if (types[i].name == value) {
+                isRecord && set && set({id: '', name: '无分项'})
               }
               delClassifySubitem(i)
             }
@@ -145,24 +148,37 @@ function PickerType({
 
   return (
     <View>
-      <View className="person-record-overtime person-record-date" onClick={() => {setShow(true)}}>
-        {!hideImg && <Image className="person-record-date-img" src={img} />}
+      <View className="person-record-overtime person-record-date" onClick={() => {
+        setShow(true)
+      }}>
+        {!hideImg && <Image className="person-record-date-img" src={img}/>}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
         <Input className="person-record-date-text" value={value || '无分项'} placeholder='请添加您的分项' disabled></Input>
-        {rightClose && <Text className="overtime-icon" onClick={(e) => { e.stopPropagation(); close && close() }}></Text>}
+        {rightClose && <Text className="overtime-icon" onClick={(e) => {
+          e.stopPropagation();
+          close && close()
+        }}></Text>}
       </View>
 
       {show &&
-        <PickerOption
-          close={() => { setShow(false); onOptionClose && onOptionClose()}}
-          show={show}
-          confirm={(data) => userSurePicker(data)}
-          add={() => userEditItemType() }
-          data={types}
-          status={status}
-          edit={(data, i) => { current = i; userEditItemType(data); }}
-          del={(id, i) => { userDelExpendTypeAction(id, i) }}
-        />}
+      <PickerOption
+        close={() => {
+          setShow(false);
+          onOptionClose && onOptionClose()
+        }}
+        show={show}
+        confirm={(data) => userSurePicker(data)}
+        add={() => userEditItemType()}
+        data={types}
+        status={status}
+        edit={(data, i) => {
+          current = i;
+          userEditItemType(data);
+        }}
+        del={(id, i) => {
+          userDelExpendTypeAction(id, i)
+        }}
+      />}
 
 
       {/* 新增弹窗 */}

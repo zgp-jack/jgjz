@@ -14,6 +14,8 @@ import userAddBorrowAction from '@/pages/work_team/components/record_borrow/api'
 import './index.scss'
 import ExpenditurePostData from './inter.d'
 import {BookkeepingProps} from "@/pages/work_team/components/record_borrow/borrow/inter";
+import createAnimation = Taro.createAnimation;
+import {teamExpenditureType} from "@/config/store";
 
 
 function Expenditure(props: BookkeepingProps) {
@@ -105,7 +107,9 @@ function Expenditure(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showBackModal(res.message)
-        Taro.setStorageSync('teamExpenditureType', JSON.stringify(typeData))
+        if (typeData.id) {
+          Taro.setStorageSync(teamExpenditureType, JSON.stringify(typeData))
+        }
       } else {
         msg(res.message)
       }

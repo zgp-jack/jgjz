@@ -96,12 +96,15 @@
               display: flex;
               align-items: center;
             }
-            .date-icon-bor-left{
+
+            .date-icon-bor-left {
               justify-content: flex-start;
             }
-            .date-icon-bor-right{
+
+            .date-icon-bor-right {
               justify-content: flex-end;
             }
+
             .date-value {
               font-size: 32px;
               color: #333333;
@@ -284,7 +287,6 @@
                     font-size: 30px;
                     font-weight: 500;
                     color: #333333;
-                    margin-left: -8px;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
@@ -324,7 +326,8 @@
             color: #333333;
             margin-bottom: 30px;
             padding: 0 30px;
-            .flow-list-filter-title{
+
+            .flow-list-filter-title {
               color: #0099FF;
             }
           }
@@ -342,7 +345,14 @@
             }
 
             .bokkeeping-list-content {
-              padding: 0 30px;
+
+              .bokkeeping-list-content-line {
+                border-bottom: 1px solid rgba(229, 229, 229, .9);
+
+                &:last-child {
+                  border: none;
+                }
+              }
             }
 
           }

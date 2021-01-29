@@ -46,11 +46,11 @@ function WorkCountDay({ list = [], type = 1}: PropsData) {
                 </View>
                 <View className='bokkeeping-list-right'>
                   <View className='bokkeeping-list-count'>
-                    {type == 2 ? <View>{item.unit_num + item.unit}</View> :
-                      <View>上班：{item.work_time ? item.work_time + '个工' : ''}{item.work_time_hour ? item.work_time_hour + '小时' : ''}{(!item.work_time && !item.work_time_hour) ? '休息' : ''}</View>}
-                    {item.overtime && <View>加班：{item.overtime}小时</View>}
+                    {type == 2 ? <View className='bokkeeping-list-count-work'>{item.unit_num + item.unit}</View> :
+                      <View className='bokkeeping-list-count-work'>上班：{item.work_time ? item.work_time + '个工' : ''}{item.work_time_hour ? item.work_time_hour + '小时' : ''}{(!item.work_time && !item.work_time_hour) ? '休息' : ''}</View>}
+                    {item.overtime && <View className='bokkeeping-list-count-work'>加班：{item.overtime}小时</View>}
                   </View>
-                  <Image src={`${IMGCDNURL}common/arrow-right.png`}></Image>
+                  <Image className='bokkeeping-list-count-image' src={`${IMGCDNURL}common/arrow-right.png`}></Image>
                 </View>
               </View>
               {item.is_note && <View className='bokkeeping-list-remarks'>备注：{item.note}</View>}

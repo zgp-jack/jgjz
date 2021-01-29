@@ -34,8 +34,7 @@ page {
         margin-right: 20px;
       }
     }
-
-    Image {
+    .record-work-data-image {
       width: 20px;
     }
   }
@@ -97,7 +96,7 @@ page {
             transform: skewX(10deg);
           }
 
-          Text {
+          .record-work-table-left-text {
             position: absolute;
             transform: translateY(-50%) translateX(-50%);
             left: 50%;
@@ -133,7 +132,7 @@ page {
             transform: skewX(-10deg);
           }
 
-          Text {
+          .record-work-table-left-text {
             position: absolute;
             transform: translateY(-50%) translateX(-50%);
             left: 50%;

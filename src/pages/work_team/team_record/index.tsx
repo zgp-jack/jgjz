@@ -149,7 +149,7 @@ export default function RecordWork() {
           <Picker mode='date' onChange={changeTime} value={startDate}>
             <View className='record-work-date'>{timeText}</View>
           </Picker>
-          <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
+          <Image src={`${IMGCDNURL}common/arrow-right.png`} className='record-work-data-image' mode='widthFix'/>
         </View>
       </View>
 
@@ -161,9 +161,9 @@ export default function RecordWork() {
         <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
           <View className='record-work-table-head'>
             <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'}
-                  data-type={1} onClick={(e) => switchTable(e)}><Text>{type == '1' ? '记账' : '记工'}</Text></View>
+                  data-type={1} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>{type == '1' ? '记账' : '记工'}</Text></View>
             <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'}
-                  data-type={2} onClick={(e) => switchTable(e)}><Text>流水</Text></View>
+              data-type={2} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>流水</Text></View>
           </View>
           {typeItem == 2 && (
             <View className='record-work-flow'>

@@ -344,6 +344,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
         )}
         <View className='record-work-person-add' onClick={() => Taro.navigateTo({ url: '/pages/address_book/index?type=groupAdd' })}>
           <View className='record-work-person-box'><Image
+            className='record-work-person-image'
             src={`${IMGCDNURL}yc/add.png`}
             mode='widthFix'
           /></View>
@@ -352,6 +353,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
         {/* 删除工友 */}
         <View className='record-work-person-del' onClick={() => Taro.navigateTo({ url: `/pages/address_book/index?type=${ADDRESSBOOKTYPE_LEAVE}` })}>
           <View className='record-work-person-box'><Image
+            className='record-work-person-image'
             src={`${IMGCDNURL}yc/del.png`}
             mode='widthFix'
           /></View>

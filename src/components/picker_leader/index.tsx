@@ -18,7 +18,7 @@ export default function PickerLeader({
     <View className="person-record-overtime person-record-date" onClick={() => Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE })}>
         {hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
-        <Text className="person-record-date-text">{leader || '无班组长'}</Text>
+        <View className="person-record-date-text">{leader || '无班组长'}</View>
       {rightClose && <Text className="overtime-icon" onClick={(e) => {  e.stopPropagation();DeletePickerLeader && DeletePickerLeader()} }></Text>}
       </View>
   </View>)

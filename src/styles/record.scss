@@ -46,6 +46,10 @@
     .person-record-date-text{
         font-size: 30px;
         color: #333333;
+        max-width: 346px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
     .person-record-modify{
         font-size: 30px;

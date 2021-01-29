@@ -141,7 +141,7 @@ function RecordDay() {
         isSelect={!isOver}
         type='over'
         isClose = {true}
-        close={() => setIsOverTime(false)}
+        close={() => {setOverTime({value: '0',text: '无加班'});setIsOver(true);setIsOverTime(false)}}
       />}
     </View>
     {isPickerDate && <PickerDate

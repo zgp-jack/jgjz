@@ -163,7 +163,7 @@ function RecordAmoumt() {
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={userTapGroupLeaderBtn}>班组长</View>}
-      {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>{typeData.name ? typeData.name : '分项'}</View>}
+      {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
     </View>
     <View className="person-record-btn">
       <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

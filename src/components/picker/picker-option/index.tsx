@@ -9,16 +9,16 @@ import PickerOptionsProps from './inter.d'
 import LoadFooter from '@/components/load_footer'
 
 export default function PickerOption({
-  data = [],
-  show,
-  close,
-  confirm,
-  add,
-  edit,
-  del,
-  status = true
-}: PickerOptionsProps) {
-  
+                                       data = [],
+                                       show,
+                                       close,
+                                       confirm,
+                                       add,
+                                       edit,
+                                       del,
+                                       status = true
+                                     }: PickerOptionsProps) {
+
   return (
     <PopupBottom show={show} closePopup={close}>
       <View className="picker-option">
@@ -30,16 +30,26 @@ export default function PickerOption({
             className='picker-body-scroll'
             scrollY
           >
-            {!status && <LoadFooter text='数据加载中...' /> }
+            {!status && <LoadFooter text='数据加载中...'/>}
             {data.map((item, index) => (
               <View className="picker-option-item" key={item.id} onClick={() => confirm(item)}>
                 <View className="option-item-name">{item.name}</View>
                 <View className="option-item-icons">
-                  <Image className="option-item-icon" src={editpng} onClick={(e) => { e.stopPropagation();edit(item, index)}}/>
-                  <Image className="option-item-icon" src={remove} onClick={(e) => { e.stopPropagation();del(item.id, index)}}/>
+                  <View className="option-item-icon-bor" onClick={(e) => {
+                    e.stopPropagation();
+                    edit(item, index)
+                  }}>
+                    <Image className="option-item-icon" src={editpng}/>
+                  </View>
+                  <View className="option-item-icon-bor" onClick={(e) => {
+                    e.stopPropagation();
+                    del(item.id, index)
+                  }}>
+                    <Image className="option-item-icon" src={remove}/>
+                  </View>
                 </View>
               </View>
-              ))
+            ))
             }
           </ScrollView>
         </View>

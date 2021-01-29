@@ -46,7 +46,7 @@ const Remember = () => {
   useEffect(() => {
     setPersonOrGroup(accountBookInfo.identity == 2)
   },[accountBookInfo.identity])
-  
+
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -324,7 +324,7 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords">{accountBookInfo.name}</View>
+          <View className="header-title overwords">{user.login ? accountBookInfo.name : '鱼泡默认记工账本'}</View>
           <View className="header-line"/>
           <View className="header-switch"
             onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>

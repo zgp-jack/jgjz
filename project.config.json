@@ -39,7 +39,7 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
-  "simulatorType": "鱼泡记工记账",
+  "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
   "condition": {
     "plugin": {

@@ -696,8 +696,8 @@ function AddressBook() {
                 </View>
                 {
                   type != ADDRESSBOOKTYPE_GROUP_LEAVE && type != ADDRESSBOOKTYPE_ALONE_DEL &&
-                  <View className="setting">
-                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(cItem) }}></Image>
+                  <View className="setting" onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(cItem) }}>
+                    <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} ></Image>
                   </View>
                 }
                 {type == ADDRESSBOOKTYPE_ALONE_DEL && cItem.is_deleted == 1 && <View className="del"><Text>已删除</Text></View>}
@@ -735,8 +735,8 @@ function AddressBook() {
               </View>
               {
                 type != ADDRESSBOOKTYPE_GROUP_LEAVE && type != ADDRESSBOOKTYPE_ALONE_DEL &&
-                <View className="setting">
-                  <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`} onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(item) }} ></Image>
+                <View className="setting" onClick={(e) => { e.stopPropagation(); bossEditWorkerinfo(item) }} >
+                  <Image className="setting_img" src={`${IMGCDNURL}ws/setting.png`}></Image>
                 </View>
               }
               {type == ADDRESSBOOKTYPE_ALONE_DEL && item.is_deleted == 1 && <View className="del"><Text>已删除</Text></View>}
@@ -774,8 +774,8 @@ function AddressBook() {
         showTitleButton={false}
         confirmText="确定"
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: '', maxlength: 20 },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: '', maxlength: 11 }
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: '', maxlength: 20, type: 'text'  },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: '', maxlength: 11, type: 'number'  }
         ]}
         confirm={(data) => addConfirm(data)}
         cancel={addCancel}
@@ -787,8 +787,8 @@ function AddressBook() {
         confirmText="确定"
         titleButtonText={type == ADDRESSBOOKTYPE_LEAVE ? "离场" : (editItemData.is_self == 1 ? '' : "删除")}
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name,maxlength:20 },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel, maxlength: 11, disabled: editItemData.is_self == 1?true:false }
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name,maxlength:20,type:'text' },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel, maxlength: 11, disabled: editItemData.is_self == 1?true:false,type:"number" }
         ]}
         confirm={(data) => editWorkerConfirm(data)}
         cancel={() => setIsShowEdit(false)}

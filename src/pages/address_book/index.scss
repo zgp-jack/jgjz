@@ -58,12 +58,12 @@ page {
         display: flex;
         flex-direction: column;
         margin-left: 23px;
-        width: 450rpx;
+        width: 410rpx;
 
         .name {
           font-size: 28px;
           color: #000;
-          font-weight: 500;
+          font-weight: 600;
           text-overflow: ellipsis;
           will-change: auto;
           white-space: nowrap;
@@ -86,6 +86,7 @@ page {
 
     .setting {
       width: 50rpx;
+      text-align: center;
       .setting_img {
         width: 26px;
         height: 26px;

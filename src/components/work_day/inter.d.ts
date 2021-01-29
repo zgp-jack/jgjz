@@ -24,4 +24,8 @@ export interface WorkDayComponentProps {
   isClose?: boolean
   /** 关闭加班组件 */
   close?: () => void
+  /** 是否显示更多时间组件 */
+  isMoreTime?:boolean
+  /** 关闭更多时间组件 */
+  closeMoreTime?: () => void
 }

@@ -26,7 +26,9 @@ function RecordDay() {
   // 上班时长的数据
   const [workTime, setWorkTime] = useState<WorkTimeType>({value: '1', text: '一个工'})
   // 加班时长的数据
-  const [overTime, setOverTime] = useState<WorkTimeType>({ value: '0', text: '无加班' })
+  const [overTime, setOverTime] = useState<WorkTimeType>({ value: '', text: '' })
+  // 设置更多时间组件显示
+  const [isMoreTime, setIsMoreTime] = useState<boolean>(false)
   // 是否显示加班时间
   const [isOverTime, setIsOverTime] = useState<boolean>(false);
   // 时间年月日
@@ -117,15 +119,35 @@ function RecordDay() {
     })
   }
   // 改变加班/上班 值
-  const useChangeWorkTime = (data,type:string,typeValue?:string) => {
+  const useChangeWorkTime = (data,type:string,typeValue?:'work' | 'over') => {
     if (typeValue == 'work'){
       setWorkTime(data)
       setIsWork(type === 'first' ? true : false)
     }else{
       setOverTime(data)
       setIsOver(type === 'first' ? true : false)
+      setIsMoreTime(false)
     }
   }
+  // 点击圆角加班时间
+  const userTapOverTimeBtn = () => {
+    setIsMoreTime(true)
+    setIsOverTime(true)
+  }
+  const closeMoreTime = ()=> {
+    if(!overTime.value){
+      setIsOverTime(false)
+      setIsMoreTime(false)
+    }
+  }
+
+  // 用户关闭加班组件
+  const userCloseOverTimePcker = () => {
+    setOverTime({ value: '', text: '' }); 
+    setIsOver(true); 
+    setIsOverTime(false)
+  }
+
   return (<View>
     <View className="person-record-time">
       <WorkDayComponent 
@@ -141,7 +163,9 @@ function RecordDay() {
         isSelect={!isOver}
         type='over'
         isClose = {true}
-        close={() => {setOverTime({value: '0',text: '无加班'});setIsOver(true);setIsOverTime(false)}}
+        close={() => userCloseOverTimePcker()}
+        isMoreTime={isMoreTime}
+        closeMoreTime={() => closeMoreTime()}
       />}
     </View>
     {isPickerDate && <PickerDate
@@ -155,7 +179,7 @@ function RecordDay() {
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
-      {!isOverTime && <View className="person-record-component-item" onClick={() => setIsOverTime(true)}>加班时长</View>}
+      {!isOverTime && <View className="person-record-component-item" onClick={() => userTapOverTimeBtn()}>加班时长</View>}
     </View>
     <View className="person-record-btn">
       <Button className="person-record-save" onClick={userPostAcion} >确认记工</Button>

@@ -119,7 +119,8 @@ export default function BusinessAmount() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      group_leader: groupLeader.id,
+      unit: postData.unit ? postData.unit : '1',
     }
     editBorrowBusiness(params).then(res => {
       if (res.code === 0) {
@@ -140,7 +141,7 @@ export default function BusinessAmount() {
     setPostData({ ...postData, unit_work_type: '' })
   }
   return (<View>
-    <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
+    <ContentInput title='工量' maxLength={3} value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
     <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
       value={data.unit_work_type_name}

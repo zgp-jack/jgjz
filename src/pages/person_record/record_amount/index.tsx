@@ -82,10 +82,10 @@ function RecordAmoumt() {
       note: postData.note,
       work_note: accountBookInfo.id,
       business_time: postData.business_time,
-      unit: postData.unit,
+      unit: postData.unit ? postData.unit : 1,
       identity: accountBookInfo.identity,
       business_type: 2,
-      unit_num: postData.unit_num,
+      unit_num: postData.unit_num ? postData.unit_num : '0',
       unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
     }
     if (postData.unit_num) {
@@ -140,7 +140,7 @@ function RecordAmoumt() {
     setIsPickerLeader(false)
   }
   return (<View>
-    <ContentInput title='工量' value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
+    <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
     <PickerUnit set={(data) => userUpdatePostData(data.id,'unit')} />
     {isPickerSubitem &&
       <PickerSubitem

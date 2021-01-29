@@ -30,6 +30,10 @@
       }
 
       .bokkeeping-list-remarks {
+        max-width: 350px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
         font-size: 28px;
         font-family: Source Han Sans CN;
         font-weight: 400;

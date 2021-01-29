@@ -147,15 +147,11 @@ export default function RecordWork() {
         <View className='record-work-head-title'>选择日期：</View>
         <View className='record-work-head-choose-date'>
           <Picker mode='date' onChange={changeTime} value={startDate}>
-            <Input className='record-work-date' type='text' disabled value={timeText}/>
+            <View className='record-work-date'>{timeText}</View>
           </Picker>
           <Image src={`${IMGCDNURL}common/arrow-right.png`} mode='widthFix'/>
         </View>
       </View>
-
-      {/* <Swiper className='record-work-swiper' current={currentIndex} duration={300} onChange={(e) => switchTab(e)}> */}
-      {/* {types.map((item, index) => ( */}
-      {/* <SwiperItem key={item.id} className='record-work-item'> */}
 
       <ScrollView className='record-work-scroll' scrollY enableFlex onScrollToLower={() => onReatchEvent()}>
         <View className='record-worker-list'>
@@ -187,9 +183,6 @@ export default function RecordWork() {
           <Expenditure workerId={workerId.join(',')} type={types[currentIndex].id} businessTime={startDate}/>}
         </View>
       </ScrollView>
-      {/* </SwiperItem> */}
-      {/* // ))} */}
-      {/* // </Swiper> */}
     </View>
   )
 }

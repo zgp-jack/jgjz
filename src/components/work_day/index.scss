@@ -36,15 +36,15 @@
     }
     .worktime-select-time{
         position: relative;
-        padding-right: 16px;
+        padding-right: 25px;
     }
     .worktime-select-time::before{
       position: absolute;
       content: '';
       width: 0;
       height: 0;
-      border: 8px solid transparent;
-      border-bottom: 8px solid #666666;
+      border: 10px solid transparent;
+      border-bottom: 10px solid #666666;
       bottom: 50%;
       right: 0;
       margin-top: 4px;
@@ -54,8 +54,8 @@
         width: 0;
         height: 0;
         margin-top: 4px;
-        border: 8px solid transparent;
-        border-top: 8px solid #666666;
+        border: 10px solid transparent;
+        border-top: 10px solid #666666;
         position: absolute;
         top: 50%;
         right: 0;

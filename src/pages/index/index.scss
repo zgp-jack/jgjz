@@ -170,6 +170,9 @@
           justify-content: space-between;
           margin-bottom: 40px;
           padding: 0 30px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
 
           .filter-info-box {
             display: flex;

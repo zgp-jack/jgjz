@@ -428,7 +428,7 @@ const Remember = () => {
                     <Text className="filter-info-line">|</Text>
                   }
                   {
-                    filterData.is_note == '1' && <Text>
+                    filterData.is_note == '1' && <Text className="overwords">
                       <Text>有备注</Text>
                     </Text>
                   }

@@ -64,29 +64,38 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
   useEffect(() => {
     if (!data || !data.business_worker_id) return
     /** 从工友录添加工友和点击添加前选择的工友 */
-    let allWorkerData = [...workerId, ...addWorker];
+    let allWorkerData:number[] = [...workerId, ...addWorker];
     /** 已记录工友数据 */ 
-    let businessWorker = JSON.parse(JSON.stringify(data.business_worker_id));
-    let workerData = JSON.parse(JSON.stringify(data.note_worker));
-    workerData.forEach((item: any) => {
-      businessWorker.forEach((obj: any) => {
-        if (type == 1 || type == 2 || type == 3){
-          if (obj == item.id) {
-            item.recorded = true
-          }
-        }
-      })
-      /** 从已经选择的工友中查找是否存在 */ 
-      let findIndex = allWorkerData.findIndex((obj: any) => item.id == obj )
-      /** 如果存在，将工友标记为选中 */ 
-      if(findIndex !== -1) item.check = true;
-      /**处理工友数据是自己*/ 
-      if (item.is_self) {
-        item.name = item.name + "自己"
+    let businessWorker:number[] = JSON.parse(JSON.stringify(data.business_worker_id));
+    let workerData: WorkerData[] = JSON.parse(JSON.stringify(data.note_worker));
+    // 已经记录的数据
+    let recordedData: WorkerData[] = []
+    for (let i = 0; i < workerData.length; i++){
+      /**处理工友数据是自己*/
+      if (workerData[i].is_self) {
+        workerData[i].name = workerData[i].name + "自己"
       }
       /**截取工友名字后两个字*/
-      item.alias = item.name.substring(item.name.length - 2)
-    })
+      workerData[i].alias = workerData[i].name.substring(workerData[i].name.length - 2)
+      /** 从已经选择的工友中查找是否存在 */
+      let findIndex = allWorkerData.findIndex((obj: any) => workerData[i].id == obj)
+      /** 如果存在，将工友标记为选中 */
+      if (findIndex !== -1) workerData[i].check = true;
+      for (let n = 0; n < businessWorker.length; n++){
+        if (type == 1 || type == 2 || type == 3) {
+          if (workerData[i].id == businessWorker[n]) {
+            workerData[i].recorded = true
+            recordedData.push(workerData[i])
+            workerData.splice(i, 1)
+            i = i -1;
+            break;
+          }
+        }
+      }
+    }
+    if (type == 1 || type == 2 || type == 3){
+      workerData = [...workerData, ...recordedData]
+    }
     // 设备宽度
     let systemWidth = Taro.getSystemInfoSync().windowWidth;
     let proportion = systemWidth / 750;
@@ -100,6 +109,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
     setWorkerId(allWorkerData)
     setWorker(workerData);
     setEmptyCount(emptCount)
+    setAddWorker([])
   }, [data])
   
 
@@ -311,7 +321,7 @@ function RecordWork({workerId, setWorkerId, workNote, startDate, type}: RecordWo
         <View className='record-work-person-head'>
           <View className='record-work-person-title'>
             <View className='record-work-person-tip'>选择工友（已选<Text className='record-work-person-text'>{workerId.length}</Text>人）</View>
-            {data.business_worker_id.length == data.note_worker.length ? '' : <View className='record-work-person-all' onClick={() => chooseAll()}>{allChoose ? '取消全选' : ((type == 1 || type == 2 || type == 3) ? '全选未记' : '全选')}</View>}
+            <View className='record-work-person-all' onClick={() => chooseAll()}>{(type == 1 || type == 2 || type == 3) ? (data.business_worker_id.length == data.note_worker.length ? '' : (allChoose ? '取消全选' : '全选未记')) : (allChoose ? '取消全选':'全选')}</View>
           </View>
           <View className='record-work-person-disc'>{(type == 1 || type == 2 || type == 3) ? '黄色块代表此工友当日已有记工' : '长按名字可编辑'}</View>
         </View>

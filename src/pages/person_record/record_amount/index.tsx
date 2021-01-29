@@ -11,7 +11,7 @@ import RecordAmountPostData from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlHistoryGroupLeader, PersonlHistoryClassitifySubitem } from '@/config/store'
+import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem } from '@/config/store'
 import { getTodayDate } from '@/utils/index'
 import msg, { showBackModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
@@ -22,9 +22,9 @@ import './index.scss'
 
 function RecordAmoumt() {
   // 获取历史班组长数据
-  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryGroupLeader)
   // 获取历史分类数据
-  let classifySubiteminfo: classifyItem = Taro.getStorageSync(PersonlHistoryClassitifySubitem);
+  let classifySubiteminfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryClassitifySubitem);
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
@@ -47,10 +47,7 @@ function RecordAmoumt() {
     identity: 2,
   })
   // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {
-    id: '',
-    name: ''
-  })
+  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {id: '', name: '' })
   // 分项数据
   const [typeData, setTypeData] = useState<classifyItem>(classifySubiteminfo ? classifySubiteminfo : { id: '', name: '' })
   // 日期文本显示年月日
@@ -99,8 +96,16 @@ function RecordAmoumt() {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
-        Taro.setStorageSync(PersonlHistoryClassitifySubitem, typeData)
+        if (isPickerSubitem && typeData.id) {
+          Taro.setStorageSync(PersonlAmountHistoryClassitifySubitem, typeData)
+        } else {
+          Taro.removeStorageSync(PersonlAmountHistoryClassitifySubitem)
+        }
+        if (isPickerLeader && groupLeader.id) {
+          Taro.setStorageSync(PersonlAmountHistoryGroupLeader, groupLeader)
+        } else {
+          Taro.removeStorageSync(PersonlAmountHistoryGroupLeader)
+        }
         showBackModal(res.message)
       } else {
         msg(res.message)

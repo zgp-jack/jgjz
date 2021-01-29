@@ -9,7 +9,7 @@ import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlHistoryGroupLeader, PersonHistoryClassitify } from '@/config/store'
+import { PersonlExpenditureHistoryGroupLeader, PersonlExpenditureHistoryClassifyType } from '@/config/store'
 import { validNumber } from '@/utils/v'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
@@ -31,9 +31,9 @@ function Expenditure(){
     work_note: 0,
   })
   // 获取历史班组长数据
-  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlExpenditureHistoryGroupLeader)
   // 获取历史分类数据
-  let classitifyInfo: classifyItem = Taro.getStorageSync(PersonHistoryClassitify)
+  let classitifyInfo: classifyItem = Taro.getStorageSync(PersonlExpenditureHistoryClassifyType)
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 分类数据
@@ -47,10 +47,7 @@ function Expenditure(){
   // 是否显示选择分类
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo:{
-    id: '',
-    name: ''
-  })
+  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo:{ id: '', name: '' })
 
   // 日期文本显示年月日
   useEffect(() => {
@@ -101,8 +98,16 @@ function Expenditure(){
     }
     userAddBorrowAction(params).then((res) => {
       if(res.code === 0){
-        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
-        Taro.setStorageSync(PersonHistoryClassitify, typeData)
+        if (isPickerType && typeData.id) {
+          Taro.setStorageSync(PersonlExpenditureHistoryClassifyType, typeData)
+        }else{
+          Taro.removeStorageSync(PersonlExpenditureHistoryClassifyType)
+        }
+        if (isPickerLeader && groupLeader.id) {
+          Taro.setStorageSync(PersonlExpenditureHistoryGroupLeader, groupLeader)
+        } else {
+          Taro.removeStorageSync(PersonlExpenditureHistoryGroupLeader)
+        }
         showBackModal(res.message)
       }else{
         msg(res.message)

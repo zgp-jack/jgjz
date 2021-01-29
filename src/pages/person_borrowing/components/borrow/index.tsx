@@ -8,7 +8,7 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
-import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType, GroupBorrowHistoryClassitifyType } from '@/config/store'
+import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType } from '@/config/store'
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
@@ -25,7 +25,7 @@ function Borrow() {
   // 获取历史班组长数据
   let leaderInfo: classifyItem = Taro.getStorageSync(PersonlBorrowHistoryGroupLeader)
   // 获取历史分类数据
-  let classitify: classifyItem = Taro.getStorageSync(GroupBorrowHistoryClassitifyType)
+  let classitify: classifyItem = Taro.getStorageSync(PersonlBorrowHistoryClassifyType)
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分类组件
@@ -39,10 +39,7 @@ function Borrow() {
   // 分类数据
   const [typeData, setTypeData] = useState<classifyItem>(classitify ? classitify : {id: '', name: ''})
   // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {
-    id: '',
-    name: ''
-  })
+  const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : { id: '', name: '' })
   // 借支提交数据
   const [postData, setPostData] = useState<BorrowPostData>({
     business_type: 4,
@@ -104,19 +101,19 @@ function Borrow() {
         msg('请输入正确的金额')
         return
       }
-    }else{
-      msg('金额不能为空')
-      return
     }
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         if(isPickerType && typeData.id){
           Taro.setStorageSync(PersonlBorrowHistoryClassifyType, typeData)
+        }else{
+          Taro.removeStorageSync(PersonlBorrowHistoryClassifyType)
         }
-        if(isPickerLeader && leaderInfo.id){
+        if (isPickerLeader && groupLeader.id){
           Taro.setStorageSync(PersonlBorrowHistoryGroupLeader, groupLeader)
+        }else{
+          Taro.removeStorageSync(PersonlBorrowHistoryGroupLeader)
         }
-        
         showBackModal(res.message)
       } else {
         msg(res.message)

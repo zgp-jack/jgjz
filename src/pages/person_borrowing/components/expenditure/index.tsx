@@ -167,7 +167,7 @@ function Expenditure(){
       {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
-        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>{typeData.id ? typeData.name : '分类'}</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>分类</View>}
         {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn() }>班组长</View>}
       </View>

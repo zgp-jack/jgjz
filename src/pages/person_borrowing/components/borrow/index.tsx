@@ -150,13 +150,19 @@ function Borrow() {
     setIsPickerLeader(false)
   }
 
+  // 用户点击右侧关闭按钮
+  const userTapRightCloseBtn = () => {
+    setTypeData({id: '',name: ''})
+    setIsPickType(false)
+  }
+
   return (
     <View>
       <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money"/>
       {isPickerType &&
       <PickerType
         value={typeData.name}
-        close={() => setIsPickType(false)}
+        close={() => userTapRightCloseBtn()}
         onOptionClose={() => userTapRightTopCloseBtn()}
         set={(data) => {
           userChangePickerType(data)

@@ -136,8 +136,8 @@ function PickerType({
           userDelExpendType(id).then(res => {
             msg(res.message)
             if (res.code === 0) {
-              if (types[i].name == value) {
-                isRecord && set && set({id: '0', name: '无分类'})
+              if (types[i].id == id) {
+                isRecord && set && set({ id: '', name: '无分类' })
               }
               delClassifyType(i)
             }

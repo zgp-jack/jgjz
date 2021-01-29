@@ -651,9 +651,10 @@ function AddressBook() {
       })
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {
       leave()
+    }else{
+      eventCenter.trigger(AddressBookConfirmEvent, selectd)
+      Taro.navigateBack()
     }
-    eventCenter.trigger(AddressBookConfirmEvent, selectd)
-    Taro.navigateBack()
   }
   /** 单选-点击搜索内容 直接返回上一页-传入选中数据 */
   const aloneFilterSelect = (data: PERSON_DATA) => {

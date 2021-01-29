@@ -7,6 +7,33 @@ page{
   height: 100vh;
   display: flex;
   flex-direction: column;
+  .record-work-head-date{
+    position: fixed;
+    top: 100px;
+    width: 100vw;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #333333;
+    font-weight: 500;
+    padding: 0 30px;
+    background-color: white;
+    .record-work-head-choose-date{
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      .record-work-date{
+        text-align: end;
+        margin-right: 20px;
+      }
+    }
+    Image{
+      width: 20px;
+    }
+  }
   .record-work-head{
     height: 100px;
     width: 100%;
@@ -18,50 +45,14 @@ page{
     top: 0;
     z-index: 1;
   }
-  .record-work-swiper{
-    height: 100vh;
-    .record-work-item{
-      top: 0;
-      padding-top: 200px;
-      height: calc(100vh - 200px) !important;
-      .record-work-head-date{
-        position: fixed;
-        top: 100px;
-        width: 100vw;
-        height: 100px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        color: #333333;
-        font-weight: 500;
-        padding: 0 30px;
-        background-color: white;
-        .record-work-head-choose-date{
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-end;
-          align-items: center;
-          .record-work-date{
-            text-align: end;
-            margin-right: 20px;
-          }
-        }
-        Image{
-          width: 20px;
-        }
-      }
-    }
-    
-  }
   .record-work-scroll{
+    padding-top: 200px;
     height: calc(100vh - 200px);
     display: flex;
     flex-direction: column;
     .record-worker-list{
       margin-top: 20px;
-      padding: 0px 6rpx 50px 30rpx;
-      // height: 45%;
+      padding: 0px 5rpx 50px 30rpx;
       background-color: white;
     }
     .record-work-table-content{
@@ -74,9 +65,10 @@ page{
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
+        background-color: #E3F4FF;
         .record-work-table-left{
           position:relative;
-          height: 80px;
+          height: 100%;
           width: 50%;
           overflow:hidden;
           &::before{
@@ -99,12 +91,12 @@ page{
         }
         .check-item{
           &::before{
-            background-color:#E3F4FF;
+            background-color: white;
           }
         }
         .record-work-table-right{
           position:relative;
-          height: 80px;
+          height: 100%;
           width: 50%;
           overflow:hidden;
           &::before{
@@ -115,8 +107,8 @@ page{
             bottom:0;
             right:0;
             width: 100%;
-            transform-origin:100% 0;
-            transform:skewX(10deg);
+            transform-origin: 0 100%;
+            transform:skewX(-10deg);
           }
           Text{
             position: absolute;
@@ -131,7 +123,7 @@ page{
       }
     }
     .padding {
-      padding-bottom: 200px;
+      padding-bottom: 220px;
     }
   }
 }

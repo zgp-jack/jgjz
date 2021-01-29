@@ -13,6 +13,7 @@ import userAddBorrowAction from '@/pages/work_team/components/record_borrow/api'
 import ContentInput from '@/components/picker_input/index'
 import './index.scss'
 import BorrowPostData, {BookkeepingProps} from './inter.d'
+import {teamBorrowType} from "@/config/store";
 
 
 function Borrow(props: BookkeepingProps) {
@@ -109,7 +110,9 @@ function Borrow(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showBackModal(res.message)
-        Taro.setStorageSync('teamBorrowType', JSON.stringify(typeData))
+        if (typeData.id) {
+          Taro.setStorageSync(teamBorrowType, JSON.stringify(typeData))
+        }
       } else {
         msg(res.message)
       }

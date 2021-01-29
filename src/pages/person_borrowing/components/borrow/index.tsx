@@ -8,7 +8,7 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
-import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType } from '@/config/store'
+import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType, PersonlLastSuccessAccountPage } from '@/config/store'
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
@@ -114,6 +114,7 @@ function Borrow() {
         }else{
           Taro.removeStorageSync(PersonlBorrowHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)

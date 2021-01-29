@@ -8,7 +8,7 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
-import { PersonlHistoryGroupLeader, PersonHistoryClassitify } from '@/config/store'
+import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType, GroupBorrowHistoryClassitifyType } from '@/config/store'
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
@@ -23,9 +23,9 @@ function Borrow() {
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
   // 获取历史班组长数据
-  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlBorrowHistoryGroupLeader)
   // 获取历史分类数据
-  let classitify: classifyItem = Taro.getStorageSync(PersonHistoryClassitify)
+  let classitify: classifyItem = Taro.getStorageSync(GroupBorrowHistoryClassitifyType)
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分类组件
@@ -110,8 +110,13 @@ function Borrow() {
     }
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
-        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
-        Taro.setStorageSync(PersonHistoryClassitify, typeData)
+        if(isPickerType && typeData.id){
+          Taro.setStorageSync(PersonlBorrowHistoryClassifyType, typeData)
+        }
+        if(isPickerLeader && leaderInfo.id){
+          Taro.setStorageSync(PersonlBorrowHistoryGroupLeader, groupLeader)
+        }
+        
         showBackModal(res.message)
       } else {
         msg(res.message)
@@ -134,8 +139,8 @@ function Borrow() {
     if (!typeData.id) {
       // 关闭options弹窗
       setShowTypePicker(false)
-      // 关闭 分类 选项
-      typeData.id == '0' ? setIsPickType(true) : setIsPickType(false);
+      // 关闭分类选项
+      setIsPickType(false)
     }
   }
 
@@ -147,6 +152,7 @@ function Borrow() {
   const DeletePickerLeader = () => {
     setIsPickerLeader(false)
   }
+
   return (
     <View>
       <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money"/>

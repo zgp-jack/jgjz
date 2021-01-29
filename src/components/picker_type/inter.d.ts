@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-20 16:26:46
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-24 11:19:37
+ * @LastEditTime: 2021-01-29 11:38:26
  * @Description: interface for picker
  */
 import ClassifyItem from '@/store/classify/inter.d'

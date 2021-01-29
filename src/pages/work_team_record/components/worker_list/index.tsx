@@ -113,6 +113,18 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
   }, [data])
   
 
+  useEffect(()=>{
+    // 设备宽度
+    let systemWidth = Taro.getSystemInfoSync().windowWidth;
+    let proportion = systemWidth / 750;
+    let maxNumber = Math.floor((systemWidth- 30 * proportion) / (105 * proportion))-2;
+    let emptCount: WorkerData[] = []
+    for (let index = 0; index < maxNumber; index++) {
+      emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
+    }
+    setEmptyCount(emptCount)
+  },[])
+
   useDidShow(()=>{
     if(firstShow){
       setLoading(true)

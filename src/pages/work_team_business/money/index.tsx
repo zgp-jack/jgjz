@@ -68,7 +68,7 @@ export default function BusinessMoney() {
       if (res.code === 0) {
         let mydata = res.data
         setData(mydata)
-        setGroupLeader({id: mydata.group_leader, name: mydata.group_leader_name})
+        setGroupLeader({id: mydata.group_leader || '', name: mydata.group_leader_name || ''})
         setPostData({
           ...postData,
           note: mydata.note || "",

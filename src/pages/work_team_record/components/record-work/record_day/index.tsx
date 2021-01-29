@@ -73,6 +73,10 @@ function RecordDay({ workerId, type, businessTime }: PropsData) {
       work_note: accountBookInfo.id,
       worker_id: workerId
     }
+    if(params.worker_id == ''){
+      msg('请选择工人！')
+      return
+    }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
@@ -110,7 +114,7 @@ function RecordDay({ workerId, type, businessTime }: PropsData) {
         close={() => setIsOverTime(false)}
       />}
     </View>
-    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
+    <PickerMark text={postData.note as string} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       {!isOverTime && <View className="person-record-component-item" onClick={() => setIsOverTime(true)}>加班时长</View>}

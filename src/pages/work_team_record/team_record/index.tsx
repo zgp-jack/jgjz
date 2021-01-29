@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter, Config} from '@tarojs/taro'
+import Taro, {useEffect, useState, useRouter, Config, useDidShow} from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team_record/components/flow_list/index'
 import RecordDay from '@/pages/work_team_record/components/record-work/record_day/index'
@@ -62,6 +62,12 @@ export default function RecordWork() {
   const [workerId, setWorkerId] = useState<number[]>([])
 
   const [touchBottom, setTouchBottom] = useState<boolean>(false)
+
+  const [pageShow, setPageShow] = useState<boolean>(false)
+
+  useDidShow(()=>{
+    setPageShow(!pageShow)
+  })
 
   useEffect(() => {
     console.log('workerId父级', workerId)
@@ -149,7 +155,7 @@ export default function RecordWork() {
           {typeItem == 2 && (
             <View className='record-work-flow'>
               <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentId={currentId}
-                        params={startDate} types={types}></FlowList>
+                        params={startDate} types={types} pageShow={pageShow}></FlowList>
             </View>
           )}
           {typeItem == 1 && currentId == 1 &&

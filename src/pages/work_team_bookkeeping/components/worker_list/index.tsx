@@ -66,10 +66,7 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     /** 从工友录添加工友和点击添加前选择的工友 */
     let allWorkerData:number[] = [...workerId, ...addWorker];
     /** 已记录工友数据 */ 
-    let businessWorker:number[] = JSON.parse(JSON.stringify(data.business_worker_id));
     let workerData: WorkerData[] = JSON.parse(JSON.stringify(data.note_worker));
-    // 已经记录的数据
-    let recordedData: WorkerData[] = []
     for (let i = 0; i < workerData.length; i++){
       /**处理工友数据是自己*/
       if (workerData[i].is_self) {
@@ -81,20 +78,6 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
       let findIndex = allWorkerData.findIndex((obj: any) => workerData[i].id == obj)
       /** 如果存在，将工友标记为选中 */
       if (findIndex !== -1) workerData[i].check = true;
-      for (let n = 0; n < businessWorker.length; n++){
-        if (currentId == 1 || currentId == 2 || currentId == 3) {
-          if (workerData[i].id == businessWorker[n]) {
-            workerData[i].recorded = true
-            recordedData.push(workerData[i])
-            workerData.splice(i, 1)
-            i = i -1;
-            break;
-          }
-        }
-      }
-    }
-    if (currentId == 1 || currentId == 2 || currentId == 3){
-      workerData = [...workerData, ...recordedData]
     }
     // 设备宽度
     let systemWidth = Taro.getSystemInfoSync().windowWidth;
@@ -112,7 +95,20 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     setAddWorker([])
   }, [data])
   
+  useEffect(()=>{
+    // 设备宽度
+    let systemWidth = Taro.getSystemInfoSync().windowWidth;
+    let proportion = systemWidth / 750;
+    let maxNumber = Math.floor((systemWidth- 30 * proportion) / (105 * proportion))-2;
+    let emptCount: WorkerData[] = []
+    for (let index = 0; index < maxNumber; index++) {
+      emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
+    }
+    setEmptyCount(emptCount)
+  },[])
 
+
+  
   useDidShow(()=>{
     if(firstShow){
       setLoading(true)

@@ -44,6 +44,10 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
       identity: 2,
       worker_id: workerId
     }
+    if(params.worker_id == ''){
+      msg('请选择工人！')
+      return
+    }
     if (postData.money) {
       if (!validNumber(params.money)) {
         msg('请输入正确的金额')

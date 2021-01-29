@@ -28,6 +28,7 @@ export default function PickerUnitWare({
   const initUnitDataFun = () => {
     if (loading || status){
       setSelectUnit(unitdata[selected])
+      set(unitdata[selected])
       return
     } 
     userGetExpendType({}).then((res) => {
@@ -36,6 +37,7 @@ export default function PickerUnitWare({
         res.data.forEach((item) => unitData.push({id:item.id,value:item.name}))
         setLoading(true)
         setSelectUnit(unitData[selected])
+        set(res.data[selected])
         initUnitData(unitData)
       }
     })

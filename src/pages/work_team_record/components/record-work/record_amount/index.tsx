@@ -79,6 +79,10 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
       unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
       worker_id: workerId
     }
+    if(params.worker_id == ''){
+      msg('请选择工人！')
+      return
+    }
     if (postData.unit_num) {
       if (!validNumber(params.unit_num)) {
         msg('请输入正确的工量')

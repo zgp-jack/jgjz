@@ -7,7 +7,7 @@ import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import { GetWorkFlowParams, FlowLists } from './index.d'
 import './index.scss'
 
-export default function FlowList({currentId=1, params='', types=[{id:'1',name:'记工天'}],touchBottom, workNote}) {
+export default function FlowList({currentId=1, params='', types=[{id:'1',name:'记工天'}],touchBottom, workNote, pageShow}) {
   // 初始化请求参数
   let defaultParams: GetWorkFlowParams = {
     /**记工类型 1记工天，2记工量，3记工钱，4借支, 5支出*/
@@ -31,10 +31,22 @@ export default function FlowList({currentId=1, params='', types=[{id:'1',name:'�
     setParams({ end_business_time: params, start_business_time: params},true)
   },[params])
 
+  
+  // 页面非第一次显示重新加载数据
+  useEffect(()=>{
+    setFirstShow(true);
+    console.log("firstShow",firstShow)
+    if (firstShow) {
+      setLoading(true)
+    }
+  },[pageShow])
 
+  
   // 监听父组件触底事件，加载下一页流水数据
   useEffect(()=>{
-    setIncreasing(true)
+    if (firstShow) {
+      setIncreasing(true)
+    }
   },[touchBottom])
   
   // 监听请求返回流水数据，进行拼接处理
@@ -49,12 +61,13 @@ export default function FlowList({currentId=1, params='', types=[{id:'1',name:'�
   },[list])
 
   // 页面非第一次显示重新加载数据
-  useDidShow(()=>{
-    setFirstShow(true);
-    if (firstShow) {
-      setLoading(true)
-    }
-  })
+  // useDidShow(()=>{
+  //   console.log("firstShow",firstShow)
+  //   setFirstShow(true);
+  //   if (firstShow) {
+  //     setLoading(true)
+  //   }
+  // })
 
   return (
       <ListProvider

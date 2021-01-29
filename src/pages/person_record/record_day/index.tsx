@@ -7,7 +7,7 @@ import PickerMark from '@/components/picker_mark/index'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlHistoryGroupLeader } from '@/config/store'
+import { PersonlWorkdayHistoryGroupLeader } from '@/config/store'
 import msg, { showBackModal } from '@/utils/msg'
 import { getTodayDate } from '@/utils/index'
 import userAddRecordAction from '../api'
@@ -18,7 +18,7 @@ import './index.scss'
 
 function RecordDay() {
   // 获取历史班组长数据
-  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlHistoryGroupLeader)
+  let leaderInfo: classifyItem = Taro.getStorageSync(PersonlWorkdayHistoryGroupLeader)
   // 记工天 是否选中上班更多
   const [isWrok, setIsWork] = useState<boolean>(true)
   // 是否选中加班更多
@@ -105,7 +105,11 @@ function RecordDay() {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        Taro.setStorageSync(PersonlHistoryGroupLeader, groupLeader)
+        if(isPickerLeader && groupLeader.id){
+          Taro.setStorageSync(PersonlWorkdayHistoryGroupLeader, groupLeader)
+        }else{
+          Taro.removeStorageSync(PersonlWorkdayHistoryGroupLeader)
+        }
         showBackModal(res.message)
       } else {
         msg(res.message)

@@ -90,6 +90,7 @@ function PickerType({
       if (res.code === 0) {
         addClassifySubitem(res.data)
         setShowPopup(false)
+        userSurePicker(res.data)
       }
     })
   }

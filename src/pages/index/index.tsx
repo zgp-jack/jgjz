@@ -18,8 +18,9 @@ import Login from '@/components/login/index'
 import Filter from "./filter/index";
 import {getBusiness} from './api'
 import Versionlimit from '@/components/version_limit/index'
-import {OldVersionLimit} from '@/config/store'
+import { OldVersionLimit} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
+
 import './index.scss'
 
 
@@ -252,10 +253,10 @@ const Remember = () => {
       return
     }
     if (filterMonth == 1) {
-      setFilterYear(filterYear - 1)
+      setFilterYear(Number(filterYear) - 1)
       setFilterMonth(12)
     } else {
-      setFilterMonth(filterMonth - 1)
+      setFilterMonth(Number(filterMonth) - 1)
     }
   }
   /*下一个月份日期*/
@@ -265,10 +266,10 @@ const Remember = () => {
       return
     }
     if (filterMonth == 12) {
-      setFilterYear(filterYear + 1)
+      setFilterYear(Number(filterYear) + 1)
       setFilterMonth(1)
     } else {
-      setFilterMonth(filterMonth + 1)
+      setFilterMonth(Number(filterMonth) + 1)
     }
   }
   /*日期选择器选择*/

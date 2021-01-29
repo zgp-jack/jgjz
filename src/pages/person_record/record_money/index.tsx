@@ -10,7 +10,7 @@ import { AddressBookConfirmEvent } from '@/config/events'
 import AccountBookInfo from '@/store/account'
 import { getTodayDate } from '@/utils/index'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
-import { PersonlMoneyHistoryGroupLeader } from '@/config/store'
+import { PersonlMoneyHistoryGroupLeader, PersonlLastSuccessRecordPage } from '@/config/store'
 import msg, { showBackModal } from '@/utils/msg'
 import userAddRecordAction from '../api'
 import { validNumber } from '@/utils/v'
@@ -90,6 +90,7 @@ function RecordMoney() {
         } else {
           Taro.removeStorageSync(PersonlMoneyHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)

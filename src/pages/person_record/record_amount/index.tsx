@@ -11,7 +11,7 @@ import RecordAmountPostData from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem } from '@/config/store'
+import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem, PersonlLastSuccessRecordPage } from '@/config/store'
 import { getTodayDate } from '@/utils/index'
 import msg, { showBackModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
@@ -106,6 +106,7 @@ function RecordAmoumt() {
         } else {
           Taro.removeStorageSync(PersonlAmountHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)

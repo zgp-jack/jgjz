@@ -12,6 +12,7 @@ import {useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import {TypeAction} from '@/pages/work_team_record/team_record/index.d'
 import {getTodayDate} from '@/utils/index'
+import { GroupLastSuccessRecordPage, GroupLastSuccessAccountPage } from '@/config/store'
 import './index.scss'
 
 

@@ -7,7 +7,7 @@ import PickerMark from '@/components/picker_mark/index'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlWorkdayHistoryGroupLeader } from '@/config/store'
+import { PersonlLastSuccessRecordPage, PersonlWorkdayHistoryGroupLeader } from '@/config/store'
 import msg, { showBackModal } from '@/utils/msg'
 import { getTodayDate } from '@/utils/index'
 import userAddRecordAction from '../api'
@@ -110,6 +110,7 @@ function RecordDay() {
         }else{
           Taro.removeStorageSync(PersonlWorkdayHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)

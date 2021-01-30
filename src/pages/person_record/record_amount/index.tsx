@@ -86,7 +86,7 @@ function RecordAmoumt() {
       identity: accountBookInfo.identity,
       business_type: 2,
       unit_num: postData.unit_num ? postData.unit_num : '0',
-      unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
+      unit_work_type: isPickerSubitem ? typeData.id : '',
     }
     if (postData.unit_num) {
       if (!validNumber(params.unit_num)) {

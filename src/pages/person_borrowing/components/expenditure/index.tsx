@@ -82,7 +82,7 @@ function Expenditure(){
   const userPostAcion = () => {
     let params: ExpenditurePostData = {
       business_type: 5,
-      expend_type: isPickerType ? postData.expend_type : 0,
+      expend_type: isPickerType ? typeData.id : 0,
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
@@ -179,7 +179,7 @@ function Expenditure(){
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn() }>班组长</View>}
       </View>
       <View className="person-record-btn">
-        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>
+        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记帐</Button>
       </View>
     </View>
   )

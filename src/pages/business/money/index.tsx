@@ -116,7 +116,7 @@ export default function BusinessMoney() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      group_leader: groupLeader.id || ''
     }
     editBusinessMoney(params).then(res => {
       if (res.code === 0) {

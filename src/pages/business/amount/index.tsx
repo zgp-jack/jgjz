@@ -144,7 +144,7 @@ export default function BusinessAmount() {
     <ContentInput title='工量' maxLength={3} value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
     <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
-      value={data.unit_work_type_name}
+      value={{ name: data.unit_work_type_name, id: data.unit_work_type}}
       show={show}
       setShow={() => { setShow(!show) }}
       set={(data) => userChangePickerType(data)}

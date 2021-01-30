@@ -17,7 +17,7 @@ let current = 0
 function PickerType({
                       img = `${IMGCDNURL}zgp/subitem_icon.png`,
                       title = '分项',
-                      value = '无分项',
+                      value = {id: '', name: '无分项'},
                       hideImg = false,
                       close,
                       onOptionClose,
@@ -103,7 +103,9 @@ function PickerType({
     userEditExpendType(params).then(res => {
       msg(res.message)
       if (res.code === 0) {
-        console.log(current)
+        if (params.id == value.id) {
+          set && set(params)
+        }
         editClassifySubitem(current, params)
         setShowPopup(false)
       }
@@ -135,7 +137,7 @@ function PickerType({
           userDelExpendType(id).then(res => {
             msg(res.message)
             if (res.code === 0) {
-              if (types[i].name == value) {
+              if (types[i].id == value.id) {
                 isRecord && set && set({ id: '', name: '无分项' }, types[i])
               }
               delClassifySubitem(i)
@@ -153,7 +155,7 @@ function PickerType({
       }}>
         {!hideImg && <Image className="person-record-date-img" src={img}/>}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
-        <Input className="person-record-date-text" value={value || '无分项'} placeholder='请添加您的分项' disabled></Input>
+        <Input className="person-record-date-text" value={value.name || '无分项'} placeholder='请添加您的分项' disabled></Input>
         {rightClose && <Text className="overtime-icon" onClick={(e) => {
           e.stopPropagation();
           close && close()

@@ -144,7 +144,7 @@ export default function BusinessExpenditure() {
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
     <PickerLeader leader={groupLeader} DeletePickerLeader={() => userClearLeader()} />
     <PickerType
-      value={data.expend_type_name}
+      value={{name:data.expend_type_name,id: data.expend_type}}
       show={show}
       setShow={() => {
         setShow(!show)

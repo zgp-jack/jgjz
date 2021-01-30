@@ -156,7 +156,7 @@ function Expenditure(){
       <ContentInput type="money" title="金额" change={userUpdatePostData} value={postData.money} />
       {isPickerType && 
         <PickerType 
-          value={typeData.name} 
+          value={typeData} 
           close={() => { setIsPickType(false); setTypeData({ id: '', name: '' })} } 
           onOptionClose={() => userTapRightTopCloseBtn()}
           set={(data, type) => userChangePickerType(data, type)} 

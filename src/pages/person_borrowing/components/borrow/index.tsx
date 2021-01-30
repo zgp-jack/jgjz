@@ -164,7 +164,7 @@ function Borrow() {
       <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money"/>
       {isPickerType &&
       <PickerType
-        value={typeData.name}
+        value={typeData}
         close={() => userTapRightCloseBtn()}
         onOptionClose={() => userTapRightTopCloseBtn()}
         set={(data,type) => {

@@ -16,7 +16,7 @@ export default interface PickerTypeProps {
   /** 标题 */
   title?: string,
   /** 内容 */
-  value?: string,
+  value?: ClassifyItem,
   /** 关闭事件 */
   close?: () => void,
   /** 是否显示右侧关闭按钮  */

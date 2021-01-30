@@ -154,7 +154,7 @@ function RecordAmoumt() {
     <PickerUnit selected={UnitInfo-1} set={(data) => userUpdatePostData(data.id,'unit')} />
     {isPickerSubitem &&
       <PickerSubitem
-        value={typeData.name}
+        value={typeData}
         close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' })}}
         onOptionClose={() => userTapRightTopCloseBtn()}
         set={(data,type) => userSetSubitem(data,type)}

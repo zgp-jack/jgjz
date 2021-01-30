@@ -26,7 +26,7 @@ function RecordAmoumt() {
   // 获取历史分类数据
   let classifySubiteminfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryClassitifySubitem);
   // 获取历史单位数据
-  let UnitInfo: number = Taro.getStorageSync(PersonlAmountHistoryUnitId) || 0
+  let UnitInfo: number = Taro.getStorageSync(PersonlAmountHistoryUnitId) || 1
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件

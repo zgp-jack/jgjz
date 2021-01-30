@@ -26,7 +26,7 @@ export default function ContentInput({ title, change, value, type, maxLength = 2
       return '';
     }
     let index: number = _value.indexOf('.')
-    if (_value[0] == '0' && index ){
+    if (_value[0] == '0' && index == -1 ){
       return 0
     }
     // if(_value.match(/^.[^.]+$/)){

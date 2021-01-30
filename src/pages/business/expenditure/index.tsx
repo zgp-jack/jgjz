@@ -119,7 +119,8 @@ export default function BusinessExpenditure() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      group_leader: groupLeader.id,
+      money: postData.money ? postData.money : '0'
     }
     editExpenditureBusiness(params).then(res => {
       if (res.code === 0) {

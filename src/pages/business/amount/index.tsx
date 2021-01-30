@@ -121,6 +121,7 @@ export default function BusinessAmount() {
       ...postData,
       group_leader: groupLeader.id,
       unit: postData.unit ? postData.unit : '1',
+      unit_num: postData.unit_num ? postData.unit_num : '0'
     }
     editBorrowBusiness(params).then(res => {
       if (res.code === 0) {

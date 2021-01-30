@@ -132,7 +132,7 @@ export default function BusinessMoney() {
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
     <PickerLeader leader={groupLeader}  DeletePickerLeader={() => userClearLeader()}  />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
+    <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
       <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>

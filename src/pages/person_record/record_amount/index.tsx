@@ -11,7 +11,7 @@ import RecordAmountPostData from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem, PersonlLastSuccessRecordPage } from '@/config/store'
+import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem, PersonlLastSuccessRecordPage, PersonlAmountHistoryUnitId } from '@/config/store'
 import { getTodayDate } from '@/utils/index'
 import msg, { showBackModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
@@ -25,6 +25,8 @@ function RecordAmoumt() {
   let leaderInfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryGroupLeader)
   // 获取历史分类数据
   let classifySubiteminfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryClassitifySubitem);
+  // 获取历史单位数据
+  let UnitInfo: number = Taro.getStorageSync(PersonlAmountHistoryUnitId) || 0
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
@@ -106,6 +108,7 @@ function RecordAmoumt() {
         } else {
           Taro.removeStorageSync(PersonlAmountHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlAmountHistoryUnitId, params.unit)
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
       } else {
@@ -142,7 +145,7 @@ function RecordAmoumt() {
   }
   return (<View>
     <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
-    <PickerUnit set={(data) => userUpdatePostData(data.id,'unit')} />
+    <PickerUnit selected={UnitInfo-1} set={(data) => userUpdatePostData(data.id,'unit')} />
     {isPickerSubitem &&
       <PickerSubitem
         value={typeData.name}

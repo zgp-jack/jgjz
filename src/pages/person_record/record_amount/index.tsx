@@ -143,6 +143,12 @@ function RecordAmoumt() {
     setGroupLeader({ id: '', name: '' })
     setIsPickerLeader(false)
   }
+  // 用户获取分项数据
+  const userSetSubitem = (data,type) => {
+    type && (type.id == typeData.id) && Taro.removeStorageSync(PersonlAmountHistoryClassitifySubitem)
+    setTypeData(data); 
+    userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') 
+  }
   return (<View>
     <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
     <PickerUnit selected={UnitInfo-1} set={(data) => userUpdatePostData(data.id,'unit')} />
@@ -151,7 +157,7 @@ function RecordAmoumt() {
         value={typeData.name}
         close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' })}}
         onOptionClose={() => userTapRightTopCloseBtn()}
-        set={(data) => { setTypeData(data); userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') }}
+        set={(data,type) => userSetSubitem(data,type)}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         isRecord = {true}

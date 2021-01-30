@@ -125,7 +125,8 @@ function Expenditure(){
     }
   }
   // 用户选择分类数据
-  const userChangePickerType = (data) => {
+  const userChangePickerType = (data, type) => {
+    type && (type.id == typeData.id) && Taro.removeStorageSync(PersonlExpenditureHistoryClassifyType)
     setTypeData(data); 
     userUpdatePostData(data.id == '0' ? '' : data.id, 'expend_type')
   }
@@ -158,7 +159,7 @@ function Expenditure(){
           value={typeData.name} 
           close={() => { setIsPickType(false); setTypeData({ id: '', name: '' })} } 
           onOptionClose={() => userTapRightTopCloseBtn()}
-          set={(data) => userChangePickerType(data)} 
+          set={(data, type) => userChangePickerType(data, type)} 
           show={showTypePicker} 
           setShow={(bool: boolean) => setShowTypePicker(bool) }
           isRecord={true}

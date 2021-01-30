@@ -137,7 +137,7 @@ function PickerType({
             msg(res.message)
             if (res.code === 0) {
               if (types[i].id == id) {
-                isRecord && set && set({ id: '', name: '无分类' })
+                isRecord && set && set({ id: '', name: '无分类' },types[i])
               }
               delClassifyType(i)
             }

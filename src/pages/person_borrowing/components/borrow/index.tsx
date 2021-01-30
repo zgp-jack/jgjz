@@ -79,7 +79,8 @@ function Borrow() {
   }
 
   // 用户选择分类数据
-  const userChangePickerType = (data) => {
+  const userChangePickerType = (data,type) => {
+    type && (type.id == typeData.id) && Taro.removeStorageSync(PersonlBorrowHistoryClassifyType)
     setTypeData(data);
     userUpdatePostData(data.id == '0' ? '' : data.id, 'expend_type')
   }
@@ -166,8 +167,8 @@ function Borrow() {
         value={typeData.name}
         close={() => userTapRightCloseBtn()}
         onOptionClose={() => userTapRightTopCloseBtn()}
-        set={(data) => {
-          userChangePickerType(data)
+        set={(data,type) => {
+          userChangePickerType(data, type)
         }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}

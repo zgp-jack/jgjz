@@ -1,5 +1,5 @@
 import { useEffect, useState, eventCenter } from '@tarojs/taro'
-import { View, Button } from  '@tarojs/components'
+import { View, Button, Picker } from  '@tarojs/components'
 import ContentInput from '@/components/picker_input/index'
 import PickerType from '@/components/picker_type'
 import PickerDate from '@/components/picker_date'
@@ -151,6 +151,12 @@ function Expenditure(){
     }
   }
 
+  // 用户更新时间选择器
+  const userChangePicker = (e) => {
+    let value = e.detail.value
+    userUpdatePostData(value, 'business_time')
+  }
+
   return (
     <View>
       <ContentInput type="money" title="金额" change={userUpdatePostData} value={postData.money} />
@@ -176,7 +182,10 @@ function Expenditure(){
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>分类</View>}
-        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+        {!isPickerDate &&
+        <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
+          <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
+        </Picker>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn() }>班组长</View>}
       </View>
       <View className="person-record-btn">

@@ -1,5 +1,5 @@
 import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View, Button, Picker } from '@tarojs/components'
 import RecordDayPostData, { WorkTimeType } from './inter.d'
 import PickerDate from '@/components/picker_date/index'
 import PickerLeader from '@/components/picker_leader/index'
@@ -149,6 +149,12 @@ function RecordDay() {
     setIsOverTime(false)
   }
 
+  // 用户更新时间选择器
+  const userChangePicker = (e) => {
+    let value = e.detail.value
+    userUpdatePostData(value, 'business_time')
+  }
+
   return (<View>
     <View className="person-record-time">
       <WorkDayComponent 
@@ -178,7 +184,10 @@ function RecordDay() {
     {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={() => { setGroupLeader({ id: '', name: '' });setIsPickerLeader(false)}} />}
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
-      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+      {!isPickerDate && 
+      <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
+        <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
+      </Picker>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
       {!isOverTime && <View className="person-record-component-item" onClick={() => userTapOverTimeBtn()}>加班时长</View>}
     </View>

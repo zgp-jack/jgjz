@@ -1,5 +1,5 @@
 import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View, Button, Picker } from '@tarojs/components'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import ContentInput from '@/components/picker_input'
 import PickerDate from '@/components/picker_date'
@@ -149,6 +149,13 @@ function RecordAmoumt() {
     setTypeData(data); 
     userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') 
   }
+
+  // 用户更新时间选择器
+  const userChangePicker = (e) => {
+    let value = e.detail.value
+    userUpdatePostData(value, 'business_time')
+  }
+
   return (<View>
     <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
     <PickerUnit selected={UnitInfo-1} set={(data) => userUpdatePostData(data.id,'unit')} />
@@ -172,7 +179,10 @@ function RecordAmoumt() {
     {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')} />
     <View className="person-record-component">
-      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+      {!isPickerDate && 
+      <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
+          <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
+        </Picker>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={userTapGroupLeaderBtn}>班组长</View>}
       {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
     </View>

@@ -150,7 +150,7 @@ export default function BusinessAmount() {
       set={(data) => userChangePickerType(data)}
       close={() => userClearPickerType()}
     />
-    <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => DeletePickerLeader()} />
+    <PickerLeader leader={groupLeader} DeletePickerLeader={() => DeletePickerLeader()} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">

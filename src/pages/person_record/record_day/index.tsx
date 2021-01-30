@@ -175,7 +175,7 @@ function RecordDay() {
       change={(val) => userUpdatePostData(val, 'business_time')}
       dateText={dateText}
     />}
-    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => { setGroupLeader({ id: '', name: '' });setIsPickerLeader(false)}} />}
+    {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={() => { setGroupLeader({ id: '', name: '' });setIsPickerLeader(false)}} />}
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}

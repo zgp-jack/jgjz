@@ -17,7 +17,12 @@ export default interface PickerLeaderProps {
   // 组件标题
   title?:string
   // 日期
-  leader:string
+  leader: leaderType
   // 删除日期组件
   DeletePickerLeader?: () => void
+}
+// 班组长信息
+interface leaderType {
+  id: string,
+  name: string
 }

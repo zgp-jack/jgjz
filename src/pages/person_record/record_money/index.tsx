@@ -10,7 +10,7 @@ import { AddressBookConfirmEvent } from '@/config/events'
 import AccountBookInfo from '@/store/account'
 import { getTodayDate } from '@/utils/index'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
-import { PersonlMoneyHistoryGroupLeader } from '@/config/store'
+import { PersonlMoneyHistoryGroupLeader, PersonlLastSuccessRecordPage } from '@/config/store'
 import msg, { showBackModal } from '@/utils/msg'
 import userAddRecordAction from '../api'
 import { validNumber } from '@/utils/v'
@@ -90,6 +90,7 @@ function RecordMoney() {
         } else {
           Taro.removeStorageSync(PersonlMoneyHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)
@@ -121,7 +122,7 @@ function RecordMoney() {
       change={(val) => userUpdatePostData(val, 'business_time')}
       dateText={dateText} 
     />}
-    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
+    {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}

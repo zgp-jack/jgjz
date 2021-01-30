@@ -22,7 +22,7 @@ export default function MoreWorkTime({
     text: '无加班'
   }
     return (
-      <View className="moreworktime" onClick={WorktimeCancle}>
+      <View className="moreworktime" onClick={(e) => { e.stopPropagation(); WorktimeCancle()}}>
         <View className={classnames({
           "moreworktime-content": true,
           "no-over-time-content": hasOverBtn
@@ -42,7 +42,7 @@ export default function MoreWorkTime({
                 <View className = {classnames({
                   "moreworktime-item": true,
                   "worktime-active": isSelect && (item.value === value)
-                })} key={item.value} onClick={() => { set(item, 'end'); WorktimeCancle() }}>{item.text}</View>
+                })} key={item.value} onClick={() => { set(item, 'end'); }}>{item.text}</View>
               )}
             </View>
         </View>

@@ -8,7 +8,7 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
-import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType } from '@/config/store'
+import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType, PersonlLastSuccessAccountPage } from '@/config/store'
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
@@ -79,7 +79,8 @@ function Borrow() {
   }
 
   // 用户选择分类数据
-  const userChangePickerType = (data) => {
+  const userChangePickerType = (data,type) => {
+    type && (type.id == typeData.id) && Taro.removeStorageSync(PersonlBorrowHistoryClassifyType)
     setTypeData(data);
     userUpdatePostData(data.id == '0' ? '' : data.id, 'expend_type')
   }
@@ -88,7 +89,7 @@ function Borrow() {
   const userPostAcion = () => {
     let params: BorrowPostData = {
       business_type: 4,
-      expend_type: isPickerType ? postData.expend_type : 0,
+      expend_type: isPickerType ? typeData.id : 0,
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
@@ -114,6 +115,7 @@ function Borrow() {
         }else{
           Taro.removeStorageSync(PersonlBorrowHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)
@@ -162,11 +164,11 @@ function Borrow() {
       <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money"/>
       {isPickerType &&
       <PickerType
-        value={typeData.name}
+        value={typeData}
         close={() => userTapRightCloseBtn()}
         onOptionClose={() => userTapRightTopCloseBtn()}
-        set={(data) => {
-          userChangePickerType(data)
+        set={(data,type) => {
+          userChangePickerType(data, type)
         }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
@@ -181,7 +183,7 @@ function Borrow() {
         change={(val) => userUpdatePostData(val, 'business_time')}
         dateText={dateText}
       />}
-      {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader}/>}
+      {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader}/>}
       <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => {
@@ -193,7 +195,7 @@ function Borrow() {
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
       </View>
       <View className="person-record-btn">
-        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>
+        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记帐</Button>
       </View>
     </View>
   )

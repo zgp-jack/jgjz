@@ -18,7 +18,7 @@ let current = 0
 function PickerType({
                       img = `${IMGCDNURL}zgp/classify_icon.png`,
                       title = '分类',
-                      value = '无分类',
+                      value = {id: '', name: '无分类'},
                       hideImg = false,
                       close,
                       onOptionClose,
@@ -105,7 +105,9 @@ function PickerType({
     userEditExpendType(params).then(res => {
       msg(res.message)
       if (res.code === 0) {
-        console.log(current)
+        if (params.id == value.id) {
+          set && set(params)
+        }
         editClassifyType(current, params)
         setShowPopup(false)
       }
@@ -137,7 +139,7 @@ function PickerType({
             msg(res.message)
             if (res.code === 0) {
               if (types[i].id == id) {
-                isRecord && set && set({ id: '', name: '无分类' })
+                isRecord && set && set({ id: '', name: '无分类' },types[i])
               }
               delClassifyType(i)
             }
@@ -153,7 +155,7 @@ function PickerType({
       <View className="person-record-overtime person-record-date" onClick={() => setShow(true)}>
         {!hideImg && <Image className="person-record-date-img" src={img}/>}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
-        <Input className="person-record-date-text" value={value} placeholder='请添加您的分类' disabled></Input>
+        <Input className="person-record-date-text" value={value.name} placeholder='请添加您的分类' disabled></Input>
         {rightClose && <Text className="overtime-icon" onClick={(e) => {
           e.stopPropagation();
           close && close()

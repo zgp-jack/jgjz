@@ -4,7 +4,6 @@ import ContentInput from '@/components/picker_input'
 import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerDetail from '@/components/picker_detail'
-import PickerType from '@/components/picker_type'
 import PickerSubitem from '@/components/picker_subitem'
 import PickerUnitWara from '@/components/picker_unit'
 import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem } from './inter.d'
@@ -120,7 +119,9 @@ export default function BusinessAmount() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      group_leader: groupLeader.id,
+      unit: postData.unit ? postData.unit : '1',
+      unit_num: postData.unit_num ? postData.unit_num : '0'
     }
     editBorrowBusiness(params).then(res => {
       if (res.code === 0) {
@@ -141,16 +142,16 @@ export default function BusinessAmount() {
     setPostData({ ...postData, unit_work_type: '' })
   }
   return (<View>
-    <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
+    <ContentInput title='工量' maxLength={3} value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
     <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
-      value={data.unit_work_type_name}
+      value={{ name: data.unit_work_type_name, id: data.unit_work_type}}
       show={show}
       setShow={() => { setShow(!show) }}
       set={(data) => userChangePickerType(data)}
       close={() => userClearPickerType()}
     />
-    <PickerLeader leader={groupLeader.name} DeletePickerLeader={() => DeletePickerLeader()} />
+    <PickerLeader leader={groupLeader} DeletePickerLeader={() => DeletePickerLeader()} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">

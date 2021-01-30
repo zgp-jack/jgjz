@@ -116,7 +116,8 @@ export default function BusinessMoney() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      group_leader: groupLeader.id || '',
+      money: postData.money ? postData.money : '0'
     }
     editBusinessMoney(params).then(res => {
       if (res.code === 0) {
@@ -129,7 +130,7 @@ export default function BusinessMoney() {
 
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
-    <PickerLeader leader={groupLeader.name}  DeletePickerLeader={() => userClearLeader()}  />
+    <PickerLeader leader={groupLeader}  DeletePickerLeader={() => userClearLeader()}  />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
     <View className="person-record-btn">

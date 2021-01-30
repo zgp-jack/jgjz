@@ -169,7 +169,7 @@ export default function ModifyWorkDay(){
         type='over'
       />
     </View>
-    <PickerLeader leader={groupLeader.name}  DeletePickerLeader={()=>userClearLeader()} />
+    <PickerLeader leader={groupLeader}  DeletePickerLeader={()=>userClearLeader()} />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <PickerDetail
       dateValue={data.busienss_time_string}

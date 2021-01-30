@@ -1,11 +1,14 @@
 import Taro from '@tarojs/taro'
 import {View, Image, Block} from '@tarojs/components'
 import {IMGCDNURL} from '@/config/index'
+import { observer, useLocalStore } from '@tarojs/mobx'
+import AccountBookInfo from "@/store/account";
 import {PropsData} from './index.d'
 import './index.scss'
 
-export default function WorkCountDay({list = [], type = 1}: PropsData) {
-
+function WorkCountDay({ list = [], type = 1}: PropsData) {
+  const _accountBookInfo = useLocalStore(() => AccountBookInfo)
+  const { accountBookInfo } = _accountBookInfo
   /**
    * @name: goDetail
    * @params id:流水信息id  action: 当前流水类型 1: 记工天 2: 记工量
@@ -14,11 +17,20 @@ export default function WorkCountDay({list = [], type = 1}: PropsData) {
    */
   const goDetail = (id: number, action: number) => {
     let url: string = ''
-    if (action === 1) {
-      url = `/pages/work_team_business/workday/index?id=${id}`
-    } else {
-      url = `/pages/work_team_business/amount/index?id=${id}`
+    if (accountBookInfo.identity == 1){
+      if (action === 1) {
+        url = `/pages/work_team_business/workday/index?id=${id}`
+      } else {
+        url = `/pages/work_team_business/amount/index?id=${id}`
+      }
+    }else{
+      if (action === 1) {
+        url = `/pages/business/workday/index?id=${id}`
+      } else {
+        url = `/pages/business/amount/index?id=${id}`
+      }
     }
+    
     Taro.navigateTo({url})
   }
   return (
@@ -51,3 +63,5 @@ export default function WorkCountDay({list = [], type = 1}: PropsData) {
     </Block>
   )
 }
+
+export default observer(WorkCountDay)

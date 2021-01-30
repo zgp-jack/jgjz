@@ -11,7 +11,7 @@ import RecordAmountPostData from './inter.d'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem } from '@/config/store'
+import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem, PersonlLastSuccessRecordPage, PersonlAmountHistoryUnitId } from '@/config/store'
 import { getTodayDate } from '@/utils/index'
 import msg, { showBackModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
@@ -25,6 +25,8 @@ function RecordAmoumt() {
   let leaderInfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryGroupLeader)
   // 获取历史分类数据
   let classifySubiteminfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryClassitifySubitem);
+  // 获取历史单位数据
+  let UnitInfo: number = Taro.getStorageSync(PersonlAmountHistoryUnitId) || 1
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
@@ -82,11 +84,11 @@ function RecordAmoumt() {
       note: postData.note,
       work_note: accountBookInfo.id,
       business_time: postData.business_time,
-      unit: postData.unit,
+      unit: postData.unit ? postData.unit : 1,
       identity: accountBookInfo.identity,
       business_type: 2,
-      unit_num: postData.unit_num,
-      unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
+      unit_num: postData.unit_num ? postData.unit_num : '0',
+      unit_work_type: isPickerSubitem ? typeData.id : '',
     }
     if (postData.unit_num) {
       if (!validNumber(params.unit_num)) {
@@ -106,6 +108,8 @@ function RecordAmoumt() {
         } else {
           Taro.removeStorageSync(PersonlAmountHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlAmountHistoryUnitId, params.unit)
+        Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)
@@ -139,15 +143,21 @@ function RecordAmoumt() {
     setGroupLeader({ id: '', name: '' })
     setIsPickerLeader(false)
   }
+  // 用户获取分项数据
+  const userSetSubitem = (data,type) => {
+    type && (type.id == typeData.id) && Taro.removeStorageSync(PersonlAmountHistoryClassitifySubitem)
+    setTypeData(data); 
+    userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') 
+  }
   return (<View>
-    <ContentInput title='工量' value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
-    <PickerUnit set={(data) => userUpdatePostData(data.id,'unit')} />
+    <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
+    <PickerUnit selected={UnitInfo-1} set={(data) => userUpdatePostData(data.id,'unit')} />
     {isPickerSubitem &&
       <PickerSubitem
-        value={typeData.name}
+        value={typeData}
         close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' })}}
         onOptionClose={() => userTapRightTopCloseBtn()}
-        set={(data) => { setTypeData(data); userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') }}
+        set={(data,type) => userSetSubitem(data,type)}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         isRecord = {true}
@@ -159,7 +169,7 @@ function RecordAmoumt() {
       change={(val) => userUpdatePostData(val, 'business_time')}
       dateText={dateText}
     />}
-    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
+    {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')} />
     <View className="person-record-component">
       {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}

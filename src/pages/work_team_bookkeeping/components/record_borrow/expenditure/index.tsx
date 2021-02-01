@@ -98,6 +98,10 @@ function Expenditure(props: BookkeepingProps) {
       work_note: accountBookInfo.id,
       worker_id: props.workerId
     }
+    if (params.worker_id == '') {
+      msg('请选择工人！')
+      return
+    }
     if (postData.money) {
       if (!validNumber(params.money)) {
         msg('请输入正确的金额')
@@ -176,7 +180,7 @@ function Expenditure(props: BookkeepingProps) {
         <View className='person-record-component-item' onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       </View>
       <View className='person-record-btn'>
-        <Button className='person-record-save' onClick={() => userPostAcion()}>确认记工</Button>
+        <Button className='person-record-save' onClick={() => userPostAcion()}>确认记账</Button>
       </View>
     </View>
   )

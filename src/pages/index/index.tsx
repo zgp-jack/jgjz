@@ -196,14 +196,13 @@ const Remember = () => {
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
-    let data = {...defaultFilterData, start_business_time, end_business_time}
+    let data = {...defaultFilterData, start_business_time, end_business_time, page: 1}
     setDefaultFilterData(data)
     setFilterData(data)
   }
   const initFlowList = (params: GetCountParams) => {
     /** 请求页面 */
     let page = filterData.page;
-    console.log("账本id:", accountBookInfo.id)
     getBusiness({...params, work_note: accountBookInfo.id}).then(res => {
       if (res.code === 0) {
         let len = res.data.length

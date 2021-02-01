@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useRouter, Config, useDidShow} from '@tarojs/taro'
+import Taro, { useEffect, useState, useRouter, Config, useDidShow, useReachBottom} from '@tarojs/taro'
 import {View, Text, Picker, Input, Image, ScrollView, Swiper, SwiperItem} from '@tarojs/components'
 import FlowList from '@/pages/work_team_record/components/flow_list/index'
 import RecordDay from '@/pages/work_team_record/components/record-work/record_day/index'
@@ -125,9 +125,9 @@ export default function RecordWork() {
     SetTypeItem(typeNum)
   }
   const onReatchEvent = function () {
-    console.log("onReatchEvent 触发了")
     setTouchBottom(!touchBottom)
   }
+
 
   return (
     <View className='record-work-container'>

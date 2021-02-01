@@ -12,7 +12,7 @@ import {IMGCDNURL} from "@/config/index";
 import {enterTheRecordBook, getTodayDate} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
-import {GetWorkFlowResult} from '@/pages/work_team/team_record/index.d'
+import {GetWorkFlowResult} from '@/pages/work_team_record/team_record/index.d'
 import {get} from "@/utils/request";
 import Login from '@/components/login/index'
 import Filter from "./filter/index";
@@ -20,9 +20,7 @@ import {getBusiness} from './api'
 import Versionlimit from '@/components/version_limit/index'
 import {OldVersionLimit, RecordSuccessSaveDate} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
-
 import './index.scss'
-import {is} from "immer/dist/utils/common";
 
 
 const Remember = () => {
@@ -488,7 +486,7 @@ const Remember = () => {
                 {
                   (counts.count_unit.length && counts.count_unit[0].unit != null) &&
                   counts.count_unit.map((item, i) => (
-                    <View className="bookkeeping-row wage-meter" key={i}>
+                    <View className="bookkeeping-row wage-meter" key={ 'id' + i}>
                       <View className="bookkeeping-content">
                         <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon"/>
                         <View className="bookkeeping-values">
@@ -539,11 +537,11 @@ const Remember = () => {
               <View className="bokkeeping-list">
                 {showEmpty || !user.login ? <EmptyDate text={`${filterMonth}月暂无记工`}/> :
                   list.map(item => (
-                    <Block key={item.date}>
+                    <Block key={'_key' + item.date}>
                       <View className="bokkeeping-list-head">{item.date}</View>
                       <View className="bokkeeping-list-content">
                         {item.list.map(p => (
-                          <View className="bokkeeping-list-content-line">
+                          <View className="bokkeeping-list-content-line" key={p.id}>
                             <Block key={p.id}>
                               {/* 如果是记工天 记工量 */}
                               {(p.business_type == 1 || p.business_type == 2) &&

@@ -164,7 +164,7 @@ export default function BusinessBorrow() {
       projectValue={data.work_note_name}
     />
     <View className="person-record-btn">
-      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      {/* <Button disabled className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button> */}
       <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
     </View>
   </View>)

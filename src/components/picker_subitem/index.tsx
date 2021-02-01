@@ -14,7 +14,7 @@ import './index.scss'
 // 被修改数据的index
 let current = 0
 
-function PickerType({
+function PickerSubitem({
                       img = `${IMGCDNURL}zgp/subitem_icon.png`,
                       title = '分项',
                       value = {id: '', name: '无分项'},
@@ -114,7 +114,6 @@ function PickerType({
 
   // 用户添加弹窗或者修改弹窗 1 添加 2 修改
   const userEditItemType = (item?: ClassifyItem) => {
-    console.log(current)
     let obj: PopupInputGroup = {...popupData[0]}
     if (item) {
       obj.value = item.name
@@ -137,9 +136,9 @@ function PickerType({
           userDelExpendType(id).then(res => {
             msg(res.message)
             if (res.code === 0) {
-              if (types[i].id == value.id) {
-                isRecord && set && set({ id: '', name: '无分项' }, types[i])
-              }
+              !i && setShowPopup(false);
+              !i && (i = getTypesIndex() || 0);
+              (types[i].id == value.id) && isRecord && set && set({ id: '', name: '无分项' }, types[i]);
               delClassifySubitem(i)
             }
           })
@@ -148,6 +147,11 @@ function PickerType({
     })
   }
 
+  const getTypesIndex = () => {
+    for(let i=0;i<types.length;i++){
+      if(types[i].id == id)  return i;
+    }
+  }
   return (
     <View>
       <View className="person-record-overtime person-record-date" onClick={() => {
@@ -186,14 +190,15 @@ function PickerType({
       {/* 新增弹窗 */}
       {showPopup && <Popup
         titleText={id ? '修改分项' : '添加分项'}
-        showTitleButton={false}
+        showTitleButton={id ? true : false}
         inputGroup={popupData}
         confirmText='确定'
         cancel={() => setShowPopup(false)}
         confirm={(data) => userEditData(data)}
+        delet={() => userDelExpendTypeAction(id,0)}
       />}
     </View>
   )
 }
 
-export default observer(PickerType)
+export default observer(PickerSubitem)

@@ -19,6 +19,8 @@ export default function BusinessBorrow() {
   const {id = ''} = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
+  // 工友数据
+  const [coworkersData, setCoworkersData] = useState<ClassifyItem>({id: '', name: ''})
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
     id: '',
@@ -82,7 +84,7 @@ export default function BusinessBorrow() {
 
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
-    let postdata: UserEditBusinessInfo = {...postData}
+    let postdata: any = {...postData}
     postdata[type] = val
     setPostData(postdata)
   }
@@ -138,14 +140,8 @@ export default function BusinessBorrow() {
     setPostData({ ...postData, expend_type: '' })
   }
 
-  return (<View>       
-    <ContentInput 
-      title='金额' 
-      value={data.money} 
-      change={userUpdatePostData} 
-      type="money"
-    />
-
+  return (<View>
+    <ContentInput title='金额' value={data.money} change={(val, type) => userUpdatePostData(val, type)} type="money"/>
     <PickerType
       value={{name: data.expend_type_name,id: data.expend_type}}
       show={show}

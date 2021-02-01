@@ -138,9 +138,9 @@ function PickerType({
           userDelExpendType(id).then(res => {
             msg(res.message)
             if (res.code === 0) {
-              if (types[i].id == id) {
-                isRecord && set && set({ id: '', name: '无分类' },types[i])
-              }
+              !i && setShowPopup(false);
+              !i && (i = getTypesIndex() || 0);
+              (types[i].id == value.id) && isRecord && set && set({ id: '', name: '无分类' }, types[i]);
               delClassifyType(i)
             }
           })
@@ -149,6 +149,11 @@ function PickerType({
     })
   }
 
+  const getTypesIndex = () => {
+    for (let i = 0; i < types.length; i++) {
+      if (types[i].id == id) return i;
+    }
+  }
   return (
     <View>
       {/* 分类item */}
@@ -186,11 +191,12 @@ function PickerType({
       {/* 新增弹窗 */}
       {showPopup && <Popup
         titleText={id ? '修改分类' : '添加分类'}
-        showTitleButton={false}
+        showTitleButton={id ? true : false}
         inputGroup={popupData}
         confirmText='确定'
         cancel={() => setShowPopup(false)}
         confirm={(data) => userEditData(data)}
+        delet={() => userDelExpendTypeAction(id, 0)}
       />}
     </View>
   )

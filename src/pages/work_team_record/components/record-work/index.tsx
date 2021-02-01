@@ -12,7 +12,7 @@ export default function PersonRecord(){
     // 切换Tap
     const Changetype = (id:number,title:string) => {
       setRecordnum(id)
-      Taro.setNavigationBarTitle({ title: `个人${title}` }) 
+      Taro.setNavigationBarTitle({ title: `班组${title}` }) 
     }
     return (
         <View className="person-record">

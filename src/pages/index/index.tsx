@@ -1,25 +1,26 @@
-import Taro, { useEffect, useState, useDidShow, useReachBottom, useDidHide,useRef } from '@tarojs/taro'
-import { Block, Image, Picker, Text, View } from '@tarojs/components'
-import { AddressBookParams, GetCountParams, GetCountResult } from "@/pages/index/inter";
-import { getCountUrl } from "@/utils/api";
+import Taro, {useEffect, useState, useDidShow, useReachBottom, useDidHide, useRef} from '@tarojs/taro'
+import {Block, Image, Picker, Text, View} from '@tarojs/components'
+import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/index/inter";
+import {getCountUrl} from "@/utils/api";
 import LoadFooter from '@/components/load_footer/index'
 import EmptyDate from '@/components/empty_data/index'
-import { observer, useLocalStore } from '@tarojs/mobx'
+import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
-import { IMGCDNURL } from "@/config/index";
-import { enterTheRecordBook, getTodayDate } from '@/utils/index'
+import {IMGCDNURL} from "@/config/index";
+import {enterTheRecordBook, getTodayDate} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team/team_record/index.d'
-import { get } from "@/utils/request";
+import {get} from "@/utils/request";
 import Login from '@/components/login/index'
 import Filter from "./filter/index";
 import {getBusiness} from './api'
 import Versionlimit from '@/components/version_limit/index'
-import { OldVersionLimit } from '@/config/store'
+import { OldVersionLimit} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
+
 import './index.scss'
 
 
@@ -28,12 +29,12 @@ const Remember = () => {
   const rememberStore = useLocalStore(() => RememberStore)
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const _user = useLocalStore(() => User)
-  const { businessType } = rememberStore
-  const { user } = _user
-  const { accountBookInfo } = _accountBookInfo
+  const {businessType} = rememberStore
+  const {user} = _user
+  const {accountBookInfo} = _accountBookInfo
 
-  Taro.setNavigationBarTitle({ title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本' })
-  Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
+  Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
+  Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
   const [counts, setCounts] = useState({
     work_time: "0",
@@ -53,8 +54,8 @@ const Remember = () => {
   // 监听登录情况
   useEffect(() => {
     setPersonOrGroup(accountBookInfo.identity == 2)
-  },[accountBookInfo.identity])
-  
+  }, [accountBookInfo.identity])
+
   /*获取年份*/
   const year = new Date().getFullYear()
   /*获取月份*/
@@ -81,7 +82,7 @@ const Remember = () => {
   /** 是否显示底部没有更多数据 */
   const [showFooter, setShowFooter] = useState<boolean>(false)
   /** 统计筛选结果数量 */
-  const [ countNum, setCountNum ] = useState<number>(0);
+  const [countNum, setCountNum] = useState<number>(0);
 
   /*数组转字符串*/
   const handleArrayToString = (data: string[] | string): string => {
@@ -128,37 +129,37 @@ const Remember = () => {
   }, [showLogin])
 
   const [workId, setWorkId] = useState<number>(0)
-  const [noLogin,setNoLogin] = useState(false)
+  const [noLogin, setNoLogin] = useState(false)
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!user.login) {
       setNoLogin(true)
     }
   })
-  useEffect(()=>{
+  useEffect(() => {
     if (accountBookInfo.id && user.login && noLogin) {
-      const data = { ...defaultFilterData, work_note: accountBookInfo.id }
+      const data = {...defaultFilterData, work_note: accountBookInfo.id}
       setDefaultFilterData(data)
       setFilterData(data)
       setNoLogin(false)
     }
-  },[user,accountBookInfo])
+  }, [user, accountBookInfo])
   /*获取统计数据*/
   useEffect(() => {
     if (!user.login || !filterData.start_business_time || !filterData.end_business_time || !filterData.work_note || !defaultFilterData.work_note) return
     const params = actionParams()
     initFlowList(params)
     initData(params)
-  }, [filterData,user])
+  }, [filterData, user])
   /*根据筛选日期初始化请求参数*/
   useEffect(() => {
     initParams()
   }, [filterMonth, filterYear])
 
-  
+
   // 滑动触底事件
   useReachBottom(() => {
-    let paramsData = { ...filterData }
+    let paramsData = {...filterData}
     if (showFooter || showEmpty || !list.length) return
     paramsData.page = paramsData.page + 1;
     setFilterData(paramsData)
@@ -172,7 +173,7 @@ const Remember = () => {
     return true
   }
   useDidShow(() => {
-    let params = { ...filterData }
+    let params = {...filterData}
     params.page = 1;
     setReloadList(true)
     if (reloadList) {
@@ -180,35 +181,35 @@ const Remember = () => {
       setFilterData(params)
     }
   })
-  
+
   const initParams = () => {
     const start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
-    let data = { ...defaultFilterData, start_business_time, end_business_time}
+    let data = {...defaultFilterData, start_business_time, end_business_time}
     setDefaultFilterData(data)
     setFilterData(data)
   }
   const initFlowList = (params: GetCountParams) => {
     /** 请求页面 */
     let page = filterData.page;
-    console.log("账本id:",accountBookInfo.id)
-    getBusiness({ ...params, work_note: accountBookInfo.id}).then(res => {
+    console.log("账本id:", accountBookInfo.id)
+    getBusiness({...params, work_note: accountBookInfo.id}).then(res => {
       if (res.code === 0) {
         let len = res.data.length
-        if( page == 1) {
-          if (len == 0){
+        if (page == 1) {
+          if (len == 0) {
             setShowEmpty(true)
-          }else{
+          } else {
             setShowFooter(false)
             setShowEmpty(false)
             setList(res.data)
           }
-        }else{
-          if(len == 0){
+        } else {
+          if (len == 0) {
             setShowFooter(true)
-          }else{
+          } else {
             setList(list.concat(res.data))
           }
         }
@@ -225,9 +226,9 @@ const Remember = () => {
       if (res.code === 0) {
         let countOjb = res.data.count_num;
         let countArray = Object.values(countOjb)
-        let countNumber = countArray.reduce((pre:number,item:number)=>{
+        let countNumber = countArray.reduce((pre: number, item: number) => {
           return pre + item
-        },0)
+        }, 0)
         setCounts(res.data.count)
         setCountNum(Number(countNumber))
       }
@@ -252,10 +253,10 @@ const Remember = () => {
       return
     }
     if (filterMonth == 1) {
-      setFilterYear(filterYear - 1)
+      setFilterYear(Number(filterYear) - 1)
       setFilterMonth(12)
     } else {
-      setFilterMonth(filterMonth - 1)
+      setFilterMonth(Number(filterMonth) - 1)
     }
   }
   /*下一个月份日期*/
@@ -265,10 +266,10 @@ const Remember = () => {
       return
     }
     if (filterMonth == 12) {
-      setFilterYear(filterYear + 1)
+      setFilterYear(Number(filterYear) + 1)
       setFilterMonth(1)
     } else {
-      setFilterMonth(filterMonth + 1)
+      setFilterMonth(Number(filterMonth) + 1)
     }
   }
   /*日期选择器选择*/
@@ -359,14 +360,14 @@ const Remember = () => {
         <View className="header">
           <View className={"header-tag" + (!personOrGroup ? ' header-tag-group' : '')}><View
             className="tag-text">{personOrGroup ? '个人' : '班组'}记工</View></View>
-          <View className="header-title overwords">{accountBookInfo.name}</View>
+          <View className="header-title overwords">{user.login ? accountBookInfo.name : '鱼泡默认记工账本'}</View>
           <View className="header-line"/>
           <View className="header-switch"
-            onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
+                onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
-            <View className="feat">
+            <View className={"feat" + (isFilter ? ' filter-feat' : '')}>
               {!isFilter ? <View className="date">
                   <View className="date-icon-bor date-icon-bor-left" onClick={prevMonth}><Image
                     src={IMGCDNURL + 'lxy/time_jt_l.png'}
@@ -387,48 +388,56 @@ const Remember = () => {
                   <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
               <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
+                    onClick={() => {
+                      !handIsLogin() ? handIsLogin() : setShowFilter(true)
+                    }}>
                 <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
-                  className="filter-icon"/>筛选
+                       className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
-              <View className="filter-info" onClick={() => { !handIsLogin() ? handIsLogin() : setShowFilter(true) }}>
+            <View>
+              <View className="filter-line"/>
+              <View className="filter-info" onClick={() => {
+                !handIsLogin() ? handIsLogin() : setShowFilter(true)
+              }}>
                 <View className="filter-info-box overwords">
                   {
                     ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
                     <Text>
                       共<Text
-                        className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
-                  </Text>
-                }
-                {
-                  (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
-                    && (filterData.business_type as string[]).length > 0)
-                  &&
-                  <Text className="filter-info-line">|</Text>}
-                {
-                  (filterData.business_type as string[]).length > 0 && <Text>
-                    {
-                      (filterData.business_type as string[]).map((item, i) => (
-                        <Text key={item}
-                              className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
-                      ))
-                    }
-                  </Text>
-                }
-                {
-                  (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
-                  <Text className="filter-info-line">|</Text>
-                }
-                {
-                  filterData.is_note == '1' && <Text>
-                    <Text>有备注</Text>
-                  </Text>
-                }
+                      className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
+                    </Text>
+                  }
+                  {
+                    (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
+                      && (filterData.business_type as string[]).length > 0)
+                    &&
+                    <Text className="filter-info-line">|</Text>}
+                  {
+                    (filterData.business_type as string[]).length > 0 && <Text>
+                      {
+                        (filterData.business_type as string[]).map((item, i) => (
+                          <Text key={item}
+                                className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
+                        ))
+                      }
+                    </Text>
+                  }
+                  {
+                    (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
+                    <Text className="filter-info-line">|</Text>
+                  }
+                  {
+                    filterData.is_note == '1' && <Text className="overwords">
+                      <Text>有备注</Text>
+                    </Text>
+                  }
+                </View>
+                <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
               </View>
-              <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
-            </View>}
+            </View>
+            }
             {/*记工统计*/}
             <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
               <View className="statistics-remember">
@@ -516,29 +525,32 @@ const Remember = () => {
               </View>
             </View>
             <View className="statistics-flow">
-              {!isFilter ? <View className="statistics-title">{filterMonth}月全部流水</View> : <View className="statistics-title">共找到<Text className="flow-list-filter-title">{countNum}</Text>条满足您条件的流水</View>}
-                <View className="bokkeeping-list">
+              {!isFilter ? <View className="statistics-title">{filterMonth}月全部流水</View> :
+                <View className="statistics-title">共找到<Text className="flow-list-filter-title">{countNum}</Text>条满足您条件的流水</View>}
+              <View className="bokkeeping-list">
                 {showEmpty || !user.login ? <EmptyDate text={`${filterMonth}月暂无记工`}/> :
-                    list.map(item => (
-                      <Block key={item.date}>
-                        <View className="bokkeeping-list-head">{item.date}</View>
-                        <View className="bokkeeping-list-content">
-                          {item.list.map(p => (
+                  list.map(item => (
+                    <Block key={item.date}>
+                      <View className="bokkeeping-list-head">{item.date}</View>
+                      <View className="bokkeeping-list-content">
+                        {item.list.map(p => (
+                          <View className="bokkeeping-list-content-line">
                             <Block key={p.id}>
                               {/* 如果是记工天 记工量 */}
                               {(p.business_type == 1 || p.business_type == 2) &&
-                                <WorkCountDay list={[p]} type={p.business_type} />}
+                              <WorkCountDay list={[p]} type={p.business_type}/>}
                               {/* 如果是 记工钱、 借支、 支出 */}
                               {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-                                <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+                              <WorkMoneyBorrowing list={[p]} type={p.business_type}/>}
                             </Block>
-                          ))}
-                        </View>
-                      </Block>
-                    ))
-                  }
-                {!showEmpty && showFooter && <LoadFooter text='瞅啥瞅，往上看呢~' />}
-                </View>
+                          </View>
+                        ))}
+                      </View>
+                    </Block>
+                  ))
+                }
+                {!showEmpty && showFooter && <LoadFooter text='瞅啥瞅，往上看呢~'/>}
+              </View>
             </View>
           </View>
         </View>
@@ -573,7 +585,7 @@ const Remember = () => {
               resetFilter={handleResetFilter}
       />
       <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>
-      <Versionlimit show={showOldVersion} ></Versionlimit>
+      <Versionlimit show={showOldVersion}></Versionlimit>
     </View>
   )
 }

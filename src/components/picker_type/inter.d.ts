@@ -16,7 +16,7 @@ export default interface PickerTypeProps {
   /** 标题 */
   title?: string,
   /** 内容 */
-  value: string,
+  value?: ClassifyItem,
   /** 右侧 X 关闭事件 */
   close?: () => void,
   /** 是否显示右侧关闭按钮  */
@@ -24,7 +24,7 @@ export default interface PickerTypeProps {
   /** 右上角 option组件 关闭事件 */
   onOptionClose?: () => void,
   /** 获取值 */
-  set?: (data: ClassifyItem) => void,
+  set?: (data: ClassifyItem, type?: ClassifyItem) => void,
   /** 是否显示option-picker */
   show: boolean
   /** 控制option-picker显示 */

@@ -1,13 +1,15 @@
 
-page{
+page {
   background-color: #f7f7f7;
 }
-.record-work-container{
+
+.record-work-container {
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  .record-work-head-date{
+
+  .record-work-head-date {
     position: fixed;
     top: 100px;
     width: 100vw;
@@ -20,21 +22,25 @@ page{
     font-weight: 500;
     padding: 0 30px;
     background-color: white;
-    .record-work-head-choose-date{
+
+    .record-work-head-choose-date {
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
       align-items: center;
-      .record-work-date{
+
+      .record-work-date {
         text-align: end;
         margin-right: 20px;
       }
     }
-    Image{
+
+    Image {
       width: 20px;
     }
   }
-  .record-work-head{
+
+  .record-work-head {
     height: 100px;
     width: 100%;
     display: flex;
@@ -45,72 +51,89 @@ page{
     top: 0;
     z-index: 1;
   }
-  .record-work-scroll{
+
+  .record-work-scroll {
     padding-top: 200px;
     height: calc(100vh - 200px);
     display: flex;
     flex-direction: column;
-    .record-worker-list{
+
+    .record-worker-list {
       margin-top: 20px;
       padding: 0px 5rpx 50px 30rpx;
       background-color: white;
     }
-    .record-work-table-content{
+
+    .record-work-table-content {
       background-color: white;
       flex: 1;
       margin-top: 20px;
-      .record-work-table-head{
+
+      .record-work-table-head {
         height: 100px;
         width: 100vw;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         background-color: #E3F4FF;
-        .record-work-table-left{
-          position:relative;
+        font-size: 28px;
+        color: #aaa;
+
+        .record-work-table-left {
+          position: relative;
           height: 100%;
           width: 50%;
-          overflow:hidden;
-          &::before{
-            content:'';
-            display:block;
-            position:absolute;
-            top:0;
-            bottom:0;
-            right:0;
+          overflow: hidden;
+
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
             width: 100%;
-            transform-origin:0 100%;
-            transform:skewX(10deg);
+            transform-origin: 0 100%;
+            transform: skewX(10deg);
           }
-          Text{
+
+          Text {
             position: absolute;
             transform: translateY(-50%) translateX(-50%);
             left: 50%;
             top: 50%;
           }
         }
-        .check-item{
-          &::before{
+
+        .check-item {
+          font-size: 32px;
+          font-weight: bold;
+          color: #0099ff;
+
+          &::before {
             background-color: white;
           }
         }
-        .record-work-table-right{
-          position:relative;
+
+        .record-work-table-right {
+          position: relative;
           height: 100%;
           width: 50%;
-          overflow:hidden;
-          &::before{
-            content:'';
-            display:block;
-            position:absolute;
-            top:0;
-            bottom:0;
-            right:0;
+          overflow: hidden;
+
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
             width: 100%;
             transform-origin: 0 100%;
-            transform:skewX(-10deg);
+            transform: skewX(-10deg);
           }
-          Text{
+
+          Text {
             position: absolute;
             transform: translateY(-50%) translateX(-50%);
             left: 50%;
@@ -118,10 +141,12 @@ page{
           }
         }
       }
-      .record-work-flow{
+
+      .record-work-flow {
         padding: 0 30px;
       }
     }
+
     .padding {
       padding-bottom: 220px;
     }

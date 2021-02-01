@@ -1,5 +1,5 @@
 import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View, Button, Picker } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerDate from '@/components/picker_date'
 import PickerLeader from '@/components/picker_leader'
@@ -10,7 +10,7 @@ import { AddressBookConfirmEvent } from '@/config/events'
 import AccountBookInfo from '@/store/account'
 import { getTodayDate } from '@/utils/index'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
-import { PersonlMoneyHistoryGroupLeader } from '@/config/store'
+import { PersonlMoneyHistoryGroupLeader, PersonlLastSuccessRecordPage } from '@/config/store'
 import msg, { showBackModal } from '@/utils/msg'
 import userAddRecordAction from '../api'
 import { validNumber } from '@/utils/v'
@@ -90,6 +90,7 @@ function RecordMoney() {
         } else {
           Taro.removeStorageSync(PersonlMoneyHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
       } else {
         msg(res.message)
@@ -113,6 +114,14 @@ function RecordMoney() {
     setGroupLeader({ id: '', name: '' })
     setIsPickerLeader(false)
   }
+
+
+  // 用户更新时间选择器
+  const userChangePicker = (e) => {
+    let value = e.detail.value
+    userUpdatePostData(value, 'business_time')
+  }
+
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
     {isPickerDate && <PickerDate 
@@ -121,10 +130,13 @@ function RecordMoney() {
       change={(val) => userUpdatePostData(val, 'business_time')}
       dateText={dateText} 
     />}
-    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
+    {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
-      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+      {!isPickerDate && 
+        <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
+          <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
+      </Picker>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
     </View>
     <View className="person-record-btn">

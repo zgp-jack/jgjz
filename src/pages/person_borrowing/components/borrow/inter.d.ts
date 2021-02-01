@@ -11,7 +11,7 @@ export default interface BorrowPostData {
   /** 借支类型 */
   business_type: 4 | 5,
   /** 分类 */
-  expend_type: number,
+  expend_type: number | string,
   /** 日期 */
   business_time: string,
   /** 班组长id */

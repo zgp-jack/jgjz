@@ -18,7 +18,7 @@
       .picker-option-item {
         height: 100px;
         padding-left: 30px;
-        padding-right: 50px;
+        padding-right: 30px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -26,6 +26,10 @@
 
 
         .option-item-name {
+          max-width: 540px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
           font-size: 30px;
           color: #333333;
         }
@@ -33,13 +37,21 @@
         .option-item-icons {
           display: flex;
 
+          .option-item-icon-bor {
+            width: 60px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:first-child {
+              margin-right: 20px;
+            }
+          }
+
           .option-item-icon {
             width: 32px;
             height: 32px;
-
-            &:first-child {
-              margin-right: 46px;
-            }
           }
 
         }

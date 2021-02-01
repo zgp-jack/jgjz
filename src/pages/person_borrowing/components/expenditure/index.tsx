@@ -1,5 +1,5 @@
 import { useEffect, useState, eventCenter } from '@tarojs/taro'
-import { View, Button } from  '@tarojs/components'
+import { View, Button, Picker } from  '@tarojs/components'
 import ContentInput from '@/components/picker_input/index'
 import PickerType from '@/components/picker_type'
 import PickerDate from '@/components/picker_date'
@@ -9,7 +9,7 @@ import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlExpenditureHistoryGroupLeader, PersonlExpenditureHistoryClassifyType } from '@/config/store'
+import { PersonlExpenditureHistoryGroupLeader, PersonlExpenditureHistoryClassifyType, PersonlLastSuccessAccountPage } from '@/config/store'
 import { validNumber } from '@/utils/v'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
@@ -82,7 +82,7 @@ function Expenditure(){
   const userPostAcion = () => {
     let params: ExpenditurePostData = {
       business_type: 5,
-      expend_type: isPickerType ? postData.expend_type : 0,
+      expend_type: isPickerType ? typeData.id : 0,
       business_time: postData.business_time,
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
@@ -108,6 +108,7 @@ function Expenditure(){
         } else {
           Taro.removeStorageSync(PersonlExpenditureHistoryGroupLeader)
         }
+        Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
         showBackModal(res.message)
       }else{
         msg(res.message)
@@ -124,7 +125,8 @@ function Expenditure(){
     }
   }
   // 用户选择分类数据
-  const userChangePickerType = (data) => {
+  const userChangePickerType = (data, type) => {
+    type && (type.id == typeData.id) && Taro.removeStorageSync(PersonlExpenditureHistoryClassifyType)
     setTypeData(data); 
     userUpdatePostData(data.id == '0' ? '' : data.id, 'expend_type')
   }
@@ -149,15 +151,21 @@ function Expenditure(){
     }
   }
 
+  // 用户更新时间选择器
+  const userChangePicker = (e) => {
+    let value = e.detail.value
+    userUpdatePostData(value, 'business_time')
+  }
+
   return (
     <View>
       <ContentInput type="money" title="金额" change={userUpdatePostData} value={postData.money} />
       {isPickerType && 
         <PickerType 
-          value={typeData.name} 
+          value={typeData} 
           close={() => { setIsPickType(false); setTypeData({ id: '', name: '' })} } 
           onOptionClose={() => userTapRightTopCloseBtn()}
-          set={(data) => userChangePickerType(data)} 
+          set={(data, type) => userChangePickerType(data, type)} 
           show={showTypePicker} 
           setShow={(bool: boolean) => setShowTypePicker(bool) }
           isRecord={true}
@@ -170,15 +178,18 @@ function Expenditure(){
           change={(val) => userUpdatePostData(val, 'business_time')}
           dateText={dateText}
         />}
-      {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
+      {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>分类</View>}
-        {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+        {!isPickerDate &&
+        <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
+          <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
+        </Picker>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn() }>班组长</View>}
       </View>
       <View className="person-record-btn">
-        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>
+        <Button className="person-record-save" onClick={() => userPostAcion()}>确认记帐</Button>
       </View>
     </View>
   )

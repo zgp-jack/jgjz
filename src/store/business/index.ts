@@ -8,12 +8,12 @@ export class RememberStore {
       name: '记工天'
     },
     {
-      id: '2',
-      name: '记工量'
-    },
-    {
       id: '3',
       name: '记工钱'
+    },
+    {
+      id: '2',
+      name: '记工量'
     },
     {
       id: '4',

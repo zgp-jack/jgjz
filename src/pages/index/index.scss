@@ -83,7 +83,7 @@
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
-          margin-bottom: 50px;
+          margin-bottom: 30px;
           padding: 0 30px;
 
           .date {
@@ -96,12 +96,15 @@
               display: flex;
               align-items: center;
             }
-            .date-icon-bor-left{
+
+            .date-icon-bor-left {
               justify-content: flex-start;
             }
-            .date-icon-bor-right{
+
+            .date-icon-bor-right {
               justify-content: flex-end;
             }
+
             .date-value {
               font-size: 32px;
               color: #333333;
@@ -142,9 +145,20 @@
             color: #333333;
 
             .filter-start-date {
-              margin-bottom: 20px;
+              margin-bottom: 5px;
             }
           }
+        }
+
+        .filter-feat {
+          margin-bottom: 10px;
+        }
+
+        .filter-line {
+          width: 630px;
+          height: 1px;
+          background-color: rgba(229, 229, 229, .9);
+          margin: 0 auto 10px auto;
         }
 
         .filter-info {
@@ -156,6 +170,9 @@
           justify-content: space-between;
           margin-bottom: 40px;
           padding: 0 30px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
 
           .filter-info-box {
             display: flex;
@@ -284,7 +301,6 @@
                     font-size: 30px;
                     font-weight: 500;
                     color: #333333;
-                    margin-left: -8px;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
@@ -324,7 +340,8 @@
             color: #333333;
             margin-bottom: 30px;
             padding: 0 30px;
-            .flow-list-filter-title{
+
+            .flow-list-filter-title {
               color: #0099FF;
             }
           }
@@ -342,7 +359,14 @@
             }
 
             .bokkeeping-list-content {
-              padding: 0 30px;
+
+              .bokkeeping-list-content-line {
+                border-bottom: 1px solid rgba(229, 229, 229, .9);
+
+                &:last-child {
+                  border: none;
+                }
+              }
             }
 
           }

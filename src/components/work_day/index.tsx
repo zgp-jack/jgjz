@@ -1,4 +1,4 @@
-import Taro,{ useState } from '@tarojs/taro'
+import Taro,{ useEffect, useState } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import classnames from 'classnames'
 import { workTimeData, workTimePickerData, overTimeData } from './config'
@@ -14,12 +14,16 @@ export default function WorkDayComponent({
   change,
   isSelect = false,
   isClose = false,
-  close
+  close,
+  isMoreTime = false,
+  closeMoreTime
 }: WorkDayComponentProps){
 
   // 是否显示picker
-  const [show, setShow] = useState<boolean>(false)
-
+  const [show, setShow] = useState<boolean>(isMoreTime)
+  useEffect(() => {
+    setShow(!!isMoreTime)
+  }, [isMoreTime])
   return (
     <View className={classnames({
       "person-record-worktime person-record-overtime clearfix": true,
@@ -60,13 +64,13 @@ export default function WorkDayComponent({
       {isClose && <View className="overtime-icon" onClick={close}></View>}
       {show && 
       <MoreWorkTime
-        set={(data,type) => change(data,type) }
+        set={(data, type) => { change(data, type);setShow(false);} }
         data={type ? workTimePickerData : data}
         value={value.value}
         hasOverBtn={(type == 'over')}
         title={title}
         isSelect={isSelect}
-        WorktimeCancle={() => setShow(false)} 
+        WorktimeCancle={() => { setShow(false);closeMoreTime && closeMoreTime()}} 
       />}
 
     </View>

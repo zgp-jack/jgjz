@@ -32,6 +32,7 @@ export default function BusinessAmount() {
     unit_num: '',
     unit: '',
     unit_work_type: '',
+    worker_id: ''
   })
   // 接口返回的初始值
   const [data, setData] = useState<BusinessInfoResult>({
@@ -47,7 +48,8 @@ export default function BusinessAmount() {
     unit: '',
     group_leader_name: '',
     unit_work_type_name:'',
-    worker_name:''
+    worker_name:'',
+    worker_id: ''
   })
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
@@ -72,6 +74,7 @@ export default function BusinessAmount() {
     getBorrowInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
+        console.log("mydata", mydata)
         setSelectedUnit(Number(mydata.unit)-1)
         setData({
           ...mydata,
@@ -84,7 +87,8 @@ export default function BusinessAmount() {
           note: mydata.note || "",
           unit: mydata.unit || '',
           unit_num: mydata.unit_num || '',
-          group_leader: mydata.group_leader || ''
+          group_leader: mydata.group_leader || '',
+          worker_id: mydata.worker_id
         })
       } else {
         msg(res.message)

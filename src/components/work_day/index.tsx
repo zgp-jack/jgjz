@@ -33,7 +33,10 @@ export default function WorkDayComponent({
       {/* 前面正常显示数据 */}
       {(type && (type == 'work') ? workTimeData : overTimeData).map(item => (
         <View 
-        onClick={() => change(item,'first')}
+        onClick={(e) => {
+            e.stopPropagation();
+            change(item, 'first')
+        }}
         key={item.value}
         className={classnames({
           "worktime": true,
@@ -43,7 +46,10 @@ export default function WorkDayComponent({
       {/* 如果没有type 那就使用数据源 */}
       {!type&&data&&data.map(item => (
         <View
-          onClick={() => change(item, 'first')}
+          onClick={(e) => {
+            e.stopPropagation();
+            change(item, 'first')
+          }}
           key={item.value}
           className={classnames({
             "worktime": true,
@@ -57,7 +63,10 @@ export default function WorkDayComponent({
         "worktime worktime-select": true,
         "worktime-active": isSelect
       })} 
-      onClick={() => setShow(true)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setShow(true)
+      }}
       >{isSelect ? value.text : '0小时'}
         <Text className="worktime-select-time"></Text>
       </View>

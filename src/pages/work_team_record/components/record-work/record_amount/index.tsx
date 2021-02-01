@@ -130,7 +130,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')} />
     <View className='person-record-component'>
-      {!isPickerSubitem && <View className='person-record-component-item' onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>{postData.unit_work_type ? postData.unit_work_type : '分项'}</View>}
+      {!isPickerSubitem && <View className='person-record-component-item' onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
     </View>
     <View className='person-record-btn'>
       <Button className='person-record-save' onClick={() => userPostAcion()}>确认记工</Button>

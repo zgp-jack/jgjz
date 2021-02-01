@@ -28,7 +28,9 @@ export default function BusinessMoney() {
     id: id,
     group_leader: '',
     note: '',
-    money: ''
+    money: '',
+    worker_name: '',
+    worker_id: ''
   })
   // 接口返回数据
   const [data, setData] = useState<BusinessInfoResult>({
@@ -43,8 +45,8 @@ export default function BusinessMoney() {
     expend_type_name: '',
     expend_type: '',
     group_leader_name: '',
-    worker_name: ''
-
+    worker_name: '',
+    worker_id: ''
   })
 
   // 等id 读取出来之后就 读取该详情
@@ -75,7 +77,8 @@ export default function BusinessMoney() {
           ...postData,
           note: mydata.note || "",
           money: mydata.money || '',
-          group_leader: mydata.group_leader || ''
+          group_leader: mydata.group_leader || '',
+          worker_id: mydata.worker_id
         })
       } else {
         msg(res.message)

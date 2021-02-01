@@ -1,8 +1,9 @@
+import { workersAdd } from '@/utils/api';
 /*
  * @Author: jack_zgp
  * @Date: 2021-01-24 10:25:31
  * @LastEditors: jsxin
- * @LastEditTime: 2021-02-01 11:34:12
+ * @LastEditTime: 2021-02-01 14:18:22
  * @Description: 个人流水工量-接口
  */
 
@@ -34,6 +35,7 @@ export default interface BusinessInfoResult {
   unit_work_type_name: string,
   /** 工友姓名 */ 
   worker_name: string
+  worker_id: string
 }
 
 // 用户提交工量流水操作
@@ -50,6 +52,7 @@ export interface UserEditBusinessInfo {
   unit: string
   /** 分项 */
   unit_work_type: string
+  worker_id: string
 }
 // 分项接口
 export interface ClassifyItem{

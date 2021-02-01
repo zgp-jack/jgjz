@@ -108,7 +108,6 @@ export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "bo
 * @description 个人、班组记工记账成功后存储记工的日期，回到首页后更筛选时间为存储的时间
 * */
 export function handleRecordSuccessSaveDate(date: string) {
-  console.log(date)
   const dates = date.split('-')
   if (!date || dates.length !== 3) return date
   let month = dates[1]

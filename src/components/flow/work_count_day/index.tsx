@@ -1,14 +1,14 @@
 import Taro from '@tarojs/taro'
 import {View, Image, Block} from '@tarojs/components'
 import {IMGCDNURL} from '@/config/index'
-import { observer, useLocalStore } from '@tarojs/mobx'
+import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import {PropsData} from './index.d'
 import './index.scss'
 
-function WorkCountDay({ list = [], type = 1}: PropsData) {
+function WorkCountDay({list = [], type = 1}: PropsData) {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
-  const { accountBookInfo } = _accountBookInfo
+  const {accountBookInfo} = _accountBookInfo
   /**
    * @name: goDetail
    * @params id:流水信息id  action: 当前流水类型 1: 记工天 2: 记工量
@@ -17,13 +17,13 @@ function WorkCountDay({ list = [], type = 1}: PropsData) {
    */
   const goDetail = (id: number, action: number) => {
     let url: string = ''
-    if (accountBookInfo.identity == 1){
+    if (accountBookInfo.identity == 1) {
       if (action === 1) {
         url = `/pages/work_team_business/workday/index?id=${id}`
       } else {
         url = `/pages/work_team_business/amount/index?id=${id}`
       }
-    }else{
+    } else {
       if (action === 1) {
         url = `/pages/business/workday/index?id=${id}`
       } else {
@@ -47,7 +47,7 @@ function WorkCountDay({ list = [], type = 1}: PropsData) {
                 </View>
                 <View className='bokkeeping-list-right'>
                   <View className='bokkeeping-list-count'>
-                    {type == 2 ? <View className='bokkeeping-list-count-work'>{item.unit_num + item.unit}</View> :
+                    {type == 2 ? <View className='bokkeeping-list-count-work'>{(item.unit_num ? item.unit_num : 0) + item.unit}</View> :
                       <View className='bokkeeping-list-count-work'>上班：{item.work_time ? item.work_time + '个工' : ''}{item.work_time_hour ? item.work_time_hour + '小时' : ''}{(!item.work_time && !item.work_time_hour) ? '休息' : ''}</View>}
                     {item.overtime && <View className='bokkeeping-list-count-work'>加班：{item.overtime}小时</View>}
                   </View>

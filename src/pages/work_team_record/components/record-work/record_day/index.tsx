@@ -4,7 +4,7 @@ import PickerMark from '@/components/picker_mark/index'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {AddressBookConfirmEvent} from '@/config/events'
-import msg, {showBackModal, showModal} from '@/utils/msg'
+import msg, { showBackModal, showModal, showActionModal } from '@/utils/msg'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import classifyItem from '@/store/classify/inter.d'
 import WorkDayComponent from '@/components/work_day'
@@ -14,8 +14,7 @@ import RecordDayPostData, {WorkTimeType, PropsData} from './inter.d'
 
 import './index.scss'
 
-function RecordDay({workerId, type, businessTime}: PropsData) {
-  console.log('businessTime', businessTime)
+function RecordDay({ workerId, type, businessTime }: PropsData) {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
@@ -85,7 +84,14 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
       if (res.code === 0) {
         console.log(postData)
         handleRecordSuccessSaveDate(params.business_time)
-        showModal(res.message)
+        showActionModal({
+          msg: res.message,
+          success: function () {
+            Taro.redirectTo({
+              url: '/pages/work_team_record/team_record/index'
+            })
+          }
+        })
         Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)
       } else {
         msg(res.message)

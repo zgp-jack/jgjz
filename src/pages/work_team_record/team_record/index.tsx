@@ -10,7 +10,7 @@ import RememberTypeItem from '@/store/business';
 import {IMGCDNURL} from '@/config/index'
 import {useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
-import {TypeAction} from '@/pages/work_team_record/team_record/index.d'
+import { TypeAction, publishStatus} from '@/pages/work_team_record/team_record/index.d'
 import {getTodayDate} from '@/utils/index'
 import {GroupLastSuccessRecordPage, GroupLastSuccessAccountPage} from '@/config/store'
 import './index.scss'
@@ -80,6 +80,8 @@ export default function RecordWork() {
     let timeStr = initTime(timeNow)[0];
     setTimeText(timeStr)
   }, [])
+ 
+
 
   /**
    * @name: changeTime
@@ -123,13 +125,14 @@ export default function RecordWork() {
     SetTypeItem(typeNum)
   }
   const onReatchEvent = function () {
+    console.log("onReatchEvent 触发了")
     setTouchBottom(!touchBottom)
   }
 
   return (
     <View className='record-work-container'>
       <View className='record-work-head'>
-        <WorkTeamTable types={types} currentId={currentId} onChange={changeTable}/>
+        <WorkTeamTable types={types} currentId={currentId} onChange={changeTable} />
       </View>
       <View className='record-work-head-date'>
         <View className='record-work-head-title'>选择日期：</View>
@@ -137,37 +140,38 @@ export default function RecordWork() {
           <Picker mode='date' onChange={changeTime} value={startDate} end={nowTime}>
             <View className='record-work-date'>{timeText}</View>
           </Picker>
-          <Image src={`${IMGCDNURL}common/arrow-right.png`} className='record-work-data-image' mode='widthFix'/>
+          <Image src={`${IMGCDNURL}common/arrow-right.png`} className='record-work-data-image' mode='widthFix' />
         </View>
       </View>
 
       <ScrollView className='record-work-scroll' scrollY enableFlex onScrollToLower={() => onReatchEvent()}>
         <View className='record-worker-list'>
           <WorkerList workNote={accountBookInfo.id} currentId={currentId}
-                      setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate}/>
+            setWorkerId={(data: number[]) => setWorkerId(data)} workerId={workerId} startDate={startDate} />
         </View>
         <View className={typeItem == 1 ? 'record-work-table-content padding' : 'record-work-table-content'}>
           <View className='record-work-table-head'>
             <View className={typeItem == 1 ? 'record-work-table-left check-item' : 'record-work-table-left'}
-                  data-type={1} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>记工</Text></View>
+              data-type={1} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>记工</Text></View>
             <View className={typeItem == 2 ? 'record-work-table-right check-item' : 'record-work-table-right'}
               data-type={2} onClick={(e) => switchTable(e)}><Text className='record-work-table-left-text'>流水</Text></View>
           </View>
           {typeItem == 2 && (
             <View className='record-work-flow'>
               <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentId={currentId}
-                        params={startDate} types={types} pageShow={pageShow}></FlowList>
+                params={startDate} types={types} pageShow={pageShow}></FlowList>
             </View>
           )}
           {typeItem == 1 && currentId == 1 &&
-          <RecordDay workerId={workerId.join(',')} type={currentId} businessTime={startDate}/>}
+            <RecordDay workerId={workerId.join(',')} type={currentId} businessTime={startDate} />}
           {typeItem == 1 && currentId == 2 &&
-          <RecordAmoumt workerId={workerId.join(',')} type={currentId} businessTime={startDate}/>}
+            <RecordAmoumt workerId={workerId.join(',')} type={currentId} businessTime={startDate} />}
           {typeItem == 1 && currentId == 3 &&
-          <RecordMoney workerId={workerId.join(',')} type={currentId} businessTime={startDate}/>}
+            <RecordMoney workerId={workerId.join(',')} type={currentId} businessTime={startDate} />}
         </View>
       </ScrollView>
     </View>
+    
   )
 }
 RecordWork.config = {

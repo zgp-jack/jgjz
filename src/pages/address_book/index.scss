@@ -24,7 +24,7 @@ page {
     background: #fff;
     border-bottom: 1px solid #eee;
     @include flex();
-    padding: 0 93px 0 26px;
+    padding: 0 50px 0 26px;
     box-sizing: border-box;
 
     &:last-child {
@@ -63,7 +63,7 @@ page {
         .name {
           font-size: 28px;
           color: #000;
-          font-weight: 600;
+          font-weight: bold;
           text-overflow: ellipsis;
           will-change: auto;
           white-space: nowrap;
@@ -85,11 +85,13 @@ page {
     }
 
     .setting {
-      width: 50rpx;
-      text-align: center;
+      width: 200rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       .setting_img {
-        width: 26px;
-        height: 26px;
+        width: 30px;
+        height: 30px;
       }
     }
   }

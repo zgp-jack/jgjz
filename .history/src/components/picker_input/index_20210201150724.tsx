@@ -9,23 +9,35 @@ export default function ContentInput({ title, change, value, type, maxLength = 2
   const [focus, setFocus] = useState<boolean>(false)
 
   // 监听输入框的值
+  // useEffect(() => {
+  //   let _value: string = value || ''
+  //   let index: number = _value.indexOf('.')
+  //   // 如果说是小数 那么就要准备切割
+  //   if (index !== -1){
+  //     let front_val: string = _value.substring(0, index + 1);
+  //     let end_val: string = _value.substring(index + 1, index+maxLength+1);
+  //     let _val = front_val + end_val
+  //     change(front_val + end_val, type)
+  //   }
+  // },[value])
   const validInfo = (value) => {
     let _value: string = value || ''
     if (_value[0] == '.'){
       return '';
     }
     let index: number = _value.indexOf('.')
-    let length:number = _value.length -1;
-    if (_value[0] == '0' && length > 0 && index == -1){
+    if (_value[0] == '0' && index == -1 ){
       return 0
     }
-    if (_value[length] == '.' && (index != length)){
-      return _value.substring(0, length)
-    }
+    // if(_value.match(/^.[^.]+$/)){
+    //   return _value.split('.')[0]
+    // }
+    // 如果说是小数 那么就要准备切割
     if (index !== -1) {
       let front_val: string = _value.substring(0, index + 1);
       let end_val: string = _value.substring(index + 1, index + maxLength + 1);
       let _val = front_val + end_val
+      // change(front_val + end_val, type)
       return _val;
     }
   }
@@ -42,10 +54,10 @@ export default function ContentInput({ title, change, value, type, maxLength = 2
             value={value} 
             placeholder={`0.00`} 
             className="work-amount-input" 
-          // onInput={(e) => change(e.detail.value, type)}
             onInput={(e: any) => validInfo(e.detail.value)}
-            onFocus={() => { setFocus(true);}}
-            onBlur={(e: any) => { e.stopPropagation();setFocus(false);change(e.detail.value, type)}} 
+            onFocus={(e) => { setFocus(true);}}
+            // 
+          onConfirm={(e: any) => { e.stopPropagation();setFocus(false);change(e.detail.value, type)}} 
           />
           </View>
       </View>

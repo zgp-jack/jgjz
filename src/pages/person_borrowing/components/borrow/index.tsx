@@ -1,5 +1,5 @@
 import {useState, useEffect, eventCenter} from '@tarojs/taro'
-import {View, Button} from '@tarojs/components'
+import { View, Button, Picker} from '@tarojs/components'
 import ContentInput from '../../../../components/picker_input/index'
 import PickerType from '@/components/picker_type'
 import PickerMark from '@/components/picker_mark'
@@ -159,6 +159,11 @@ function Borrow() {
     setTypeData({id: '',name: ''})
     setIsPickType(false)
   }
+  // 用户更新时间选择器
+  const userChangePicker = (e) => {
+    let value = e.detail.value
+    userUpdatePostData(value, 'business_time')
+  }
 
   return (
     <View>
@@ -192,7 +197,9 @@ function Borrow() {
           setShowTypePicker(true)
         }}>分类</View>}
         {!isPickerDate &&
-        <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+          <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
+          <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
+      </Picker>}
         {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
       </View>
       <View className="person-record-btn">

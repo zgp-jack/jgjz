@@ -47,7 +47,7 @@ export default function MoreWorkTime({
             </View>
         </View>
         {hasOverBtn && <View className="no-over-time" >
-          <View className="no-over-time-btn" onClick={() => { set(notOver,'first');WorktimeCancle()}}>{notOver.text}</View>
+          <View className="no-over-time-btn" onClick={(e) => { e.stopPropagation(); set(notOver,'first');}}>{notOver.text}</View>
         </View>}
       </View>
     )

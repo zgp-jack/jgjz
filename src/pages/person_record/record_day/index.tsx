@@ -1,18 +1,18 @@
-import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
-import {View, Button} from '@tarojs/components'
-import RecordDayPostData, {WorkTimeType} from './inter.d'
+import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
+import { View, Button, Picker } from '@tarojs/components'
+import RecordDayPostData, { WorkTimeType } from './inter.d'
 import PickerDate from '@/components/picker_date/index'
 import PickerLeader from '@/components/picker_leader/index'
 import PickerMark from '@/components/picker_mark/index'
-import {observer, useLocalStore} from '@tarojs/mobx'
+import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import {AddressBookConfirmEvent} from '@/config/events'
-import {PersonlLastSuccessRecordPage, PersonlWorkdayHistoryGroupLeader} from '@/config/store'
-import msg, {showBackModal} from '@/utils/msg'
-import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
+import { AddressBookConfirmEvent } from '@/config/events'
+import { PersonlLastSuccessRecordPage, PersonlWorkdayHistoryGroupLeader } from '@/config/store'
+import msg, { showBackModal } from '@/utils/msg'
+import { getTodayDate } from '@/utils/index'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
-import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
+import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import WorkDayComponent from '@/components/work_day'
 import './index.scss'
 
@@ -150,6 +150,12 @@ function RecordDay() {
     setIsOverTime(false)
   }
 
+  // 用户更新时间选择器
+  const userChangePicker = (e) => {
+    let value = e.detail.value
+    userUpdatePostData(value, 'business_time')
+  }
+
   return (<View>
     <View className="person-record-time">
       <WorkDayComponent
@@ -183,9 +189,10 @@ function RecordDay() {
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>
     <View className="person-record-component">
       {!isPickerDate &&
-      <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-      {!isPickerLeader &&
-      <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
+      <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
+        <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
+      </Picker>}
+      {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
       {!isOverTime && <View className="person-record-component-item" onClick={() => userTapOverTimeBtn()}>加班时长</View>}
     </View>
     <View className="person-record-btn">

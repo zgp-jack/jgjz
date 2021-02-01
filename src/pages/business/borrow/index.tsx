@@ -142,7 +142,6 @@ export default function BusinessBorrow() {
 
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
-    <PickerLeader leader={groupLeader} DeletePickerLeader={() => userClearLeader()} />
     <PickerType
       value={{name: data.expend_type_name,id: data.expend_type}}
       show={show}
@@ -152,6 +151,7 @@ export default function BusinessBorrow() {
       close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
+    <PickerLeader leader={groupLeader} DeletePickerLeader={() => userClearLeader()} />
     
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
     <PickerDetail

@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-24 10:25:31
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-24 18:58:07
+ * @LastEditTime: 2021-02-01 11:38:02
  * @Description: 记工钱 接口
  */
 
@@ -30,6 +30,8 @@ export interface BusinessInfoResult {
   expend_type: string
   /** 班组长名字 */
   group_leader_name: string
+  /** 工友姓名 */
+  worker_name: string 
 }
 
 // 用户删除借支流水操作

@@ -46,7 +46,8 @@ export default function BusinessAmount() {
     unit_work_type: '',
     unit: '',
     group_leader_name: '',
-    unit_work_type_name:''
+    unit_work_type_name:'',
+    worker_name:''
   })
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
@@ -149,7 +150,7 @@ export default function BusinessAmount() {
       close={() => userClearPickerType()}
     />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
+    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} worker={data.worker_name} showWorker={true}/>
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
       <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>

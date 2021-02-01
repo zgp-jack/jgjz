@@ -10,6 +10,7 @@ import User from "@/store/user";
 function WorkMoneyBorrowing({ list = [], type = 1}: PropsData) {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {accountBookInfo} = _accountBookInfo
+  const identity = accountBookInfo.identity
   /**
    * @name: goDetail
    * @params id:流水信息id  action: 当前流水类型 3: 工钱 4: 借支 5: 支出
@@ -46,8 +47,10 @@ function WorkMoneyBorrowing({ list = [], type = 1}: PropsData) {
             <View className='bokkeeping-list-item' onClick={() => goDetail(item.id, item.business_type)}>
               <View className="bokkeeping-list-item-box">
                 <View className='bokkeeping-list-left'>
-                  <View className='bokkeeping-list-title'>{type == 3 ? "工钱" : (type == 4 ? "借支" : "支出")}</View>
-                  <View className='bokkeeping-list-des'>{item.worker_name}</View>
+                  {identity == 1 && <View className='bokkeeping-list-title'>{item.worker_name}</View>}
+                  {identity == 2 && <View className='bokkeeping-list-title'>{type == 3 ? '工钱' : (type == 4 ? '借支' : '支出')}</View>}
+                  {identity == 1 && <View className='bokkeeping-list-des'>{type == 3 ? '工钱' : (type == 4 ? '借支' : '支出')}</View>}
+                  {identity == 2 && <View className='bokkeeping-list-des'>{item.group_leader_name ? ('班组长：' + item.group_leader_name) : ''}</View>}
                 </View>
                 <View className='bokkeeping-list-right'>
                   <View className='bokkeeping-list-count'>

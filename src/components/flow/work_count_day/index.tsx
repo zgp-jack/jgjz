@@ -9,6 +9,7 @@ import './index.scss'
 function WorkCountDay({ list = [], type = 1}: PropsData) {
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const { accountBookInfo } = _accountBookInfo
+  const identity = accountBookInfo.identity
   /**
    * @name: goDetail
    * @params id:流水信息id  action: 当前流水类型 1: 记工天 2: 记工量
@@ -41,9 +42,10 @@ function WorkCountDay({ list = [], type = 1}: PropsData) {
             <View className='bokkeeping-list-item' onClick={() => goDetail(item.id, item.business_type)}>
               <View className="bokkeeping-list-item-box">
                 <View className='bokkeeping-list-left'>
-                  <View className='bokkeeping-list-title'>{type == 1 ? '工天' : (type == 2 ? '工量' : '')}</View>
-                  <View
-                    className='bokkeeping-list-des'>{item.group_leader_name ? ('班组长：' + item.group_leader_name) : ''}</View>
+                  {identity == 1 && <View className='bokkeeping-list-title'>{item.worker_name}</View> }
+                  {identity == 2 && <View className='bokkeeping-list-title'>{type == 1 ? '工天' : '工量'}</View>}
+                  {identity == 1 && <View className='bokkeeping-list-des'>{type == 1 ? '工天' : '工量'}</View>}
+                  {identity == 2 && <View className='bokkeeping-list-des'>{item.group_leader_name ? ('班组长：' + item.group_leader_name) : ''}</View>}
                 </View>
                 <View className='bokkeeping-list-right'>
                   <View className='bokkeeping-list-count'>

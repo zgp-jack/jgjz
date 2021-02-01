@@ -180,8 +180,6 @@ function Borrow(props: BookkeepingProps) {
         >{typeData.id ? typeData.name : '分类'}</View>}
         {!isPickerDate &&
         <View className='person-record-component-item' onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-        {/*{!isPickerLeader &&
-        <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}*/}
       </View>
       <View className='person-record-btn'>
         <Button className='person-record-save' onClick={() => userPostAcion()}>确认记账</Button>

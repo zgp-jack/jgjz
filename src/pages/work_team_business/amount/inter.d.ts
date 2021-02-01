@@ -1,8 +1,8 @@
 /*
  * @Author: jack_zgp
  * @Date: 2021-01-24 10:25:31
- * @LastEditors: jack_zgp
- * @LastEditTime: 2021-01-24 14:35:56
+ * @LastEditors: jsxin
+ * @LastEditTime: 2021-02-01 11:34:12
  * @Description: 个人流水工量-接口
  */
 
@@ -31,7 +31,9 @@ export default interface BusinessInfoResult {
   /** 班组长name */
   group_leader_name: string
   /** 分项name */
-  unit_work_type_name: string
+  unit_work_type_name: string,
+  /** 工友姓名 */ 
+  worker_name: string
 }
 
 // 用户提交工量流水操作

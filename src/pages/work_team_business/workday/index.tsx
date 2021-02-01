@@ -44,7 +44,8 @@ export default function ModifyWorkDay(){
     group_leader_name: '',
     work_time: '',
     work_time_hour: '',
-    overtime: ''
+    overtime: '',
+    worker_name:''
   })
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
@@ -168,6 +169,7 @@ export default function ModifyWorkDay(){
       dateValue={data.busienss_time_string}
       submitValue={data.created_time_string}
       projectValue={data.work_note_name}
+      worker={data.worker_name} showWorker={true}
     />
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>

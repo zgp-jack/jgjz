@@ -42,7 +42,9 @@ export default function BusinessMoney() {
     work_note_name: '',
     expend_type_name: '',
     expend_type: '',
-    group_leader_name: ''
+    group_leader_name: '',
+    worker_name: ''
+
   })
 
   // 等id 读取出来之后就 读取该详情
@@ -126,7 +128,7 @@ export default function BusinessMoney() {
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
+    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} worker={data.worker_name} showWorker={true}/>
     <View className="person-record-btn">
       <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
       <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>

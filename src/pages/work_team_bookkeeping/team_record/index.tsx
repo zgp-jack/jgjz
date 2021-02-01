@@ -146,7 +146,7 @@ export default function RecordWork() {
           {typeItem == 2 && (
             <View className='record-work-flow'>
               <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentId={currentId}
-                        params={startDate} types={types}></FlowList>
+                        params={startDate}></FlowList>
             </View>
           )}
           {typeItem == 1 && currentId == 4 &&

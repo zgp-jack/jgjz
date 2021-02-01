@@ -10,7 +10,7 @@ import PickerSubitem from '@/components/picker_subitem'
 import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
-import { getTodayDate } from '@/utils/index'
+import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import msg, { showBackModal, showModal } from '@/utils/msg'
 import { GroupLastSuccessRecordPage } from '@/config/store'
 import { validNumber } from '@/utils/v'
@@ -49,7 +49,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
   })
   // 分项数据
   const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: '' })
-  
+
   // 注册事件 监听班组长的选择
   useEffect(() => {
     // 监听到了 班组长的回调 然后设置班组长的信息
@@ -59,7 +59,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
-  
+
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }
@@ -93,12 +93,13 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
       if (res.code === 0) {
         showModal(res.message)
         Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)
+        handleRecordSuccessSaveDate(params.business_time)
       } else {
         msg(res.message)
       }
     })
   }
-  // 用户点击分类组件  右上角关闭 
+  // 用户点击分类组件  右上角关闭
   const userTapRightTopCloseBtn = () => {
     // 如果没有设置过分类数据
     if (!typeData.id) {
@@ -118,7 +119,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     <PickerUnit set={(data) => userUpdatePostData(data.id,'unit')} />
     {isPickerSubitem &&
       <PickerSubitem
-        value={typeData.name}
+        value={typeData}
         close={() => setIsPickSubitem(false)}
         onOptionClose={() => userTapRightTopCloseBtn()}
         set={(data) => { setTypeData(data);userUpdatePostData(data.id, 'unit_work_type') }}
@@ -126,7 +127,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
         setShow={(bool: boolean) => setShowTypePicker(bool)}
       />
     }
-    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
+    {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')} />
     <View className='person-record-component'>
       {!isPickerSubitem && <View className='person-record-component-item' onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>{postData.unit_work_type ? postData.unit_work_type : '分项'}</View>}

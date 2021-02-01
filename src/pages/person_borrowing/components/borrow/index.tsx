@@ -14,7 +14,7 @@ import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
 import msg, {showBackModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
-import { getTodayDate } from '@/utils/index'
+import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import './index.scss'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
 
@@ -117,6 +117,7 @@ function Borrow() {
         }
         Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
         showBackModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
       } else {
         msg(res.message)
       }
@@ -180,7 +181,7 @@ function Borrow() {
         isRecord = {true}
       />
       }
-      
+
       {isPickerDate &&
       <PickerDate
         date={postData.business_time}

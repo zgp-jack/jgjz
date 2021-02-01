@@ -8,7 +8,7 @@ import RecordMoneyPostData from './inter.d'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import { AddressBookConfirmEvent } from '@/config/events'
 import AccountBookInfo from '@/store/account'
-import { getTodayDate } from '@/utils/index'
+import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { PersonlMoneyHistoryGroupLeader, PersonlLastSuccessRecordPage } from '@/config/store'
 import msg, { showBackModal } from '@/utils/msg'
@@ -92,6 +92,7 @@ function RecordMoney() {
         }
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
       } else {
         msg(res.message)
       }
@@ -124,11 +125,11 @@ function RecordMoney() {
 
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
-    {isPickerDate && <PickerDate 
-      date={postData.business_time} 
-      DeletePickerDate={DeletePickerDate} 
+    {isPickerDate && <PickerDate
+      date={postData.business_time}
+      DeletePickerDate={DeletePickerDate}
       change={(val) => userUpdatePostData(val, 'business_time')}
-      dateText={dateText} 
+      dateText={dateText}
     />}
     {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />

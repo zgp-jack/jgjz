@@ -7,8 +7,10 @@
  */
 import Taro from '@tarojs/taro'
 import {showModal} from '@/utils/msg';
-import { RECORD_WORK_DATA } from '@/pages/account_book_list/index.d'
-import { INDEXPAGE } from '@/config/pages'
+import {RECORD_WORK_DATA} from '@/pages/account_book_list/index.d'
+import {INDEXPAGE} from '@/config/pages'
+import userAddRecordAction from "@/pages/person_record/api";
+import {RecordSuccessSaveDate} from "@/config/store";
 
 /**
  * @name: objDeepCopy for jsxin
@@ -78,7 +80,7 @@ export function getTodayDate(type: string = 'd'): string {
  * @return void 无返回值
  * @description 拨打电话
  */
-export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "borrow" |  "account"){
+export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "borrow" | "account") {
   let url: string = ''
   // 判断是 record:记工 borrow:记账 还是 account:进入记工本
   if (type == 'record') {
@@ -95,8 +97,24 @@ export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "bo
     }
   } else { // 记工记工本
     url = INDEXPAGE
-    Taro.reLaunch({ url })
+    Taro.reLaunch({url})
     return
   }
-  Taro.navigateTo({ url })
+  Taro.navigateTo({url})
+}
+
+/*
+* @params 日期
+* @description 个人、班组记工记账成功后存储记工的日期，回到首页后更筛选时间为存储的时间
+* */
+export function handleRecordSuccessSaveDate(date: string) {
+  console.log(date)
+  const dates = date.split('-')
+  if (!date || dates.length !== 3) return date
+  let month = dates[1]
+  if (month.substr(0, 1) == '0') {
+    month = month.substr(1)
+  }
+  const newDate = dates[0] + '-' + month
+  Taro.setStorageSync(RecordSuccessSaveDate, newDate)
 }

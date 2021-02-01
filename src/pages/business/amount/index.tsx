@@ -117,6 +117,7 @@ export default function BusinessAmount() {
   }
   // 用户修改流水
   const userEditBusiness = () => {
+    console.log(postData)
     let params: UserEditBusinessInfo = {
       ...postData,
       group_leader: groupLeader.id,

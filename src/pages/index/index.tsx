@@ -18,10 +18,11 @@ import Login from '@/components/login/index'
 import Filter from "./filter/index";
 import {getBusiness} from './api'
 import Versionlimit from '@/components/version_limit/index'
-import { OldVersionLimit} from '@/config/store'
+import {OldVersionLimit, RecordSuccessSaveDate} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
 
 import './index.scss'
+import {is} from "immer/dist/utils/common";
 
 
 const Remember = () => {
@@ -32,7 +33,7 @@ const Remember = () => {
   const {businessType} = rememberStore
   const {user} = _user
   const {accountBookInfo} = _accountBookInfo
-
+  const recordSuccessSaveDate = Taro.getStorageSync(RecordSuccessSaveDate)
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
   /*统计数据*/
@@ -176,14 +177,22 @@ const Remember = () => {
     let params = {...filterData}
     params.page = 1;
     setReloadList(true)
-    if (reloadList) {
+    const recordSuccessSaveDate = Taro.getStorageSync(RecordSuccessSaveDate)
+    if (recordSuccessSaveDate) {
+      console.error('获取日期')
+      // params.start_business_time = recordSuccessSaveDate
+      const dates = recordSuccessSaveDate.split('-')
+      setFilterYear(parseInt(dates[0]))
+      setFilterMonth(parseInt(dates[1]))
+      Taro.removeStorageSync(RecordSuccessSaveDate)
+    } else if (reloadList) {
       if (!user.login) return
       setFilterData(params)
     }
   })
 
   const initParams = () => {
-    const start_business_time = filterYear + '-' + filterMonth
+    let start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
@@ -440,6 +449,7 @@ const Remember = () => {
             }
             {/*记工统计*/}
             <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
+              {(!isFilter || (isFilter && (counts.work_time || counts.work_time_hour || counts.overtime))) &&
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -457,12 +467,12 @@ const Remember = () => {
                     </View>
                   </View>
                 </View>
-              </View>
+              </View>}
             </View>
 
             {/*临时工资，平方米，筛选后才展示*/}
 
-            {(counts.work_money || (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0)) &&
+            {(counts.work_money || counts.count_unit[0].unit != null) &&
             <View className="statistics">
               <View className="statistics-bookkeeping statistics-bookkeeping-unit">
                 {counts.work_money && <View className="bookkeeping-row wage-meter">
@@ -477,7 +487,7 @@ const Remember = () => {
                   </View>
                 </View>}
                 {
-                  (counts.count_unit[0].unit != null && counts.count_unit[0].count != 0) &&
+                  (counts.count_unit[0].unit != null) &&
                   counts.count_unit.map((item, i) => (
                     <View className="bookkeeping-row wage-meter" key={i}>
                       <View className="bookkeeping-content">

@@ -12,7 +12,7 @@ import AccountBookInfo from '@/store/account'
 import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem, PersonlLastSuccessRecordPage, PersonlAmountHistoryUnitId } from '@/config/store'
-import { getTodayDate } from '@/utils/index'
+import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import msg, { showBackModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
 import userAddRecordAction from '../api'
@@ -111,6 +111,7 @@ function RecordAmoumt() {
         Taro.setStorageSync(PersonlAmountHistoryUnitId, params.unit)
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
       } else {
         msg(res.message)
       }
@@ -124,7 +125,7 @@ function RecordAmoumt() {
       Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE })
     }
   }
-  // 用户点击分类组件  右上角关闭 
+  // 用户点击分类组件  右上角关闭
   const userTapRightTopCloseBtn = () => {
     // 如果没有设置过分类数据
     if (!typeData.id) {
@@ -146,8 +147,8 @@ function RecordAmoumt() {
   // 用户获取分项数据
   const userSetSubitem = (data,type) => {
     type && (type.id == typeData.id) && Taro.removeStorageSync(PersonlAmountHistoryClassitifySubitem)
-    setTypeData(data); 
-    userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type') 
+    setTypeData(data);
+    userUpdatePostData(data.id == '0' ? '' : data.id, 'unit_work_type')
   }
 
   // 用户更新时间选择器

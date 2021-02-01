@@ -12,7 +12,7 @@ import {useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import {TypeAction} from '@/pages/work_team_record/team_record/index.d'
 import {getTodayDate} from '@/utils/index'
-import { GroupLastSuccessRecordPage } from '@/config/store'
+import {GroupLastSuccessRecordPage, GroupLastSuccessAccountPage} from '@/config/store'
 import './index.scss'
 
 
@@ -91,6 +91,7 @@ export default function RecordWork() {
     let timeStr = initTime(e.detail.value)[0]
     setTimeText(timeStr)
     setStartDate(e.detail.value)
+    console.log(e.detail.value)
   }
  
 

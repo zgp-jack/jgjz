@@ -15,7 +15,8 @@ import './index.scss'
 import ExpenditurePostData from './inter.d'
 import { BookkeepingProps } from "@/pages/work_team_bookkeeping/components/record_borrow/borrow/inter";
 import createAnimation = Taro.createAnimation;
-import { teamExpenditureType, GroupLastSuccessAccountPage} from "@/config/store";
+import {teamExpenditureType,GroupLastSuccessAccountPage} from "@/config/store";
+import {handleRecordSuccessSaveDate} from "@/utils/index";
 
 
 function Expenditure(props: BookkeepingProps) {
@@ -111,6 +112,7 @@ function Expenditure(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
         if (typeData.id) {
           Taro.setStorageSync(teamExpenditureType, JSON.stringify(typeData))
         }
@@ -159,7 +161,7 @@ function Expenditure(props: BookkeepingProps) {
       <ContentInput type='money' title='金额' change={userUpdatePostData} value={postData.money}/>
       {isPickerType &&
       <PickerType
-        value={typeData.name}
+        value={typeData}
         close={() => {
           setIsPickType(false)
           setTypeData({id: '', name: ''})

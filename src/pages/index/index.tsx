@@ -486,7 +486,7 @@ const Remember = () => {
                   </View>
                 </View>}
                 {
-                  (counts.count_unit[0].unit != null) &&
+                  (counts.count_unit.length && counts.count_unit[0].unit != null) &&
                   counts.count_unit.map((item, i) => (
                     <View className="bookkeeping-row wage-meter" key={i}>
                       <View className="bookkeeping-content">

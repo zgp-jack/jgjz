@@ -1,6 +1,6 @@
-import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
-import { observer, useLocalStore } from '@tarojs/mobx'
+import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
+import {View, Button} from '@tarojs/components'
+import {observer, useLocalStore} from '@tarojs/mobx'
 import ContentInput from '@/components/picker_input'
 import PickerDate from '@/components/picker_date'
 import PickerLeader from '@/components/picker_leader'
@@ -8,21 +8,21 @@ import PickerMark from '@/components/picker_mark'
 import PickerUnit from '@/components/picker_unit'
 import PickerSubitem from '@/components/picker_subitem'
 import AccountBookInfo from '@/store/account'
-import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
-import { AddressBookConfirmEvent } from '@/config/events'
+import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
+import {AddressBookConfirmEvent} from '@/config/events'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
-import msg, { showBackModal, showModal } from '@/utils/msg'
-import { validNumber } from '@/utils/v'
+import msg, {showBackModal, showModal} from '@/utils/msg'
+import {validNumber} from '@/utils/v'
 import classifyItem from '@/store/classify/inter.d'
-import RecordAmountPostData, { UnitTpey, PropsData } from './inter.d'
+import RecordAmountPostData, {UnitTpey, PropsData} from './inter.d'
 import userAddRecordAction from '../api'
 import './index.scss'
 
 
-function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
+function RecordAmoumt({workerId, type, businessTime}: PropsData) {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
-  const { accountBookInfo } = localStore
+  const {accountBookInfo} = localStore
   // 是否显示分项组件
   const [isPickerSubitem, setIsPickSubitem] = useState<boolean>(false)
   // 是否显示班组长 组件
@@ -36,8 +36,8 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     work_note: accountBookInfo.id,
     note: '',
     unit_num: '',
-    unit: 0,
-    unit_work_type:'',
+    unit: 1,
+    unit_work_type: '',
     identity: Number(accountBookInfo.identity),
     worker_id: workerId
   })
@@ -47,13 +47,13 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     name: ''
   })
   // 分项数据
-  const [typeData, setTypeData] = useState<classifyItem>({ id: '', name: '' })
+  const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
 
   // 注册事件 监听班组长的选择
   useEffect(() => {
     // 监听到了 班组长的回调 然后设置班组长的信息
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      setGroupLeader({ id: data.id, name: data.name })
+      setGroupLeader({id: data.id, name: data.name})
       setIsPickerLeader(true)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
@@ -61,7 +61,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
 
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
-    let postdata: any = { ...postData }
+    let postdata: any = {...postData}
     postdata[type] = val
     setPostData(postdata)
   }
@@ -109,26 +109,33 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
     setIsPickerLeader(false)
   }
   return (<View>
-    <ContentInput title='工量' value={postData.unit_num} change={userUpdatePostData} type='unit_num' />
-    <PickerUnit set={(data) => userUpdatePostData(data.id,'unit')} />
+    <ContentInput title='工量' value={postData.unit_num} change={userUpdatePostData} type='unit_num'/>
+    <PickerUnit set={(data) => userUpdatePostData(data.id, 'unit')}/>
     {isPickerSubitem &&
-      <PickerSubitem
-        value={typeData.name}
-        close={() => setIsPickSubitem(false)}
-        onOptionClose={() => userTapRightTopCloseBtn()}
-        set={(data) => { setTypeData(data);userUpdatePostData(data.id, 'unit_work_type') }}
-        show={showTypePicker}
-        setShow={(bool: boolean) => setShowTypePicker(bool)}
-      />
+    <PickerSubitem
+      value={typeData.name}
+      close={() => setIsPickSubitem(false)}
+      onOptionClose={() => userTapRightTopCloseBtn()}
+      set={(data) => {
+        setTypeData(data);
+        userUpdatePostData(data.id, 'unit_work_type')
+      }}
+      show={showTypePicker}
+      setShow={(bool: boolean) => setShowTypePicker(bool)}
+    />
     }
-    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader} />}
-    <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')} />
+    {isPickerLeader && <PickerLeader leader={groupLeader.name} DeletePickerLeader={DeletePickerLeader}/>}
+    <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')}/>
     <View className='person-record-component'>
-      {!isPickerSubitem && <View className='person-record-component-item' onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>{postData.unit_work_type ? postData.unit_work_type : '分项'}</View>}
+      {!isPickerSubitem && <View className='person-record-component-item' onClick={() => {
+        setIsPickSubitem(true);
+        setShowTypePicker(true)
+      }}>{postData.unit_work_type ? postData.unit_work_type : '分项'}</View>}
     </View>
     <View className='person-record-btn'>
       <Button className='person-record-save' onClick={() => userPostAcion()}>确认记工</Button>
     </View>
   </View>)
 }
+
 export default observer(RecordAmoumt)

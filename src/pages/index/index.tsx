@@ -179,7 +179,6 @@ const Remember = () => {
     setReloadList(true)
     const recordSuccessSaveDate = Taro.getStorageSync(RecordSuccessSaveDate)
     if (recordSuccessSaveDate) {
-      console.error('获取日期')
       // params.start_business_time = recordSuccessSaveDate
       const dates = recordSuccessSaveDate.split('-')
       setFilterYear(parseInt(dates[0]))

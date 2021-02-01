@@ -182,7 +182,8 @@ const Remember = () => {
       setFilterYear(parseInt(dates[0]))
       setFilterMonth(parseInt(dates[1]))
       Taro.removeStorageSync(RecordSuccessSaveDate)
-    } else if (reloadList) {
+    }
+    if (reloadList) {
       if (!user.login) return
       setFilterData(params)
     }
@@ -193,9 +194,18 @@ const Remember = () => {
     const end_business_time = getNextYearMonth()
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
-    let data = {...defaultFilterData, start_business_time, end_business_time}
+    let data = {
+      ...defaultFilterData,
+      start_business_time: start_business_time.length === 3 ? start_business_time : start_business_time + '-01',
+      end_business_time: end_business_time.length === 3 ? end_business_time : handleGetEndDay(start_business_time)
+    }
     setDefaultFilterData(data)
     setFilterData(data)
+  }
+  const handleGetEndDay = (yearAndMonth) => {
+    const dates = yearAndMonth.split('-')
+    const day = new Date(dates[0], dates[1], 0).getDate()
+    return yearAndMonth + '-' + day
   }
   const initFlowList = (params: GetCountParams) => {
     /** 请求页面 */
@@ -308,12 +318,12 @@ const Remember = () => {
     setShowFilter(false)
   }
   /*2020-9改成2020年09月*/
-  const handleSplitDate = (date: string | undefined) => {
+  const handleSplitDate = (date: string | undefined, showDay?: boolean) => {
     if (!date) return ''
     const _date = date.split('-')
     let _month = _date[1].length == 1 ? ('0' + _date[1]) : _date[1]
     let dateStr = _date[0] + '年' + _month + '月'
-    if (_date.length == 3) {
+    if (_date.length == 3 && showDay) {
       dateStr += _date[2] + '日'
     }
     return dateStr
@@ -588,7 +598,7 @@ const Remember = () => {
       <Filter data={filterData} personOrGroup={personOrGroup} confirmFilter={data => handleConfirmFilter(data)}
               show={showFilter}
               close={() => setShowFilter(false)}
-              handleSplitDate={(date) => handleSplitDate(date)}
+              handleSplitDate={(date) => handleSplitDate(date, true)}
               resetFilter={handleResetFilter}
       />
       <Login show={showLogin} setShow={() => setShowLogin(false)}></Login>

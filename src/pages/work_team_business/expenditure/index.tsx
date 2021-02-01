@@ -145,7 +145,7 @@ export default function BusinessExpenditure() {
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
     <PickerType
-      value={data.expend_type_name}
+      value={{ id: data.expend_type, name: data.expend_type_name}}
       show={show}
       setShow={() => {
         setShow(!show)

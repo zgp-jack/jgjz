@@ -1,0 +1,153 @@
+
+page {
+  background-color: #f7f7f7;
+}
+
+.record-work-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .record-work-head-date {
+    position: fixed;
+    top: 100px;
+    width: 100vw;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #333333;
+    font-weight: 500;
+    padding: 0 30px;
+    background-color: white;
+
+    .record-work-head-choose-date {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+
+      .record-work-date {
+        text-align: end;
+        margin-right: 20px;
+      }
+    }
+    .record-work-data-image {
+      width: 20px;
+    }
+  }
+
+  .record-work-head {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 30px;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+  }
+
+  .record-work-scroll {
+    padding-top: 200px;
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+
+    .record-worker-list {
+      margin-top: 20px;
+      padding: 0px 5rpx 50px 30rpx;
+      background-color: white;
+    }
+
+    .record-work-table-content {
+      background-color: white;
+      flex: 1;
+      margin-top: 20px;
+
+      .record-work-table-head {
+        height: 100px;
+        width: 100vw;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        background-color: #E3F4FF;
+        font-size: 28px;
+        color: #aaa;
+
+        .record-work-table-left {
+          position: relative;
+          height: 100%;
+          width: 50%;
+          overflow: hidden;
+
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            transform-origin: 0 100%;
+            transform: skewX(10deg);
+          }
+
+          .record-work-table-left-text {
+            position: absolute;
+            transform: translateY(-50%) translateX(-50%);
+            left: 50%;
+            top: 50%;
+          }
+        }
+
+        .check-item {
+          font-size: 32px;
+          font-weight: bold;
+          color: #0099ff;
+
+          &::before {
+            background-color: white;
+          }
+        }
+
+        .record-work-table-right {
+          position: relative;
+          height: 100%;
+          width: 50%;
+          overflow: hidden;
+
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            transform-origin: 0 100%;
+            transform: skewX(-10deg);
+          }
+
+          .record-work-table-left-text {
+            position: absolute;
+            transform: translateY(-50%) translateX(-50%);
+            left: 50%;
+            top: 50%;
+          }
+        }
+      }
+
+      .record-work-flow {
+        padding: 0 30px;
+      }
+    }
+
+    .padding {
+      padding-bottom: 220px;
+    }
+  }
+}

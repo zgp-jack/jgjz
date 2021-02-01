@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-27 17:09:41
+ * @LastEditTime: 2021-01-29 19:57:16
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'
@@ -85,13 +85,13 @@ export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "bo
   // 判断是 record:记工 borrow:记账 还是 account:进入记工本
   if (type == 'record') {
     if (data.identity == 1) { // 班组记工
-      url = '/pages/work_team/team_record/index?type=2'
+      url = '/pages/work_team_record/team_record/index'
     } else { // 个人记工
       url = '/pages/person_record/index'
     }
   } else if (type == 'borrow') {
     if (data.identity == 1) { // 班组记账
-      url = '/pages/work_team/team_record/index?type=1 '
+      url = '/pages/work_team_bookkeeping/team_record/index'
     } else { // 个人记账
       url = '/pages/person_borrowing/index'
     }

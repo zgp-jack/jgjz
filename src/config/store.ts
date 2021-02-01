@@ -22,6 +22,8 @@ export const PersonlMoneyHistoryGroupLeader: string = 'personlMoneyHistoryGroupL
 export const PersonlAmountHistoryGroupLeader: string = 'personlAmountHistoryGroupLeader'
 // 个人记工量-历史分项信息
 export const PersonlAmountHistoryClassitifySubitem: string = 'personlAmountHistoryClassitifySubitem'
+// 个人记工量-历史单位id
+export const PersonlAmountHistoryUnitId: string = 'personlAmountHistoryUnitId'
 
 // 个人记借支-历史班组长信息
 export const PersonlBorrowHistoryGroupLeader: string = 'personlBorrowHistoryGroupLeader'

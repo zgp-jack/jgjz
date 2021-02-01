@@ -15,7 +15,6 @@ import RecordDayPostData, {WorkTimeType, PropsData} from './inter.d'
 import './index.scss'
 
 function RecordDay({workerId, type, businessTime}: PropsData) {
-  console.log('businessTime', businessTime)
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
@@ -83,7 +82,6 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        console.log(postData)
         handleRecordSuccessSaveDate(params.business_time)
         showModal(res.message)
         Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)

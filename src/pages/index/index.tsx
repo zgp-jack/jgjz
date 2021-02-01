@@ -120,7 +120,7 @@ const Remember = () => {
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*是否重新请求流水列表*/
   const [reloadList, setReloadList] = useState(false)
-
+  const [listTypeLength, setListTypeLength] = useState<boolean[]>([])
   useEffect(() => {/**监听登录弹窗*/
     if (oldVersionLimit) {
       setShowVersion(true)
@@ -188,7 +188,9 @@ const Remember = () => {
       setFilterData(params)
     }
   })
-
+  useEffect(() => {
+    console.log('listTypeLength', listTypeLength)
+  }, [listTypeLength])
   const initParams = () => {
     let start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -221,6 +223,7 @@ const Remember = () => {
             setShowFooter(false)
             setShowEmpty(false)
             setList(res.data)
+            getListTypeLength(res.data)
           }
         } else {
           if (len == 0) {
@@ -233,6 +236,27 @@ const Remember = () => {
     }).catch(e => {
 
     })
+  }
+  const getListTypeLength = (data) => {
+    console.log('11111', data)
+    let _listTypeLength: boolean[] = [false, false, false, false, false]
+    data.forEach(item => {
+      item.list.forEach(subItem => {
+        let type = subItem.business_type
+        if (type == 1) {
+          _listTypeLength[0] = true
+        } else if (type == 2) {
+          _listTypeLength[1] = true
+        } else if (type == 3) {
+          _listTypeLength[2] = true
+        } else if (type == 4) {
+          _listTypeLength[3] = true
+        } else if (type == 5) {
+          _listTypeLength[4] = true
+        }
+      })
+    })
+    setListTypeLength(_listTypeLength)
   }
   /*获取统计数据*/
   const initData = (params: GetCountParams) => {
@@ -456,7 +480,7 @@ const Remember = () => {
             }
             {/*记工统计*/}
             <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
-              {(!isFilter || (isFilter && (counts.work_time || counts.work_time_hour || counts.overtime))) &&
+              {(!isFilter || (isFilter && (counts.work_time || counts.work_time_hour || counts.overtime)) || listTypeLength[0]) &&
               <View className="statistics-remember">
                 <View className="remember-row">
                   <View className="remember-content">
@@ -482,7 +506,7 @@ const Remember = () => {
             {(counts.work_money || (counts.count_unit.length > 0 && counts.count_unit[0].unit != null)) &&
             <View className="statistics">
               <View className="statistics-bookkeeping statistics-bookkeeping-unit">
-                {counts.work_money && <View className="bookkeeping-row wage-meter">
+                {(counts.work_money || listTypeLength[1]) && <View className="bookkeeping-row wage-meter">
                   <View className="bookkeeping-content">
                     <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
@@ -494,7 +518,7 @@ const Remember = () => {
                   </View>
                 </View>}
                 {
-                  (counts.count_unit.length > 0 && counts.count_unit[0].unit) &&
+                  ((counts.count_unit.length > 0 && counts.count_unit[0].unit) || listTypeLength[2]) &&
                   counts.count_unit.map((item, i) => (
                     <View className="bookkeeping-row wage-meter" key={'id' + i}>
                       <View className="bookkeeping-content">
@@ -516,7 +540,8 @@ const Remember = () => {
             <View className="statistics">
               {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
               <View className="statistics-bookkeeping">
-                {(!isFilter || (isFilter && Number(counts.borrow_count))) && <View className="bookkeeping-row">
+                {(!isFilter || (isFilter && Number(counts.borrow_count)) || listTypeLength[3]) &&
+                <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
                     <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">
@@ -528,7 +553,8 @@ const Remember = () => {
                   </View>
                 </View>}
 
-                {(!isFilter || (isFilter && Number(counts.expend_count))) && <View className="bookkeeping-row">
+                {(!isFilter || (isFilter && Number(counts.expend_count)) || listTypeLength[4]) &&
+                <View className="bookkeeping-row">
                   <View className="bookkeeping-content">
                     <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon"/>
                     <View className="bookkeeping-values">

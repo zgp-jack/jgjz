@@ -801,10 +801,12 @@ function AddressBook() {
       {/* 底部组件 当非个人类型时显示 */}
       {type !== ADDRESSBOOKTYPE_ALONE &&
         <View className="bottom_all">
-          <View className="bottom_all_box" onClick={() => allSelect()}>
+          {
+          value.length < 1 && <View className="bottom_all_box" onClick={() => allSelect()}>
             <Image className="bottom_all_img" src={isAllSelect ? `${IMGCDNURL}ws/ckeckd.png` : `${IMGCDNURL}ws/check.png`} />
             <Text className="bottom_all_text" >全选</Text>
           </View>
+          }
           <View className="button" style={{ background: type == ADDRESSBOOKTYPE_LEAVE ? '#c82928' : "#0099FF" }} onClick={() => submitSelect()}>
             {type == ADDRESSBOOKTYPE_LEAVE ? '离场' : "确定"}（{selectd.length}人）
           </View>

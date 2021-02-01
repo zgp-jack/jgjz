@@ -1,7 +1,6 @@
 import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
-import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerDetail from '@/components/picker_detail'
 import PickerSubitem from '@/components/picker_subitem'
@@ -10,7 +9,6 @@ import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem } from './inter.
 import msg, { showActionModal, showBackModal } from '@/utils/msg'
 import { AddressBookConfirmEvent } from '@/config/events'
 import getBorrowInfo, { delBorrowBusiness, editBorrowBusiness } from './api'
-import BusinessBtns from '@/components/business_btns'
 import './index.scss'
 
 export default function BusinessAmount() {
@@ -118,12 +116,9 @@ export default function BusinessAmount() {
   }
   // 用户修改流水
   const userEditBusiness = () => {
-    console.log(postData)
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id,
-      unit: postData.unit ? postData.unit : '1',
-      unit_num: postData.unit_num ? postData.unit_num : '0'
+      group_leader: groupLeader.id
     }
     editBorrowBusiness(params).then(res => {
       if (res.code === 0) {
@@ -144,19 +139,21 @@ export default function BusinessAmount() {
     setPostData({ ...postData, unit_work_type: '' })
   }
   return (<View>
-    <ContentInput title='工量' maxLength={3} value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
+    <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
     <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
-      value={{ name: data.unit_work_type_name, id: data.unit_work_type}}
+      value={{ id: data.unit_work_type, name: data.unit_work_type_name}}
       show={show}
       setShow={() => { setShow(!show) }}
       set={(data) => userChangePickerType(data)}
       close={() => userClearPickerType()}
     />
-    <PickerLeader leader={groupLeader} DeletePickerLeader={() => DeletePickerLeader()} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} />
-    <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
+    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
+    <View className="person-record-btn">
+      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
+    </View>
   </View>)
 }
 

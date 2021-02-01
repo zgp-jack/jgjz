@@ -5,13 +5,13 @@ import msg, {showActionModal, showBackModal} from '@/utils/msg'
 import PickerMark from '@/components/picker_mark'
 import PickerType from '@/components/picker_type'
 import PickerDetail from '@/components/picker_detail'
+import PickerLeader from '@/components/picker_leader'
 import {AddressBookConfirmEvent} from '@/config/events'
 import getExpenditureInfo, {delExpenditureBusiness, editExpenditureBusiness} from './api'
 import ClassifyItem from '@/store/classify/inter.d'
 import {BusinessInfoResult, UserEditBusinessInfo} from './inter.d'
 import './index.scss'
 import PickerCoworkers from "@/components/picker_coworkers";
-import BusinessBtns from '@/components/business_btns'
 
 export default function BusinessExpenditure() {
 
@@ -160,7 +160,10 @@ export default function BusinessExpenditure() {
       submitValue={data.created_time_string}
       projectValue={data.work_note_name}
     />
-    <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
+    <View className="person-record-btn">
+      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
+    </View>
   </View>)
 }
 

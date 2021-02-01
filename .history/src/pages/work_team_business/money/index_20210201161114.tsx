@@ -1,7 +1,7 @@
 import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
-import BusinessBtns from '@/components/business_btns'
+import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import msg, { showBackModal, showActionModal } from '@/utils/msg'
 import ClassifyItem from '@/store/classify/inter.d'
@@ -127,7 +127,10 @@ export default function BusinessMoney() {
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
-    <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
+    <View className="person-record-btn">
+      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
+    </View>
   </View>)
 }
 BusinessMoney.config = {

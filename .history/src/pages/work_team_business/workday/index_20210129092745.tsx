@@ -1,14 +1,12 @@
 import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerDetail from '@/components/picker_detail'
-import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem, WorkTimeType } from './inter.d'
 import msg, { showActionModal, showBackModal } from '@/utils/msg'
 import { AddressBookConfirmEvent } from '@/config/events'
 import WorkDayComponent from '@/components/work_day'
 import getBorrowInfo, { delBorrowBusiness, editBorrowBusiness } from './api'
-import BusinessBtns from '@/components/business_btns'
+import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem, WorkTimeType } from './inter.d'
 import './index.scss'
 
 export default function ModifyWorkDay(){
@@ -139,11 +137,6 @@ export default function ModifyWorkDay(){
     postdata[type] = val
     setPostData(postdata)
   }
-
-  // 用户清空班组长
-  const userClearLeader =() => {
-    setGroupLeader({id: '', name: ''})
-  }
   // 改变加班/上班 值
   const useChangeWorkTime = (data, type: string, typeValue?: string) => {
     if (typeValue == 'work') {
@@ -170,14 +163,16 @@ export default function ModifyWorkDay(){
         type='over'
       />
     </View>
-    <PickerLeader leader={groupLeader}  DeletePickerLeader={()=>userClearLeader()} />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <PickerDetail
       dateValue={data.busienss_time_string}
       submitValue={data.created_time_string}
       projectValue={data.work_note_name}
     />
-    <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
+    <View className="person-record-btn">
+      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
+    </View>
   </View>)
 }
 ModifyWorkDay.config = {

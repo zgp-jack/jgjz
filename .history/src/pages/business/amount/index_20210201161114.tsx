@@ -1,5 +1,5 @@
 import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
@@ -10,7 +10,6 @@ import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem } from './inter.
 import msg, { showActionModal, showBackModal } from '@/utils/msg'
 import { AddressBookConfirmEvent } from '@/config/events'
 import getBorrowInfo, { delBorrowBusiness, editBorrowBusiness } from './api'
-import BusinessBtns from '@/components/business_btns'
 import './index.scss'
 
 export default function BusinessAmount() {
@@ -156,7 +155,10 @@ export default function BusinessAmount() {
     <PickerLeader leader={groupLeader} DeletePickerLeader={() => DeletePickerLeader()} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
     <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} />
-    <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
+    <View className="person-record-btn">
+      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
+    </View>
   </View>)
 }
 

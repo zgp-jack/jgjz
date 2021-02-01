@@ -1,15 +1,15 @@
 import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
-import BusinessBtns from '@/components/business_btns'
+import PickerType from '@/components/picker_type'
+import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
+import getBusinessMoneyInfo , { delBusinessMoney, editBusinessMoney} from './api'
+import PickerDetail from '@/components/picker_detail'
+import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
 import msg, { showBackModal, showActionModal } from '@/utils/msg'
 import ClassifyItem from '@/store/classify/inter.d'
 import { AddressBookConfirmEvent } from '@/config/events'
-import PickerDetail from '@/components/picker_detail'
-import getBusinessMoneyInfo , { delBusinessMoney, editBusinessMoney} from './api'
-import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
-
 import './index.scss'
 
 export default function BusinessMoney() {
@@ -61,6 +61,10 @@ export default function BusinessMoney() {
     return () => eventCenter.off(AddressBookConfirmEvent)
   },[])
 
+  // 用户清空班组长
+  const userClearLeader = () => {
+    setGroupLeader({ id: '', name: '' })
+  }
 
   // 初始化流水数据
   const userGetBusinessInfo = () => {
@@ -68,7 +72,7 @@ export default function BusinessMoney() {
       if (res.code === 0) {
         let mydata = res.data
         setData(mydata)
-        setGroupLeader({id: mydata.group_leader || '', name: mydata.group_leader_name || ''})
+        setGroupLeader({id: mydata.group_leader, name: mydata.group_leader_name})
         setPostData({
           ...postData,
           note: mydata.note || "",
@@ -112,7 +116,8 @@ export default function BusinessMoney() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      group_leader: groupLeader.id || '',
+      money: postData.money ? postData.money : '0'
     }
     editBusinessMoney(params).then(res => {
       if (res.code === 0) {
@@ -125,9 +130,13 @@ export default function BusinessMoney() {
 
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money" />
+    <PickerLeader leader={groupLeader}  DeletePickerLeader={() => userClearLeader()}  />
     <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} />
-    <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
+    <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} />
+    <View className="person-record-btn">
+      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
+    </View>
   </View>)
 }
 BusinessMoney.config = {

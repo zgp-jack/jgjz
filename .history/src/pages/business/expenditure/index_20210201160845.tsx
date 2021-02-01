@@ -5,13 +5,12 @@ import msg, {showActionModal, showBackModal} from '@/utils/msg'
 import PickerMark from '@/components/picker_mark'
 import PickerType from '@/components/picker_type'
 import PickerDetail from '@/components/picker_detail'
+import PickerLeader from '@/components/picker_leader'
 import {AddressBookConfirmEvent} from '@/config/events'
 import getExpenditureInfo, {delExpenditureBusiness, editExpenditureBusiness} from './api'
 import ClassifyItem from '@/store/classify/inter.d'
 import {BusinessInfoResult, UserEditBusinessInfo} from './inter.d'
 import './index.scss'
-import PickerCoworkers from "@/components/picker_coworkers";
-import BusinessBtns from '@/components/business_btns'
 
 export default function BusinessExpenditure() {
 
@@ -20,8 +19,11 @@ export default function BusinessExpenditure() {
   const {id = ''} = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
-  // 工友数据
-  const [coworkersData, setCoworkersData] = useState<ClassifyItem>({id: '', name: ''})
+  // 选择的班组长数据
+  const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
+    id: '',
+    name: ''
+  })
   // 借支提交数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -44,8 +46,6 @@ export default function BusinessExpenditure() {
     expend_type_name: '',
     expend_type: '',
     group_leader_name: '',
-    worker_id: '',
-    worker_name: ''
   })
 
   useEffect(() => {
@@ -56,8 +56,8 @@ export default function BusinessExpenditure() {
 
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
-    eventCenter.on(AddressBookConfirmEvent, (coworkers) => {
-      setCoworkersData({id: coworkers.id, name: coworkers.name})
+    eventCenter.on(AddressBookConfirmEvent, (leader) => {
+      setGroupLeader({ id: leader.id || '', name: leader.name ||'' })
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
@@ -68,14 +68,14 @@ export default function BusinessExpenditure() {
       if (res.code === 0) {
         let mydata = res.data
         setData({...mydata})
-        setCoworkersData({id: mydata.worker_id || '', name: mydata.worker_name || ''})
+        setGroupLeader({ id: mydata.group_leader || '', name: mydata.group_leader_name || '' })
         setPostData({
           ...postData,
           expend_type: mydata.expend_type || '',
           note: mydata.note || "",
           money: mydata.money || '',
           group_leader: mydata.group_leader || '',
-          worker_id: mydata.worker_id
+          worker_id: mydata.worker_id || ''
         })
       } else {
         msg(res.message)
@@ -119,7 +119,8 @@ export default function BusinessExpenditure() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      worker_id: coworkersData.id
+      group_leader: groupLeader.id,
+      money: postData.money ? postData.money : '0'
     }
     editExpenditureBusiness(params).then(res => {
       if (res.code === 0) {
@@ -130,22 +131,20 @@ export default function BusinessExpenditure() {
     })
   }
 
-  // 用户删除班组长
-  const userClearGroupCoworkers = () => {
-    setCoworkersData({id: '', name: ''})
-  }
-
   // 用户删除分类
   const userClearPickerType = () => {
     setData({...data, expend_type_name: '', expend_type: ''})
     setPostData({...postData, expend_type: ''})
   }
 
-
+  // 用户清空班组长
+  const userClearLeader = () => {
+    setGroupLeader({ id: '', name: '' })
+  }
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
     <PickerType
-      value={{ id: data.expend_type, name: data.expend_type_name}}
+      value={{name:data.expend_type_name,id: data.expend_type}}
       show={show}
       setShow={() => {
         setShow(!show)
@@ -153,17 +152,23 @@ export default function BusinessExpenditure() {
       close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
     />
-    <PickerCoworkers leader={coworkersData.name} DeletePickerCoworkers={userClearGroupCoworkers}/>
+    <PickerLeader leader={groupLeader} DeletePickerLeader={() => userClearLeader()} />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
     <PickerDetail
       dateValue={data.busienss_time_string}
       submitValue={data.created_time_string}
       projectValue={data.work_note_name}
     />
-    <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
+    <View className="person-record-btn">
+      <Button className="person-record-resave" onClick={() => userDeleteBusiness()}>删除</Button>
+      <Button className="person-record-save" onClick={() => userEditBusiness()}>保存修改</Button>
+    </View>
   </View>)
 }
 
 BusinessExpenditure.config = {
-  navigationBarTitleText: '修改支出'
+  navigationBarTitleText: '修改支出',
+  navigationBarBackgroundColor: '#0099ff',
+  navigationBarTextStyle: 'white',
+  backgroundTextStyle: "dark"
 } as Config

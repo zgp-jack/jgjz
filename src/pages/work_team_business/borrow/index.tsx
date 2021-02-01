@@ -142,7 +142,7 @@ export default function BusinessBorrow() {
   return (<View>
     <ContentInput title='金额' value={data.money} change={userUpdatePostData} type="money"/>
     <PickerType
-      value={typeData.name}
+      value={typeData}
       show={show}
       setShow={() => {
         setShow(!show)

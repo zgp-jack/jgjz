@@ -14,7 +14,7 @@ import './index.scss'
 // 被修改数据的index
 let current = 0
 
-function PickerType({
+function PickerSubitem({
                       img = `${IMGCDNURL}zgp/subitem_icon.png`,
                       title = '分项',
                       value = {id: '', name: '无分项'},
@@ -196,4 +196,4 @@ function PickerType({
   )
 }
 
-export default observer(PickerType)
+export default observer(PickerSubitem)

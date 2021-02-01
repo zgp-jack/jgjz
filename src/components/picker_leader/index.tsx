@@ -15,7 +15,7 @@ export default function PickerLeader({
 }:PickerLeaderProps){
 
   return (<View>
-      <View className="person-record-overtime person-record-date" onClick={() => Taro.navigateTo({ url: `${ADDRESSBOOKALONEPAGE}&data=${leader}` })}>
+      <View className="person-record-overtime person-record-date" onClick={() => Taro.navigateTo({ url: `${ADDRESSBOOKALONEPAGE}&data=${JSON.stringify(leader)}` })}>
         {hideImg && <Image className="person-record-date-img" src={img} />}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
         <View className="person-record-date-text">{leader.name || '无班组长'}</View>

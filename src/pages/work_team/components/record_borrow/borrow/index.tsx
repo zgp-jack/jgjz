@@ -7,13 +7,14 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import {validNumber} from '@/utils/v'
-import msg, { showBackModal, showModal} from '@/utils/msg'
+import msg, {showBackModal, showModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
 import userAddBorrowAction from '@/pages/work_team/components/record_borrow/api'
 import ContentInput from '@/components/picker_input/index'
 import './index.scss'
 import BorrowPostData, {BookkeepingProps} from './inter.d'
 import {teamBorrowType} from "@/config/store";
+import {handleRecordSuccessSaveDate} from "@/utils/index";
 
 
 function Borrow(props: BookkeepingProps) {
@@ -110,6 +111,7 @@ function Borrow(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
         if (typeData.id) {
           Taro.setStorageSync(teamBorrowType, JSON.stringify(typeData))
         }

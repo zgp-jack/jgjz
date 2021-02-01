@@ -30,7 +30,7 @@ function WorkCountDay({ list = [], type = 1}: PropsData) {
         url = `/pages/business/amount/index?id=${id}`
       }
     }
-    
+
     Taro.navigateTo({url})
   }
   return (
@@ -41,7 +41,7 @@ function WorkCountDay({ list = [], type = 1}: PropsData) {
             <View className='bokkeeping-list-item' onClick={() => goDetail(item.id, item.business_type)}>
               <View className="bokkeeping-list-item-box">
                 <View className='bokkeeping-list-left'>
-                  <View className='bokkeeping-list-title'>记{type == 1 ? '工天' : (type == 2 ? '工量' : '')}</View>
+                  <View className='bokkeeping-list-title'>{type == 1 ? '工天' : (type == 2 ? '工量' : '')}</View>
                   <View
                     className='bokkeeping-list-des'>{item.group_leader_name ? ('班组长：' + item.group_leader_name) : ''}</View>
                 </View>

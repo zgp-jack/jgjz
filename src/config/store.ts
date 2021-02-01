@@ -3,7 +3,7 @@
  * @Date: 2021-01-18 14:00:27
  * @LastEditors: jsxin
  * @LastEditTime: 2021-01-29 18:18:08
- * @Description: 项目缓存文件，所有缓存key存放文件 
+ * @Description: 项目缓存文件，所有缓存key存放文件
  ! @rules: 1.key 为大驼峰 值为小驼峰 2.注释在上方
  */
 
@@ -56,3 +56,5 @@ export const PersonlLastSuccessAccountPage: string = 'personlLastSuccessAccountP
 export const GroupLastSuccessRecordPage: string = 'groupLastSuccessRecordPage'
 // 班组记账-历史记录成功页面
 export const GroupLastSuccessAccountPage: string = 'groupLastSuccessAccountPage'
+//个人、班组记工记账成功后存储记得日期，回到首页后更筛选时间为存储的时间
+export const RecordSuccessSaveDate: string = 'recordSuccessSaveDate'

@@ -9,6 +9,7 @@ import { validNumber } from '@/utils/v'
 import RecordMoneyPostData, { PropsData} from './inter.d'
 import userAddRecordAction from '../api'
 import './index.scss'
+import {handleRecordSuccessSaveDate} from "@/utils/index";
 
 function RecordMoney({ workerId, type, businessTime }: PropsData) {
   // 获取记工本数据
@@ -24,7 +25,7 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
     worker_id: workerId,
     work_note: accountBookInfo.id
   })
-  
+
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }
@@ -38,7 +39,7 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
       note: postData.note,
       work_note: accountBookInfo.id,
       business_type: 3,
-      business_time: postData.business_time,
+      business_time: businessTime,
       money: postData.money,
       identity: 2,
       worker_id: workerId
@@ -52,15 +53,16 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
       } else {
         msg(res.message)
       }
     })
   }
- 
+
   return (<View>
     <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type='money' />
-    
+
     <PickerMark text={postData.note as string} set={(val) => userUpdatePostData(val, 'note')} />
     <View className='person-record-btn'>
       <Button className='person-record-save' onClick={() => userPostAcion()}>确认记工</Button>

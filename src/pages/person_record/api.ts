@@ -6,9 +6,9 @@
  * @Description: 记工 - 记工天/记工量/记工钱
  */
 
-import { userAddBorrow } from '@/utils/api'
-import { post } from '@/utils/request/index'
-import { RecordPostData } from './inter.d'
+import {userAddBorrow} from '@/utils/api'
+import {post} from '@/utils/request/index'
+import {RecordPostData} from './inter.d'
 
 export default function userAddRecordAction(params: RecordPostData) {
   return post<RecordPostData, number>(userAddBorrow, params)

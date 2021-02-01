@@ -16,6 +16,7 @@ import ExpenditurePostData from './inter.d'
 import {BookkeepingProps} from "@/pages/work_team/components/record_borrow/borrow/inter";
 import createAnimation = Taro.createAnimation;
 import {teamExpenditureType} from "@/config/store";
+import {handleRecordSuccessSaveDate} from "@/utils/index";
 
 
 function Expenditure(props: BookkeepingProps) {
@@ -107,6 +108,7 @@ function Expenditure(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
         if (typeData.id) {
           Taro.setStorageSync(teamExpenditureType, JSON.stringify(typeData))
         }

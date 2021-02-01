@@ -1,18 +1,18 @@
-import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
-import RecordDayPostData, { WorkTimeType } from './inter.d'
+import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
+import {View, Button} from '@tarojs/components'
+import RecordDayPostData, {WorkTimeType} from './inter.d'
 import PickerDate from '@/components/picker_date/index'
 import PickerLeader from '@/components/picker_leader/index'
 import PickerMark from '@/components/picker_mark/index'
-import { observer, useLocalStore } from '@tarojs/mobx'
+import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import { AddressBookConfirmEvent } from '@/config/events'
-import { PersonlLastSuccessRecordPage, PersonlWorkdayHistoryGroupLeader } from '@/config/store'
-import msg, { showBackModal } from '@/utils/msg'
-import { getTodayDate } from '@/utils/index'
+import {AddressBookConfirmEvent} from '@/config/events'
+import {PersonlLastSuccessRecordPage, PersonlWorkdayHistoryGroupLeader} from '@/config/store'
+import msg, {showBackModal} from '@/utils/msg'
+import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
-import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
+import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import WorkDayComponent from '@/components/work_day'
 import './index.scss'
 
@@ -26,7 +26,7 @@ function RecordDay() {
   // 上班时长的数据
   const [workTime, setWorkTime] = useState<WorkTimeType>({value: '1', text: '一个工'})
   // 加班时长的数据
-  const [overTime, setOverTime] = useState<WorkTimeType>({ value: '', text: '' })
+  const [overTime, setOverTime] = useState<WorkTimeType>({value: '', text: ''})
   // 设置更多时间组件显示
   const [isMoreTime, setIsMoreTime] = useState<boolean>(false)
   // 是否显示加班时间
@@ -67,7 +67,7 @@ function RecordDay() {
     // 监听到了 班组长的回调 然后设置班组长的信息
     eventCenter.on(AddressBookConfirmEvent, (data) => {
       console.log(data)
-      setGroupLeader({ id: data.id, name: data.name })
+      setGroupLeader({id: data.id, name: data.name})
       setIsPickerLeader(true)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
@@ -75,11 +75,11 @@ function RecordDay() {
 
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
-  const { accountBookInfo } = localStore
+  const {accountBookInfo} = localStore
 
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
-    let postdata: any = { ...postData }
+    let postdata: any = {...postData}
     postdata[type] = val
     setPostData(postdata)
   }
@@ -88,7 +88,7 @@ function RecordDay() {
     if (groupLeader.id) {
       setIsPickerLeader(true)
     } else {
-      Taro.navigateTo({ url: ADDRESSBOOKALONEPAGE })
+      Taro.navigateTo({url: ADDRESSBOOKALONEPAGE})
     }
   }
   // 提交借支数据
@@ -103,28 +103,29 @@ function RecordDay() {
       group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
       work_note: accountBookInfo.id
-      
+
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        if(isPickerLeader && groupLeader.id){
+        if (isPickerLeader && groupLeader.id) {
           Taro.setStorageSync(PersonlWorkdayHistoryGroupLeader, groupLeader)
-        }else{
+        } else {
           Taro.removeStorageSync(PersonlWorkdayHistoryGroupLeader)
         }
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         showBackModal(res.message)
+        handleRecordSuccessSaveDate(params.business_time)
       } else {
         msg(res.message)
       }
     })
   }
   // 改变加班/上班 值
-  const useChangeWorkTime = (data,type:string,typeValue?:'work' | 'over') => {
-    if (typeValue == 'work'){
+  const useChangeWorkTime = (data, type: string, typeValue?: 'work' | 'over') => {
+    if (typeValue == 'work') {
       setWorkTime(data)
       setIsWork(type === 'first' ? true : false)
-    }else{
+    } else {
       setOverTime(data)
       setIsOver(type === 'first' ? true : false)
       setIsMoreTime(false)
@@ -135,8 +136,8 @@ function RecordDay() {
     setIsMoreTime(true)
     setIsOverTime(true)
   }
-  const closeMoreTime = ()=> {
-    if(!overTime.value){
+  const closeMoreTime = () => {
+    if (!overTime.value) {
       setIsOverTime(false)
       setIsMoreTime(false)
     }
@@ -144,26 +145,26 @@ function RecordDay() {
 
   // 用户关闭加班组件
   const userCloseOverTimePcker = () => {
-    setOverTime({ value: '', text: '' }); 
-    setIsOver(true); 
+    setOverTime({value: '', text: ''});
+    setIsOver(true);
     setIsOverTime(false)
   }
 
   return (<View>
     <View className="person-record-time">
-      <WorkDayComponent 
-        change={(data,type) => useChangeWorkTime(data,type,'work')}
+      <WorkDayComponent
+        change={(data, type) => useChangeWorkTime(data, type, 'work')}
         value={workTime}
         isSelect={!isWrok}
         type='work'
       />
       {isOverTime && <WorkDayComponent
-        title = {'加班时长'}
-        change={(data, type) => useChangeWorkTime(data, type,'over')}
+        title={'加班时长'}
+        change={(data, type) => useChangeWorkTime(data, type, 'over')}
         value={overTime}
         isSelect={!isOver}
         type='over'
-        isClose = {true}
+        isClose={true}
         close={() => userCloseOverTimePcker()}
         isMoreTime={isMoreTime}
         closeMoreTime={() => closeMoreTime()}
@@ -175,16 +176,22 @@ function RecordDay() {
       change={(val) => userUpdatePostData(val, 'business_time')}
       dateText={dateText}
     />}
-    {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={() => { setGroupLeader({ id: '', name: '' });setIsPickerLeader(false)}} />}
-    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
+    {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={() => {
+      setGroupLeader({id: '', name: ''});
+      setIsPickerLeader(false)
+    }}/>}
+    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>
     <View className="person-record-component">
-      {!isPickerDate && <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-      {!isPickerLeader && <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
+      {!isPickerDate &&
+      <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
+      {!isPickerLeader &&
+      <View className="person-record-component-item" onClick={() => userTapGroupLeaderBtn()}>班组长</View>}
       {!isOverTime && <View className="person-record-component-item" onClick={() => userTapOverTimeBtn()}>加班时长</View>}
     </View>
     <View className="person-record-btn">
-      <Button className="person-record-save" onClick={userPostAcion} >确认记工</Button>
+      <Button className="person-record-save" onClick={userPostAcion}>确认记工</Button>
     </View>
   </View>)
 }
+
 export default observer(RecordDay)

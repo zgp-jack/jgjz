@@ -469,7 +469,7 @@ const Remember = () => {
 
             {/*临时工资，平方米，筛选后才展示*/}
 
-            {(counts.work_money || counts.count_unit[0].unit != null) &&
+            {(counts.work_money || (counts.count_unit.length > 0 && counts.count_unit[0].unit != null)) &&
             <View className="statistics">
               <View className="statistics-bookkeeping statistics-bookkeeping-unit">
                 {counts.work_money && <View className="bookkeeping-row wage-meter">
@@ -484,9 +484,9 @@ const Remember = () => {
                   </View>
                 </View>}
                 {
-                  (counts.count_unit.length && counts.count_unit[0].unit != null) &&
+                  (counts.count_unit.length > 0 && counts.count_unit[0].unit) &&
                   counts.count_unit.map((item, i) => (
-                    <View className="bookkeeping-row wage-meter" key={ 'id' + i}>
+                    <View className="bookkeeping-row wage-meter" key={'id' + i}>
                       <View className="bookkeeping-content">
                         <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon"/>
                         <View className="bookkeeping-values">

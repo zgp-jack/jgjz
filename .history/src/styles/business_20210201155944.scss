@@ -3,6 +3,7 @@
     left: 0;
     bottom: 0px;
     display: flex;
+    // justify-content: space-between;
     width: 100%;
     padding:0 26px;
     padding-bottom: 40px;
@@ -15,7 +16,6 @@
     }
     .person-record-resave{
         margin: 0;
-        margin-right: 30px;
         padding: 0 31px;
         width: 200px;
         background-color: #fff;

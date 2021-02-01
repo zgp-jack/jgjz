@@ -49,14 +49,14 @@ export default function ContentInput({ title, change, value, type, maxLength = 2
       })}>
         <Text className="work-amount-text">{title}</Text>
           <Input 
-            type="digit" 
+            // type="digit" 
             maxLength={13}
             value={value} 
             placeholder={`0.00`} 
             className="work-amount-input" 
-          // onInput={(e) => change(e.detail.value, type)}
             onInput={(e: any) => validInfo(e.detail.value)}
-            onFocus={() => { setFocus(true);}}
+            onFocus={(e) => { setFocus(true);}}
+            // onConfirm
             onBlur={(e: any) => { e.stopPropagation();setFocus(false);change(e.detail.value, type)}} 
           />
           </View>

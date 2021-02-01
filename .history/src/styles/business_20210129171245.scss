@@ -3,19 +3,18 @@
     left: 0;
     bottom: 0px;
     display: flex;
+    justify-content: space-between;
     width: 100%;
     padding:0 26px;
     padding-bottom: 40px;
     background-color: #fff;
     font-size: 30px;
     text-align: center;
-    z-index: 10;
     button:after{
         border: none;
     }
     .person-record-resave{
         margin: 0;
-        margin-right: 30px;
         padding: 0 31px;
         width: 200px;
         background-color: #fff;
@@ -26,7 +25,7 @@
         font-size: 32px;
     }
     .person-record-save{
-        width: 100%;
+        width: 460px;
         margin: 0;
         padding: 0 70px;
         background-color: #0099FF;

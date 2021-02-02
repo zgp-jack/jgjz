@@ -372,8 +372,6 @@ const Remember = () => {
         </View>
         <View className="body">
           <View className="body-container">
-
-          <View className="index-top-box">
             <View className={"feat" + (isFilter ? ' filter-feat' : '')}>
               {!isFilter ? <View className="date">
                   <View className="date-icon-bor date-icon-bor-left" onClick={prevMonth}><Image
@@ -532,8 +530,6 @@ const Remember = () => {
                 </View>}
               </View>
             </View>
-          </View>
-            
             <View className="statistics-flow">
               {!isFilter ? <View className="statistics-title">{filterMonth}月全部流水</View> :
                 <View className="statistics-title">共找到<Text className="flow-list-filter-title">{countNum}</Text>条满足您条件的流水</View>}

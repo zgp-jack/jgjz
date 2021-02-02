@@ -1,4 +1,4 @@
-import Taro, { useEffect, useState, useDidShow } from '@tarojs/taro'
+import Taro, { useEffect, useState, useDidShow, useReachBottom } from '@tarojs/taro'
 import ListProvider from '@/components/list_provider'
 import useList from '@/hooks/list'
 import getFlowlists from '@/pages/work_team_record/team_record/api'
@@ -60,14 +60,6 @@ export default function FlowList({currentId=1, params='', types=[{id:'1',name:'�
     }
   },[list])
 
-  // 页面非第一次显示重新加载数据
-  // useDidShow(()=>{
-  //   console.log("firstShow",firstShow)
-  //   setFirstShow(true);
-  //   if (firstShow) {
-  //     setLoading(true)
-  //   }
-  // })
 
   return (
       <ListProvider

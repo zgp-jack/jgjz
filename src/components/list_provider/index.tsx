@@ -31,7 +31,7 @@ export default function ListProvider(props: ListProviderProps) {
         <LoadFooter />
       )
     }
-    if(!hasmore){
+    if(!hasmore || length <= 19){
       return (
         <LoadFooter text='没有更多数据了' />
       )

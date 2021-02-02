@@ -11,7 +11,11 @@ import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import {AddressBookConfirmEvent} from '@/config/events'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
+<<<<<<< HEAD
+import msg, {showBackModal, showModal} from '@/utils/msg'
+=======
 import msg, { showBackModal, showModal, showActionModal } from '@/utils/msg'
+>>>>>>> yangchao
 import { GroupLastSuccessRecordPage } from '@/config/store'
 import {validNumber} from '@/utils/v'
 import classifyItem from '@/store/classify/inter.d'
@@ -140,7 +144,14 @@ function RecordAmoumt({workerId, type, businessTime}: PropsData) {
     {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')}/>
     <View className='person-record-component'>
+<<<<<<< HEAD
+      {!isPickerSubitem && <View className='person-record-component-item' onClick={() => {
+        setIsPickSubitem(true);
+        setShowTypePicker(true)
+      }}>{postData.unit_work_type ? postData.unit_work_type : '分项'}</View>}
+=======
       {!isPickerSubitem && <View className='person-record-component-item' onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
+>>>>>>> yangchao
     </View>
     <View className='person-record-btn'>
       <Button className='person-record-save' onClick={() => userPostAcion()}>确认记工</Button>

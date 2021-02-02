@@ -42,7 +42,7 @@ export default function MoreWorkTime({
                 <View className = {classnames({
                   "moreworktime-item": true,
                   "worktime-active": isSelect && (item.value === value)
-                })} key={item.value} onClick={() => { set(item, 'end'); }}>{item.text}</View>
+                })} key={item.value} onClick={(e) => { e.stopPropagation();set(item, 'end'); }}>{item.text}</View>
               )}
             </View>
         </View>

@@ -10,7 +10,7 @@ export default function PickerDetail({
     submitValue = '',
     projectName = '项目名称',
     projectValue = '',
-    workerTitle = '工人',
+    workerTitle = '工友',
     worker = '未选择',
     showWorker = false
 }:PickerDetailProps){

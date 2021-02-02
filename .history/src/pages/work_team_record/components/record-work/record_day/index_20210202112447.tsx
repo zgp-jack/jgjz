@@ -14,7 +14,11 @@ import RecordDayPostData, {WorkTimeType, PropsData} from './inter.d'
 
 import './index.scss'
 
+<<<<<<< HEAD
 function RecordDay({workerId, type, businessTime}: PropsData) {
+=======
+function RecordDay({ workerId, type, businessTime }: PropsData) {
+>>>>>>> yangchao
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore

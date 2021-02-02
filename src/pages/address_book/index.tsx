@@ -645,7 +645,10 @@ function AddressBook() {
       params.worker_ids = id.toString()
     }
     showActionModal({
-      msg: "确定要离场此工友吗", showCancel: true, success: (()=>{
+      msg: "确定要离场此工友吗", showCancel: true, success: ((r)=>{
+        if (r.cancel) {
+          return
+        }
         //发送离场接口
         deleteNoteWorkers(params).then(res => {
           msg(res.message)

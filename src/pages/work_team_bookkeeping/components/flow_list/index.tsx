@@ -7,7 +7,7 @@ import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import { GetWorkFlowParams, FlowLists } from './index.d'
 import './index.scss'
 
-export default function FlowList({ currentId=4, params='', types=[{id:'1',name:'记工天'}],touchBottom, workNote}) {
+export default function FlowList({ currentId=4, params='',touchBottom, workNote}) {
   // 初始化请求参数
   let defaultParams: GetWorkFlowParams = {
     /**记工类型 1记工天，2记工量，3记工钱，4借支, 5支出*/

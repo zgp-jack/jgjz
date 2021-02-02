@@ -22,6 +22,7 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   let { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
+  console.log(type)
   // debugger
   const [routerData,setRouterData] = useState<{id:number,name:string}>({id:0,name:''})
   // 不通的type显示不同的页面标题
@@ -33,9 +34,13 @@ function AddressBook() {
     Taro.setNavigationBarTitle({
       title: '请选择需要离场的工友'
     })
-  } else if (type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_GROUP_LEAVE || type == ADDRESSBOOKTYPE_ALONE_DEL) {
+  } else if (type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_ALONE_DEL) {
     Taro.setNavigationBarTitle({
       title: '请选择班组长'
+    })
+  } else if (type == ADDRESSBOOKTYPE_GROUP_LEAVE){
+    Taro.setNavigationBarTitle({
+      title: '请选择工友'
     })
   }
   /** 通信录列表数据 */
@@ -252,6 +257,7 @@ function AddressBook() {
         }else{
           pushNewPerson(newPersonData)
         }
+        setAddPopupShow(false)
       }
     })
   }
@@ -687,7 +693,7 @@ function AddressBook() {
         if (res.code != 0) {
           return
         }
-        eventCenter.trigger(AddressBookConfirmEvent, selectd)
+        eventCenter.trigger(AddressBookConfirmEvent, ids)
         Taro.navigateBack()
       })
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {

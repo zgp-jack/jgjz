@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:11:09
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-21 17:25:22
+ * @LastEditTime: 2021-02-01 16:15:26
  * @Description: 当前页面定义变量类型与接口请求相关参数返回结果定义
  */
 
@@ -80,4 +80,8 @@ export interface loadData{
   setIncreasing?: (increasing: boolean) => void
   hasmore?: boolean
 
+}
+
+interface publishStatus {
+  status: number
 }

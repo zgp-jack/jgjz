@@ -22,18 +22,18 @@ export default function MoreWorkTime({
     text: '无加班'
   }
     return (
-      <View className="moreworktime" onClick={(e) => { e.stopPropagation(); WorktimeCancle()}}>
+      <View className="moreworktime" onClick={(e) => { e.preventDefault(); WorktimeCancle()}}>
         <View className={classnames({
           "moreworktime-content": true,
           "no-over-time-content": hasOverBtn
-        })} onClick={(e) => {e.stopPropagation()}}>
+        })} onClick={(e) => { e.preventDefault()}}>
             <View className="moreworktime-btn">
               <Text className="moreworktime-cancle">{'　　'}</Text>
               <Text className={classnames({
                 "moreworktime-title": true,
                 "ismorework": false
               })}>{`选择${title}`}</Text>
-              <View className="person-record-overtime" onClick={WorktimeCancle} >
+            <View className="person-record-overtime" onClick={(e) => {e.preventDefault();WorktimeCancle()}} >
                 <Text className="overtime-icon"></Text>
               </View>
             </View>
@@ -42,12 +42,12 @@ export default function MoreWorkTime({
                 <View className = {classnames({
                   "moreworktime-item": true,
                   "worktime-active": isSelect && (item.value === value)
-                })} key={item.value} onClick={() => { set(item, 'end'); }}>{item.text}</View>
+                })} key={item.value} onClick={(e) => { e.preventDefault();set(item, 'end'); }}>{item.text}</View>
               )}
             </View>
         </View>
         {hasOverBtn && <View className="no-over-time" >
-          <View className="no-over-time-btn" onClick={(e) => { e.stopPropagation(); set(notOver,'first');}}>{notOver.text}</View>
+          <View className="no-over-time-btn" onClick={(e) => { e.preventDefault(); set(notOver,'first');}}>{notOver.text}</View>
         </View>}
       </View>
     )

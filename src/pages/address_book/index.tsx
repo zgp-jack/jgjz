@@ -645,51 +645,53 @@ function AddressBook() {
       params.worker_ids = id.toString()
     }
     showActionModal({
-      msg: "确定要离场此工友吗", showCancel: true, success: (()=>{
-        //发送离场接口
-        deleteNoteWorkers(params).then(res => {
-          msg(res.message)
-          if (res.code != 0) {
-            return
-          }
-          //判断是单个离场还是批量离场
-          if (id) {
-            let newList = JSON.parse(JSON.stringify(list))
-            let newSelectd = JSON.parse(JSON.stringify(selectd))
-            newList[0].data.map((item, index) => {
-              if (item.id == id) {
-                newList[0].data.splice(index, 1)
-              }
-            })
-            newSelectd.map((selectdItem, selectdIndex) => {
-              if (selectdItem.id == id) {
-                newSelectd.splice(selectdIndex, 1)
-              }
-            })
-            //关闭修改弹窗
-            setIsShowEdit(false)
-            setList(newList)
-            setSelectd(newSelectd)
-            //重新搜索
-            let _lists: PERSON_DATA[] = []
-            newList.forEach(item => {
-              let items: PERSON_DATA[] = item.data
-              for (let i = 0; i < items.length; i++) {
-                let data: PERSON_DATA = items[i]
-                if (data.tel == null) {
-                  data.tel = ''
+      msg: "确定要离场此工友吗", showCancel: true, success: ((res)=>{
+        if(res.confirm){
+          //发送离场接口
+          deleteNoteWorkers(params).then(res => {
+            msg(res.message)
+            if (res.code != 0) {
+              return
+            }
+            //判断是单个离场还是批量离场
+            if (id) {
+              let newList = JSON.parse(JSON.stringify(list))
+              let newSelectd = JSON.parse(JSON.stringify(selectd))
+              newList[0].data.map((item, index) => {
+                if (item.id == id) {
+                  newList[0].data.splice(index, 1)
                 }
-                if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
-                  _lists = [..._lists, data]
+              })
+              newSelectd.map((selectdItem, selectdIndex) => {
+                if (selectdItem.id == id) {
+                  newSelectd.splice(selectdIndex, 1)
                 }
-              }
-            })
-            setFilterList(_lists)
-          } else {
-            //批量离场成功-返回上一页
-            Taro.navigateBack()
-          }
-        })
+              })
+              //关闭修改弹窗
+              setIsShowEdit(false)
+              setList(newList)
+              setSelectd(newSelectd)
+              //重新搜索
+              let _lists: PERSON_DATA[] = []
+              newList.forEach(item => {
+                let items: PERSON_DATA[] = item.data
+                for (let i = 0; i < items.length; i++) {
+                  let data: PERSON_DATA = items[i]
+                  if (data.tel == null) {
+                    data.tel = ''
+                  }
+                  if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
+                    _lists = [..._lists, data]
+                  }
+                }
+              })
+              setFilterList(_lists)
+            } else {
+              //批量离场成功-返回上一页
+              Taro.navigateBack()
+            }
+          })
+        }
       })
     })
 

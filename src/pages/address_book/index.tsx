@@ -644,60 +644,65 @@ function AddressBook() {
     } else {
       params.worker_ids = id.toString()
     }
-    //发送离场接口
-    deleteNoteWorkers(params).then(res => {
-      msg(res.message)
-      if (res.code != 0) {
-        return
-      }
-      //判断是单个离场还是批量离场
-      if (id) {
-        let newList = JSON.parse(JSON.stringify(list))
-        let newSelectd = JSON.parse(JSON.stringify(selectd))
-        newList[0].data.map((item, index) => {
-          if (item.id == id) {
-            newList[0].data.splice(index, 1)
+    showActionModal({
+      msg: "确定要离场此工友吗", showCancel: true, success: (()=>{
+        //发送离场接口
+        deleteNoteWorkers(params).then(res => {
+          msg(res.message)
+          if (res.code != 0) {
+            return
+          }
+          //判断是单个离场还是批量离场
+          if (id) {
+            let newList = JSON.parse(JSON.stringify(list))
+            let newSelectd = JSON.parse(JSON.stringify(selectd))
+            newList[0].data.map((item, index) => {
+              if (item.id == id) {
+                newList[0].data.splice(index, 1)
+              }
+            })
+            newSelectd.map((selectdItem, selectdIndex) => {
+              if (selectdItem.id == id) {
+                newSelectd.splice(selectdIndex, 1)
+              }
+            })
+            //关闭修改弹窗
+            setIsShowEdit(false)
+            setList(newList)
+            setSelectd(newSelectd)
+            //重新搜索
+            let _lists: PERSON_DATA[] = []
+            newList.forEach(item => {
+              let items: PERSON_DATA[] = item.data
+              for (let i = 0; i < items.length; i++) {
+                let data: PERSON_DATA = items[i]
+                if (data.tel == null) {
+                  data.tel = ''
+                }
+                if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
+                  _lists = [..._lists, data]
+                }
+              }
+            })
+            setFilterList(_lists)
+          } else {
+            //批量离场成功-返回上一页
+            Taro.navigateBack()
           }
         })
-        newSelectd.map((selectdItem, selectdIndex) => {
-          if (selectdItem.id == id) {
-            newSelectd.splice(selectdIndex, 1)
-          }
-        })
-        //关闭修改弹窗
-        setIsShowEdit(false)
-        setList(newList)
-        setSelectd(newSelectd)
-        //重新搜索
-        let _lists: PERSON_DATA[] = []
-        newList.forEach(item => {
-          let items: PERSON_DATA[] = item.data
-          for (let i = 0; i < items.length; i++) {
-            let data: PERSON_DATA = items[i]
-            if (data.tel == null) {
-              data.tel = ''
-            }
-            if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
-              _lists = [..._lists, data]
-            }
-          }
-        })
-        setFilterList(_lists)
-      } else {
-        //批量离场成功-返回上一页
-        Taro.navigateBack()
-      }
+      })
     })
+
   }
   /** 确定提交 */
   const submitSelect = () => {
     // 拷贝已选中的数据
     let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
     // 已选中是否有数据
-    if (newSelectd.length < 1) {
-      msg("最少选中一个工友")
-      return
-    }
+    // if (newSelectd.length < 1) {
+    //   msg("最少选中一个工友")
+    //   return
+    // }
     //如果type是groupAdd 需要在通讯录发接口
     if (type == ADDRESSBOOKTYPE_GROUP_ADD) {
       let params: ADD_NOTE_WORKERS_PARAMS = {

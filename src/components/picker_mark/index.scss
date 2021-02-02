@@ -3,9 +3,11 @@
   margin-top: 6px;
 }
 .person-record-note .person-record-date-textarea{
-  height: 40px;
+  min-height: 44px;
+  line-height: 45px;
   padding-top: 0;
-  overflow-y: hidden;
+  overflow-y: scroll;
+  max-height: 225px;
 }
 .person-record-note{
   align-items: flex-start;

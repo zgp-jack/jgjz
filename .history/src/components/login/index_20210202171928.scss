@@ -109,9 +109,15 @@
         z-index: 5;
       }
       .login-eyes-open {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        padding: 40px;
+        right: 0;
         background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-open.png") no-repeat;
         background-size: 40px 40px;
         background-position: center;
+        z-index: 5;
       }
     }
   }

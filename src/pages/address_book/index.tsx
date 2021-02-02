@@ -496,7 +496,7 @@ function AddressBook() {
         let items: PERSON_DATA[] = item.data
         for (let i = 0; i < items.length; i++) {
           let data: PERSON_DATA = items[i]
-          if (data.name.indexOf(value) !== -1) {
+          if (data.name.indexOf(value) !== -1 || (data.tel != null && data.tel.indexOf(value) !== -1)) {
             _lists = [..._lists, data]
           }
         }
@@ -551,7 +551,7 @@ function AddressBook() {
               let items: PERSON_DATA[] = item.data
               for (let i = 0; i < items.length; i++) {
                 let data: PERSON_DATA = items[i]
-                if (data.name.indexOf(value) !== -1) {
+                if (data.name.indexOf(value) !== -1 || (data.tel != null && data.tel.indexOf(value) !== -1)) {
                   _lists = [..._lists, data]
                 }
               }
@@ -576,10 +576,7 @@ function AddressBook() {
       let items: PERSON_DATA[] = item.data
       for (let i = 0; i < items.length; i++) {
         let data: PERSON_DATA = items[i]
-        if(data.tel == null){
-          data.tel = ''
-        }
-        if (data.name.indexOf(val) !== -1 || data.tel.indexOf(val) !== -1) {
+        if (data.name.indexOf(value) !== -1 || (data.tel != null && data.tel.indexOf(value) !== -1)) {
           _lists = [..._lists, data]
         }
       }
@@ -665,7 +662,7 @@ function AddressBook() {
           let items: PERSON_DATA[] = item.data
           for (let i = 0; i < items.length; i++) {
             let data: PERSON_DATA = items[i]
-            if (data.name.indexOf(value) !== -1) {
+            if (data.name.indexOf(value) !== -1 || (data.tel != null && data.tel.indexOf(value) !== -1)) {
               _lists = [..._lists, data]
             }
           }

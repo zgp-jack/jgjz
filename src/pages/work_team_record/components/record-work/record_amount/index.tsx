@@ -75,19 +75,13 @@ function RecordAmoumt({workerId, type, businessTime}: PropsData) {
       unit: postData.unit,
       identity: Number(accountBookInfo.identity),
       business_type: type || 2,
-      unit_num: postData.unit_num,
+      unit_num: postData.unit_num || '0',
       unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
       worker_id: workerId
     }
     if(params.worker_id == ''){
       msg('请选择工人！')
       return
-    }
-    if (postData.unit_num) {
-      if (!validNumber(params.unit_num)) {
-        msg('请输入正确的工量')
-        return
-      }
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
@@ -127,7 +121,7 @@ function RecordAmoumt({workerId, type, businessTime}: PropsData) {
     {isPickerSubitem &&
     <PickerSubitem
         value={typeData}
-      close={() => setIsPickSubitem(false)}
+      close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' }) }}
       onOptionClose={() => userTapRightTopCloseBtn()}
       set={(data) => {
         setTypeData(data);

@@ -112,10 +112,10 @@ function Expenditure(props: BookkeepingProps) {
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
         showActionModal({
-          msg: res.message,
+          msg: "记账成功",
           success: function () {
             Taro.redirectTo({
-              url: '/pages/work_team_record/team_record/index'
+              url: '/pages/work_team_bookkeeping/team_record/index'
             })
           }
         })

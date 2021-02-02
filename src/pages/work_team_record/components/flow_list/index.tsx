@@ -1,4 +1,5 @@
 import Taro, { useEffect, useState, useDidShow, useReachBottom } from '@tarojs/taro'
+import { Block } from '@tarojs/components'
 import ListProvider from '@/components/list_provider'
 import useList from '@/hooks/list'
 import getFlowlists from '@/pages/work_team_record/team_record/api'
@@ -11,7 +12,7 @@ export default function FlowList({currentId=1, params='', types=[{id:'1',name:'�
   // 初始化请求参数
   let defaultParams: GetWorkFlowParams = {
     /**记工类型 1记工天，2记工量，3记工钱，4借支, 5支出*/
-    business_type: String(currentId),
+    business_type: '2,3,1',
     /**开始时间*/
     start_business_time: params,
     /**当前账本，个人账本或者班组账本id*/
@@ -69,12 +70,16 @@ export default function FlowList({currentId=1, params='', types=[{id:'1',name:'�
         hasmore={hasmore}
         length={list.length}
       >
-        {(currentId == 1 || currentId == 2) &&
-          <WorkCountDay list={flowList} type={Number(currentId)}></WorkCountDay>}
-        {(currentId == 3 || currentId == 4 || currentId == 5) &&
-          <WorkMoneyBorrowing list={flowList}
-            type={Number(currentId)}
-          ></WorkMoneyBorrowing>}
+      {flowList.map(p => (
+          <Block key={p.id}>
+            {/* 如果是记工天 记工量 */}
+            {(p.business_type == 1 || p.business_type == 2) &&
+              <WorkCountDay list={[p]} type={p.business_type} />}
+            {/* 如果是 记工钱、 借支、 支出 */}
+            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+              <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+          </Block>
+      ))}
       </ListProvider>
   )
 }

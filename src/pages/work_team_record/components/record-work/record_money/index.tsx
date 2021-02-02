@@ -42,7 +42,7 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
       business_type: 3,
       business_time: businessTime,
       money: postData.money,
-      identity: 2,
+      identity: accountBookInfo.identity,
       worker_id: workerId
     }
     if(params.worker_id == ''){

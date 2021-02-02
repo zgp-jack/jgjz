@@ -318,14 +318,16 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     showActionModal({
       msg: '确定要将此工友离场吗？',
       showCancel: true,
-      success: function () {
-        removePerson({ workId: selectWorker.id, work_note: workNote }).then((res) => {
-          msg(res.message)
-          if (res.code == 0) {
-            setLoading(true)
-            setIsShowEdit(false)
-          }
-        })
+      success: function (res) {
+        if (res.confirm) {
+          removePerson({ workId: selectWorker.id, work_note: workNote }).then((res) => {
+            msg(res.message)
+            if (res.code == 0) {
+              setLoading(true)
+              setIsShowEdit(false)
+            }
+          })
+        }
       }
     })
     

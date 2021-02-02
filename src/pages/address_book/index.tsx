@@ -22,8 +22,6 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   let { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
-  console.log(type)
-  // debugger
   const [routerData,setRouterData] = useState<{id:number,name:string}>({id:0,name:''})
   // 不通的type显示不同的页面标题
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
@@ -208,6 +206,21 @@ function AddressBook() {
         }
       })
     })
+    //重新搜索
+    let _lists: PERSON_DATA[] = []
+    newListData.forEach(item => {
+      let items: PERSON_DATA[] = item.data
+      for (let i = 0; i < items.length; i++) {
+        let data: PERSON_DATA = items[i]
+        if (data.tel == null) {
+          data.tel = ''
+        }
+        if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
+          _lists = [..._lists, data]
+        }
+      }
+    })
+    setFilterList(_lists)
     setList(newListData)
     setIsAllSelect(false)
   }
@@ -486,7 +499,10 @@ function AddressBook() {
         let items: PERSON_DATA[] = item.data
         for (let i = 0; i < items.length; i++) {
           let data: PERSON_DATA = items[i]
-          if (data.name.indexOf(value) !== -1) {
+          if (data.tel == null) {
+            data.tel = ''
+          }
+          if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
             _lists = [..._lists, data]
           }
         }
@@ -541,7 +557,10 @@ function AddressBook() {
               let items: PERSON_DATA[] = item.data
               for (let i = 0; i < items.length; i++) {
                 let data: PERSON_DATA = items[i]
-                if (data.name.indexOf(value) !== -1) {
+                if (data.tel == null) {
+                  data.tel = ''
+                }
+                if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
                   _lists = [..._lists, data]
                 }
               }
@@ -655,7 +674,10 @@ function AddressBook() {
           let items: PERSON_DATA[] = item.data
           for (let i = 0; i < items.length; i++) {
             let data: PERSON_DATA = items[i]
-            if (data.name.indexOf(value) !== -1) {
+            if (data.tel == null) {
+              data.tel = ''
+            }
+            if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
               _lists = [..._lists, data]
             }
           }

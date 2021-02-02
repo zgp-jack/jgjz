@@ -17,7 +17,7 @@ function AccountBook() {
 
   // 获取记工本store
   const localStore = useLocalStore(() => AccountBookInfo);
-  const {setAccountBoookInfo} = localStore
+  const { setAccountBoookInfo, accountBookInfo} = localStore
 
   /** 获取所有记工列表 */
   const {loading, data, errMsg, setLoading} = useInit(getWorkNotes, {}, [])
@@ -55,6 +55,11 @@ function AccountBook() {
     editWorkNote(editData.id, params).then((r) => {
       msg(r.message)
       if (r.code === 0) {
+        if (accountBookInfo.id && accountBookInfo.id == editData.id){
+          let accountBookInfoData = JSON.parse(JSON.stringify(accountBookInfo)) 
+          accountBookInfoData.name = params.name;
+          setAccountBoookInfo(accountBookInfoData)
+        }
         setLoading(true)
       }
     })

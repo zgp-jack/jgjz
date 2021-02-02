@@ -2,7 +2,11 @@
 
 .bokkeeping-list-count{
   margin-right: 15px;
-    .bokkeeping-list-money-text{
+  max-width: 200px;
+  .bokkeeping-list-money-text{
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
       color:red !important;
     }
 }

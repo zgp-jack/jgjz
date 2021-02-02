@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:05:35
  * @LastEditors: jsxin
- * @LastEditTime: 2021-02-02 11:11:29
+ * @LastEditTime: 2021-01-26 19:34:17
  * @Description: 全局请求公共方法
  ! get<T>(url,data):Promise<T>  post<T>(url,data):Promise<T> get post优先是否该方法
  */
@@ -120,7 +120,7 @@ export default function doRequestAction<T>(reqData: Request): Promise<Result<T>>
  * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起get请求
  */
-export const get = <T, R>(url: string, data: T, loading: boolean = true): Promise<Result<R>> => {
+export const get = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
     url, data, loading: !!loading, method: 'GET'
   })
@@ -132,7 +132,7 @@ export const get = <T, R>(url: string, data: T, loading: boolean = true): Promis
  * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起post请求
  */
-export const post = <T, R>(url: string, data: T, loading: boolean = true): Promise<Result<R>> => {
+export const post = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
     url, data, loading: !!loading, method: 'POST'
   })
@@ -145,7 +145,7 @@ export const post = <T, R>(url: string, data: T, loading: boolean = true): Promi
  * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起delete请求
  */
-export const del = <T, R>(url: string, data?: T, loading: boolean = true): Promise<Result<R>> => {
+export const del = <T, R>(url: string, data?: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
     url, data, loading: !!loading, method: 'DELETE'
   })
@@ -158,7 +158,7 @@ export const del = <T, R>(url: string, data?: T, loading: boolean = true): Promi
  * @params url: string 接口请求地址 data: T 请求的参数 loading: boolean是否显示loading
  * @description 发起put请求
  */
-export const put = <T, R>(url: string, data: T, loading: boolean = true): Promise<Result<R>> => {
+export const put = <T, R>(url: string, data: T, loading?: boolean): Promise<Result<R>> => {
   return doRequestAction<R>({
     url, data, loading: !!loading, method: 'PUT'
   })

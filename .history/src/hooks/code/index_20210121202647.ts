@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 16:22:10
  * @LastEditors: jsxin
- * @LastEditTime: 2021-02-02 09:56:40
+ * @LastEditTime: 2021-01-18 18:03:14
  * @Description: hooks for 通用获取验证码 
  * tips: 获取验证码 直接调用 userGetCode(tel)
  */
@@ -49,7 +49,6 @@ export default function useCode() {
           setText(t + 's后重新获取')
         }, 1000)
       } else {
-        setDisabled(false)
         showModal(res.message)
       }
     })

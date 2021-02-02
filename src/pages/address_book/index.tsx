@@ -252,6 +252,7 @@ function AddressBook() {
         }else{
           pushNewPerson(newPersonData)
         }
+        setAddPopupShow(false)
       }
     })
   }
@@ -687,7 +688,7 @@ function AddressBook() {
         if (res.code != 0) {
           return
         }
-        eventCenter.trigger(AddressBookConfirmEvent, selectd)
+        eventCenter.trigger(AddressBookConfirmEvent, ids)
         Taro.navigateBack()
       })
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {

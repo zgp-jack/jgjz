@@ -155,7 +155,7 @@ function Login({
             {id === passWay &&
               <View className="login-form-item">
                 <Image className="login-passlock" src={`${IMGCDNURL}gl/pass-lock.png`} ></Image>
-                <Input className="input-item-text" placeholder="请输入密码" password={!showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
+                <Input className="input-item-text" placeholder="请输入密码" maxLength={6} password={!showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
                 <Text className={classnames({
                   'login-eyes-clone': !showPass,
                   'login-eyes-open': showPass

@@ -104,20 +104,14 @@
         position: absolute;
         right: 0;
         background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-clone.png") no-repeat;
-        background-size: 40px 40px;
+        background-size: inherit;
         background-position: center;
         z-index: 5;
       }
       .login-eyes-open {
         background: url("https://jgjz.oss-cn-beijing.aliyuncs.com/new_mini/images/gl/eyes-open.png") no-repeat;
-        background-size: 40px 40px;
+        background-size: inherit;
         background-position: center;
-        width: 40px;
-        height: 40px;
-        padding: 40px;
-        position: absolute;
-        right: 0;
-        z-index: 5;
       }
     }
   }

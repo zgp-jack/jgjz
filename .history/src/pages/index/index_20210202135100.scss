@@ -156,7 +156,7 @@
         }
 
         .filter-feat {
-          margin-bottom: 20px;
+          margin-bottom: 10px;
         }
 
         .filter-line {
@@ -216,7 +216,7 @@
 
         .statistics {
           width: 100%;
-          margin-bottom: 20px;
+          margin-bottom: 40px;
           padding: 0 30px;
 
           .statistics-title {
@@ -335,7 +335,6 @@
 
 
         }
-        .account_count_box{margin-top: 40px;}
 
         .statistics-flow {
           width: 100%;
@@ -372,7 +371,8 @@
             .bokkeeping-list-content {
 
               .bokkeeping-list-content-line {
-                border-bottom: 1px solid rgba(229, 229, 229, .9);
+                border-bottom: #e5e5e5;
+
                 &:last-child {
                   border: none;
                 }

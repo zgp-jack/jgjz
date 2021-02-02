@@ -158,7 +158,7 @@ function Login({
                 <Input className="input-item-text" placeholder="请输入密码" password={!showPass} onInput={(e: any) => userEnterForm(e, 'pass')} />
                 <Text className={classnames({
                   'login-eyes-clone': !showPass,
-                  'login-eyes-open': showPass
+                  'login-eyes-clone login-eyes-open': showPass
                 })}
                   onClick={() => setSHowPass(!showPass)}></Text>
               </View>}

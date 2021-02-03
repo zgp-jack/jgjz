@@ -2,15 +2,13 @@ import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button, Picker } from '@tarojs/components'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import ContentInput from '@/components/picker_input'
-import PickerDate from '@/components/picker_date'
 import PickerMark from '@/components/picker_mark'
 import PickerUnit from '@/components/picker_unit'
 import PickerSubitem from '@/components/picker_subitem'
 import RecordAmountPostData, { PropsData } from './inter.d'
 import AccountBookInfo from '@/store/account'
-import { AddressBookConfirmEvent } from '@/config/events'
 import { GroupAmountHistoryClassitifySubitem, GroupLastSuccessRecordPage, GroupAmountHistoryUnitId } from '@/config/store'
-import { getTodayDate, handleRecordSuccessSaveDate } from '@/utils/index'
+import { handleRecordSuccessSaveDate } from '@/utils/index'
 import msg, { showActionModal } from '@/utils/msg'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
@@ -25,12 +23,8 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
   let classifySubiteminfo: classifyItem = Taro.getStorageSync(GroupAmountHistoryClassitifySubitem);
   // 获取历史单位数据
   let UnitInfo: number = Taro.getStorageSync(GroupAmountHistoryUnitId) || 1
-  // 时间年月日
-  const [dateText, setDateText] = useState<string>('')
   // 是否显示分项组件
   const [isPickerSubitem, setIsPickSubitem] = useState<boolean>(!!classifySubiteminfo)
-  // 是否显示日期组件
-  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示选择分项
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
   // 记工量提交数据
@@ -47,13 +41,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
   })
   // 分项数据
   const [typeData, setTypeData] = useState<classifyItem>(classifySubiteminfo ? classifySubiteminfo : { id: '', name: '' })
-  // 日期文本显示年月日
-  useEffect(() => {
-    let date = postData.business_time
-    let dateArr: string[] = date.split('-')
-    let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
-    setDateText(dataStr)
-  }, [postData.business_time])
+  
  
 
   
@@ -115,10 +103,6 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
       // 关闭 分类 选项
       typeData.id == '0' ? setIsPickSubitem(true) : setIsPickSubitem(false);
     }
-  }
-  // 用户关闭 日期组件
-  const DeletePickerDate = () => {
-    setIsPickerDate(false)
   }
   
   // 用户获取分项数据

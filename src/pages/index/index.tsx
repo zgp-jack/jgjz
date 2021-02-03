@@ -122,13 +122,16 @@ const Remember = () => {
   const [nextYearMonth, setNextYearMonth] = useState('')
   /*是否重新请求流水列表*/
   const [reloadList, setReloadList] = useState(false)
-  const [listTypeLength, setListTypeLength] = useState<boolean[]>([])
+  const [listTypeLength, setListTypeLength] = useState<boolean[]>([false, false, false, false, false])
   useEffect(() => {/**监听登录弹窗*/
     if (oldVersionLimit) {
       setShowVersion(true)
     }
   }, [showLogin])
-
+  /*根据流水数据变化，获取那些类型的流水有*/
+  useEffect(() => {
+    getListTypeLength(list)
+  }, [list])
   const [workId, setWorkId] = useState<number>(0)
   const [noLogin, setNoLogin] = useState(false)
 
@@ -235,11 +238,11 @@ const Remember = () => {
         if (page == 1) {
           if (len == 0) {
             setShowEmpty(true)
+            getListTypeLength(res.data)
           } else {
             setShowFooter(false)
             setShowEmpty(false)
             setList(res.data)
-            getListTypeLength(res.data)
           }
         } else {
           if (len == 0) {
@@ -255,22 +258,26 @@ const Remember = () => {
   }
   const getListTypeLength = (data) => {
     let _listTypeLength: boolean[] = [false, false, false, false, false]
-    data.forEach(item => {
-      item.list.forEach(subItem => {
-        let type = subItem.business_type
-        if (type == 1) {
-          _listTypeLength[0] = true
-        } else if (type == 2) {
-          _listTypeLength[1] = true
-        } else if (type == 3) {
-          _listTypeLength[2] = true
-        } else if (type == 4) {
-          _listTypeLength[3] = true
-        } else if (type == 5) {
-          _listTypeLength[4] = true
-        }
+    if (data.length) {
+      console.log(data)
+      data.forEach(item => {
+        item.list.forEach(subItem => {
+          let type = subItem.business_type
+          if (type == 1) {
+            _listTypeLength[0] = true
+          } else if (type == 2) {
+            _listTypeLength[1] = true
+          } else if (type == 3) {
+            _listTypeLength[2] = true
+          } else if (type == 4) {
+            _listTypeLength[3] = true
+          } else if (type == 5) {
+            _listTypeLength[4] = true
+          }
+        })
       })
-    })
+    }
+    console.log(_listTypeLength)
     setListTypeLength(_listTypeLength)
   }
   /*获取统计数据*/
@@ -539,7 +546,7 @@ const Remember = () => {
                       </View>
                     </View>}
                     {
-                      ((!isFilter && counts.count_unit.length) || (isFilter && listTypeLength[1])) &&
+                      ((!isFilter && counts.count_unit.length && counts.count_unit[0].count != 0) || (isFilter && listTypeLength[1])) &&
                       counts.count_unit.map((item, i) => (
                         <View className="bookkeeping-row wage-meter" key={'id' + i}>
                           <View className="bookkeeping-content">

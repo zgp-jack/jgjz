@@ -56,6 +56,7 @@ export default function BusinessAmount() {
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }
     postdata[type] = val
+    console.log("postdata", postdata)
     setPostData(postdata)
   }
   useEffect(() => {
@@ -75,7 +76,6 @@ export default function BusinessAmount() {
     getBorrowInfo(id).then(res => {
       if (res.code === 0) {
         let mydata = res.data
-        console.log("mydata", mydata)
         setSelectedUnit(Number(mydata.unit)-1)
         setData({
           ...mydata,

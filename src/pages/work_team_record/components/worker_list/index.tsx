@@ -106,6 +106,13 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
     }
+    let noRecordData = workerData.filter((item: any) => {
+      return !item.recorded;
+    })
+    let allStatus = noRecordData.every((item: any) => {
+      return item.check == true;
+    })
+    setAllchoose(allStatus)
     setWorkerId(allWorkerData)
     setWorker(workerData);
     setEmptyCount(emptCount)
@@ -315,6 +322,7 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
   * @description 移除工友事件
   */
   const movePerson = () => {
+    let workerIdData = JSON.parse(JSON.stringify(workerId))
     showActionModal({
       msg: '确定要将此工友离场吗？',
       showCancel: true,
@@ -323,6 +331,9 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
           removePerson({ workId: selectWorker.id, work_note: workNote }).then((res) => {
             msg(res.message)
             if (res.code == 0) {
+              let findIndex = workerIdData.findIndex((item: any) => item == selectWorker.id);
+              if (findIndex !== -1) workerIdData.splice(findIndex,1);
+              setWorkerId(workerIdData)
               setLoading(true)
               setIsShowEdit(false)
             }

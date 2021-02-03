@@ -32,7 +32,9 @@ export default interface PickerTypeProps {
   /** 是否记工 */
   isRecord?: boolean
   /*删除*/
-  onDelete: (id) => void
+  onDelete?: (id) => void
+  /** 是否显示备注 */
+  setIsPickerMark?: (boolean) => void
 }
 
 // popup弹窗数据格式

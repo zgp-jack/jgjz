@@ -50,6 +50,8 @@ function Expenditure({type}:{type: string}) {
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
   // 是否显示选择分类
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : {id: '', name: ''})
 
@@ -184,6 +186,7 @@ function Expenditure({type}:{type: string}) {
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         isRecord={true}
+        setIsPickerMark={setIsPickerMark}
       />
       }
       {isPickerDate &&
@@ -194,9 +197,9 @@ function Expenditure({type}:{type: string}) {
         dateText={dateText}
       />}
       {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader}/>}
-      <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>
+      {isPickerMark && <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>}
       <View className="person-record-component">
-        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickType(true); setShowTypePicker(true) }}>分类</View>}
+        {!isPickerType && <View className="person-record-component-item" onClick={() => { setIsPickerMark(false);setIsPickType(true); setShowTypePicker(true) }}>分类</View>}
         {!isPickerDate &&
         <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
           <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>

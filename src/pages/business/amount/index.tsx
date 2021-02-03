@@ -24,6 +24,8 @@ export default function BusinessAmount() {
   })
   // 默认选中单位
   const [selectedUnit, setSelectedUnit] = useState<number>(0)
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 是否显示分项数据
   const [show, setShow] = useState<boolean>(false)
   // 提交工量数据
@@ -145,16 +147,17 @@ export default function BusinessAmount() {
   }
   return (<View>
     <ContentInput title='工量' maxLength={3} value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
-    <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
+    <PickerUnitWara setIsPickerMark={setIsPickerMark} selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
       value={{ name: data.unit_work_type_name, id: data.unit_work_type}}
       show={show}
       setShow={() => { setShow(!show) }}
       set={(data) => userChangePickerType(data)}
       close={() => userClearPickerType()}
+      setIsPickerMark={setIsPickerMark}
     />
     <PickerLeader leader={groupLeader} DeletePickerLeader={() => DeletePickerLeader()} />
-    <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
+    {isPickerMark && <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />}
     <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} />
     <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
   </View>)

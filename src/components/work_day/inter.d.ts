@@ -28,4 +28,6 @@ export interface WorkDayComponentProps {
   isMoreTime?:boolean
   /** 关闭更多时间组件 */
   closeMoreTime?: () => void
+  /** 关闭备注 */
+  setIsPickerMark?: (any) => void
 }

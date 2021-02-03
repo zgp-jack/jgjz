@@ -27,7 +27,8 @@ function PickerType({
                       setShow,
                       rightClose = true,
                       isRecord = false,
-                      onDelete
+                      onDelete,
+                      setIsPickerMark
                     }: PickerTypeProps) {
 
   // input-name
@@ -51,6 +52,7 @@ function PickerType({
     console.log(data)
     set && set(data)
     setShow(false)
+    setIsPickerMark && setIsPickerMark(true)
   }
 
   // 获取stroe里面的数据
@@ -143,7 +145,7 @@ function PickerType({
           userDelExpendType(id).then(res => {
             msg(res.message)
             if (res.code === 0) {
-              onDelete(id)
+              onDelete && onDelete(id)
               !i && setShowPopup(false);
               !i && (i = getTypesIndex() || 0);
               (types[i].id == value.id) && isRecord && set && set({id: '', name: '无分类'}, types[i]);
@@ -163,7 +165,7 @@ function PickerType({
   return (
     <View>
       {/* 分类item */}
-      <View className="person-record-overtime person-record-date" onClick={() => setShow(true)}>
+      <View className="person-record-overtime person-record-date" onClick={() => { setIsPickerMark && setIsPickerMark(false);setShow(true)}}>
         {!hideImg && <Image className="person-record-date-img" src={img}/>}
         <View className="person-record-modify-title person-record-date-title">{title}</View>
         <Input className="person-record-date-text" value={value.name} placeholder='请添加您的分类' disabled></Input>
@@ -178,6 +180,7 @@ function PickerType({
       <PickerOption
         title={'选择分类'}
         close={() => {
+          setIsPickerMark && setIsPickerMark(true)
           setShow(false);
           onOptionClose && onOptionClose()
         }}

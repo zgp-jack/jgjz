@@ -19,6 +19,8 @@
   set: (PickerData) => void
   // 默认值
   selected?: number
+  /**是否显示备注 */
+  setIsPickerMark?: (boolean) => void
  }
 export interface PickerData {
   id: number

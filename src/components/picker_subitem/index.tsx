@@ -25,7 +25,8 @@ function PickerSubitem({
                       show,
                       setShow,
                       rightClose = true,
-                      isRecord = false
+                      isRecord = false,
+                      setIsPickerMark
                     }: PickerTypeProps) {
 
   // input-name
@@ -49,6 +50,7 @@ function PickerSubitem({
     console.log(data)
     set && set(data)
     setShow(false)
+    setIsPickerMark && setIsPickerMark(true)
   }
 
   // 获取stroe里面的数据
@@ -157,6 +159,7 @@ function PickerSubitem({
   return (
     <View>
       <View className="person-record-overtime person-record-date" onClick={() => {
+        setIsPickerMark && setIsPickerMark(false)
         setShow(true)
       }}>
         {!hideImg && <Image className="person-record-date-img" src={img}/>}
@@ -171,6 +174,7 @@ function PickerSubitem({
       {show &&
       <PickerOption
         close={() => {
+          setIsPickerMark && setIsPickerMark(true)
           setShow(false);
           onOptionClose && onOptionClose()
         }}

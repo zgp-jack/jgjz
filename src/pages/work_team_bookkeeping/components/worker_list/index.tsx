@@ -89,6 +89,12 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
     }
+    let noRecordData = workerData.filter((item: any) => {
+      return !item.recorded;
+    })
+    let allStatus = noRecordData.every((item: any) => {
+      return item.check == true;
+    })
     let selectedWorkerId = workerData.reduce((pre:any,item:any)=>{
       let selectWorker = [...pre];
       if (item.check) selectWorker.push(item.id)
@@ -96,6 +102,7 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     },[])
     setWorkerId(selectedWorkerId)
     setWorker(workerData);
+    setAllchoose(allStatus)
     setEmptyCount(emptCount)
     setAddWorker([])
   }, [data])
@@ -322,7 +329,7 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
         <View className='record-work-person-head'>
           <View className='record-work-person-title'>
             <View className='record-work-person-tip'>选择工友（已选<Text className='record-work-person-text'>{workerId.length}</Text>人）</View>
-            <View className='record-work-person-all' onClick={() => chooseAll()}>{(currentId == 1 || currentId == 2 || currentId == 3) ? (data.business_worker_id.length == data.note_worker.length ? '' : (allChoose ? '取消全选' : '全选未记')) : (allChoose ? '取消全选':'全选')}</View>
+            <View className='record-work-person-all' onClick={() => chooseAll()}>{(currentId == 1 || currentId == 2 || currentId == 3) ? (data.business_worker_id.length == data.note_worker.length ? '' : (allChoose ? '取消全选' : '全选未记')) : (allChoose ? (data.note_worker.length ? '取消全选' : '') : (data.note_worker.length ? '全选' : ''))}</View>
           </View>
           <View className='record-work-person-disc'>{(currentId == 1 || currentId == 2 || currentId == 3) ? '黄色块代表此工友当日已有记工;' : ''}长按名字可编辑</View>
         </View>

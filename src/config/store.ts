@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 14:00:27
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-29 18:18:08
+ * @LastEditTime: 2021-02-03 17:37:11
  * @Description: 项目缓存文件，所有缓存key存放文件
  ! @rules: 1.key 为大驼峰 值为小驼峰 2.注释在上方
  */
@@ -37,6 +37,8 @@ export const PersonlExpenditureHistoryClassifyType: string = 'personlExpenditure
 
 // 班组记工量-历史分项信息
 export const GroupAmountHistoryClassitifySubitem: string = 'groupAmountHistoryClassitifySubitem'
+// 班组记工量-历史单位id
+export const GroupAmountHistoryUnitId: string = 'groupAmountHistoryUnitId'
 // 班组记借支-历史分类信息
 export const GroupBorrowHistoryClassitifyType: string = 'groupBorrowHistoryClassitifyType'
 // 班组记支出-历史分类信息
@@ -58,3 +60,8 @@ export const GroupLastSuccessRecordPage: string = 'groupLastSuccessRecordPage'
 export const GroupLastSuccessAccountPage: string = 'groupLastSuccessAccountPage'
 //个人、班组记工记账成功后存储记得日期，回到首页后更筛选时间为存储的时间
 export const RecordSuccessSaveDate: string = 'recordSuccessSaveDate'
+// 班组记工时间缓存
+export const TeamWorkTimeStorage: string = 'teamWorkTimeStorage'
+// 班组记账时间缓存
+export const TeamBookkeepingTimeStorage: string = 'teamBookkeepingTimeStorage'
+

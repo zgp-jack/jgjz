@@ -2,16 +2,18 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-02-03 18:14:27
+<<<<<<< HEAD
+ * @LastEditTime: 2021-02-03 09:49:40
+=======
+ * @LastEditTime: 2021-02-03 17:15:49
+>>>>>>> yangchao
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'
 import {showModal} from '@/utils/msg';
 import {RECORD_WORK_DATA} from '@/pages/account_book_list/index.d'
 import {INDEXPAGE} from '@/config/pages'
-import { randIntNumber } from '@/utils/v'
-import { IMGCDNURL } from '@/config/index'
-import { UserShareInfo } from './inter.d'
+import userAddRecordAction from "@/pages/person_record/api";
 import { RecordSuccessSaveDate, TeamBookkeepingTimeStorage, TeamWorkTimeStorage} from "@/config/store";
 
 /**
@@ -121,21 +123,3 @@ export function handleRecordSuccessSaveDate(date: string) {
   const newDate = dates[0] + '-' + month
   Taro.setStorageSync(RecordSuccessSaveDate, newDate)
 }
-
-/**
- * @name: getRandomShareInfo for jsxin
- * @params obj: UserShareInfo 分享的信息
- * @return UserShareInfo 获取自定义分享信息
- * @description 随机获取标题+图片，如果有传入的 就以 传入的为主
- */
-export function getRandomShareInfo(obj?: Partial<UserShareInfo>): UserShareInfo {
-  let shareTitles = ['极简操作3秒记工，智能统计一目了然 | 鱼泡网']
-  let shareImgs = ['share/share1.png', 'share/share2.png', 'share/share3.png']
-  let shareInfo: UserShareInfo = {
-    title: obj && obj.title ? obj.title : shareTitles[randIntNumber(0, shareTitles.length)],
-    imageUrl: obj && obj.imageUrl ? obj.imageUrl : IMGCDNURL + shareImgs[randIntNumber(0, shareImgs.length)],
-    path: INDEXPAGE
-  }
-  return shareInfo
-}
-

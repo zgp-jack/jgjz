@@ -1,10 +1,9 @@
-import Taro, { useState, Config, useRouter, useEffect, useShareAppMessage } from '@tarojs/taro'
+import Taro, { useState, Config, useRouter, useEffect } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import Borrow from './components/borrow'
 import Expenditure from './components/expenditure'
 import tallyConfig from './config'
 import classnames from 'classnames'
-import { getRandomShareInfo } from '@/utils/index'
 import { PersonlLastSuccessAccountPage } from '@/config/store'
 import './index.scss'
 
@@ -13,11 +12,6 @@ export default function PersonTally(){
   // 获取页面参数 type 记录成功之后  1: 销毁到首页  0: 返回上一页
   const router = useRouter()
   const { type = '0' } = router.params
-
-  // 设置页面分享信息
-  useShareAppMessage(() => {
-    return { ...getRandomShareInfo() }
-  })
 
   useEffect(()=>{
     Taro.setNavigationBarTitle({title: '个人记账'})

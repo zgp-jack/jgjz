@@ -1,4 +1,4 @@
-import Taro, {useEffect, useState, useDidShow, useReachBottom, useDidHide, useRef, useShareAppMessage} from '@tarojs/taro'
+import Taro, {useEffect, useState, useDidShow, useReachBottom, useDidHide, useRef} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/index/inter";
 import {getCountUrl} from "@/utils/api";
@@ -10,7 +10,7 @@ import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
 import getWorkNotes from '@/pages/account_book_list/api'
 import {IMGCDNURL} from "@/config/index";
-import { enterTheRecordBook, getTodayDate, getRandomShareInfo} from '@/utils/index'
+import {enterTheRecordBook, getTodayDate} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team_record/team_record/index.d'
@@ -22,6 +22,7 @@ import Versionlimit from '@/components/version_limit/index'
 import {OldVersionLimit, RecordSuccessSaveDate} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
 import './index.scss'
+import {INDEXPAGE} from '@/config/pages';
 
 
 const Remember = () => {
@@ -97,12 +98,6 @@ const Remember = () => {
     })
     return result.join(',')
   }
-
-  // 设置页面分享信息
-  useShareAppMessage(()=>{
-    return {...getRandomShareInfo()}
-  })
-
   // 参数处理
   const actionParams = () => {
     return {

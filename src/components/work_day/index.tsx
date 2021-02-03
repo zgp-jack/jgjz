@@ -35,6 +35,7 @@ export default function WorkDayComponent({
       {(type && (type == 'work') ? workTimeData : overTimeData).map(item => (
         <View 
         onClick={(e) => {
+            e.stopPropagation();
             e.preventDefault();
             change(item, 'first')
         }}
@@ -48,6 +49,7 @@ export default function WorkDayComponent({
       {!type&&data&&data.map(item => (
         <View
           onClick={(e) => {
+            e.stopPropagation();
             e.preventDefault();
             change(item, 'first')
           }}
@@ -65,6 +67,7 @@ export default function WorkDayComponent({
         "worktime-active": isSelect
       })} 
       onClick={(e) => {
+        e.stopPropagation();
         e.preventDefault();
         setShow(true)
         setIsPickerMark && setIsPickerMark(false)

@@ -60,7 +60,7 @@ function AddressBook() {
       /** 获取所有通讯录列表 */
       getWorkers(type == ADDRESSBOOKTYPE_ALONE_DEL ? { action: "select" } : { work_note: accountBookInfo.id }).then((res) => {
         let newListData = res.data
-        if (data){
+        if (data && type != ADDRESSBOOKTYPE_ALONE){
           let newData: PERSON_DATA[] = JSON.parse(data)
           //工友总人数
           let listLen = 0
@@ -672,14 +672,14 @@ function AddressBook() {
       work_note: accountBookInfo.id.toString(),
       action: 'note_workers'
     }
+    // 拷贝已选中的数据
+    let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
+    //已选中工友的id
+    let ids: number[] = []
+    newSelectd.map(item => {
+      ids.push(item.id)
+    })
     if (!id) {
-      // 拷贝已选中的数据
-      let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
-      //已选中工友的id
-      let ids: number[] = []
-      newSelectd.map(item => {
-        ids.push(item.id)
-      })
       params.worker_ids = ids.toString()
     } else {
       params.worker_ids = id.toString()
@@ -728,8 +728,10 @@ function AddressBook() {
               }
             })
             setFilterList(_lists)
+            eventCenter.trigger(AddressBookConfirmEvent, ids)
           } else {
             //批量离场成功-返回上一页
+            eventCenter.trigger(AddressBookConfirmEvent, ids)
             Taro.navigateBack()
           }
         })
@@ -741,8 +743,17 @@ function AddressBook() {
   const submitSelect = () => {
     // 拷贝已选中的数据
     let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
+    //如果一个都没有选 直接返回上一页
+    if (newSelectd.length < 1 && type != ADDRESSBOOKTYPE_GROUP_ADD){
+      Taro.navigateBack()
+      return
+    }
     //如果type是groupAdd 需要在通讯录发接口
     if (type == ADDRESSBOOKTYPE_GROUP_ADD) {
+      if (newSelectd.length < 1){
+        msg("请选择工友") 
+        return
+      }
       let params: ADD_NOTE_WORKERS_PARAMS = {
         worker_ids: '',
         work_note: accountBookInfo.id.toString(),

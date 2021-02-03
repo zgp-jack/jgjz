@@ -115,9 +115,18 @@ export default function RecordWork() {
     console.log('workerId父级', workerId)
   }, [workerId])
 
+<<<<<<< HEAD
   useEffect(() => {
     Taro.setNavigationBarTitle({title: '班组记工'})
+    /**获取本地格式化日期 eg:2021/01/21*/
+    let timeNow = getTodayDate()
+    /**按照格式初始化时间*/
+    let timeStr = initTime(timeNow)[0];
+    setTimeText(timeStr)
   }, [])
+=======
+ 
+>>>>>>> yangchao
 
   const changeTimeStorage = (time:string,id: number) => {
     let teamWorkTimeData = teamWorkTimeStorage || {};

@@ -52,7 +52,7 @@ export default function WorkerList({ workerId, setWorkerId, workNote, startDate,
       eventCenter.off(AddressBookConfirmEvent);
       clearTimeout(timeOutEvent)
     }
-  }, [currentId])
+  }, [])
 
   
 

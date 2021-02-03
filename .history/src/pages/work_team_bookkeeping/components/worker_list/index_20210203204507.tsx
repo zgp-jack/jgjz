@@ -19,7 +19,7 @@ interface RecordWorkProps {
   currentId: number
 }
 
-export default function WorkerList({ workerId, setWorkerId, workNote, startDate, currentId}: RecordWorkProps) {
+function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: RecordWorkProps) {
   const { data, setLoading} = useInit(getWorkerList, {
     business_time: startDate,
     action: currentId,
@@ -45,14 +45,13 @@ export default function WorkerList({ workerId, setWorkerId, workNote, startDate,
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
     eventCenter.on(AddressBookConfirmEvent, (workerdata) => {
-      console.log('workerdata', workerdata)
       setAddWorker(workerdata)
     })
     return () => {
       eventCenter.off(AddressBookConfirmEvent);
       clearTimeout(timeOutEvent)
     }
-  }, [currentId])
+  }, [])
 
   
 
@@ -400,3 +399,5 @@ export default function WorkerList({ workerId, setWorkerId, workNote, startDate,
     </View>
   )
 }
+
+export default RecordWork

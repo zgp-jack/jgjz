@@ -19,7 +19,7 @@ interface RecordWorkProps {
   currentId: number
 }
 
-export default function WorkerList({ workerId, setWorkerId, workNote, startDate, currentId}: RecordWorkProps) {
+function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: RecordWorkProps) {
   const { data, setLoading} = useInit(getWorkerList, {
     business_time: startDate,
     action: currentId,
@@ -52,7 +52,7 @@ export default function WorkerList({ workerId, setWorkerId, workNote, startDate,
       eventCenter.off(AddressBookConfirmEvent);
       clearTimeout(timeOutEvent)
     }
-  }, [currentId])
+  }, [])
 
   
 
@@ -400,3 +400,5 @@ export default function WorkerList({ workerId, setWorkerId, workNote, startDate,
     </View>
   )
 }
+
+export default RecordWork

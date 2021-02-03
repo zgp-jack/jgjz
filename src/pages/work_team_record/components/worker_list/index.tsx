@@ -45,6 +45,7 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
   // 注册全局事件 监听是否切换班组长信息
   useEffect(() => {
     eventCenter.on(AddressBookConfirmEvent, (workerdata) => {
+      console.log("workerdata",workerdata)
       setAddWorker(workerdata)
     })
     return () => {

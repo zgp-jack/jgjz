@@ -137,7 +137,6 @@ const Remember = () => {
   useEffect(() => {
     getListTypeLength(list)
   }, [list])
-  const [workId, setWorkId] = useState<number>(0)
   const [noLogin, setNoLogin] = useState(false)
 
   useEffect(() => {
@@ -266,6 +265,7 @@ const Remember = () => {
           if (len == 0) {
             setShowFooter(true)
           } else {
+            debugger
             // list 数据
             let listData = JSON.parse(JSON.stringify(list));
             // 请求返回流水数据
@@ -278,9 +278,8 @@ const Remember = () => {
             if (dataStr == newDateStr) {
               listData[listData.length - 1].list = [...listData[listData.length - 1].list, ...reqList[0].list]
               reqList.splice(0,1);
-            }else{
-              listData = listData.concat(reqList);
             }
+            listData = [...listData, ...reqList];
             setList(listData)
           }
         }

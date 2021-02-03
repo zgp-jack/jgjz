@@ -12,7 +12,7 @@ import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType, Pers
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
-import msg, {showBackModal,showActionModal} from '@/utils/msg'
+import msg, {showBackModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import './index.scss'
@@ -118,10 +118,7 @@ function Borrow({type}:{type: string}) {
         Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
         handleRecordSuccessSaveDate(params.business_time)
         if (type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
+          Taro.reLaunch({url: INDEXPAGE})
         }else{
           showBackModal(res.message)
         }

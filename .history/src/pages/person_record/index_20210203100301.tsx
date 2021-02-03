@@ -36,9 +36,9 @@ export default function PersonRecord(){
         )}
       </View>
       <View className="record-content">
-        {recordnum == 1 && <RecordDay type={type} /> } 
-        {recordnum == 2 && <RecordAmoumt type={type} />}
-        {recordnum == 3 && <RecordMoney type={type} />}
+        {recordnum == 1 && <RecordDay /> } 
+        {recordnum == 2 && <RecordAmoumt />}
+        {recordnum == 3 && <RecordMoney />}
       </View>
     </View>
   )

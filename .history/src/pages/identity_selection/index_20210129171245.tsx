@@ -7,7 +7,7 @@ import { InputValue } from '@/components/popup/index.d'
 import userAddWorkNotesAction from './api'
 import { IDENTITY_CONFIG, Remember_Config } from './index.d'
 import createConfig from './config'
-import msg, { showActionModal } from '@/utils/msg'
+import msg from '@/utils/msg'
 import AccountBookInfo from "@/store/account";
 import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'

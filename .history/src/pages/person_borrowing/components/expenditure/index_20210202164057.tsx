@@ -7,7 +7,7 @@ import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import ExpenditurePostData from './inter.d'
 import classifyItem from '@/store/classify/inter.d'
-import {ADDRESSBOOKALONEPAGE, INDEXPAGE} from '@/config/pages'
+import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import {AddressBookConfirmEvent} from '@/config/events'
 import {
   PersonlExpenditureHistoryGroupLeader,
@@ -17,12 +17,12 @@ import {
 import {validNumber} from '@/utils/v'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import msg, {showBackModal,showActionModal} from '@/utils/msg'
+import msg, {showBackModal} from '@/utils/msg'
 import './index.scss'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
 
-function Expenditure({type}:{type: string}) {
+function Expenditure() {
   // 支出提交数据
   const [postData, setPostData] = useState<ExpenditurePostData>({
     business_type: 4,
@@ -114,14 +114,7 @@ function Expenditure({type}:{type: string}) {
         }
         Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
         handleRecordSuccessSaveDate(params.business_time)
-        if(type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
-        }else{
-          showBackModal(res.message)
-        }
+        showBackModal(res.message)
       } else {
         msg(res.message)
       }

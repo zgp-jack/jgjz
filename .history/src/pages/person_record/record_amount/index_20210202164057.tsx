@@ -9,18 +9,18 @@ import PickerUnit from '@/components/picker_unit'
 import PickerSubitem from '@/components/picker_subitem'
 import RecordAmountPostData from './inter.d'
 import AccountBookInfo from '@/store/account'
-import { ADDRESSBOOKALONEPAGE, INDEXPAGE } from '@/config/pages'
+import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { PersonlAmountHistoryGroupLeader, PersonlAmountHistoryClassitifySubitem, PersonlLastSuccessRecordPage, PersonlAmountHistoryUnitId } from '@/config/store'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
-import msg, { showBackModal, showActionModal } from '@/utils/msg'
+import msg, { showBackModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
 
 
-function RecordAmoumt({type}:{type: string}) {
+function RecordAmoumt() {
   // 获取历史班组长数据
   let leaderInfo: classifyItem = Taro.getStorageSync(PersonlAmountHistoryGroupLeader)
   // 获取历史分类数据
@@ -110,15 +110,8 @@ function RecordAmoumt({type}:{type: string}) {
         }
         Taro.setStorageSync(PersonlAmountHistoryUnitId, params.unit)
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
+        showBackModal(res.message)
         handleRecordSuccessSaveDate(params.business_time)
-        if(type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
-        }else{
-          showBackModal(res.message)
-        }
       } else {
         msg(res.message)
       }

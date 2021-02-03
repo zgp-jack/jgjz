@@ -92,16 +92,16 @@ function AccountBook() {
               </View>
               <View className="account-book-flex">
                 <View className="account-book-align"
-                  onClick={() => { enterTheRecordBook(item, 'record',false); setAccountBoookInfo(item)}}>
+                  onClick={() => { enterTheRecordBook(item, 'record'); setAccountBoookInfo(item)}}>
                   <Image className="account-gong-icon" src={`${IMGCDNURL}gl/Bookkeeping-icon.png`}></Image> 记工
                 </View>
                 <View className="account-book-align"
-                  onClick={() => { enterTheRecordBook(item, 'borrow',false); setAccountBoookInfo(item)}}>
+                  onClick={() => { enterTheRecordBook(item, 'borrow'); setAccountBoookInfo(item)}}>
                   <Image className="account-zhang-icon" src={`${IMGCDNURL}gl/record-work-icon.png`}></Image>记账
                 </View>
               </View>
               <Button className="account-book-btn"
-                onClick={() => { enterTheRecordBook(item, 'account',false); setAccountBoookInfo(item)}}>进入记工账本</Button>
+                onClick={() => { enterTheRecordBook(item, 'account'); setAccountBoookInfo(item)}}>进入记工账本</Button>
             </View>
           </View>
         ))}

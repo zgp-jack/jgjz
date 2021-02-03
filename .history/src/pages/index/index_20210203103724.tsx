@@ -8,7 +8,6 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
-import getWorkNotes from '@/pages/account_book_list/api'
 import {IMGCDNURL} from "@/config/index";
 import {enterTheRecordBook, getTodayDate} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
@@ -32,7 +31,7 @@ const Remember = () => {
   const _user = useLocalStore(() => User)
   const {businessType} = rememberStore
   const {user} = _user
-  const { accountBookInfo, setAccountBoookInfo} = _accountBookInfo
+  const {accountBookInfo} = _accountBookInfo
   const recordSuccessSaveDate = Taro.getStorageSync(RecordSuccessSaveDate)
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
@@ -138,19 +137,9 @@ const Remember = () => {
     }
   })
   useEffect(() => {
-    if (user.login && !showLogin && !accountBookInfo.id){
-      getWorkNotes().then(res => {
-        if (res.code === 0) {
-          let mydata = res.data
-          if (mydata.length) {
-            // 储存mobx
-            setAccountBoookInfo(mydata[0])
-          } else {
-            Taro.redirectTo({
-              url: '/pages/identity_selection/index?type=1'
-            })
-          }
-        }
+    if(user.login && !accountBookInfo.id){
+      Taro.redirectTo({
+        url: '/pages/identity_selection/index?type=1'
       })
     }
     if (accountBookInfo.id && user.login && noLogin) {
@@ -199,7 +188,6 @@ const Remember = () => {
       setFilterYear(parseInt(dates[0]))
       setFilterMonth(parseInt(dates[1]))
       Taro.removeStorageSync(RecordSuccessSaveDate)
-      return;
     }
     if (reloadList) {
       if (!user.login) return
@@ -418,177 +406,173 @@ const Remember = () => {
           <View className="header-title overwords">{user.login ? accountBookInfo.name : '鱼泡默认记工账本'}</View>
           <View className="header-line"/>
           <View className="header-switch"
-                onClick={() => handNavigateTo('/pages/account_book_list/index')}><View>切换</View><View>记工本</View></View>
+                onClick={() => handNavigateTo('/pages/account_book_list/index')}>切换记工本</View>
         </View>
         <View className="body">
           <View className="body-container">
 
-            <View className="index-top-box">
-              <View className={"feat" + (isFilter ? ' filter-feat' : '')}>
-                {!isFilter ? <View className="date">
-                    <View className="date-icon-bor date-icon-bor-left" onClick={prevMonth}><Image
-                      src={IMGCDNURL + 'lxy/time_jt_l.png'}
-                      className="icon-left date-icon"/></View>
-                    <Picker fields="month" mode='date' end={getTodayDate()} onChange={onFilterDateChange}
-                            value={currentYearMonth}>
-                      <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
-                    </Picker>
-                    {!handleHideRightArrow() &&
-                    <View className="date-icon-bor date-icon-bor-right" onClick={nextMonth}><Image
-                      src={IMGCDNURL + 'lxy/time_jt_r.png'}
-                      className="icon-right date-icon"/></View>}
-                  </View>
-                  :
-                  <View className="filter-start-end-date">
-                    <View
-                      className="filter-start-date">开始时间：{handleSplitDate(filterData.start_business_time)}</View>
-                    <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
-                  </View>}
-                <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
-                      onClick={() => {
-                        !handIsLogin() ? handIsLogin() : setShowFilter(true)
-                      }}>
-                  <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
-                         className="filter-icon"/>筛选
+          <View className="index-top-box">
+            <View className={"feat" + (isFilter ? ' filter-feat' : '')}>
+              {!isFilter ? <View className="date">
+                  <View className="date-icon-bor date-icon-bor-left" onClick={prevMonth}><Image
+                    src={IMGCDNURL + 'lxy/time_jt_l.png'}
+                    className="icon-left date-icon"/></View>
+                  <Picker fields="month" mode='date' end={getTodayDate()} onChange={onFilterDateChange}
+                          value={currentYearMonth}>
+                    <View className="date-value">{handleSplitDate(filterData.start_business_time)}</View>
+                  </Picker>
+                  {!handleHideRightArrow() &&
+                  <View className="date-icon-bor date-icon-bor-right" onClick={nextMonth}><Image
+                    src={IMGCDNURL + 'lxy/time_jt_r.png'}
+                    className="icon-right date-icon"/></View>}
                 </View>
-              </View>
-              {(isFilter && handleShowFilterResult()) &&
-              <View>
-                <View className="filter-line"/>
-                <View className="filter-info" onClick={() => {
-                  !handIsLogin() ? handIsLogin() : setShowFilter(true)
-                }}>
-                  <View className="filter-info-box overwords">
-                    {
-                      ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
-                      <Text>
-                        共<Text
-                        className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
-                      </Text>
-                    }
-                    {
-                      (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
-                        && (filterData.business_type as string[]).length > 0)
-                      &&
-                      <Text className="filter-info-line">|</Text>}
-                    {
-                      (filterData.business_type as string[]).length > 0 && <Text>
-                        {
-                          (filterData.business_type as string[]).map((item, i) => (
-                            <Text key={item}
-                                  className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
-                          ))
-                        }
-                      </Text>
-                    }
-                    {
-                      (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
-                      <Text className="filter-info-line">|</Text>
-                    }
-                    {
-                      filterData.is_note == '1' && <Text className="overwords">
-                        <Text>有备注</Text>
-                      </Text>
-                    }
-                  </View>
-                  <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
-                </View>
-              </View>
-              }
-              {/*记工统计*/}
-              <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
-                {(!isFilter || (isFilter && (counts.work_time || counts.work_time_hour || counts.overtime)) || listTypeLength[0]) &&
-                <View className="statistics-remember">
-                  <View className="remember-row">
-                    <View className="remember-content">
-                      <Image src={IMGCDNURL + 'lxy/ic_gt.png'} className="statistics-icon"/>
-                      <View className="remember-values">
-                        <View className="remember-value">
-                          <Text className="remember-value-text">上班</Text>
-                          <Text className="remember-value-text">{counts.work_time}个工</Text>
-                          {counts.work_time_hour != '0' &&
-                          <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
-                        </View>
-                        {counts.overtime != '0' &&
-                        <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
-                          className="remember-value-text">{counts.overtime}小时</Text></View>}
-                      </View>
-                    </View>
-                  </View>
+                :
+                <View className="filter-start-end-date">
+                  <View
+                    className="filter-start-date">开始时间：{handleSplitDate(filterData.start_business_time)}</View>
+                  <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                 </View>}
-              </View>
-
-              {/*临时工资，平方米，筛选后才展示*/}
-
-              {
-                // (counts.work_money || (counts.count_unit.length > 0 && counts.count_unit[0].unit != null))
-                (listTypeLength[1] || listTypeLength[2])
-                &&
-                <View className="statistics">
-                  <View className="statistics-bookkeeping statistics-bookkeeping-unit">
-                    {((!isFilter && counts.work_money != '0.00' && counts.work_money != '0') || (isFilter && listTypeLength[2])) &&
-                    <View className="bookkeeping-row wage-meter">
-                      <View className="bookkeeping-content">
-                        <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon"/>
-                        <View className="bookkeeping-values">
-                          <View className="bookkeeping-label">
-                            工钱
-                          </View>
-                          <View className="bookkeeping-value">￥{counts.work_money}</View>
-                        </View>
-                      </View>
-                    </View>}
-                    {
-                      ((!isFilter && counts.count_unit.length) || (isFilter && listTypeLength[1])) &&
-                      counts.count_unit.map((item, i) => (
-                        <View className="bookkeeping-row wage-meter" key={'id' + i}>
-                          <View className="bookkeeping-content">
-                            <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon"/>
-                            <View className="bookkeeping-values">
-                              <View className="bookkeeping-label">
-                                {item.unit}
-                              </View>
-                              <View className="bookkeeping-value">{item.count}</View>
-                            </View>
-                          </View>
-                        </View>
-                      ))
-                    }
-                  </View>
-                </View>}
-
-              {/*记账统计*/}
-              <View className="statistics account_count_box">
-                {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
-                <View className="statistics-bookkeeping">
-                  {(!isFilter || (isFilter && listTypeLength[3])) &&
-                  <View className="bookkeeping-row">
-                    <View className="bookkeeping-content">
-                      <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon"/>
-                      <View className="bookkeeping-values">
-                        <View className="bookkeeping-label">
-                          借支
-                        </View>
-                        <View className="bookkeeping-value">￥{parseFloat(counts.borrow_count).toFixed(2)}</View>
-                      </View>
-                    </View>
-                  </View>}
-
-                  {(!isFilter || (isFilter && listTypeLength[4])) &&
-                  <View className="bookkeeping-row">
-                    <View className="bookkeeping-content">
-                      <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon"/>
-                      <View className="bookkeeping-values">
-                        <View className="bookkeeping-label">
-                          支出
-                        </View>
-                        <View className="bookkeeping-value">￥{parseFloat(counts.expend_count).toFixed(2)}</View>
-                      </View>
-                    </View>
-                  </View>}
-                </View>
+              <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
+                    onClick={() => {
+                      !handIsLogin() ? handIsLogin() : setShowFilter(true)
+                    }}>
+                <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
+                  className="filter-icon"/>筛选
               </View>
             </View>
+            {(isFilter && handleShowFilterResult()) &&
+            <View>
+              <View className="filter-line"/>
+              <View className="filter-info" onClick={() => {
+                !handIsLogin() ? handIsLogin() : setShowFilter(true)
+              }}>
+                <View className="filter-info-box overwords">
+                  {
+                    ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
+                    <Text>
+                      共<Text
+                      className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
+                    </Text>
+                  }
+                  {
+                    (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
+                      && (filterData.business_type as string[]).length > 0)
+                    &&
+                    <Text className="filter-info-line">|</Text>}
+                  {
+                    (filterData.business_type as string[]).length > 0 && <Text>
+                      {
+                        (filterData.business_type as string[]).map((item, i) => (
+                          <Text key={item}
+                                className={"business-type-item" + (i == 0 ? ' business-type-item-last' : '')}>{handleFilterBusinessType(item)}</Text>
+                        ))
+                      }
+                    </Text>
+                  }
+                  {
+                    (filterData.is_note == '1' && (filterData.business_type as string[]).length > 0) &&
+                    <Text className="filter-info-line">|</Text>
+                  }
+                  {
+                    filterData.is_note == '1' && <Text className="overwords">
+                      <Text>有备注</Text>
+                    </Text>
+                  }
+                </View>
+                <Image src={IMGCDNURL + 'lxy/arrow-right.png'} className="filter-info-arrow"/>
+              </View>
+            </View>
+            }
+            {/*记工统计*/}
+            <View className="statistics">{!isFilter && <View className="statistics-title">{filterMonth}月记工统计</View>}
+              {(!isFilter || (isFilter && (counts.work_time || counts.work_time_hour || counts.overtime)) || listTypeLength[0]) &&
+              <View className="statistics-remember">
+                <View className="remember-row">
+                  <View className="remember-content">
+                    <Image src={IMGCDNURL + 'lxy/ic_gt.png'} className="statistics-icon"/>
+                    <View className="remember-values">
+                      <View className="remember-value">
+                        <Text className="remember-value-text">上班</Text>
+                        <Text className="remember-value-text">{counts.work_time}个工</Text>
+                        {counts.work_time_hour != '0' &&
+                        <Text className="remember-value-text">+{counts.work_time_hour}小时</Text>}
+                      </View>
+                      {counts.overtime != '0' &&
+                      <View className="remember-value"><Text className="remember-value-text">加班</Text><Text
+                        className="remember-value-text">{counts.overtime}小时</Text></View>}
+                    </View>
+                  </View>
+                </View>
+              </View>}
+            </View>
+
+            {/*临时工资，平方米，筛选后才展示*/}
+
+            {(counts.work_money || (counts.count_unit.length > 0 && counts.count_unit[0].unit != null)) &&
+            <View className="statistics">
+              <View className="statistics-bookkeeping statistics-bookkeeping-unit">
+                {(counts.work_money || listTypeLength[1]) && <View className="bookkeeping-row wage-meter">
+                  <View className="bookkeeping-content">
+                    <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon"/>
+                    <View className="bookkeeping-values">
+                      <View className="bookkeeping-label">
+                        工钱
+                      </View>
+                      <View className="bookkeeping-value">￥{counts.work_money}</View>
+                    </View>
+                  </View>
+                </View>}
+                {
+                  ((counts.count_unit.length > 0 && counts.count_unit[0].unit) || listTypeLength[2]) &&
+                  counts.count_unit.map((item, i) => (
+                    <View className="bookkeeping-row wage-meter" key={'id' + i}>
+                      <View className="bookkeeping-content">
+                        <Image src={IMGCDNURL + 'lxy/ic_gl.png'} className="statistics-icon"/>
+                        <View className="bookkeeping-values">
+                          <View className="bookkeeping-label">
+                            {item.unit}
+                          </View>
+                          <View className="bookkeeping-value">{item.count}</View>
+                        </View>
+                      </View>
+                    </View>
+                  ))
+                }
+              </View>
+            </View>}
+
+            {/*记账统计*/}
+            <View className="statistics account_count_box">
+              {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
+              <View className="statistics-bookkeeping">
+                {(!isFilter || (isFilter && Number(counts.borrow_count)) || listTypeLength[3]) &&
+                <View className="bookkeeping-row">
+                  <View className="bookkeeping-content">
+                    <Image src={IMGCDNURL + 'lxy/ic_jz.png'} className="statistics-icon"/>
+                    <View className="bookkeeping-values">
+                      <View className="bookkeeping-label">
+                        借支
+                      </View>
+                      <View className="bookkeeping-value">￥{parseFloat(counts.borrow_count).toFixed(2)}</View>
+                    </View>
+                  </View>
+                </View>}
+
+                {(!isFilter || (isFilter && Number(counts.expend_count)) || listTypeLength[4]) &&
+                <View className="bookkeeping-row">
+                  <View className="bookkeeping-content">
+                    <Image src={IMGCDNURL + 'lxy/ic_zc.png'} className="statistics-icon"/>
+                    <View className="bookkeeping-values">
+                      <View className="bookkeeping-label">
+                        支出
+                      </View>
+                      <View className="bookkeeping-value">￥{parseFloat(counts.expend_count).toFixed(2)}</View>
+                    </View>
+                  </View>
+                </View>}
+              </View>
+            </View>
+          </View>
 
             <View className="statistics-flow">
               {!isFilter ? <View className="statistics-title">{filterMonth}月全部流水</View> :

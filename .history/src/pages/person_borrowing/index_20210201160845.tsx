@@ -1,4 +1,4 @@
-import Taro, { useState, Config, useRouter } from '@tarojs/taro'
+import Taro, { useState, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import Borrow from './components/borrow'
 import Expenditure from './components/expenditure'
@@ -8,10 +8,6 @@ import { PersonlLastSuccessAccountPage } from '@/config/store'
 import './index.scss'
 
 export default function PersonTally(){
-
-  // 获取页面参数 type 记录成功之后  1: 销毁到首页  0: 返回上一页
-  const router = useRouter()
-  const { type = '0' } = router.params
 
   // 获取 历史记工成功页面
   let personlLastType: number = Taro.getStorageSync(PersonlLastSuccessAccountPage)
@@ -37,8 +33,8 @@ export default function PersonTally(){
         )}
       </View>
       <View className="record-content">
-        {id === 4 && <Borrow type={type} /> }
-        {id === 5 && <Expenditure type={type} /> }
+        {id === 4 && <Borrow /> }
+        {id === 5 && <Expenditure /> }
       </View>
     </View>
   )

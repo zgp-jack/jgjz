@@ -104,7 +104,6 @@ export default function RecordWork() {
    * @description 点击table切换页面并更新数据
    */
   const changeTable = (index: number) => {
-    Taro.setNavigationBarTitle({title: '班组记工'})
     /**设置当前选中最新index*/
     setCurrentId(Number(types[index].id))
     /**传递新的参数，刷新页面*/

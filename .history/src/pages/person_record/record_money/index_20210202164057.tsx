@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, eventCenter, showModal } from '@tarojs/taro'
+import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button, Picker } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerDate from '@/components/picker_date'
@@ -9,15 +9,15 @@ import { observer, useLocalStore } from '@tarojs/mobx'
 import { AddressBookConfirmEvent } from '@/config/events'
 import AccountBookInfo from '@/store/account'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
-import { ADDRESSBOOKALONEPAGE, INDEXPAGE } from '@/config/pages'
+import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import { PersonlMoneyHistoryGroupLeader, PersonlLastSuccessRecordPage } from '@/config/store'
-import msg, { showBackModal, showActionModal } from '@/utils/msg'
+import msg, { showBackModal } from '@/utils/msg'
 import userAddRecordAction from '../api'
 import { validNumber } from '@/utils/v'
 import classifyItem from '@/store/classify/inter.d'
 import './index.scss'
 
-function RecordMoney({type}:{type: string}) {
+function RecordMoney() {
   // 获取历史班组长数据
   let leaderInfo: classifyItem = Taro.getStorageSync(PersonlMoneyHistoryGroupLeader)
   // 时间年月日
@@ -91,15 +91,8 @@ function RecordMoney({type}:{type: string}) {
           Taro.removeStorageSync(PersonlMoneyHistoryGroupLeader)
         }
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
+        showBackModal(res.message)
         handleRecordSuccessSaveDate(params.business_time)
-        if(type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
-        }else{
-          showBackModal(res.message)
-        }
       } else {
         msg(res.message)
       }

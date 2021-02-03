@@ -83,6 +83,8 @@ function PickerSubitem({
         let params = {id, name: value}
         userEditAction(params)
       }
+    } else {
+      msg("请输入分项名称")
     }
   }
 

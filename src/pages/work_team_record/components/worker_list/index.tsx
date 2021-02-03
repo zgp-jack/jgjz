@@ -113,8 +113,13 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     let allStatus = noRecordData.every((item: any) => {
       return item.check == true;
     })
+    let selectedWorkerId = workerData.reduce((pre: any, item: any) => {
+      let selectWorker = [...pre];
+      if (item.check) selectWorker.push(item.id)
+      return selectWorker
+    }, [])
+    setWorkerId(selectedWorkerId)
     setAllchoose(allStatus)
-    setWorkerId(allWorkerData)
     setWorker(workerData);
     setEmptyCount(emptCount)
     setAddWorker([])

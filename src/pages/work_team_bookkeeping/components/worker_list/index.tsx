@@ -89,7 +89,12 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
     }
-    setWorkerId(allWorkerData)
+    let selectedWorkerId = workerData.reduce((pre:any,item:any)=>{
+      let selectWorker = [...pre];
+      if (item.check) selectWorker.push(item.id)
+      return selectWorker
+    },[])
+    setWorkerId(selectedWorkerId)
     setWorker(workerData);
     setEmptyCount(emptCount)
     setAddWorker([])

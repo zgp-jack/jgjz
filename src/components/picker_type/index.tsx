@@ -73,6 +73,10 @@ function PickerType({
 
   // 用户新增 请求
   const userEditData = (data) => {
+    if (!data.name) {
+      Taro.showToast({title: '请输入' + (id ? '分类' : '分项') + '名称', icon: 'none'})
+      return
+    }
     let value: string = data[inputName]
     if (value) {
       console.log(id)
@@ -140,7 +144,7 @@ function PickerType({
             if (res.code === 0) {
               !i && setShowPopup(false);
               !i && (i = getTypesIndex() || 0);
-              (types[i].id == value.id) && isRecord && set && set({ id: '', name: '无分类' }, types[i]);
+              (types[i].id == value.id) && isRecord && set && set({id: '', name: '无分类'}, types[i]);
               delClassifyType(i)
             }
           })

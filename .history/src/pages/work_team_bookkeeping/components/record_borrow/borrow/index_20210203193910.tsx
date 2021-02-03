@@ -1,68 +1,63 @@
-import Taro, {useEffect, useState, eventCenter} from '@tarojs/taro'
+import Taro, {useState, useEffect, eventCenter} from '@tarojs/taro'
 import {View, Button} from '@tarojs/components'
-import ContentInput from '@/components/picker_input/index'
 import PickerType from '@/components/picker_type'
 import PickerMark from '@/components/picker_mark'
-import classifyItem from '@/store/classify/inter.d'
-import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import {AddressBookConfirmEvent} from '@/config/events'
-import {validNumber} from '@/utils/v'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
+import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
+import {validNumber} from '@/utils/v'
 import msg, {showBackModal, showModal, showActionModal} from '@/utils/msg'
+import classifyItem from '@/store/classify/inter.d'
 import userAddBorrowAction from '@/pages/work_team_bookkeeping/components/record_borrow/api'
+import ContentInput from '@/components/picker_input/index'
 import './index.scss'
-import ExpenditurePostData from './inter.d'
-import {BookkeepingProps} from "@/pages/work_team_bookkeeping/components/record_borrow/borrow/inter";
-import createAnimation = Taro.createAnimation;
-import {teamExpenditureType, GroupLastSuccessAccountPage} from "@/config/store";
+import BorrowPostData, {BookkeepingProps} from './inter.d'
+import {teamBorrowType, GroupLastSuccessAccountPage} from "@/config/store";
 import {handleRecordSuccessSaveDate} from "@/utils/index";
 
 
-function Expenditure(props: BookkeepingProps) {
-
+function Borrow(props: BookkeepingProps) {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
+  // 时间年月日
+  const [dateText, setDateText] = useState<string>('')
+  // 是否显示分类组件
+  const [isPickerType, setIsPickType] = useState<boolean>(false)
+  // 是否显示选择分类
+  const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
+  // 是否显示日期组件
+  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
+  // 是否显示班组长 组件
+  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 分类数据
   const [typeData, setTypeData] = useState<classifyItem>({id: '', name: ''})
-  // 是否显示备注输入框
-  const [showMark, setShowMark] = useState<boolean>(true)
-  // 支出提交数据
-  const [postData, setPostData] = useState<ExpenditurePostData>({
-    business_type: 5,
+  // 选择的班组长数据
+  const [groupLeader, setGroupLeader] = useState<classifyItem>({
+    id: '',
+    name: ''
+  })
+  // 借支提交数据
+  const [postData, setPostData] = useState<BorrowPostData>({
+    business_type: 4,
     expend_type: typeData.id,
     business_time: props.businessTime,
     group_leader: '',
     note: '',
     money: '',
     identity: accountBookInfo.identity,
-    work_note: accountBookInfo.id,
-  })
-  // 时间年月日
-  const [dateText, setDateText] = useState<string>('')
-
-  // 是否显示分类组件
-  const [isPickerType, setIsPickType] = useState<boolean>(false)
-  // 是否显示日期组件
-  const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
-  // 是否显示班组长 组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
-  // 是否显示选择分类
-  const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
-  // 选择的班组长数据
-  const [groupLeader, setGroupLeader] = useState<classifyItem>({
-    id: '',
-    name: ''
+    work_note: 0,
   })
   /*初始化分类*/
   useEffect(() => {
-    const teamBorrowType = Taro.getStorageSync('teamExpenditureType')
+    const teamBorrowType = Taro.getStorageSync('teamBorrowType')
     if (!teamBorrowType) return;
     const _typeData = JSON.parse(teamBorrowType)
     setTypeData(_typeData)
     setIsPickType(true)
   }, [])
+
   // 日期文本显示年月日
   useEffect(() => {
     let date = postData.business_time
@@ -70,13 +65,6 @@ function Expenditure(props: BookkeepingProps) {
     let dataStr: string = `${dateArr[0]}年${dateArr[1]}月${dateArr[2]}日`
     setDateText(dataStr)
   }, [postData.business_time])
-
-  // 用户更新数据
-  const userUpdatePostData = (val: string, type: string) => {
-    let postdata: ExpenditurePostData = {...postData}
-    postdata[type] = val
-    setPostData(postdata)
-  }
 
   // 注册事件 监听班组长的选择
   useEffect(() => {
@@ -88,13 +76,26 @@ function Expenditure(props: BookkeepingProps) {
     return () => eventCenter.off(AddressBookConfirmEvent)
   }, [])
 
+  // 用户更新数据
+  const userUpdatePostData = (val: string, type: string) => {
+    let postdata: BorrowPostData = {...postData}
+    postdata[type] = val
+    setPostData(postdata)
+  }
+
+  // 用户选择分类数据
+  const userChangePickerType = (data) => {
+    setTypeData(data);
+    userUpdatePostData(data.id, 'expend_type')
+  }
+
   // 提交借支数据
   const userPostAcion = () => {
-    let params: ExpenditurePostData = {
-      business_type: 5,
+    let params: BorrowPostData = {
+      business_type: 4,
       expend_type: typeData.id,
       business_time: props.businessTime,
-      group_leader: '',
+      // group_leader: isPickerLeader ? groupLeader.id : '',
       note: postData.note,
       money: postData.money,
       identity: accountBookInfo.identity,
@@ -123,7 +124,7 @@ function Expenditure(props: BookkeepingProps) {
         })
         handleRecordSuccessSaveDate(params.business_time)
         if (typeData.id) {
-          Taro.setStorageSync(teamExpenditureType, JSON.stringify(typeData))
+          Taro.setStorageSync(teamBorrowType, JSON.stringify(typeData))
         }
         Taro.setStorageSync(GroupLastSuccessAccountPage, params.business_type)
       } else {
@@ -140,20 +141,7 @@ function Expenditure(props: BookkeepingProps) {
       Taro.navigateTo({url: ADDRESSBOOKALONEPAGE})
     }
   }
-  // 用户选择分类数据
-  const userChangePickerType = (data) => {
-    setTypeData(data);
-    userUpdatePostData(data.id, 'expend_type')
-  }
 
-  // 用户关闭 日期组件
-  const DeletePickerDate = () => {
-    setIsPickerDate(false)
-  }
-  // 用户关闭班组 组件
-  const DeletePickerLeader = () => {
-    setIsPickerLeader(false)
-  }
   // 用户点击分类组件  右上角关闭
   const userTapRightTopCloseBtn = () => {
     // 如果没有设置过分类数据
@@ -164,6 +152,15 @@ function Expenditure(props: BookkeepingProps) {
       setIsPickType(false)
     }
   }
+
+  // 用户关闭 日期组件
+  const DeletePickerDate = () => {
+    setIsPickerDate(false)
+  }
+  // 用户关闭班组 组件
+  const DeletePickerLeader = () => {
+    setIsPickerLeader(false)
+  }
   const handlePickerDelete = id => {
     if (id === typeData.id) {
       setTypeData({id: '', name: ''})
@@ -171,29 +168,29 @@ function Expenditure(props: BookkeepingProps) {
   }
   return (
     <View>
-      <ContentInput type='money' title='金额' change={userUpdatePostData} value={postData.money}/>
+      <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money"/>
       {isPickerType &&
       <PickerType
         value={typeData}
         close={() => {
           setIsPickType(false)
-          setTypeData({id: '', name: ''});
-          setShowMark(true)
         }}
-        onOptionClose={() => { userTapRightTopCloseBtn(); setShowMark(true)}}
-        set={(data) => { userChangePickerType(data); setShowMark(true)}}
+        onOptionClose={() => userTapRightTopCloseBtn()}
+        set={(data) => {
+          userChangePickerType(data)
+        }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         onDelete={(id) => handlePickerDelete(id)}
       />
       }
-      <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>
+      <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
       <View className='person-record-component'>
         {!isPickerType && <View className='person-record-component-item' onClick={() => {
           setIsPickType(true);
-          setShowTypePicker(true);
-          setShowMark(false)
-        }}>{typeData.id ? typeData.name : '分类'}</View>}
+          setShowTypePicker(true)
+        }}
+        >{typeData.id ? typeData.name : '分类'}</View>}
         {!isPickerDate &&
         <View className='person-record-component-item' onClick={() => setIsPickerDate(true)}>{dateText}</View>}
       </View>
@@ -204,4 +201,4 @@ function Expenditure(props: BookkeepingProps) {
   )
 }
 
-export default observer(Expenditure)
+export default observer(Borrow)

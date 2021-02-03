@@ -177,11 +177,10 @@ function Expenditure(props: BookkeepingProps) {
         value={typeData}
         close={() => {
           setIsPickType(false)
-          setTypeData({id: '', name: ''});
-          setShowMark(true)
+          setTypeData({id: '', name: ''})
         }}
-        onOptionClose={() => { userTapRightTopCloseBtn(); setShowMark(true)}}
-        set={(data) => { userChangePickerType(data); setShowMark(true)}}
+        onOptionClose={() => userTapRightTopCloseBtn()}
+        set={(data) => userChangePickerType(data)}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         onDelete={(id) => handlePickerDelete(id)}
@@ -191,8 +190,7 @@ function Expenditure(props: BookkeepingProps) {
       <View className='person-record-component'>
         {!isPickerType && <View className='person-record-component-item' onClick={() => {
           setIsPickType(true);
-          setShowTypePicker(true);
-          setShowMark(false)
+          setShowTypePicker(true)
         }}>{typeData.id ? typeData.name : '分类'}</View>}
         {!isPickerDate &&
         <View className='person-record-component-item' onClick={() => setIsPickerDate(true)}>{dateText}</View>}

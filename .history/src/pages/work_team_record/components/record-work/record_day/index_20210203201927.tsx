@@ -116,14 +116,13 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
     if (!overTime.value){
       setIsOverTime(false);
     }
-    setShowMark(true)
   }
   
   
   return (<View>
     <View className="person-record-time">
       <WorkDayComponent
-        change={(data, type) => { useChangeWorkTime(data, type, 'work'); setShowMark(true)}}
+        change={(data, type) => useChangeWorkTime(data, type, 'work')}
         value={workTime}
         isSelect={!isWrok}
         type='work'

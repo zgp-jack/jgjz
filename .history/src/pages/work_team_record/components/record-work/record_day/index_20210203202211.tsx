@@ -123,7 +123,7 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
   return (<View>
     <View className="person-record-time">
       <WorkDayComponent
-        change={(data, type) => { useChangeWorkTime(data, type, 'work'); setShowMark(true)}}
+        change={(data, type) => useChangeWorkTime(data, type, 'work')}
         value={workTime}
         isSelect={!isWrok}
         type='work'

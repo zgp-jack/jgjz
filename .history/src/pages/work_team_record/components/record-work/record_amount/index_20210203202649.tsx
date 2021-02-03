@@ -116,7 +116,7 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
 
   return (<View>
     <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
-    <PickerUnit selected={UnitInfo - 1} set={(data) => { userUpdatePostData(data.id, 'unit'); setShowMark(true) }} setIsPickerMark={setShowMark} />
+    <PickerUnit selected={UnitInfo - 1} set={(data) => {userUpdatePostData(data.id, 'unit'); setShowMark(true)}} />
     {isPickerSubitem &&
       <PickerSubitem
         value={typeData}

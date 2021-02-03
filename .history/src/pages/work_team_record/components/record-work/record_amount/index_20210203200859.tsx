@@ -23,8 +23,6 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
   let classifySubiteminfo: classifyItem = Taro.getStorageSync(GroupAmountHistoryClassitifySubitem);
   // 获取历史单位数据
   let UnitInfo: number = Taro.getStorageSync(GroupAmountHistoryUnitId) || 1
-  // 是否显示备注输入框
-  const [showMark, setShowMark] = useState<boolean>(false)
   // 是否显示分项组件
   const [isPickerSubitem, setIsPickSubitem] = useState<boolean>(!!classifySubiteminfo)
   // 是否显示选择分项
@@ -116,21 +114,21 @@ function RecordAmoumt({ workerId, type, businessTime }: PropsData) {
 
   return (<View>
     <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
-    <PickerUnit selected={UnitInfo - 1} set={(data) => { userUpdatePostData(data.id, 'unit'); setShowMark(true) }} setIsPickerMark={setShowMark} />
+    <PickerUnit selected={UnitInfo - 1} set={(data) => userUpdatePostData(data.id, 'unit')} />
     {isPickerSubitem &&
       <PickerSubitem
         value={typeData}
-        close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' });setShowMark(true) }}
-        onOptionClose={() => {userTapRightTopCloseBtn(); setShowMark(true)}}
-        set={(data, type) => {userSetSubitem(data, type); setShowMark(true)}}
+        close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' }) }}
+        onOptionClose={() => userTapRightTopCloseBtn()}
+        set={(data, type) => userSetSubitem(data, type)}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         isRecord={true}
       />
     }
-    {showMark && <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')} />}
+    <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')} />
     <View className="person-record-component">
-      {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickSubitem(true); setShowTypePicker(true);setShowMark(false) }}>分项</View>}
+      {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
     </View>
     <View className="person-record-btn">
       <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

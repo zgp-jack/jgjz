@@ -16,8 +16,6 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
-  // 是否显示备注框
-  const [showMark, setShowMark] = useState<boolean>(true)
   // 记工天 是否选中上班更多
   const [isWrok, setIsWork] = useState<boolean>(true)
   // 是否选中加班更多
@@ -116,35 +114,34 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
     if (!overTime.value){
       setIsOverTime(false);
     }
-    setShowMark(true)
   }
   
   
   return (<View>
     <View className="person-record-time">
       <WorkDayComponent
-        change={(data, type) => { useChangeWorkTime(data, type, 'work'); setShowMark(true)}}
+        change={(data, type) => useChangeWorkTime(data, type, 'work')}
         value={workTime}
         isSelect={!isWrok}
         type='work'
       />
       {isOverTime && <WorkDayComponent
         title={'加班时长'}
-        change={(data, type) => { useChangeWorkTime(data, type, 'over'); setShowMark(true)}}
+        change={(data, type) => useChangeWorkTime(data, type, 'over')}
         value={overTime}
         isSelect={!isOver}
         type='over'
         isClose={true}
-        close={() => { setOverTime({ value: '', text: '无加班' }); setIsOverTime(false); setShowMark(true)}}
+        close={() => { setOverTime({ value: '', text: '无加班' }); setIsOverTime(false)}}
         isMoreTime={isMoreTime}
         closeMoreTime={closeMoreTime}
       />}
     </View>
-    {showMark && <PickerMark text={postData.note as string} set={(val) => userUpdatePostData(val, 'note')} />}
+    <PickerMark text={postData.note as string} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
       {!isPickerDate &&
       <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-      {!isOverTime && <View className="person-record-component-item" onClick={() => {onOverTime();setShowMark(false)}}>加班时长</View>}
+      {!isOverTime && <View className="person-record-component-item" onClick={() => onOverTime()}>加班时长</View>}
     </View>
     <View className="person-record-btn">
       <Button className="person-record-save" onClick={userPostAcion}>确认记工</Button>

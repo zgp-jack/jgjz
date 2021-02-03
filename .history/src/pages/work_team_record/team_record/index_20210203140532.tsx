@@ -81,6 +81,7 @@ export default function RecordWork() {
     let timeStr = initTime(timeNow)[0];
     setTimeText(timeStr)
   }, [])
+ 
 
 
   /**

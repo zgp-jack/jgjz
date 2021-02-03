@@ -23,6 +23,7 @@ function AddressBook() {
   const router = useRouter()
   let { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
   console.log("上一个页面传过来的选中数据",data)
+  console.log("上一个页面传过来的type", type)
   const [routerData,setRouterData] = useState<{id:number,name:string}>({id:0,name:''})
   // 不通的type显示不同的页面标题
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
@@ -58,7 +59,34 @@ function AddressBook() {
     if (type == ADDRESSBOOKTYPE_GROUP_ADD || type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_ALONE || type == ADDRESSBOOKTYPE_ALONE_DEL) {
       /** 获取所有通讯录列表 */
       getWorkers(type == ADDRESSBOOKTYPE_ALONE_DEL ? { action: "select" } : { work_note: accountBookInfo.id }).then((res) => {
-        setList(res.data)
+        let newListData = res.data
+        if (data){
+          let newData: PERSON_DATA[] = JSON.parse(data)
+          //工友总人数
+          let listLen = 0
+          //上一个页面传过来的数据 默认选中
+          newListData.map((Pitem, Pindex) => {
+            Pitem.data.map((Citem,Cindex)=>{
+              listLen++
+              newData.map((dataItem) => {
+                if (Citem.id == dataItem.id) {
+                  newListData[Pindex].data[Cindex].is_check = true
+                }
+              })
+            })
+          })
+          //上一个页面传过来的数据 默认选中
+          let newSelectd: PERSON_DATA[] = []
+          newData.map((dataItem) => {
+            newSelectd.push(dataItem)
+          })
+          setSelectd(newSelectd)
+          //判断是否已经全选
+          if (newSelectd.length == listLen){
+            setIsAllSelect(true)
+          }
+        }
+        setList(newListData)
         statisticsWorkrLen(res.data)
       })
     } else if (type == ADDRESSBOOKTYPE_LEAVE || type == ADDRESSBOOKTYPE_GROUP_LEAVE) {
@@ -96,6 +124,10 @@ function AddressBook() {
             name_py: "no",
             data: newListData
           }
+          //判断是否已经全选
+          if (newListData.length == newSelectd.length){
+            setIsAllSelect(true)
+          }
           setList([note_worker])
         } else {
           //过滤掉已离场的工人
@@ -110,8 +142,6 @@ function AddressBook() {
         }
       })
     }
-
-
   }, [])
 
   /** 未选择check图片 */
@@ -605,7 +635,8 @@ function AddressBook() {
     setFilterList(_lists)
   }
   // 搜索后的数据 选择
-  const filterSelect = (index: number, id: number) => {
+  const filterSelect = (index: number, id: number, isInNote: number) => {
+    if (isInNote) return
     let newSelectd = JSON.parse(JSON.stringify(selectd))
     let newList = JSON.parse(JSON.stringify(list))
     let newFilterList = JSON.parse(JSON.stringify(filterList))
@@ -800,7 +831,7 @@ function AddressBook() {
         })}>
           {filterList.map((item, pIndex) => (
             <View className="item_person" key={item.id}>
-              <View className="left" onClick={() => type === ADDRESSBOOKTYPE_ALONE ? aloneFilterSelect(item) : filterSelect(pIndex, item.id)}>
+              <View className="left" onClick={() => type === ADDRESSBOOKTYPE_ALONE ? aloneFilterSelect(item) : filterSelect(pIndex, item.id,item.is_in_work_note)}>
 
                 {/* 只有当 type 非个人的时候 才会有图片选择   // 判断是否已经在账本中 默认选中 再判断是否已经选中 */}
                 {type !== ADDRESSBOOKTYPE_ALONE &&

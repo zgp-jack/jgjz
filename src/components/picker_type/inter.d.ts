@@ -31,6 +31,8 @@ export default interface PickerTypeProps {
   setShow: (bool: boolean) => void
   /** 是否记工 */
   isRecord?: boolean
+  /*删除*/
+  onDelete: (id) => void
 }
 
 // popup弹窗数据格式

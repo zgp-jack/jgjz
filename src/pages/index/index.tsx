@@ -631,7 +631,7 @@ const Remember = () => {
                     </Block>
                   ))
                 }
-                {!showEmpty && showFooter && <LoadFooter text='瞅啥瞅，往上看呢~'/>}
+                {!showEmpty && showFooter && <LoadFooter text='无更多流水'/>}
               </View>
             </View>
           </View>

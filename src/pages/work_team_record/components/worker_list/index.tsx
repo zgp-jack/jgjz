@@ -400,7 +400,7 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
         titleButtonText='离场'
         inputGroup={[
           { name: 'name', title: "姓名（必填）", placeholder: '请输入工友的姓名', value: selectWorker.name },
-          { name: 'tel', title: "电话号码", placeholder: '请输入工友的电话号码(可不填)', value: selectWorker.tel }
+          { name: 'tel', title: "电话号码", placeholder: '请输入工友的电话号码(可不填)', value: selectWorker.tel, maxlength: 11 }
         ]}
         confirm={(inputData) => editWorkerConfirm(inputData)}
         cancel={() => setIsShowEdit(false)}

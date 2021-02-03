@@ -8,6 +8,7 @@ import { PersonlLastSuccessAccountPage } from '@/config/store'
 import './index.scss'
 
 export default function PersonTally(){
+<<<<<<< HEAD
 
   // 获取页面参数 type 记录成功之后  1: 销毁到首页  0: 返回上一页
   const router = useRouter()
@@ -15,9 +16,12 @@ export default function PersonTally(){
 
   useEffect(()=>{
     Taro.setNavigationBarTitle({title: '个人记账'})
-    Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
   },[])
 
+=======
+  Taro.setNavigationBarTitle({ title: '个人记账' })
+  Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
+>>>>>>> yangchao
   // 获取 历史记工成功页面
   let personlLastType: number = Taro.getStorageSync(PersonlLastSuccessAccountPage)
   // 当前选中的tab

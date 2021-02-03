@@ -245,7 +245,9 @@ const Remember = () => {
     let page = filterData.page;
     getBusiness({...params, work_note: accountBookInfo.id}).then(res => {
       if (res.code === 0) {
+        // 请求数据长度
         let len = res.data.length
+        // 如果页码为1 请求返回数据长度为0 那么显示数据为空图片
         if (page == 1) {
           if (len == 0) {
             setShowEmpty(true)
@@ -259,7 +261,22 @@ const Remember = () => {
           if (len == 0) {
             setShowFooter(true)
           } else {
-            setList(list.concat(res.data))
+            // list 数据
+            let listData = JSON.parse(JSON.stringify(list));
+            // 请求返回流水数据
+            let reqList = res.data;
+            // 获取已有列表最后一条数据的date
+            let dataStr = listData[listData.length - 1].date
+            // 获取新数据列表第一条数据date
+            let newDateStr = reqList[0].date;
+            // 如果新请求回数据第一条与老数据最后一条日期相等，那么需要合并相同日期数据
+            if (dataStr == newDateStr) {
+              listData[listData.length - 1].list = [...listData[listData.length - 1].list, ...reqList[0].list]
+              reqList.splice(0,1);
+            }else{
+              listData = listData.concat(reqList);
+            }
+            setList(listData)
           }
         }
       }

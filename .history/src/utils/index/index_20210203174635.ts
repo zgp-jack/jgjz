@@ -2,7 +2,11 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-02-03 17:51:22
+<<<<<<< HEAD
+ * @LastEditTime: 2021-02-03 09:49:40
+=======
+ * @LastEditTime: 2021-02-03 17:15:49
+>>>>>>> yangchao
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'

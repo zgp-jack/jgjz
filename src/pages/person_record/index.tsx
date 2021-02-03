@@ -20,7 +20,8 @@ export default function PersonRecord(){
 
   // 获取 历史记工成功页面
   let personlLastType: number = Taro.getStorageSync(PersonlLastSuccessRecordPage)
-
+  Taro.setNavigationBarTitle({ title: '个人记工' })
+  Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
   // 切换记工type值
   const [recordnum, setRecordnum] = useState<number>(personlLastType || recordConfig[0].id);
   // 切换Tap

@@ -213,6 +213,11 @@ const Remember = () => {
   const initParams = () => {
     let start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
+    const _end_business_time = end_business_time.split('-')
+    console.log(_end_business_time)
+    console.log(filterMonth)
+    console.log(filterYear)
+    console.log(_end_business_time)
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
     let data = {
@@ -226,8 +231,13 @@ const Remember = () => {
   }
   const handleGetEndDay = (yearAndMonth) => {
     const dates = yearAndMonth.split('-')
-    const day = new Date(dates[0], dates[1], 0).getDate()
-    return yearAndMonth + '-' + day
+
+    if (dates[0] == year && dates[1] == month) {
+      return yearAndMonth + '-' + day
+    } else {
+      const endDay = new Date(dates[0], dates[1], 0).getDate()
+      return yearAndMonth + '-' + endDay
+    }
   }
   const initFlowList = (params: GetCountParams) => {
     /** 请求页面 */
@@ -356,11 +366,9 @@ const Remember = () => {
   }
   /*确认筛选*/
   const handleConfirmFilter = (data: GetCountParams) => {
-    if (JSON.stringify(data) != JSON.stringify(filterData)) {
-      data.page = 1;
-      setFilterData(data)
-      setIsFilter(true)
-    }
+    data.page = 1;
+    setFilterData(data)
+    setIsFilter(true)
     setShowFilter(false)
   }
   /*2020-9改成2020年09月*/
@@ -470,12 +478,12 @@ const Remember = () => {
                       ((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0) &&
                       <Text>
                         共<Text
-                        className="filter-info-blue">{personOrGroup ? (filterData.worker_id as AddressBookParams[]).length : (filterData.group_leader as AddressBookParams[]).length}</Text>人
+                        className="filter-info-blue">{personOrGroup ? (filterData.group_leader as AddressBookParams[]).length : (filterData.worker_id as AddressBookParams[]).length}</Text>人
                       </Text>
                     }
                     {
                       (((filterData.worker_id as AddressBookParams[]).length > 0 || (filterData.group_leader as AddressBookParams[]).length > 0)
-                        && (filterData.business_type as string[]).length > 0)
+                        && ((filterData.business_type as string[]).length > 0 || filterData.is_note == '1'))
                       &&
                       <Text className="filter-info-line">|</Text>}
                     {

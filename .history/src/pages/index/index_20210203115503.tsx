@@ -152,6 +152,9 @@ const Remember = () => {
           }
         }
       })
+      Taro.redirectTo({
+        url: '/pages/identity_selection/index?type=1'
+      })
     }
     if (accountBookInfo.id && user.login && noLogin) {
       const data = {...defaultFilterData, work_note: accountBookInfo.id}

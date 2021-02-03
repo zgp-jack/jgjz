@@ -733,7 +733,6 @@ function AddressBook() {
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {
       leave()
     }else{
-      debugger
       eventCenter.trigger(AddressBookConfirmEvent, selectd)
       Taro.navigateBack()
     }

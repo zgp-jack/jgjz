@@ -910,10 +910,10 @@ function AddressBook() {
       {isShowEdit && <PromptBox
         titleText="修改工友"
         confirmText="确定"
-        titleButtonText={type == ADDRESSBOOKTYPE_LEAVE ? "离场" : (editItemData.is_self == 1 || editItemData.id == routerData.id || editItemData.is_in_work_note ? (editItemData.id == routerData.id ? '已选中':'') : "删除")}
+        titleButtonText={type == ADDRESSBOOKTYPE_LEAVE ? "离场" : (editItemData.is_self == 1 || editItemData.id == routerData.id || editItemData.is_in_work_note ? (editItemData.id == routerData.id || editItemData.is_in_work_note ? '已选中':'') : "删除")}
         inputGroup={[
-          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name, maxlength: 20, type: 'text', disabled: editItemData.id == routerData.id ? true : false },
-          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel, maxlength: 11, disabled: editItemData.is_self == 1 || editItemData.id == routerData.id ?true:false,type:"number" }
+          { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name, maxlength: 20, type: 'text', disabled: editItemData.id == routerData.id || editItemData.is_in_work_note ? true : false },
+          { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel, maxlength: 11, disabled: editItemData.is_self == 1 || editItemData.id == routerData.id || editItemData.is_in_work_note ?true:false,type:"number" }
         ]}
         confirm={(data) => editWorkerConfirm(data)}
         cancel={() => setIsShowEdit(false)}

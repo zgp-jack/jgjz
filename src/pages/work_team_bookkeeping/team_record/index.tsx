@@ -124,7 +124,7 @@ export default function RecordWork() {
       <View className='record-work-head-date'>
         <View className='record-work-head-title'>选择日期：</View>
         <View className='record-work-head-choose-date'>
-          <Picker mode='date' onChange={changeTime} value={startDate}>
+          <Picker mode='date' onChange={changeTime} value={startDate} end={nowTime}>
             <View className='record-work-date'>{timeText}</View>
           </Picker>
           <Image src={`${IMGCDNURL}common/arrow-right.png`} className='record-work-data-image' mode='widthFix'/>
@@ -146,7 +146,7 @@ export default function RecordWork() {
           {typeItem == 2 && (
             <View className='record-work-flow'>
               <FlowList workNote={accountBookInfo.id} touchBottom={touchBottom} currentId={currentId}
-                        params={startDate} types={types}></FlowList>
+                        params={startDate}></FlowList>
             </View>
           )}
           {typeItem == 1 && currentId == 4 &&

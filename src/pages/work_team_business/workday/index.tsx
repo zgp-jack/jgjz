@@ -31,7 +31,9 @@ export default function ModifyWorkDay(){
     note: '',
     work_time: '',
     work_time_hour: '',
-    overtime: ''
+    overtime: '',
+    worker_name:'',
+    worker_id: ''
   })
   // 接口返回的初始值
   const [data, setData] = useState<BusinessInfoResult>({
@@ -45,7 +47,9 @@ export default function ModifyWorkDay(){
     group_leader_name: '',
     work_time: '',
     work_time_hour: '',
-    overtime: ''
+    overtime: '',
+    worker_name:'',
+    worker_id: ''
   })
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
@@ -77,7 +81,8 @@ export default function ModifyWorkDay(){
           note: mydata.note || '',
           work_time: mydata.work_time || '',
           work_time_hour: mydata.work_time_hour || '',
-          overtime: mydata.overtime || ''
+          overtime: mydata.overtime || '',
+          worker_id: mydata.worker_id
         })
         if (mydata.work_time){
           mydata.work_time == '1' ? setWorkTime({value: '1',text:'一个工'}) : setWorkTime({value: '0.5', text: '半个工'});
@@ -169,6 +174,8 @@ export default function ModifyWorkDay(){
       dateValue={data.busienss_time_string}
       submitValue={data.created_time_string}
       projectValue={data.work_note_name}
+      worker={data.worker_name} 
+      showWorker={true}
     />
     <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
   </View>)

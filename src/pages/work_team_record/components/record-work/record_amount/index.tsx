@@ -11,7 +11,7 @@ import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import {AddressBookConfirmEvent} from '@/config/events'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
-import msg, {showBackModal, showModal} from '@/utils/msg'
+import msg, { showBackModal, showModal, showActionModal } from '@/utils/msg'
 import { GroupLastSuccessRecordPage } from '@/config/store'
 import {validNumber} from '@/utils/v'
 import classifyItem from '@/store/classify/inter.d'
@@ -75,7 +75,7 @@ function RecordAmoumt({workerId, type, businessTime}: PropsData) {
       unit: postData.unit,
       identity: Number(accountBookInfo.identity),
       business_type: type || 2,
-      unit_num: postData.unit_num,
+      unit_num: postData.unit_num || '0',
       unit_work_type: isPickerSubitem ? postData.unit_work_type : '',
       worker_id: workerId
     }
@@ -83,15 +83,16 @@ function RecordAmoumt({workerId, type, businessTime}: PropsData) {
       msg('请选择工人！')
       return
     }
-    if (postData.unit_num) {
-      if (!validNumber(params.unit_num)) {
-        msg('请输入正确的工量')
-        return
-      }
-    }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        showModal(res.message)
+        showActionModal({
+          msg: res.message,
+          success: function () {
+            Taro.redirectTo({
+              url: '/pages/work_team_record/team_record/index'
+            })
+          }
+        })
         Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)
         handleRecordSuccessSaveDate(params.business_time)
       } else {
@@ -120,7 +121,7 @@ function RecordAmoumt({workerId, type, businessTime}: PropsData) {
     {isPickerSubitem &&
     <PickerSubitem
         value={typeData}
-      close={() => setIsPickSubitem(false)}
+      close={() => { setIsPickSubitem(false); setTypeData({ id: '', name: '' }) }}
       onOptionClose={() => userTapRightTopCloseBtn()}
       set={(data) => {
         setTypeData(data);
@@ -133,10 +134,7 @@ function RecordAmoumt({workerId, type, businessTime}: PropsData) {
     {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
     <PickerMark text={postData.note as string} set={(data) => userUpdatePostData(data, 'note')}/>
     <View className='person-record-component'>
-      {!isPickerSubitem && <View className='person-record-component-item' onClick={() => {
-        setIsPickSubitem(true);
-        setShowTypePicker(true)
-      }}>{postData.unit_work_type ? postData.unit_work_type : '分项'}</View>}
+      {!isPickerSubitem && <View className='person-record-component-item' onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
     </View>
     <View className='person-record-btn'>
       <Button className='person-record-save' onClick={() => userPostAcion()}>确认记工</Button>

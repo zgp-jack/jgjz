@@ -16,13 +16,14 @@ export default function PickerOption({
                                        add,
                                        edit,
                                        del,
-                                       status = true
+                                       status = true,
+                                       title = '选择分项'
                                      }: PickerOptionsProps) {
 
   return (
     <PopupBottom show={show} closePopup={close}>
       <View className="picker-option">
-        <PickerBar centerText="选择分项" confirmClick={close}>
+        <PickerBar centerText={title} confirmClick={close}>
           <View className="picker-bar-children" onClick={() => add()}>添加</View>
         </PickerBar>
         <View className="picker-option-body">

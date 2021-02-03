@@ -32,4 +32,6 @@ export default interface PickerOptionsProps{
   del: (id: string, i: number) => void,
   /** 当前数据是否还在初始化 */
   status?: boolean
+  /** title */
+  title?: string
 }

@@ -4,7 +4,7 @@ import ContentInput from '@/components/picker_input'
 import PickerMark from '@/components/picker_mark'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import msg, { showBackModal, showModal } from '@/utils/msg'
+import msg, { showBackModal, showModal, showActionModal } from '@/utils/msg'
 import { validNumber } from '@/utils/v'
 import { GroupLastSuccessRecordPage } from '@/config/store'
 import RecordMoneyPostData, { PropsData} from './inter.d'
@@ -42,7 +42,7 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
       business_type: 3,
       business_time: businessTime,
       money: postData.money,
-      identity: 2,
+      identity: accountBookInfo.identity,
       worker_id: workerId
     }
     if(params.worker_id == ''){
@@ -57,7 +57,14 @@ function RecordMoney({ workerId, type, businessTime }: PropsData) {
     }
     userAddRecordAction(params).then((res) => {
       if (res.code === 0) {
-        showModal(res.message)
+        showActionModal({
+          msg: res.message,
+          success: function () {
+            Taro.redirectTo({
+              url: '/pages/work_team_record/team_record/index'
+            })
+          }
+        })
         Taro.setStorageSync(GroupLastSuccessRecordPage, params.business_type)
         handleRecordSuccessSaveDate(params.business_time)
       } else {

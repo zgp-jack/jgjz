@@ -170,6 +170,7 @@ function PickerType({
       {/* picker弹窗 */}
       {show &&
       <PickerOption
+        title={'选择分类'}
         close={() => {
           setShow(false);
           onOptionClose && onOptionClose()

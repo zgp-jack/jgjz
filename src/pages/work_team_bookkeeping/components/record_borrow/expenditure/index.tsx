@@ -9,7 +9,7 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {validNumber} from '@/utils/v'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import msg, { showBackModal, showModal} from '@/utils/msg'
+import msg, { showBackModal, showModal, showActionModal} from '@/utils/msg'
 import userAddBorrowAction from '@/pages/work_team_bookkeeping/components/record_borrow/api'
 import './index.scss'
 import ExpenditurePostData from './inter.d'
@@ -111,7 +111,14 @@ function Expenditure(props: BookkeepingProps) {
     }
     userAddBorrowAction(params).then((res) => {
       if (res.code === 0) {
-        showModal(res.message)
+        showActionModal({
+          msg: "记账成功",
+          success: function () {
+            Taro.redirectTo({
+              url: '/pages/work_team_bookkeeping/team_record/index'
+            })
+          }
+        })
         handleRecordSuccessSaveDate(params.business_time)
         if (typeData.id) {
           Taro.setStorageSync(teamExpenditureType, JSON.stringify(typeData))

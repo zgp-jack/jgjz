@@ -5,7 +5,7 @@ import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_LEAVE } from '@/c
 import { AddressBookConfirmEvent } from '@/config/events'
 import PromptBox from '@/components/popup/index'
 import { editWordkerInfo } from '@/pages/address_book/api'
-import msg from '@/utils/msg'
+import msg, { showActionModal } from '@/utils/msg'
 import { InputValue } from '@/components/popup/index.d'
 import { WorkerData } from './index.d'
 import getWorkerList, { removePerson} from './api'
@@ -106,6 +106,13 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
     for (let index = 0; index < emptyObjCount; index++) {
       emptCount.push({id: 0, is_self: 0, name: '', name_color: '', name_py: '', tel: '', check: false, recorded: false})
     }
+    let noRecordData = workerData.filter((item: any) => {
+      return !item.recorded;
+    })
+    let allStatus = noRecordData.every((item: any) => {
+      return item.check == true;
+    })
+    setAllchoose(allStatus)
     setWorkerId(allWorkerData)
     setWorker(workerData);
     setEmptyCount(emptCount)
@@ -315,13 +322,26 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
   * @description 移除工友事件
   */
   const movePerson = () => {
-    removePerson({ workId: selectWorker.id, work_note: workNote}).then((res) => {
-      msg(res.message)
-      if (res.code == 0) {
-        setLoading(true)
-        setIsShowEdit(false)
+    let workerIdData = JSON.parse(JSON.stringify(workerId))
+    showActionModal({
+      msg: '确定要将此工友离场吗？',
+      showCancel: true,
+      success: function (res) {
+        if (res.confirm) {
+          removePerson({ workId: selectWorker.id, work_note: workNote }).then((res) => {
+            msg(res.message)
+            if (res.code == 0) {
+              let findIndex = workerIdData.findIndex((item: any) => item == selectWorker.id);
+              if (findIndex !== -1) workerIdData.splice(findIndex,1);
+              setWorkerId(workerIdData)
+              setLoading(true)
+              setIsShowEdit(false)
+            }
+          })
+        }
       }
     })
+    
   }
 
   return (
@@ -333,7 +353,7 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
             <View className='record-work-person-tip'>选择工友（已选<Text className='record-work-person-text'>{workerId.length}</Text>人）</View>
             {worker.length && <View className='record-work-person-all' onClick={() => chooseAll()}>{(currentId == 1 || currentId == 2 || currentId == 3) ? (data.business_worker_id.length == data.note_worker.length ? '' : (allChoose ? '取消全选' : '全选未记')) : (allChoose ? '取消全选' : '全选')}</View>}
           </View>
-          <View className='record-work-person-disc'>{(currentId == 1 || currentId == 2 || currentId == 3) ? '黄色块代表此工友当日已有记工' : '长按名字可编辑'}</View>
+          <View className='record-work-person-disc'>{(currentId == 1 || currentId == 2 || currentId == 3) ? '黄色块代表此工友当日已有记工;' : ''}长按名字可编辑</View>
         </View>
       </View>
       {/* 工友数据列表 */}

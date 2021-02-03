@@ -188,9 +188,7 @@ const Remember = () => {
       setFilterData(params)
     }
   })
-  useEffect(() => {
-    console.log('listTypeLength', listTypeLength)
-  }, [listTypeLength])
+
   const initParams = () => {
     let start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -199,7 +197,8 @@ const Remember = () => {
     let data = {
       ...defaultFilterData,
       start_business_time: start_business_time.length === 3 ? start_business_time : start_business_time + '-01',
-      end_business_time: end_business_time.length === 3 ? end_business_time : handleGetEndDay(start_business_time)
+      end_business_time: end_business_time.length === 3 ? end_business_time : handleGetEndDay(start_business_time),
+      page: 1
     }
     setDefaultFilterData(data)
     setFilterData(data)
@@ -212,7 +211,6 @@ const Remember = () => {
   const initFlowList = (params: GetCountParams) => {
     /** 请求页面 */
     let page = filterData.page;
-    console.log("账本id:", accountBookInfo.id)
     getBusiness({...params, work_note: accountBookInfo.id}).then(res => {
       if (res.code === 0) {
         let len = res.data.length
@@ -238,7 +236,6 @@ const Remember = () => {
     })
   }
   const getListTypeLength = (data) => {
-    console.log('11111', data)
     let _listTypeLength: boolean[] = [false, false, false, false, false]
     data.forEach(item => {
       item.list.forEach(subItem => {
@@ -407,6 +404,8 @@ const Remember = () => {
         </View>
         <View className="body">
           <View className="body-container">
+
+          <View className="index-top-box">
             <View className={"feat" + (isFilter ? ' filter-feat' : '')}>
               {!isFilter ? <View className="date">
                   <View className="date-icon-bor date-icon-bor-left" onClick={prevMonth}><Image
@@ -432,7 +431,7 @@ const Remember = () => {
                       !handIsLogin() ? handIsLogin() : setShowFilter(true)
                     }}>
                 <Image src={isFilter ? IMGCDNURL + 'lxy/ic_sx_blue.png' : IMGCDNURL + 'lxy/ic_sx.png'}
-                       className="filter-icon"/>筛选
+                  className="filter-icon"/>筛选
               </View>
             </View>
             {(isFilter && handleShowFilterResult()) &&
@@ -537,7 +536,7 @@ const Remember = () => {
             </View>}
 
             {/*记账统计*/}
-            <View className="statistics">
+            <View className="statistics account_count_box">
               {!isFilter && <View className="statistics-title">{filterMonth}月记账统计</View>}
               <View className="statistics-bookkeeping">
                 {(!isFilter || (isFilter && Number(counts.borrow_count)) || listTypeLength[3]) &&
@@ -567,6 +566,8 @@ const Remember = () => {
                 </View>}
               </View>
             </View>
+          </View>
+
             <View className="statistics-flow">
               {!isFilter ? <View className="statistics-title">{filterMonth}月全部流水</View> :
                 <View className="statistics-title">共找到<Text className="flow-list-filter-title">{countNum}</Text>条满足您条件的流水</View>}

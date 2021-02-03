@@ -1,13 +1,13 @@
-import { showBackModal } from '@/utils/msg'
-import { View } from '@tarojs/components'
+import {showBackModal} from '@/utils/msg'
+import {View} from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import classnames from 'classnames'
 import EmptyDate from '@/components/empty_data'
-import LoadFooter from  '@/components/load_footer'
+import LoadFooter from '@/components/load_footer'
 import ListProviderProps from './inter.d'
 
 export default function ListProvider(props: ListProviderProps) {
-  const { errMsg, children, className, hasmore, loading, length, increasing } = props
+  const {errMsg, children, className, hasmore, loading, length, increasing} = props
   if (errMsg) {
     showBackModal(errMsg)
   }
@@ -17,10 +17,10 @@ export default function ListProvider(props: ListProviderProps) {
     [className]: !!className
   })
 
-  if(!length){
+  if (!length) {
     return (
       <View className={cls}>
-        {!loading && <EmptyDate />}
+        {!loading && <EmptyDate/>}
       </View>
     )
   }
@@ -28,12 +28,12 @@ export default function ListProvider(props: ListProviderProps) {
   const renderFooter = () => {
     if (loading || increasing) {
       return (
-        <LoadFooter />
+        <LoadFooter/>
       )
     }
     if(!hasmore || length <= 19){
       return (
-        <LoadFooter text='没有更多数据了' />
+        <LoadFooter text='没有更多数据了'/>
       )
     }
   }

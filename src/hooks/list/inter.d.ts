@@ -3,14 +3,14 @@
  * @Date: 2021-01-18 17:31:32
  * @LastEditors: jsxin
  * @LastEditTime: 2021-01-19 15:53:25
- * @Description: useInit 使用 的所有接口存放地址 
+ * @Description: useInit 使用 的所有接口存放地址
  */
-import { Result } from '@/utils/request/inter.d'
+import {Result} from '@/utils/request/inter.d'
 
 // 所有api接口请求的类型 api为请求方法()
 type APIFunc<P, R> = (params: P) => Promise<Result<R[]>>
 
-// 定义hooks 管理状态的所有字段 
+// 定义hooks 管理状态的所有字段
 export interface FetchResult<P, R> {
   /** 监听loading 改变 负责请求 */
   loading: boolean,

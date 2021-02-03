@@ -188,9 +188,7 @@ const Remember = () => {
       setFilterData(params)
     }
   })
-  useEffect(() => {
-    console.log('listTypeLength', listTypeLength)
-  }, [listTypeLength])
+
   const initParams = () => {
     let start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
@@ -199,7 +197,8 @@ const Remember = () => {
     let data = {
       ...defaultFilterData,
       start_business_time: start_business_time.length === 3 ? start_business_time : start_business_time + '-01',
-      end_business_time: end_business_time.length === 3 ? end_business_time : handleGetEndDay(start_business_time)
+      end_business_time: end_business_time.length === 3 ? end_business_time : handleGetEndDay(start_business_time),
+      page: 1
     }
     setDefaultFilterData(data)
     setFilterData(data)
@@ -237,7 +236,6 @@ const Remember = () => {
     })
   }
   const getListTypeLength = (data) => {
-    console.log('11111', data)
     let _listTypeLength: boolean[] = [false, false, false, false, false]
     data.forEach(item => {
       item.list.forEach(subItem => {
@@ -569,7 +567,7 @@ const Remember = () => {
               </View>
             </View>
           </View>
-            
+
             <View className="statistics-flow">
               {!isFilter ? <View className="statistics-title">{filterMonth}月全部流水</View> :
                 <View className="statistics-title">共找到<Text className="flow-list-filter-title">{countNum}</Text>条满足您条件的流水</View>}

@@ -41,6 +41,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
     if (filterData && filterData.start_business_time.split('-').length !== 3) return
     eventCenter.on(AddressBookConfirmEvent, (data) => {
       let _data: any = {}
+      debugger
       if (props.personOrGroup) {
         _data = {...filterData, worker_id: data}
       } else {

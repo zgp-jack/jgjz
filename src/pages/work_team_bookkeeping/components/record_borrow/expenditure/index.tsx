@@ -9,13 +9,13 @@ import {AddressBookConfirmEvent} from '@/config/events'
 import {validNumber} from '@/utils/v'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import msg, { showBackModal, showModal, showActionModal} from '@/utils/msg'
+import msg, {showBackModal, showModal, showActionModal} from '@/utils/msg'
 import userAddBorrowAction from '@/pages/work_team_bookkeeping/components/record_borrow/api'
 import './index.scss'
 import ExpenditurePostData from './inter.d'
-import { BookkeepingProps } from "@/pages/work_team_bookkeeping/components/record_borrow/borrow/inter";
+import {BookkeepingProps} from "@/pages/work_team_bookkeeping/components/record_borrow/borrow/inter";
 import createAnimation = Taro.createAnimation;
-import {teamExpenditureType,GroupLastSuccessAccountPage} from "@/config/store";
+import {teamExpenditureType, GroupLastSuccessAccountPage} from "@/config/store";
 import {handleRecordSuccessSaveDate} from "@/utils/index";
 
 
@@ -162,7 +162,11 @@ function Expenditure(props: BookkeepingProps) {
       setIsPickType(false)
     }
   }
-
+  const handlePickerDelete = id => {
+    if (id === typeData.id) {
+      setTypeData({id: '', name: ''})
+    }
+  }
   return (
     <View>
       <ContentInput type='money' title='金额' change={userUpdatePostData} value={postData.money}/>
@@ -177,6 +181,7 @@ function Expenditure(props: BookkeepingProps) {
         set={(data) => userChangePickerType(data)}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
+        onDelete={(id) => handlePickerDelete(id)}
       />
       }
       <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>

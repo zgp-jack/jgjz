@@ -1,8 +1,8 @@
 import Taro, { useEffect, useState, useDidShow } from '@tarojs/taro'
 import ListProvider from '@/components/list_provider'
+import { Block, View } from '@tarojs/components'
 import useList from '@/hooks/list'
 import getFlowlists from '@/pages/work_team_bookkeeping/team_record/api'
-import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import { GetWorkFlowParams, FlowLists } from './index.d'
 import './index.scss'
@@ -64,12 +64,17 @@ export default function FlowList({ currentId=4, params='',touchBottom, workNote}
         hasmore={hasmore}
         length={list.length}
       >
-        {(currentId == 1 || currentId == 2) &&
-          <WorkCountDay list={flowList} type={Number(currentId)}></WorkCountDay>}
-        {(currentId == 3 || currentId == 4 || currentId == 5) &&
-          <WorkMoneyBorrowing list={flowList}
-            type={Number(currentId)}
-          ></WorkMoneyBorrowing>}
+      <View className="flow-list-item">
+        {flowList.map(p => (
+          <Block key={p.id}>
+            <View className="flow-list-item">
+              {/* 如果是  借支、 支出 */}
+              {(p.business_type == 4 || p.business_type == 5) &&
+                <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+            </View>
+          </Block>
+        ))}
+      </View>
       </ListProvider>
   )
 }

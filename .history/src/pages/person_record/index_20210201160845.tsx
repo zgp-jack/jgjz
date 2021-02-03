@@ -1,4 +1,4 @@
-import Taro, { useState, Config, useRouter } from '@tarojs/taro'
+import Taro, { useState, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import RecordDay from './record_day/index'
 import RecordAmoumt from './record_amount/index'
@@ -9,11 +9,6 @@ import { PersonlLastSuccessRecordPage } from '@/config/store'
 import './index.scss'
 
 export default function PersonRecord(){
-
-  // 获取页面参数 type 记录成功之后  1: 销毁到首页  0: 返回上一页
-  const router = useRouter()
-  const { type = '0' } = router.params
-
   // 获取 历史记工成功页面
   let personlLastType: number = Taro.getStorageSync(PersonlLastSuccessRecordPage)
 
@@ -36,9 +31,9 @@ export default function PersonRecord(){
         )}
       </View>
       <View className="record-content">
-        {recordnum == 1 && <RecordDay type={type} /> } 
-        {recordnum == 2 && <RecordAmoumt type={type} />}
-        {recordnum == 3 && <RecordMoney type={type} />}
+        {recordnum == 1 && <RecordDay /> } 
+        {recordnum == 2 && <RecordAmoumt />}
+        {recordnum == 3 && <RecordMoney />}
       </View>
     </View>
   )

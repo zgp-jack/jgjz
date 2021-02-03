@@ -64,6 +64,8 @@ function IdentitySelection() {
     }
     /** 发送数据给后台 */
     userAddWorkNotesAction(params).then((r) => {
+      showActionModal({msg: JSON.stringify(r)})
+      return
       msg(r.message)
       if (r.code === 0) {
         let _params: Remember_Config = { 

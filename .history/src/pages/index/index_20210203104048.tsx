@@ -138,7 +138,7 @@ const Remember = () => {
     }
   })
   useEffect(() => {
-    if (user.login && !showLogin && !accountBookInfo.id){
+    if(user.login && !accountBookInfo.id){
       getWorkNotes().then(res => {
         if (res.code === 0) {
           let mydata = res.data

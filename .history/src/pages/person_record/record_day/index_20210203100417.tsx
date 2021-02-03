@@ -8,7 +8,7 @@ import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { PersonlLastSuccessRecordPage, PersonlWorkdayHistoryGroupLeader } from '@/config/store'
-import msg, { showBackModal,showActionModal } from '@/utils/msg'
+import msg, { showBackModal } from '@/utils/msg'
 import { getTodayDate,handleRecordSuccessSaveDate } from '@/utils/index'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
@@ -115,10 +115,7 @@ function RecordDay({type}:{type: string}) {
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         handleRecordSuccessSaveDate(params.business_time)
         if(type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
+          Taro.reLaunch({url: INDEXPAGE})
         }else{
           showBackModal(res.message)
         }

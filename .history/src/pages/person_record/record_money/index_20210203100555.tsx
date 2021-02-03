@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, eventCenter, showModal } from '@tarojs/taro'
+import Taro, { useState, useEffect, eventCenter } from '@tarojs/taro'
 import { View, Button, Picker } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import PickerDate from '@/components/picker_date'
@@ -11,7 +11,7 @@ import AccountBookInfo from '@/store/account'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import { ADDRESSBOOKALONEPAGE, INDEXPAGE } from '@/config/pages'
 import { PersonlMoneyHistoryGroupLeader, PersonlLastSuccessRecordPage } from '@/config/store'
-import msg, { showBackModal, showActionModal } from '@/utils/msg'
+import msg, { showBackModal } from '@/utils/msg'
 import userAddRecordAction from '../api'
 import { validNumber } from '@/utils/v'
 import classifyItem from '@/store/classify/inter.d'
@@ -93,10 +93,7 @@ function RecordMoney({type}:{type: string}) {
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
         handleRecordSuccessSaveDate(params.business_time)
         if(type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
+          Taro.reLaunch({url: INDEXPAGE})
         }else{
           showBackModal(res.message)
         }

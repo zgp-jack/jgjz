@@ -8,15 +8,15 @@ import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import { AddressBookConfirmEvent } from '@/config/events'
 import { PersonlLastSuccessRecordPage, PersonlWorkdayHistoryGroupLeader } from '@/config/store'
-import msg, { showBackModal,showActionModal } from '@/utils/msg'
+import msg, { showBackModal } from '@/utils/msg'
 import { getTodayDate,handleRecordSuccessSaveDate } from '@/utils/index'
 import userAddRecordAction from '../api'
 import classifyItem from '@/store/classify/inter.d'
-import { ADDRESSBOOKALONEPAGE, INDEXPAGE } from '@/config/pages'
+import { ADDRESSBOOKALONEPAGE } from '@/config/pages'
 import WorkDayComponent from '@/components/work_day'
 import './index.scss'
 
-function RecordDay({type}:{type: string}) {
+function RecordDay() {
   // 获取历史班组长数据
   let leaderInfo: classifyItem = Taro.getStorageSync(PersonlWorkdayHistoryGroupLeader)
   // 记工天 是否选中上班更多
@@ -113,15 +113,8 @@ function RecordDay({type}:{type: string}) {
           Taro.removeStorageSync(PersonlWorkdayHistoryGroupLeader)
         }
         Taro.setStorageSync(PersonlLastSuccessRecordPage, params.business_type)
+        showBackModal(res.message)
         handleRecordSuccessSaveDate(params.business_time)
-        if(type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
-        }else{
-          showBackModal(res.message)
-        }
       } else {
         msg(res.message)
       }

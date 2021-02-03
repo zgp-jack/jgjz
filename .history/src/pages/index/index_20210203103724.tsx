@@ -8,7 +8,6 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import RememberStore from "@/store/business";
 import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
-import getWorkNotes from '@/pages/account_book_list/api'
 import {IMGCDNURL} from "@/config/index";
 import {enterTheRecordBook, getTodayDate} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
@@ -32,7 +31,7 @@ const Remember = () => {
   const _user = useLocalStore(() => User)
   const {businessType} = rememberStore
   const {user} = _user
-  const { accountBookInfo, setAccountBoookInfo} = _accountBookInfo
+  const {accountBookInfo} = _accountBookInfo
   const recordSuccessSaveDate = Taro.getStorageSync(RecordSuccessSaveDate)
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
@@ -138,20 +137,7 @@ const Remember = () => {
     }
   })
   useEffect(() => {
-    if (user.login && !showLogin && !accountBookInfo.id){
-      getWorkNotes().then(res => {
-        if (res.code === 0) {
-          let mydata = res.data
-          if (mydata.length) {
-            // 储存mobx
-            setAccountBoookInfo(mydata[0])
-          } else {
-            Taro.redirectTo({
-              url: '/pages/identity_selection/index?type=1'
-            })
-          }
-        }
-      })
+    if(user.login && !accountBookInfo.id){
       Taro.redirectTo({
         url: '/pages/identity_selection/index?type=1'
       })

@@ -7,18 +7,18 @@ import BorrowPostData from './inter.d'
 import {AddressBookConfirmEvent} from '@/config/events'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import {ADDRESSBOOKALONEPAGE, INDEXPAGE} from '@/config/pages'
+import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import { PersonlBorrowHistoryGroupLeader, PersonlBorrowHistoryClassifyType, PersonlLastSuccessAccountPage } from '@/config/store'
 import PickerLeader from '@/components/picker_leader'
 import PickerDate from '@/components/picker_date'
 import {validNumber} from '@/utils/v'
-import msg, {showBackModal,showActionModal} from '@/utils/msg'
+import msg, {showBackModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
 import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
 import './index.scss'
 import userAddBorrowAction from '@/pages/person_borrowing/api'
 
-function Borrow({type}:{type: string}) {
+function Borrow() {
   // 获取记工本数据
   const localStore = useLocalStore(() => AccountBookInfo);
   const {accountBookInfo} = localStore
@@ -116,15 +116,8 @@ function Borrow({type}:{type: string}) {
           Taro.removeStorageSync(PersonlBorrowHistoryGroupLeader)
         }
         Taro.setStorageSync(PersonlLastSuccessAccountPage, params.business_type)
+        showBackModal(res.message)
         handleRecordSuccessSaveDate(params.business_time)
-        if (type == '1'){
-          showActionModal({
-            msg: res.message,
-            success: () => Taro.reLaunch({ url: INDEXPAGE })
-          })
-        }else{
-          showBackModal(res.message)
-        }
       } else {
         msg(res.message)
       }

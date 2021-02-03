@@ -46,6 +46,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
       } else {
         _data = {...filterData, group_leader: data}
       }
+      console.log(_data)
       initData(_data)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
@@ -61,6 +62,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
       start_business_time: startDates.length === 3 ? start_business_time : start_business_time + '-01',
       end_business_time: endDates.length === 3 ? end_business_time : handleGetEndDay(start_business_time)
     }
+    console.log(_data)
     setFilterData(JSON.parse(JSON.stringify(_data)))
   }
   const handleGetEndDay = (yearAndMonth) => {
@@ -181,8 +183,8 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
               </View>
             </View>
             {/*班组账本选择工友*/}
-            {!props.personOrGroup && <View className="filter-block-row filter-block-row-small"
-              onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_GROUP_LEAVE)}>
+            {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
+                                          onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_GROUP_LEAVE)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择工友</View>
                 <View className="filter-picker-value">
@@ -192,7 +194,7 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
               </View>
             </View>}
             {/*个人账本筛选选择班组长*/}
-            {props.personOrGroup && <View className="filter-block-row filter-block-row-small"
+            {!props.personOrGroup && <View className="filter-block-row filter-block-row-small"
                                            onClick={() => handleGoToAddressBook(ADDRESSBOOKTYPE_ALONE_DEL)}>
               <View className="filter-coworkers">
                 <View className="filter-block-row-title">选择班组长</View>

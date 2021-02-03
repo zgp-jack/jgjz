@@ -234,7 +234,7 @@ const Remember = () => {
     const dates = yearAndMonth.split('-')
 
     if (dates[0] == year && dates[1] == month) {
-      return yearAndMonth + '-' + day
+      return yearAndMonth + '-' + (day < 10 ? ('0' + day) : day)
     } else {
       const endDay = new Date(dates[0], dates[1], 0).getDate()
       return yearAndMonth + '-' + endDay

@@ -22,6 +22,7 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   let { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
+  console.log("上一个页面传过来的选中数据",data)
   const [routerData,setRouterData] = useState<{id:number,name:string}>({id:0,name:''})
   // 不通的type显示不同的页面标题
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
@@ -374,7 +375,6 @@ function AddressBook() {
       if (res.code != 0) {
         return
       }
-
       setIsShowEdit(false)
       /** 所有工友数据 */
       let newList: ADDRESS_BOOK_LIST[] = JSON.parse(JSON.stringify(list))
@@ -391,6 +391,21 @@ function AddressBook() {
           }
         })
         setList(newList)
+        //重新搜索
+        let _lists: PERSON_DATA[] = []
+        newList.forEach(item => {
+          let items: PERSON_DATA[] = item.data
+          for (let i = 0; i < items.length; i++) {
+            let data: PERSON_DATA = items[i]
+            if (data.tel == null) {
+              data.tel = ''
+            }
+            if (data.name.indexOf(value) !== -1 || data.tel.indexOf(value) !== -1) {
+              _lists = [..._lists, data]
+            }
+          }
+        })
+        setFilterList(_lists)
         return
       }
       /** 现有的字母表 */
@@ -398,7 +413,6 @@ function AddressBook() {
       newList.map((item) => {
         modernLetter.push(item.name_py)
       })
-
       /** 如果name_py没有改变 */
       if (res.data.name_py == editItemData.name_py) {
         newList.map((Pitem, Pindex) => {
@@ -570,11 +584,6 @@ function AddressBook() {
         })
       })
     })
-  }
-  /** 显示修弹窗 */
-  const editwork = (editData: PERSON_DATA) => {
-    setEditItemData(editData)
-    setIsShowEdit(true)
   }
   // 用户搜索操作
   const userSearchAction = (val: string) => {
@@ -864,7 +873,7 @@ function AddressBook() {
       {isShowEdit && <PromptBox
         titleText="修改工友"
         confirmText="确定"
-        titleButtonText={type == ADDRESSBOOKTYPE_LEAVE ? "离场" : (editItemData.is_self == 1 || editItemData.id == routerData.id ? (editItemData.id == routerData.id ? '已选中':'') : "删除")}
+        titleButtonText={type == ADDRESSBOOKTYPE_LEAVE ? "离场" : (editItemData.is_self == 1 || editItemData.id == routerData.id || editItemData.is_in_work_note ? (editItemData.id == routerData.id ? '已选中':'') : "删除")}
         inputGroup={[
           { name: 'name', title: "姓名（必填）", placeholder: '请输入对方的姓名', value: editItemData.name, maxlength: 20, type: 'text', disabled: editItemData.id == routerData.id ? true : false },
           { name: 'tel', title: "电话号码", placeholder: '请输入对方的电话号码(可不填)', value: editItemData.tel, maxlength: 11, disabled: editItemData.is_self == 1 || editItemData.id == routerData.id ?true:false,type:"number" }

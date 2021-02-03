@@ -672,14 +672,14 @@ function AddressBook() {
       work_note: accountBookInfo.id.toString(),
       action: 'note_workers'
     }
+    // 拷贝已选中的数据
+    let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
+    //已选中工友的id
+    let ids: number[] = []
+    newSelectd.map(item => {
+      ids.push(item.id)
+    })
     if (!id) {
-      // 拷贝已选中的数据
-      let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
-      //已选中工友的id
-      let ids: number[] = []
-      newSelectd.map(item => {
-        ids.push(item.id)
-      })
       params.worker_ids = ids.toString()
     } else {
       params.worker_ids = id.toString()
@@ -728,8 +728,10 @@ function AddressBook() {
               }
             })
             setFilterList(_lists)
+            eventCenter.trigger(AddressBookConfirmEvent, ids)
           } else {
             //批量离场成功-返回上一页
+            eventCenter.trigger(AddressBookConfirmEvent, ids)
             Taro.navigateBack()
           }
         })

@@ -199,9 +199,15 @@ const Remember = () => {
     if (recordSuccessSaveDate) {
       // params.start_business_time = recordSuccessSaveDate
       const dates = recordSuccessSaveDate.split('-')
-      setFilterYear(parseInt(dates[0]))
-      setFilterMonth(parseInt(dates[1]))
-      Taro.removeStorageSync(RecordSuccessSaveDate)
+      let recordYear = parseInt(dates[0])
+      let recordMonth = parseInt(dates[1])
+      if (recordYear == filterYear && recordMonth == filterMonth) {
+        initParams()
+      } else {
+        setFilterYear(recordYear)
+        setFilterMonth(recordMonth)
+        Taro.removeStorageSync(RecordSuccessSaveDate)
+      }
       return;
     }
     if (reloadList) {
@@ -213,11 +219,6 @@ const Remember = () => {
   const initParams = () => {
     let start_business_time = filterYear + '-' + filterMonth
     const end_business_time = getNextYearMonth()
-    const _end_business_time = end_business_time.split('-')
-    console.log(_end_business_time)
-    console.log(filterMonth)
-    console.log(filterYear)
-    console.log(_end_business_time)
     setCurrentYearMonth(start_business_time)
     setNextYearMonth(end_business_time)
     let data = {
@@ -541,7 +542,7 @@ const Remember = () => {
                 &&
                 <View className="statistics">
                   <View className="statistics-bookkeeping statistics-bookkeeping-unit">
-                    {((!isFilter && counts.work_money != '0.00' && counts.work_money != '0') || (isFilter && listTypeLength[2])) &&
+                    {listTypeLength[2] &&
                     <View className="bookkeeping-row wage-meter">
                       <View className="bookkeeping-content">
                         <Image src={IMGCDNURL + 'lxy/ic_gq.png'} className="statistics-icon"/>
@@ -554,7 +555,7 @@ const Remember = () => {
                       </View>
                     </View>}
                     {
-                      ((!isFilter && counts.count_unit.length && counts.count_unit[0].count != 0) || (isFilter && listTypeLength[1])) &&
+                      listTypeLength[1] &&
                       counts.count_unit.map((item, i) => (
                         <View className="bookkeeping-row wage-meter" key={'id' + i}>
                           <View className="bookkeeping-content">

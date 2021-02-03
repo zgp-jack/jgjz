@@ -54,7 +54,7 @@ function WorkMoneyBorrowing({ list = [], type = 1}: PropsData) {
                 </View>
                 <View className='bokkeeping-list-right'>
                   <View className='bokkeeping-list-count'>
-                    <View className='bokkeeping-list-money-text'>¥{item.money || '0.00'}</View>
+                    <View className='bokkeeping-list-money-text'>¥{item.money ? item.money : '0.00'}</View>
                   </View>
                   <Image className='bokkeeping-list-count-image' src={`${IMGCDNURL}common/arrow-right.png`}></Image>
                 </View>

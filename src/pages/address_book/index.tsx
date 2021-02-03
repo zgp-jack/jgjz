@@ -60,7 +60,7 @@ function AddressBook() {
       /** 获取所有通讯录列表 */
       getWorkers(type == ADDRESSBOOKTYPE_ALONE_DEL ? { action: "select" } : { work_note: accountBookInfo.id }).then((res) => {
         let newListData = res.data
-        if (data){
+        if (data && type != ADDRESSBOOKTYPE_ALONE){
           let newData: PERSON_DATA[] = JSON.parse(data)
           //工友总人数
           let listLen = 0
@@ -742,6 +742,10 @@ function AddressBook() {
     // 拷贝已选中的数据
     let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
     //如果type是groupAdd 需要在通讯录发接口
+    if (newSelectd.length < 1){
+      Taro.navigateBack()
+      return
+    }
     if (type == ADDRESSBOOKTYPE_GROUP_ADD) {
       let params: ADD_NOTE_WORKERS_PARAMS = {
         worker_ids: '',

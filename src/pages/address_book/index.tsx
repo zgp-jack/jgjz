@@ -710,11 +710,6 @@ function AddressBook() {
   const submitSelect = () => {
     // 拷贝已选中的数据
     let newSelectd: PERSON_DATA[] = JSON.parse(JSON.stringify(selectd))
-    // 已选中是否有数据
-    // if (newSelectd.length < 1) {
-    //   msg("最少选中一个工友")
-    //   return
-    // }
     //如果type是groupAdd 需要在通讯录发接口
     if (type == ADDRESSBOOKTYPE_GROUP_ADD) {
       let params: ADD_NOTE_WORKERS_PARAMS = {
@@ -738,6 +733,7 @@ function AddressBook() {
     } else if (type == ADDRESSBOOKTYPE_LEAVE) {
       leave()
     }else{
+      debugger
       eventCenter.trigger(AddressBookConfirmEvent, selectd)
       Taro.navigateBack()
     }

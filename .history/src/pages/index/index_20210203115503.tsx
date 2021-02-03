@@ -22,7 +22,7 @@ import Versionlimit from '@/components/version_limit/index'
 import {OldVersionLimit, RecordSuccessSaveDate} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
 import './index.scss'
-import {INDEXPAGE} from '@/config/pages';
+import { INDEXPAGE } from '@/config/pages';
 
 
 const Remember = () => {
@@ -32,7 +32,7 @@ const Remember = () => {
   const _user = useLocalStore(() => User)
   const {businessType} = rememberStore
   const {user} = _user
-  const {accountBookInfo, setAccountBoookInfo} = _accountBookInfo
+  const { accountBookInfo, setAccountBoookInfo} = _accountBookInfo
   const recordSuccessSaveDate = Taro.getStorageSync(RecordSuccessSaveDate)
   Taro.setNavigationBarTitle({title: (accountBookInfo.identity == 2 ? '个人' : '班组') + '记工账本'})
   Taro.setNavigationBarColor({backgroundColor: '#0099FF', frontColor: '#ffffff'})
@@ -138,7 +138,7 @@ const Remember = () => {
     }
   })
   useEffect(() => {
-    if (user.login && !showLogin && !accountBookInfo.id) {
+    if (user.login && !showLogin && !accountBookInfo.id){
       getWorkNotes().then(res => {
         if (res.code === 0) {
           let mydata = res.data
@@ -151,6 +151,9 @@ const Remember = () => {
             })
           }
         }
+      })
+      Taro.redirectTo({
+        url: '/pages/identity_selection/index?type=1'
       })
     }
     if (accountBookInfo.id && user.login && noLogin) {
@@ -441,8 +444,8 @@ const Remember = () => {
                   :
                   <View className="filter-start-end-date">
                     <View
-                      className="filter-start-date">开始时间：{handleSplitDate(filterData.start_business_time, true)}</View>
-                    <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time, true)}</View>
+                      className="filter-start-date">开始时间：{handleSplitDate(filterData.start_business_time)}</View>
+                    <View className="filter-end-date">截止时间：{handleSplitDate(filterData.end_business_time)}</View>
                   </View>}
                 <View className={"filter-btn" + (isFilter ? ' filter-btn-active' : '')}
                       onClick={() => {

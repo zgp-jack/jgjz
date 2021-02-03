@@ -37,6 +37,8 @@ function RecordAmoumt({type}:{type: string}) {
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
   // 是否显示选择分项
   const [showTypePicker, setShowTypePicker] = useState<boolean>(false)
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 记工量提交数据
   const [postData, setPostData] = useState<RecordAmountPostData>({
     business_type: 1,
@@ -166,7 +168,7 @@ function RecordAmoumt({type}:{type: string}) {
 
   return (<View>
     <ContentInput title='工量' maxLength={3} value={postData.unit_num} change={userUpdatePostData} type="unit_num" />
-    <PickerUnit selected={UnitInfo-1} set={(data) => userUpdatePostData(data.id,'unit')} />
+    <PickerUnit setIsPickerMark={setIsPickerMark} selected={UnitInfo-1} set={(data) => userUpdatePostData(data.id,'unit')} />
     {isPickerSubitem &&
       <PickerSubitem
         value={typeData}
@@ -176,6 +178,7 @@ function RecordAmoumt({type}:{type: string}) {
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         isRecord = {true}
+        setIsPickerMark={setIsPickerMark}
       />
     }
     {isPickerDate && <PickerDate
@@ -185,14 +188,14 @@ function RecordAmoumt({type}:{type: string}) {
       dateText={dateText}
     />}
     {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader} />}
-    <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')} />
+    {isPickerMark && <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')} />}
     <View className="person-record-component">
       {!isPickerDate && 
       <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >
           <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>
         </Picker>}
       {!isPickerLeader && <View className="person-record-component-item" onClick={userTapGroupLeaderBtn}>班组长</View>}
-      {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
+      {!isPickerSubitem && <View className="person-record-component-item" onClick={() => { setIsPickerMark(false);setIsPickSubitem(true); setShowTypePicker(true) }}>分项</View>}
     </View>
     <View className="person-record-btn">
       <Button className="person-record-save" onClick={() => userPostAcion()}>确认记工</Button>

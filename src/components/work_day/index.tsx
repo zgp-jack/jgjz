@@ -16,7 +16,8 @@ export default function WorkDayComponent({
   isClose = false,
   close,
   isMoreTime = false,
-  closeMoreTime
+  closeMoreTime,
+  setIsPickerMark
 }: WorkDayComponentProps){
 
   // 是否显示picker
@@ -66,6 +67,7 @@ export default function WorkDayComponent({
       onClick={(e) => {
         e.preventDefault();
         setShow(true)
+        setIsPickerMark && setIsPickerMark(false)
       }}
       >{isSelect ? value.text : '0小时'}
         <Text className="worktime-select-time"></Text>
@@ -73,13 +75,13 @@ export default function WorkDayComponent({
       {isClose && <View className="overtime-icon" onClick={close}></View>}
       {show && 
       <MoreWorkTime
-        set={(data, type) => { change(data, type);setShow(false);} }
+        set={(data, type) => { change(data, type); setShow(false); setIsPickerMark && setIsPickerMark(true)} }
         data={type ? workTimePickerData : data}
         value={value.value}
         hasOverBtn={(type == 'over')}
         title={title}
         isSelect={isSelect}
-        WorktimeCancle={() => { setShow(false);closeMoreTime && closeMoreTime()}} 
+        WorktimeCancle={() => { setShow(false); closeMoreTime && closeMoreTime(); setIsPickerMark && setIsPickerMark(true)}} 
       />}
 
     </View>

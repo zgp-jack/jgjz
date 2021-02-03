@@ -40,6 +40,8 @@ function Borrow({type}:{type: string}) {
   const [typeData, setTypeData] = useState<classifyItem>(classitify ? classitify : {id: '', name: ''})
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<classifyItem>(leaderInfo ? leaderInfo : { id: '', name: '' })
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 借支提交数据
   const [postData, setPostData] = useState<BorrowPostData>({
     business_type: 4,
@@ -186,6 +188,7 @@ function Borrow({type}:{type: string}) {
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
         isRecord = {true}
+        setIsPickerMark={setIsPickerMark}
       />
       }
 
@@ -197,9 +200,10 @@ function Borrow({type}:{type: string}) {
         dateText={dateText}
       />}
       {isPickerLeader && <PickerLeader leader={groupLeader} DeletePickerLeader={DeletePickerLeader}/>}
-      <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>
+      {isPickerMark && <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>}
       <View className="person-record-component">
         {!isPickerType && <View className="person-record-component-item" onClick={() => {
+          setIsPickerMark(false)
           setIsPickType(true);
           setShowTypePicker(true)
         }}>分类</View>}

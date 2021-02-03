@@ -13,7 +13,8 @@ export default function PickerUnitWare({
                                          img = `${IMGCDNURL}zgp/unit_icon.png`,
                                          title = '单位',
                                          selected = 0,
-                                         set
+                                         set,
+                                         setIsPickerMark
                                        }: PickerUnitProps) {
   // 是否显示PickerUnit
   const [isPickerUnit, setIsPickerUnit] = useState<boolean>(false)
@@ -49,16 +50,18 @@ export default function PickerUnitWare({
   return (<View>
     <View className="person-record-overtime person-record-date" onClick={() => {
       setIsPickerUnit(true)
+      setIsPickerMark && setIsPickerMark(false)
     }}>
       {hideImg && <Image className="person-record-date-img" src={img}/>}
       <View className="person-record-modify-title person-record-date-title">{title}</View>
       <Text className="person-record-date-text">{selectUnit.value}</Text>
     </View>
     {isPickerUnit &&
-    <PickerUnit show={isPickerUnit} close={() => setIsPickerUnit(false)} value={unitdata} confirm={(data) => {
+      <PickerUnit show={isPickerUnit} close={() => { setIsPickerUnit(false); setIsPickerMark && setIsPickerMark(true)}} value={unitdata} confirm={(data) => {
       setIsPickerUnit(false);
       setSelectUnit(data);
       set(data)
+      setIsPickerMark && setIsPickerMark(true)
     }}/>}
   </View>)
 }

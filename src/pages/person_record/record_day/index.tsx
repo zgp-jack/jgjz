@@ -37,6 +37,8 @@ function RecordDay({type}:{type: string}) {
   const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
   // 是否显示班组长组件
   const [isPickerLeader, setIsPickerLeader] = useState<boolean>(!!leaderInfo)
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 记工天提交数据
   const [postData, setPostData] = useState<RecordDayPostData>({
     business_type: 2,
@@ -140,6 +142,7 @@ function RecordDay({type}:{type: string}) {
   }
   // 点击圆角加班时间
   const userTapOverTimeBtn = () => {
+    setIsPickerMark(false)
     setIsMoreTime(true)
     setIsOverTime(true)
   }
@@ -170,6 +173,7 @@ function RecordDay({type}:{type: string}) {
         value={workTime}
         isSelect={!isWrok}
         type='work'
+        setIsPickerMark={setIsPickerMark}
       />
       {isOverTime && <WorkDayComponent
         title={'加班时长'}
@@ -181,6 +185,7 @@ function RecordDay({type}:{type: string}) {
         close={() => userCloseOverTimePcker()}
         isMoreTime={isMoreTime}
         closeMoreTime={() => closeMoreTime()}
+        setIsPickerMark={setIsPickerMark}
       />}
     </View>
     {isPickerDate && <PickerDate
@@ -193,7 +198,7 @@ function RecordDay({type}:{type: string}) {
       setGroupLeader({id: '', name: ''});
       setIsPickerLeader(false)
     }}/>}
-    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>
+    {isPickerMark && <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')}/>}
     <View className="person-record-component">
       {!isPickerDate &&
       <Picker mode='date' value={postData.business_time} onChange={(e) => userChangePicker(e)} end={getTodayDate()} onCancel={() => setIsPickerDate(false)} >

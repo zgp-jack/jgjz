@@ -25,6 +25,8 @@ export default function ModifyWorkDay(){
   const [workTime, setWorkTime] = useState<WorkTimeType>({ value: '1', text: '一个工' })
   // 加班时长的数据
   const [overTime, setOverTime] = useState<WorkTimeType>({ value: '0', text: '无加班' })
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 提交工量数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -161,6 +163,7 @@ export default function ModifyWorkDay(){
         value={workTime}
         isSelect={!isWrok}
         type='work'
+        setIsPickerMark={setIsPickerMark}
       />
       <WorkDayComponent
         title={'加班时长'}
@@ -168,10 +171,11 @@ export default function ModifyWorkDay(){
         value={overTime}
         isSelect={!isOver}
         type='over'
+        setIsPickerMark={setIsPickerMark}
       />
     </View>
     <PickerLeader leader={groupLeader}  DeletePickerLeader={()=>userClearLeader()} />
-    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
+    {isPickerMark && <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />}
     <PickerDetail
       dateValue={data.busienss_time_string}
       submitValue={data.created_time_string}

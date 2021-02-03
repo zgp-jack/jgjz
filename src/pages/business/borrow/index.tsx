@@ -20,6 +20,8 @@ export default function BusinessBorrow() {
   const {id = ''} = router.params
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
     id: '',
@@ -155,10 +157,11 @@ export default function BusinessBorrow() {
       }}
       close={() => userClearPickerType()}
       set={(data) => userChangePickerType(data)}
+      setIsPickerMark={setIsPickerMark}
     />
     <PickerLeader leader={groupLeader} DeletePickerLeader={() => userClearLeader()} />
     
-    <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>
+    {isPickerMark && <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")}/>}
     <PickerDetail
       dateValue={data.busienss_time_string}
       submitValue={data.created_time_string}

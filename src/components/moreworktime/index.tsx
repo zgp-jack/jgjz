@@ -42,12 +42,12 @@ export default function MoreWorkTime({
                 <View className = {classnames({
                   "moreworktime-item": true,
                   "worktime-active": isSelect && (item.value === value)
-                })} key={item.value} onClick={(e) => { e.preventDefault();set(item, 'end'); }}>{item.text}</View>
+                })} key={item.value} onClick={(e) => { set(item, 'end');e.preventDefault();e.stopPropagation() }}>{item.text}</View>
               )}
             </View>
         </View>
         {hasOverBtn && <View className="no-over-time" >
-          <View className="no-over-time-btn" onClick={(e) => { e.preventDefault(); set(notOver,'first');}}>{notOver.text}</View>
+          <View className="no-over-time-btn" onClick={(e) => { e.preventDefault(); e.stopPropagation(); set(notOver,'first');}}>{notOver.text}</View>
         </View>}
       </View>
     )

@@ -7,13 +7,13 @@ import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
 import {ADDRESSBOOKALONEPAGE} from '@/config/pages'
 import {validNumber} from '@/utils/v'
-import msg, { showBackModal, showModal, showActionModal} from '@/utils/msg'
+import msg, {showBackModal, showModal, showActionModal} from '@/utils/msg'
 import classifyItem from '@/store/classify/inter.d'
 import userAddBorrowAction from '@/pages/work_team_bookkeeping/components/record_borrow/api'
 import ContentInput from '@/components/picker_input/index'
 import './index.scss'
 import BorrowPostData, {BookkeepingProps} from './inter.d'
-import {teamBorrowType,GroupLastSuccessAccountPage} from "@/config/store";
+import {teamBorrowType, GroupLastSuccessAccountPage} from "@/config/store";
 import {handleRecordSuccessSaveDate} from "@/utils/index";
 
 
@@ -161,6 +161,11 @@ function Borrow(props: BookkeepingProps) {
   const DeletePickerLeader = () => {
     setIsPickerLeader(false)
   }
+  const handlePickerDelete = id => {
+    if (id === typeData.id) {
+      setTypeData({id: '', name: ''})
+    }
+  }
   return (
     <View>
       <ContentInput title='金额' value={postData.money} change={userUpdatePostData} type="money"/>
@@ -176,6 +181,7 @@ function Borrow(props: BookkeepingProps) {
         }}
         show={showTypePicker}
         setShow={(bool: boolean) => setShowTypePicker(bool)}
+        onDelete={(id) => handlePickerDelete(id)}
       />
       }
       <PickerMark text={postData.note} set={(data) => userUpdatePostData(data, 'note')}/>

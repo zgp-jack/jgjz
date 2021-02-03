@@ -5,7 +5,7 @@ import { IMGCDNURL, ADDRESSBOOKTYPE_GROUP_ADD, ADDRESSBOOKTYPE_LEAVE } from '@/c
 import { AddressBookConfirmEvent } from '@/config/events'
 import PromptBox from '@/components/popup/index'
 import { editWordkerInfo } from '@/pages/address_book/api'
-import msg from '@/utils/msg'
+import msg, { showActionModal } from '@/utils/msg'
 import { InputValue } from '@/components/popup/index.d'
 import { WorkerData } from './index.d'
 import getWorkerList, { removePerson} from './api'
@@ -313,11 +313,23 @@ function RecordWork({ workerId, setWorkerId, workNote, startDate, currentId}: Re
   * @description 移除工友事件
   */
   const movePerson = () => {
-    removePerson({ workId: selectWorker.id, work_note: workNote}).then((res) => {
-      msg(res.message)
-      if (res.code == 0) {
-        setLoading(true)
-        setIsShowEdit(false)
+    let workerIdData = JSON.parse(JSON.stringify(workerId))
+    showActionModal({
+      msg: '确定要将此工友离场吗？',
+      showCancel: true,
+      success: function (res) {
+        if (res.confirm) {
+          removePerson({ workId: selectWorker.id, work_note: workNote }).then((res) => {
+            msg(res.message)
+            if (res.code == 0) {
+              let findIndex = workerIdData.findIndex((item: any) => item == selectWorker.id);
+              if (findIndex !== -1) workerIdData.splice(findIndex, 1);
+              setWorkerId(workerIdData)
+              setLoading(true)
+              setIsShowEdit(false)
+            }
+          })
+        }
       }
     })
   }

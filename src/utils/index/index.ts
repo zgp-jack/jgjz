@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-01-29 19:57:16
+ * @LastEditTime: 2021-02-03 17:15:49
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'
@@ -10,7 +10,7 @@ import {showModal} from '@/utils/msg';
 import {RECORD_WORK_DATA} from '@/pages/account_book_list/index.d'
 import {INDEXPAGE} from '@/config/pages'
 import userAddRecordAction from "@/pages/person_record/api";
-import {RecordSuccessSaveDate} from "@/config/store";
+import { RecordSuccessSaveDate, TeamBookkeepingTimeStorage, TeamWorkTimeStorage} from "@/config/store";
 
 /**
  * @name: objDeepCopy for jsxin
@@ -85,12 +85,14 @@ export function enterTheRecordBook(data: RECORD_WORK_DATA, type?: "record" | "bo
   // 判断是 record:记工 borrow:记账 还是 account:进入记工本
   if (type == 'record') {
     if (data.identity == 1) { // 班组记工
+      Taro.removeStorageSync(TeamWorkTimeStorage)
       url = '/pages/work_team_record/team_record/index'
     } else { // 个人记工
       url = '/pages/person_record/index'
     }
   } else if (type == 'borrow') {
     if (data.identity == 1) { // 班组记账
+      Taro.removeStorageSync(TeamBookkeepingTimeStorage)
       url = '/pages/work_team_bookkeeping/team_record/index'
     } else { // 个人记账
       url = '/pages/person_borrowing/index'

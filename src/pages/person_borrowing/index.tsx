@@ -8,7 +8,8 @@ import { PersonlLastSuccessAccountPage } from '@/config/store'
 import './index.scss'
 
 export default function PersonTally(){
-
+  Taro.setNavigationBarTitle({ title: '个人记账' })
+  Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
   // 获取 历史记工成功页面
   let personlLastType: number = Taro.getStorageSync(PersonlLastSuccessAccountPage)
   // 当前选中的tab

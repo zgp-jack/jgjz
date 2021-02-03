@@ -3,10 +3,8 @@ import {View, Button} from '@tarojs/components'
 import PickerMark from '@/components/picker_mark/index'
 import {observer, useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account'
-import {AddressBookConfirmEvent} from '@/config/events'
-import msg, { showBackModal, showModal, showActionModal } from '@/utils/msg'
-import {getTodayDate, handleRecordSuccessSaveDate} from '@/utils/index'
-import classifyItem from '@/store/classify/inter.d'
+import msg, { showActionModal } from '@/utils/msg'
+import {handleRecordSuccessSaveDate} from '@/utils/index'
 import WorkDayComponent from '@/components/work_day'
 import { GroupLastSuccessRecordPage } from '@/config/store'
 import userAddRecordAction from '../api'
@@ -25,15 +23,14 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
   // 上班时长的数据
   const [workTime, setWorkTime] = useState<WorkTimeType>({value: '1', text: '一个工'})
   // 加班时长的数据
-  const [overTime, setOverTime] = useState<WorkTimeType>({value: '0', text: '无加班'})
+  const [overTime, setOverTime] = useState<WorkTimeType>({value: '', text: '无加班'})
+  const [isMoreTime, setIsMoreTime] = useState<boolean>(false)
   // 是否显示加班时间
   const [isOverTime, setIsOverTime] = useState<boolean>(false);
   // 时间年月日
   const [dateText, setDateText] = useState<string>('')
   // 是否日期组件
   const [isPickerDate, setIsPickerDate] = useState<boolean>(true)
-  // 是否显示班组长组件
-  const [isPickerLeader, setIsPickerLeader] = useState<boolean>(false)
   // 记工天提交数据
   const [postData, setPostData] = useState<RecordDayPostData>({
     business_type: type,
@@ -107,6 +104,19 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
       setIsOver(type === 'first' ? true : false)
     }
   }
+  const onOverTime = () => {
+    setIsOverTime(true);
+    setIsMoreTime(true);
+  }
+
+
+  const closeMoreTime = () => {
+    if (!overTime.value){
+      setIsOverTime(false);
+    }
+  }
+  
+  
   return (<View>
     <View className="person-record-time">
       <WorkDayComponent
@@ -122,14 +132,16 @@ function RecordDay({workerId, type, businessTime}: PropsData) {
         isSelect={!isOver}
         type='over'
         isClose={true}
-        close={() => setIsOverTime(false)}
+        close={() => { setOverTime({ value: '', text: '无加班' }); setIsOverTime(false)}}
+        isMoreTime={isMoreTime}
+        closeMoreTime={closeMoreTime}
       />}
     </View>
     <PickerMark text={postData.note as string} set={(val) => userUpdatePostData(val, 'note')} />
     <View className="person-record-component">
       {!isPickerDate &&
       <View className="person-record-component-item" onClick={() => setIsPickerDate(true)}>{dateText}</View>}
-      {!isOverTime && <View className="person-record-component-item" onClick={() => setIsOverTime(true)}>加班时长</View>}
+      {!isOverTime && <View className="person-record-component-item" onClick={() => onOverTime()}>加班时长</View>}
     </View>
     <View className="person-record-btn">
       <Button className="person-record-save" onClick={userPostAcion}>确认记工</Button>

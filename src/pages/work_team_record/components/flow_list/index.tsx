@@ -1,5 +1,5 @@
 import Taro, { useEffect, useState, useDidShow, useReachBottom } from '@tarojs/taro'
-import { Block } from '@tarojs/components'
+import { Block, View } from '@tarojs/components'
 import ListProvider from '@/components/list_provider'
 import useList from '@/hooks/list'
 import getFlowlists from '@/pages/work_team_record/team_record/api'
@@ -77,12 +77,14 @@ export default function FlowList({
       >
       {flowList.map(p => (
           <Block key={p.id}>
-            {/* 如果是记工天 记工量 */}
-            {(p.business_type == 1 || p.business_type == 2) &&
-              <WorkCountDay list={[p]} type={p.business_type} />}
-            {/* 如果是 记工钱、 借支、 支出 */}
-            {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
-              <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+            <View className="flow-list-item">
+              {/* 如果是记工天 记工量 */}
+              {(p.business_type == 1 || p.business_type == 2) &&
+                <WorkCountDay list={[p]} type={p.business_type} />}
+              {/* 如果是 记工钱、 借支、 支出 */}
+              {(p.business_type == 3 || p.business_type == 4 || p.business_type == 5) &&
+                <WorkMoneyBorrowing list={[p]} type={p.business_type} />}
+            </View>
           </Block>
       ))}
     </ListProvider>

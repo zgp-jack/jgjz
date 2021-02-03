@@ -12,17 +12,20 @@ import {useLocalStore} from '@tarojs/mobx'
 import AccountBookInfo from "@/store/account";
 import { TypeAction, publishStatus} from '@/pages/work_team_record/team_record/index.d'
 import {getTodayDate} from '@/utils/index'
-import {GroupLastSuccessRecordPage, GroupLastSuccessAccountPage} from '@/config/store'
+import {GroupLastSuccessRecordPage, GroupLastSuccessAccountPage, TeamWorkTimeStorage} from '@/config/store'
 import './index.scss'
 
 
 export default function RecordWork() {
-
   // 获取 历史记工成功页面
   let personlLastType: number = Taro.getStorageSync(GroupLastSuccessRecordPage)
+  // 选择时间缓存
+  let teamWorkTimeStorage = Taro.getStorageSync(TeamWorkTimeStorage)
   /*获取账本数据*/
   const _accountBookInfo = useLocalStore(() => AccountBookInfo)
   const {accountBookInfo} = _accountBookInfo
+  Taro.setNavigationBarTitle({ title: '班组记工' })
+  Taro.setNavigationBarColor({ backgroundColor: '#0099FF', frontColor: '#ffffff' })
   // 获取stroe数据
   const localStore = useLocalStore(() => RememberTypeItem);
   // 获取remebertype数据
@@ -41,7 +44,7 @@ export default function RecordWork() {
    * @return string
    * @description 滑动滑块的时候切换当前的index
    */
-  let initTime = (time: string): string[] => {
+  const initTime = (time: string): string[] => {
     /**检查字符串格式是哪种  / 或者 | */
     let result = time.search("/")
     /**字符串转换成成数组*/
@@ -52,12 +55,45 @@ export default function RecordWork() {
     /**返回处理日期字符串*/
     return [`${timeArray[0]}年${timeArray[1]}月${timeArray[2]}日`, `${timeArray[0]}-${timeArray[1]}-${timeArray[2]}`, `${timeArray[0]}/${timeArray[1]}/${timeArray[2]}`]
   }
+  // 初始化选择时间
+  const initSelectTime =  (id:number): string =>{
+    let dataStr = '' || initTime(getTodayDate())[1]
+    if (teamWorkTimeStorage) {
+      if (id == 1) {
+        let workDayTime = teamWorkTimeStorage.workDayTime;
+        if (workDayTime) {
+          dataStr = initTime(workDayTime)[1]
+        }else{
+          dataStr = initTime(getTodayDate())[1]
+        }
+      }
+      if (id == 2) {
+        let workCountTime = teamWorkTimeStorage.workCountTime;
+        if (workCountTime) {
+          dataStr = initTime(workCountTime)[1]
+        } else {
+          dataStr = initTime(getTodayDate())[1]
+        }
+      }
+      if (id == 3) {
+        let workMoneyTime = teamWorkTimeStorage.workMoneyTime;
+        if (workMoneyTime) {
+          dataStr = initTime(workMoneyTime)[1]
+        } else {
+          dataStr = initTime(getTodayDate())[1]
+        }
+      }
+    }else{
+      dataStr = initTime(getTodayDate())[1]
+    }
+    return dataStr
+  }
   //定义当前时间
   const nowTime = initTime(getTodayDate())[1]
 
   // 时间选择文本显示
-  const [timeText, setTimeText] = useState<string>('');
-  const [startDate, setStartDate] = useState<string>(nowTime)//筛选开始日期
+  const [timeText, setTimeText] = useState<string>(initTime(initSelectTime(currentId))[0]);
+  const [startDate, setStartDate] = useState<string>(initSelectTime(currentId))//筛选开始日期
 
   const [workerId, setWorkerId] = useState<number[]>([])
 
@@ -70,18 +106,30 @@ export default function RecordWork() {
   })
 
   useEffect(() => {
+    setStartDate(initSelectTime(currentId));
+    setTimeText(initTime(initSelectTime(currentId))[0])
+  },[currentId])
+
+
+  useEffect(() => {
     console.log('workerId父级', workerId)
   }, [workerId])
 
-  useEffect(() => {
-    /**获取本地格式化日期 eg:2021/01/21*/
-    let timeNow = getTodayDate()
-    /**按照格式初始化时间*/
-    let timeStr = initTime(timeNow)[0];
-    setTimeText(timeStr)
-  }, [])
  
 
+  const changeTimeStorage = (time:string,id: number) => {
+    let teamWorkTimeData = teamWorkTimeStorage || {};
+    if (id == 1) {
+      teamWorkTimeData['workDayTime'] = time;
+    }
+    if (id == 2) {
+      teamWorkTimeData['workCountTime'] = time;
+    }
+    if (id == 3) {
+      teamWorkTimeData['workMoneyTime'] = time;
+    }
+    Taro.setStorageSync('teamWorkTimeStorage', teamWorkTimeData)
+  }
 
   /**
    * @name: changeTime
@@ -93,7 +141,7 @@ export default function RecordWork() {
     let timeStr = initTime(e.detail.value)[0]
     setTimeText(timeStr)
     setStartDate(e.detail.value)
-    console.log(e.detail.value)
+    changeTimeStorage(e.detail.value, currentId)
   }
  
 
@@ -106,9 +154,6 @@ export default function RecordWork() {
   const changeTable = (index: number) => {
     /**设置当前选中最新index*/
     setCurrentId(Number(types[index].id))
-    /**传递新的参数，刷新页面*/
-    setTimeText(initTime(nowTime)[0])
-    setStartDate(nowTime)
     SetTypeItem(1)
   }
 

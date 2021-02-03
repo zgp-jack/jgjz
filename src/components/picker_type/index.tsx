@@ -77,7 +77,7 @@ function PickerType({
   // 用户新增 请求
   const userEditData = (data) => {
     if (!data.name) {
-      Taro.showToast({title: '请输入' + (id ? '分类' : '分项') + '名称', icon: 'none'})
+      Taro.showToast({title: '请输入分类名称', icon: 'none'})
       return
     }
     let value: string = data[inputName]

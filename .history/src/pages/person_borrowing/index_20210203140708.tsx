@@ -1,4 +1,4 @@
-import Taro, { useState, Config, useRouter, useEffect } from '@tarojs/taro'
+import Taro, { useState, Config, useRouter } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import Borrow from './components/borrow'
 import Expenditure from './components/expenditure'

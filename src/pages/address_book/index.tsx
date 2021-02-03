@@ -557,7 +557,7 @@ function AddressBook() {
   /** 删除事件 */
   const deletPerson = () => {
     //如果需要删除的这一条已经被选中  不做任何操作
-    if (editItemData.id == routerData.id){
+    if (editItemData.id == routerData.id || editItemData.is_in_work_note){
       return
     }
     let workId = {

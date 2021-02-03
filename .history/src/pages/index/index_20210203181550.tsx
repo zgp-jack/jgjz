@@ -10,7 +10,7 @@ import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
 import getWorkNotes from '@/pages/account_book_list/api'
 import {IMGCDNURL} from "@/config/index";
-import { enterTheRecordBook, getTodayDate, getRandomShareInfo} from '@/utils/index'
+import {enterTheRecordBook, getTodayDate} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team_record/team_record/index.d'
@@ -22,6 +22,7 @@ import Versionlimit from '@/components/version_limit/index'
 import {OldVersionLimit, RecordSuccessSaveDate} from '@/config/store'
 import VERSINLIMIT from '@/components/version_limit/inter.d'
 import './index.scss'
+import { getRandomShareInfo } from '@/utils/index';
 
 
 const Remember = () => {

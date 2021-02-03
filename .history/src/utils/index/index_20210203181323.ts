@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-21 13:44:17
  * @LastEditors: jsxin
- * @LastEditTime: 2021-02-03 18:14:27
+ * @LastEditTime: 2021-02-03 18:13:23
  * @Description: 常用助手函数
  */
 import Taro from '@tarojs/taro'
@@ -124,9 +124,9 @@ export function handleRecordSuccessSaveDate(date: string) {
 
 /**
  * @name: getRandomShareInfo for jsxin
- * @params obj: UserShareInfo 分享的信息
- * @return UserShareInfo 获取自定义分享信息
- * @description 随机获取标题+图片，如果有传入的 就以 传入的为主
+ * @params source: T 要被拷贝的对象
+ * @return new source<T>
+ * @description 对象深拷贝
  */
 export function getRandomShareInfo(obj?: Partial<UserShareInfo>): UserShareInfo {
   let shareTitles = ['极简操作3秒记工，智能统计一目了然 | 鱼泡网']

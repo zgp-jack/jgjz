@@ -1,4 +1,14 @@
-import Taro, {useEffect, useState, useDidShow, useReachBottom, useDidHide, useRef, useShareAppMessage} from '@tarojs/taro'
+import Taro, {
+  Config,
+  useEffect,
+  useState,
+  useDidShow,
+  useReachBottom,
+  useDidHide,
+  useRef,
+  useShareAppMessage,
+  usePullDownRefresh
+} from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/index/inter";
 import {getCountUrl} from "@/utils/api";
@@ -10,7 +20,7 @@ import AccountBookInfo from "@/store/account";
 import User from '@/store/user'
 import getWorkNotes from '@/pages/account_book_list/api'
 import {IMGCDNURL} from "@/config/index";
-import { enterTheRecordBook, getTodayDate, getRandomShareInfo} from '@/utils/index'
+import {enterTheRecordBook, getTodayDate, getRandomShareInfo} from '@/utils/index'
 import WorkCountDay from '@/components/flow/work_count_day/index'
 import WorkMoneyBorrowing from '@/components/flow/work_money_borrowing/index'
 import {GetWorkFlowResult} from '@/pages/work_team_record/team_record/index.d'
@@ -99,7 +109,7 @@ const Remember = () => {
   }
 
   // 设置页面分享信息
-  useShareAppMessage(()=>{
+  useShareAppMessage(() => {
     return {...getRandomShareInfo()}
   })
 
@@ -277,7 +287,7 @@ const Remember = () => {
             // 如果新请求回数据第一条与老数据最后一条日期相等，那么需要合并相同日期数据
             if (dataStr == newDateStr) {
               listData[listData.length - 1].list = [...listData[listData.length - 1].list, ...reqList[0].list]
-              reqList.splice(0,1);
+              reqList.splice(0, 1);
             }
             listData = [...listData, ...reqList];
             setList(listData)
@@ -444,7 +454,13 @@ const Remember = () => {
     }
     enterTheRecordBook(accountBookInfo, type)
   }
-
+  // 下拉刷新后 更新当前找活名片
+  usePullDownRefresh(() => {
+    initParams()
+    setTimeout(() => {
+      Taro.stopPullDownRefresh()
+    }, 500)
+  })
 
   return (
     <View className={"remember" + (showFilter ? ' stop-move' : '')}>
@@ -693,3 +709,7 @@ const Remember = () => {
   )
 }
 export default observer(Remember)
+Remember.config = {
+  enablePullDownRefresh: true,
+  "backgroundTextStyle": "dark"
+} as Config

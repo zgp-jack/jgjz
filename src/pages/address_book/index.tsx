@@ -22,8 +22,6 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   let { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
-  console.log("上一个页面传过来的选中数据",data)
-  console.log("上一个页面传过来的type", type)
   const [routerData,setRouterData] = useState<{id:number,name:string}>({id:0,name:''})
   // 不通的type显示不同的页面标题
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {
@@ -508,7 +506,6 @@ function AddressBook() {
         //在newList中插入新的数据
         if (letterIndex == 0) {
           newList.splice(0, 0, newLetterData)
-          console.log(newList)
         } else {
           newList.map((item, index) => {
             if (item.name_py == lastLetter) {

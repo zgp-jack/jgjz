@@ -35,6 +35,9 @@
         font-size: 30px;
         font-weight: 400;
         color: #333333;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       .bokkeeping-list-des {

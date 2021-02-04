@@ -72,9 +72,9 @@ const PromptBox = ({
         {/* 弹窗中输入框内容 */}
         <View className='prompt-content'>     
           {inputGroup.map((item)=>(
-            item.title ? (<View className='input-container' style={{ color: (item.disabled) ? "#a7a7a7" : "" }} key={item.name}><View className='input-title' >{item.title}</View><Input type={item.type ? item.type:"text"} placeholder={item.placeholder} data-name={item.name} maxLength={item.maxlength || inputMaxLength} value={item.value} onInput={(e) => enterInput(e)} focus={item.name == 'name' ? true : false} disabled={ !!item.disabled}   ></Input></View>) 
+            item.title ? (<View className='input-container' style={{ color: (item.disabled) ? "#a7a7a7" : "" }} key={item.name}><View className='input-title' >{item.title}</View><Input className='input-box' type={item.type ? item.type:"text"} placeholder={item.placeholder} data-name={item.name} maxLength={item.maxlength || inputMaxLength} value={item.value} onInput={(e) => enterInput(e)} focus={item.name == 'name' ? true : false} disabled={ !!item.disabled}   ></Input></View>) 
             : 
-              <Input key={item.name} type='text' placeholder={item.placeholder} maxLength={item.maxlength || inputMaxLength} disabled={!!item.disabled} data-name={item.name} value={item.value} onInput={(e) => enterInput(e)}></Input>
+              <Input className='input-box' key={item.name} type='text' placeholder={item.placeholder} maxLength={item.maxlength || inputMaxLength} disabled={!!item.disabled} data-name={item.name} value={item.value} onInput={(e) => enterInput(e)}></Input>
           ))}
         </View>
 

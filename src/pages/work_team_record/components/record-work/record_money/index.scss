@@ -12,8 +12,10 @@
     font-size: 30px;
     text-align: center;
     z-index: 100;
-    button:after{
+    .person-record-save{
+      &::after{
         border: none;
+      }
     }
     .person-record-save{
         width: 710px;

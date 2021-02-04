@@ -154,7 +154,7 @@ export default function BusinessAmount() {
       close={() => userClearPickerType()}
     />
     <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.created_time_string} submitValue={data.busienss_time_string} projectValue={data.work_note_name} worker={data.worker_name} showWorker={true}/>
+    <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} worker={data.worker_name} showWorker={true}/>
     <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
   </View>)
 }

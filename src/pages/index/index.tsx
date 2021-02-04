@@ -224,7 +224,7 @@ const Remember = () => {
       }
       return;
     }
-    if (reloadList) {
+    if (reloadList && !showFilter) {
       if (!user.login) return
       setFilterData(params)
     }

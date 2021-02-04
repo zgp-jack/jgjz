@@ -40,7 +40,6 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
   useEffect(() => {
     if (filterData && filterData.start_business_time.split('-').length !== 3) return
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      console.log('data', data)
       let _data: any = {}
       if (props.personOrGroup) {
         _data = {...filterData, group_leader: data}
@@ -48,7 +47,6 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
       } else {
         _data = {...filterData, worker_id: data}
       }
-      console.log(_data)
       initData(_data)
     })
     return () => eventCenter.off(AddressBookConfirmEvent)
@@ -64,7 +62,6 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
       start_business_time: startDates.length === 3 ? start_business_time : start_business_time + '-01',
       end_business_time: endDates.length === 3 ? end_business_time : handleGetEndDay(start_business_time)
     }
-    console.log('_data', _data)
     setFilterData(JSON.parse(JSON.stringify(_data)))
   }
   const handleGetEndDay = (yearAndMonth) => {

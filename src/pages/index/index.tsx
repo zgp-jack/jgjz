@@ -265,7 +265,6 @@ const Remember = () => {
           if (len == 0) {
             setShowFooter(true)
           } else {
-            debugger
             // list 数据
             let listData = JSON.parse(JSON.stringify(list));
             // 请求返回流水数据
@@ -291,7 +290,6 @@ const Remember = () => {
   const getListTypeLength = (data) => {
     let _listTypeLength: boolean[] = [false, false, false, false, false]
     if (data.length) {
-      console.log(data)
       data.forEach(item => {
         item.list.forEach(subItem => {
           let type = subItem.business_type
@@ -309,7 +307,6 @@ const Remember = () => {
         })
       })
     }
-    console.log(_listTypeLength)
     setListTypeLength(_listTypeLength)
   }
   /*获取统计数据*/

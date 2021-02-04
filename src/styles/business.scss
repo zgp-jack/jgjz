@@ -10,8 +10,10 @@
     font-size: 30px;
     text-align: center;
     z-index: 10;
-    button:after{
+    .person-record-save{
+      &::after{
         border: none;
+      }
     }
     .person-record-resave{
         margin: 0;

@@ -56,7 +56,6 @@ export default function BusinessAmount() {
   const userUpdatePostData = (val: string, type: string) => {
     let postdata: any = { ...postData }
     postdata[type] = val
-    console.log("postdata", postdata)
     setPostData(postdata)
   }
   useEffect(() => {

@@ -1,4 +1,4 @@
-import Taro, { Config, useState, useEffect, useShareAppMessage} from '@tarojs/taro'
+import Taro, { Config, useState, useEffect} from '@tarojs/taro'
 import {View, Text, Image, Button} from '@tarojs/components'
 import {IMGCDNURL} from '@/config/index'
 import getWorkNotes, {editWorkNote} from './api'
@@ -7,7 +7,7 @@ import {Edit_AddressBook_Info, ADD_RECORD_WORK_PARAMS} from './index.d'
 import useInit from '@/hooks/init'
 import InitProvider from '@/components/init_provider'
 import PromptBox from '@/components/popup/index'
-import { enterTheRecordBook, getRandomShareInfo } from '@/utils/index' 
+import { enterTheRecordBook } from '@/utils/index' 
 import msg from '@/utils/msg'
 import {useLocalStore, observer} from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account';
@@ -29,11 +29,6 @@ function AccountBook() {
   })
   /**是否显示修改记工弹窗*/
   const [addPopupShow, setAddPopupShow] = useState<boolean>(false);
-
-  useShareAppMessage(() => {
-    return {...getRandomShareInfo()}
-  })
-
   /** 修改记工弹窗取消 */
   const addCancel = () => {
     setAddPopupShow(false)

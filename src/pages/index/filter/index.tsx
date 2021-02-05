@@ -61,8 +61,8 @@ const Filter: React.FC<FilterProps<GetCountParams>> = (props) => {
       ...data,
       start_business_time: startDates.length === 3 ? start_business_time : start_business_time + '-01',
       end_business_time: endDates.length === 3 ? end_business_time : handleGetEndDay(start_business_time),
-      worker_id: filterData.worker_id!=data.worker_id ? (selectd ? data.worker_id : filterData.worker_id) : data.worker_id,
-      group_leader: filterData.group_leader!=data.group_leader ? (selectd ? data.group_leader : filterData.group_leader) : data.group_leader,
+      // worker_id: filterData.worker_id!=data.worker_id ? (selectd ? data.worker_id : filterData.worker_id) : data.worker_id,
+      // group_leader: filterData.group_leader!=data.group_leader ? (selectd ? data.group_leader : filterData.group_leader) : data.group_leader,
     }
     setFilterData(JSON.parse(JSON.stringify(_data)))
   }

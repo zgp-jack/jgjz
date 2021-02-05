@@ -68,7 +68,6 @@ function RecordDay({type}:{type: string}) {
   useEffect(() => {
     // 监听到了 班组长的回调 然后设置班组长的信息
     eventCenter.on(AddressBookConfirmEvent, (data) => {
-      console.log(data)
       setGroupLeader({id: data.id, name: data.name})
       setIsPickerLeader(true)
     })

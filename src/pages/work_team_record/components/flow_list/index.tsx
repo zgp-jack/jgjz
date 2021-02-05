@@ -41,7 +41,6 @@ export default function FlowList({
   // 页面非第一次显示重新加载数据
   useEffect(() => {
     setFirstShow(true);
-    console.log("firstShow", firstShow)
     if (firstShow) {
       setLoading(true)
     }

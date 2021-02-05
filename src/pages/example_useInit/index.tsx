@@ -8,8 +8,6 @@ import './index.scss'
 export default function ExampleUseInit(){
 
   const { loading, data, errMsg } = useInit(getWorkNotesLists, { work_note: '685', business_time: ''}, [] )
-
-  console.log(data)
   return (
     <InitProvider loading={loading} errMsg={errMsg} >
       <View className='index'>

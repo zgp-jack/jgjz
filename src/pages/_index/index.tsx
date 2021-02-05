@@ -6,7 +6,6 @@ export default function Index_() {
 
   useEffect(() => {
     eventCenter.on('test', (aa: string) => {
-      console.log('我被触发了...', aa)
     })
     return () => eventCenter.off('test')
   }, [])

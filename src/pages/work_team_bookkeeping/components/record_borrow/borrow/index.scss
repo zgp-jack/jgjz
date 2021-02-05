@@ -31,9 +31,10 @@
   background-color: #fff;
   font-size: 30px;
   text-align: center;
-
-  button:after {
-    border: none;
+  .person-record-save{
+    &::after{
+      border: none;
+    }
   }
 
   .person-record-save {

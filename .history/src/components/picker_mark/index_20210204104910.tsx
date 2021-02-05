@@ -22,8 +22,8 @@ export default function PickerMark({
               className="person-record-date-textarea" 
               value={text} 
               placeholder="..." 
-              onInput={(e: any) => set&&set(e.detail.value)}
-              // onBlur={(e: any) => set && set(e.detail.value)}
+              // onInput={(e: any) => set&&set(e.detail.value)}
+              onBlur={(e: any) => set && set(e.detail.value)}
             ></Textarea>
         </View>
     </View>)

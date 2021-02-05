@@ -105,7 +105,7 @@ export default function ModifyWorkDay(){
   // 用户删除流水
   const userDeleteBusiness = () => {
     showActionModal({
-      msg: '您确定删除该笔工天吗？',
+      msg: '您确定删除该笔工量吗？',
       showCancel: true,
       success: (res) => {
         if (res.confirm) {

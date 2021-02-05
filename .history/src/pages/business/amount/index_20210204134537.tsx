@@ -1,6 +1,7 @@
 import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
-import { View, Button } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
+import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerDetail from '@/components/picker_detail'
 import PickerSubitem from '@/components/picker_subitem'
@@ -23,6 +24,8 @@ export default function BusinessAmount() {
   })
   // 默认选中单位
   const [selectedUnit, setSelectedUnit] = useState<number>(0)
+  // 是否显示备注
+  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 是否显示分项数据
   const [show, setShow] = useState<boolean>(false)
   // 提交工量数据
@@ -33,7 +36,6 @@ export default function BusinessAmount() {
     unit_num: '',
     unit: '',
     unit_work_type: '',
-    worker_id: ''
   })
   // 接口返回的初始值
   const [data, setData] = useState<BusinessInfoResult>({
@@ -48,9 +50,7 @@ export default function BusinessAmount() {
     unit_work_type: '',
     unit: '',
     group_leader_name: '',
-    unit_work_type_name:'',
-    worker_name:'',
-    worker_id: ''
+    unit_work_type_name:''
   })
   // 用户更新数据
   const userUpdatePostData = (val: string, type: string) => {
@@ -87,8 +87,7 @@ export default function BusinessAmount() {
           note: mydata.note || "",
           unit: mydata.unit || '',
           unit_num: mydata.unit_num || '',
-          group_leader: mydata.group_leader || '',
-          worker_id: mydata.worker_id
+          group_leader: mydata.group_leader || ''
         })
       } else {
         msg(res.message)
@@ -104,7 +103,7 @@ export default function BusinessAmount() {
   // 用户删除流水
   const userDeleteBusiness = () => {
     showActionModal({
-      msg: '您确定删除该笔工量吗？',
+      msg: '您确定删除该信息吗？',
       showCancel: true,
       success: (res) => {
         if (res.confirm) {
@@ -123,7 +122,9 @@ export default function BusinessAmount() {
   const userEditBusiness = () => {
     let params: UserEditBusinessInfo = {
       ...postData,
-      group_leader: groupLeader.id
+      group_leader: groupLeader.id,
+      unit: postData.unit ? postData.unit : '1',
+      unit_num: postData.unit_num ? postData.unit_num : '0'
     }
     editBorrowBusiness(params).then(res => {
       if (res.code === 0) {
@@ -144,17 +145,19 @@ export default function BusinessAmount() {
     setPostData({ ...postData, unit_work_type: '' })
   }
   return (<View>
-    <ContentInput title='工量' value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
-    <PickerUnitWara selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
+    <ContentInput title='工量' maxLength={3} value={data.unit_num} change={userUpdatePostData} type="unit_num"  />
+    <PickerUnitWara setIsPickerMark={setIsPickerMark} selected={selectedUnit} set={(data) => userUpdatePostData(data.id,'unit')}  />
     <PickerSubitem
-      value={{ id: data.unit_work_type, name: data.unit_work_type_name}}
+      value={{ name: data.unit_work_type_name, id: data.unit_work_type}}
       show={show}
       setShow={() => { setShow(!show) }}
       set={(data) => userChangePickerType(data)}
       close={() => userClearPickerType()}
+      setIsPickerMark={setIsPickerMark}
     />
-    <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />
-    <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} worker={data.worker_name} showWorker={true}/>
+    <PickerLeader leader={groupLeader} DeletePickerLeader={() => DeletePickerLeader()} />
+    {isPickerMark && <PickerMark text={data.note} set={(val) => userUpdatePostData(val, "note")} />}
+    <PickerDetail dateValue={data.busienss_time_string} submitValue={data.created_time_string} projectValue={data.work_note_name} />
     <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
   </View>)
 }

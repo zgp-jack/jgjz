@@ -16,7 +16,7 @@ import { INDEXPAGE } from '@/config/pages'
  * @params msg: string 提示信息 duration: number 提示时间
  * @description 轻提示
 */
-export default function msg(msg: string, duration: number = 1750):void {
+export default function msg(msg: string, duration: number = 1500):void {
   Taro.showToast({
     title: msg,
     icon: 'none',

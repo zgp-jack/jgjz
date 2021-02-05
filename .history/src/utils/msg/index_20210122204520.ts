@@ -2,7 +2,7 @@
  * @Author: jsxin
  * @Date: 2021-01-18 15:51:47
  * @LastEditors: jsxin
- * @LastEditTime: 2021-02-05 09:28:52
+ * @LastEditTime: 2021-01-19 19:21:37
  * @Description: 公共提示信息
  ! @rules 1.轻提示 msg  2.模态框提示 showActionModal 3.方法小驼峰 4.注释请参考以后方法
  */
@@ -16,7 +16,7 @@ import { INDEXPAGE } from '@/config/pages'
  * @params msg: string 提示信息 duration: number 提示时间
  * @description 轻提示
 */
-export default function msg(msg: string, duration: number = 1750):void {
+export default function msg(msg: string, duration: number = 3000):void {
   Taro.showToast({
     title: msg,
     icon: 'none',

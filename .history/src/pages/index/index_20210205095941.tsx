@@ -459,13 +459,6 @@ const Remember = () => {
     }, 500)
   })
 
-  // 跳转鱼泡网
-  const userJumpYuapo = () => {
-    Taro.navigateToMiniProgram({
-      appId: 'wx31a1c86a67bc6c54'
-    })
-  }
-
   return (
     <View className={"remember" + (showFilter ? ' stop-move' : '')}>
       <View className="container">
@@ -679,15 +672,13 @@ const Remember = () => {
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="footer-tabbar">
-              <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
-                <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon" />
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
+              <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon"/>
               意见反馈
-              </View>
-              <View className="feedback" onClick={() => userJumpYuapo()}>
-                <Image src={IMGCDNURL + 'common/worker.png?t=1111'} className="feedback-icon" />
+            </View>
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
+              <Image src={IMGCDNURL + 'common/mini-tabbar-yupao.png'} className="feedback-icon" />
               招工找活
-              </View>
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">

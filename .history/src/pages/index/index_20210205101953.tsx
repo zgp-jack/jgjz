@@ -679,15 +679,13 @@ const Remember = () => {
         </View>
         <View className="footer">
           <View className="footer-container">
-            <View className="footer-tabbar">
-              <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
-                <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon" />
+            <View className="feedback" onClick={() => handNavigateTo('/pages/feedback/index')}>
+              <Image src={IMGCDNURL + 'lxy/ic_yjfk.png'} className="feedback-icon"/>
               意见反馈
-              </View>
-              <View className="feedback" onClick={() => userJumpYuapo()}>
-                <Image src={IMGCDNURL + 'common/worker.png?t=1111'} className="feedback-icon" />
+            </View>
+            <View className="feedback" onClick={() => userJumpYuapo()}>
+              <Image src={IMGCDNURL + 'common/worker.png?t=11'} className="feedback-icon" />
               招工找活
-              </View>
             </View>
             <View className="footer-buttons">
               {!isFilter ? <View className="footer-button-box">

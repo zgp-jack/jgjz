@@ -685,7 +685,7 @@ const Remember = () => {
               意见反馈
               </View>
               <View className="feedback" onClick={() => userJumpYuapo()}>
-                <Image src={IMGCDNURL + 'common/worker.png?t=1111'} className="feedback-icon" />
+                <Image src={IMGCDNURL + 'common/worker.png?t=1111'} className="feedback-icon yupao-icon" />
               招工找活
               </View>
             </View>

@@ -404,15 +404,12 @@
           display: flex;
           align-items: center;
           flex-direction: column;
-          margin-right: 20px;
-          &:nth-last-child(1){
-            margin-right: 0;
-          }
 
           .feedback-icon {
             width: 36px;
             height: 36px;
             display: block;
+            margin-right: 15px;
             margin-bottom: 10px;
           }
         }

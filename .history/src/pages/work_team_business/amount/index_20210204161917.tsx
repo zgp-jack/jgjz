@@ -104,7 +104,7 @@ export default function BusinessAmount() {
   // 用户删除流水
   const userDeleteBusiness = () => {
     showActionModal({
-      msg: '您确定删除该笔工量吗？',
+      msg: '您确定删除该信息吗？',
       showCancel: true,
       success: (res) => {
         if (res.confirm) {

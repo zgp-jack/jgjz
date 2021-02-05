@@ -1,4 +1,4 @@
-import Taro, { useState, useEffect, Config, eventCenter, useRouter, useShareAppMessage } from '@tarojs/taro'
+import Taro, { useState, useEffect, Config, eventCenter, useRouter } from '@tarojs/taro'
 import { observer, useLocalStore } from '@tarojs/mobx'
 import AccountBookInfo from '@/store/account/index'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
@@ -10,7 +10,6 @@ import { ADDRESS_BOOK_LIST, PERSON_DATA, ADD_PERSON_PARAMS, ADD_NOTE_WORKERS_PAR
 import { InputValue } from '@/components/popup/index.d'
 import classnames from 'classnames'
 import msg, { showActionModal } from '@/utils/msg'
-import { getRandomShareInfo } from '@/utils/index'  
 import { getWorkers, postAdd_Person, deletedPerson, editWordkerInfo, addNoteWorkers, deleteNoteWorkers, getNoteWorkers } from './api'
 import { isNumber, isRequire } from '@/utils/v/index'
 import PromptBox from '@/components/popup/index'
@@ -23,11 +22,6 @@ function AddressBook() {
   // 获取当前显示的类型 默认个人选择
   const router = useRouter()
   let { type = ADDRESSBOOKTYPE_GROUP, data } = router.params
-
-  useShareAppMessage(() => {
-    return { ...getRandomShareInfo() }
-  })
-
   const [routerData,setRouterData] = useState<{id:number,name:string}>({id:0,name:''})
   // 不通的type显示不同的页面标题
   if (type == ADDRESSBOOKTYPE_GROUP || type == ADDRESSBOOKTYPE_GROUP_ADD) {

@@ -1,4 +1,4 @@
-import Taro, { useState, useRouter, Config, useShareAppMessage } from '@tarojs/taro'
+import Taro, { useState, useRouter, Config } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { IMGCDNURL } from '@/config/index'
 import { INDEXPAGE } from '@/config/pages'
@@ -8,7 +8,6 @@ import userAddWorkNotesAction from './api'
 import { IDENTITY_CONFIG, Remember_Config } from './index.d'
 import createConfig from './config'
 import msg, { showActionModal } from '@/utils/msg'
-import { getRandomShareInfo } from '@/utils/index'
 import AccountBookInfo from "@/store/account";
 import { observer, useLocalStore } from '@tarojs/mobx'
 import './index.scss'
@@ -21,10 +20,6 @@ function IdentitySelection() {
 
   const localStore = useLocalStore(() => AccountBookInfo);
   const { setAccountBoookInfo } = localStore
-  
-  useShareAppMessage(() => {
-    return { ...getRandomShareInfo() }
-  })
 
   /** 是否显示新增记工弹窗 */
   const [addPopupShow, setAddPopupShow] = useState<boolean>(false);

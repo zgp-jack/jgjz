@@ -1,14 +1,13 @@
-import Taro, { useState, useRouter, useEffect, eventCenter, Config, useShareAppMessage } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter, Config, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
-import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import PickerDetail from '@/components/picker_detail'
-import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem, WorkTimeType } from './inter.d'
 import msg, { showActionModal, showBackModal } from '@/utils/msg'
 import { getRandomShareInfo } from '@/utils/index'
 import { AddressBookConfirmEvent } from '@/config/events'
 import WorkDayComponent from '@/components/work_day'
 import getBorrowInfo, { delBorrowBusiness, editBorrowBusiness } from './api'
+import BusinessInfoResult, { UserEditBusinessInfo, ClassifyItem, WorkTimeType } from './inter.d'
 import BusinessBtns from '@/components/business_btns'
 import './index.scss'
 
@@ -30,8 +29,6 @@ export default function ModifyWorkDay(){
   const [workTime, setWorkTime] = useState<WorkTimeType>({ value: '1', text: '一个工' })
   // 加班时长的数据
   const [overTime, setOverTime] = useState<WorkTimeType>({ value: '0', text: '无加班' })
-  // 是否显示备注
-  const [isPickerMark, setIsPickerMark] = useState<boolean>(true)
   // 提交工量数据
   const [postData, setPostData] = useState<UserEditBusinessInfo>({
     id: id,
@@ -39,7 +36,9 @@ export default function ModifyWorkDay(){
     note: '',
     work_time: '',
     work_time_hour: '',
-    overtime: ''
+    overtime: '',
+    worker_name:'',
+    worker_id: ''
   })
   // 接口返回的初始值
   const [data, setData] = useState<BusinessInfoResult>({
@@ -53,7 +52,9 @@ export default function ModifyWorkDay(){
     group_leader_name: '',
     work_time: '',
     work_time_hour: '',
-    overtime: ''
+    overtime: '',
+    worker_name:'',
+    worker_id: ''
   })
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
@@ -85,7 +86,8 @@ export default function ModifyWorkDay(){
           note: mydata.note || '',
           work_time: mydata.work_time || '',
           work_time_hour: mydata.work_time_hour || '',
-          overtime: mydata.overtime || ''
+          overtime: mydata.overtime || '',
+          worker_id: mydata.worker_id
         })
         if (mydata.work_time){
           mydata.work_time == '1' ? setWorkTime({value: '1',text:'一个工'}) : setWorkTime({value: '0.5', text: '半个工'});
@@ -146,11 +148,6 @@ export default function ModifyWorkDay(){
     postdata[type] = val
     setPostData(postdata)
   }
-
-  // 用户清空班组长
-  const userClearLeader =() => {
-    setGroupLeader({id: '', name: ''})
-  }
   // 改变加班/上班 值
   const useChangeWorkTime = (data, type: string, typeValue?: string) => {
     if (typeValue == 'work') {
@@ -168,7 +165,6 @@ export default function ModifyWorkDay(){
         value={workTime}
         isSelect={!isWrok}
         type='work'
-        setIsPickerMark={setIsPickerMark}
       />
       <WorkDayComponent
         title={'加班时长'}
@@ -176,15 +172,15 @@ export default function ModifyWorkDay(){
         value={overTime}
         isSelect={!isOver}
         type='over'
-        setIsPickerMark={setIsPickerMark}
       />
     </View>
-    <PickerLeader leader={groupLeader}  DeletePickerLeader={()=>userClearLeader()} />
-    {isPickerMark && <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />}
+    <PickerMark text={postData.note} set={(val) => userUpdatePostData(val, 'note')} />
     <PickerDetail
       dateValue={data.busienss_time_string}
       submitValue={data.created_time_string}
       projectValue={data.work_note_name}
+      worker={data.worker_name} 
+      showWorker={true}
     />
     <BusinessBtns del={userDeleteBusiness} edit={userEditBusiness} />
   </View>)

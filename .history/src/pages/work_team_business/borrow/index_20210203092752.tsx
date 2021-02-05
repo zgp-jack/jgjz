@@ -1,8 +1,7 @@
-import Taro, {useState, useRouter, useEffect, eventCenter, useShareAppMessage} from '@tarojs/taro'
+import Taro, {useState, useRouter, useEffect, eventCenter} from '@tarojs/taro'
 import {View, Button} from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
 import msg, {showActionModal, showBackModal} from '@/utils/msg'
-import { getRandomShareInfo } from '@/utils/index'
 import PickerMark from '@/components/picker_mark'
 import PickerType from '@/components/picker_type'
 import PickerDetail from '@/components/picker_detail'
@@ -19,10 +18,6 @@ export default function BusinessBorrow() {
   // 根据路由获取id参数
   const router = useRouter()
   const {id = ''} = router.params
-
-  useShareAppMessage(() => {
-    return { ...getRandomShareInfo() }
-  })
   // 是否显示分类数据
   const [show, setShow] = useState<boolean>(false)
   // 工友数据

@@ -1,4 +1,4 @@
-import Taro, { Config, useEffect, useState, useDidShow, useReachBottom,  useShareAppMessage, usePullDownRefresh } from '@tarojs/taro'
+import Taro, { Config, useEffect, useState, useDidShow, useReachBottom,  useShareAppMessage, usePullDownRefresh, useShareTimeline } from '@tarojs/taro'
 import {Block, Image, Picker, Text, View} from '@tarojs/components'
 import {AddressBookParams, GetCountParams, GetCountResult} from "@/pages/index/inter";
 import {getCountUrl} from "@/utils/api";
@@ -101,6 +101,9 @@ const Remember = () => {
   // 设置页面分享信息
   useShareAppMessage(() => {
     return {...getRandomShareInfo()}
+  })
+  useShareTimeline(() => {
+    return { ...getRandomShareInfo() }
   })
 
   // 参数处理

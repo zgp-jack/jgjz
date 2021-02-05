@@ -1,19 +1,14 @@
-import Taro, { useState, Config, useShareAppMessage } from '@tarojs/taro'
+import Taro, { useState, Config } from '@tarojs/taro'
 import { View, Text, Textarea, Button } from '@tarojs/components'
 import FeedbackData from './inter.d'
 import Star from  './components/star'
 import UploadImg from '@/components/upload_img'
 import msg, { showBackModal } from '@/utils/msg'
 import userGetFeedbackAction from './api'
-import { copyWechat, callPhone, getRandomShareInfo } from '@/utils/index'
+import { copyWechat, callPhone } from '@/utils/index'
 import './index.scss'
 
 export default function Feedback() {
-
-  useShareAppMessage(() => {
-    return { ...getRandomShareInfo() }
-  })
-
   // 微信号
   const [wechat, setWechat] = useState<string>('xyrz3205')
   // 提交表单数据

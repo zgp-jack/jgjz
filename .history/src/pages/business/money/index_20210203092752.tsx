@@ -1,13 +1,13 @@
-import Taro, { useState, useRouter, useEffect, eventCenter, Config, useShareAppMessage } from '@tarojs/taro'
+import Taro, { useState, useRouter, useEffect, eventCenter, Config } from '@tarojs/taro'
 import { View, Button } from '@tarojs/components'
 import ContentInput from '@/components/picker_input'
+import PickerType from '@/components/picker_type'
 import PickerLeader from '@/components/picker_leader'
 import PickerMark from '@/components/picker_mark'
 import getBusinessMoneyInfo , { delBusinessMoney, editBusinessMoney} from './api'
 import PickerDetail from '@/components/picker_detail'
 import { BusinessInfoResult, UserEditBusinessInfo } from './inter.d'
 import msg, { showBackModal, showActionModal } from '@/utils/msg'
-import { getRandomShareInfo } from '@/utils/index'
 import ClassifyItem from '@/store/classify/inter.d'
 import { AddressBookConfirmEvent } from '@/config/events'
 import BusinessBtns from '@/components/business_btns'
@@ -18,10 +18,6 @@ export default function BusinessMoney() {
   // 根据路由获取id参数
   const router = useRouter()
   const { id = '11151' } = router.params
-
-  useShareAppMessage(() => {
-    return { ...getRandomShareInfo() }
-  })
 
   // 选择的班组长数据
   const [groupLeader, setGroupLeader] = useState<ClassifyItem>({
